@@ -1,0 +1,73 @@
+import { StatusBadge } from "@/components/dashboard/StatusBadge";
+import { AdminRiskBadge } from "./AdminRiskBadge";
+import type { RiskLevel } from "@/types/admin";
+
+interface AdminQueueCardProps {
+  titleAr: string;
+  subtitleAr?: string;
+  metaAr?: string;
+  statusLabel?: string;
+  statusVariant?: "success" | "warning" | "danger" | "info" | "neutral" | "purple";
+  riskLevel?: RiskLevel;
+  flagLabel?: string;
+  adminNote?: string;
+  children?: React.ReactNode;
+}
+
+export function AdminQueueCard({
+  titleAr,
+  subtitleAr,
+  metaAr,
+  statusLabel,
+  statusVariant = "neutral",
+  riskLevel,
+  flagLabel,
+  adminNote,
+  children,
+}: AdminQueueCardProps) {
+  return (
+    <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4" dir="rtl">
+      {/* Header row */}
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-bold text-[#1E1E1E] line-clamp-2">{titleAr}</p>
+          {subtitleAr && (
+            <p className="text-xs text-[#7A6B5E] mt-0.5">{subtitleAr}</p>
+          )}
+          {metaAr && (
+            <p className="text-[10px] text-[#A89480] mt-0.5">{metaAr}</p>
+          )}
+        </div>
+        <div className="flex flex-col items-end gap-1 flex-shrink-0">
+          {statusLabel && (
+            <StatusBadge label={statusLabel} variant={statusVariant} size="xs" />
+          )}
+          {riskLevel && <AdminRiskBadge level={riskLevel} />}
+        </div>
+      </div>
+
+      {/* Flag chips */}
+      {flagLabel && (
+        <div className="mb-2">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#FBF0EB] text-[#C65D3B] text-[10px] font-bold rounded-lg">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7" />
+            </svg>
+            {flagLabel}
+          </span>
+        </div>
+      )}
+
+      {/* Admin note */}
+      {adminNote && (
+        <div className="bg-[#FFF8E7] rounded-xl px-3 py-2 mb-2">
+          <p className="text-[10px] text-[#D4A017] font-semibold mb-0.5">ملاحظة الإدارة</p>
+          <p className="text-xs text-[#7A6B5E] leading-relaxed">{adminNote}</p>
+        </div>
+      )}
+
+      {/* Slot for actions / extra content */}
+      {children}
+    </div>
+  );
+}

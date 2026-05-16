@@ -1,0 +1,86 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { useSearchStore, SORT_LABELS } from "@/store/search.store";
+import type { SortOption } from "@/store/search.store";
+
+interface SortDropdownProps {
+  className?: string;
+}
+
+export function SortDropdown({ className }: SortDropdownProps) {
+  const { filters, setFilter } = useSearchStore();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function close(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+
+  const options = Object.entries(SORT_LABELS) as [SortOption, string][];
+
+  return (
+    <div ref={ref} className={cn("relative", className)}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        className={cn(
+          "flex items-center gap-2 px-3 h-9 rounded-xl text-xs font-semibold",
+          "border border-[#E8DDD0] bg-white text-[#7A6B5E] hover:border-[#C65D3B] transition-colors",
+          "whitespace-nowrap"
+        )}
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+          <line x1="8" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
+          <line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+        {SORT_LABELS[filters.sortBy]}
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+          className={cn("transition-transform", open && "rotate-180")}>
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          role="listbox"
+          aria-label="ترتيب النتائج"
+          className="absolute top-full end-0 mt-1 bg-white border border-[#F0EBE3] rounded-2xl shadow-[0_8px_24px_0_rgb(30_30_30/0.10)] z-50 min-w-[180px] overflow-hidden"
+        >
+          {options.map(([value, label]) => (
+            <button
+              key={value}
+              role="option"
+              aria-selected={filters.sortBy === value}
+              onClick={() => {
+                setFilter("sortBy", value);
+                setOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center justify-between gap-3 px-4 py-3 text-sm transition-colors text-start",
+                filters.sortBy === value
+                  ? "bg-[#FAF7F2] text-[#C65D3B] font-semibold"
+                  : "text-[#1E1E1E] hover:bg-[#FAF7F2]"
+              )}
+            >
+              {label}
+              {filters.sortBy === value && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <path d="M20 6 9 17l-5-5"/>
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Maqar Brand Palette ─────────────────────────────────────── */
+  --color-background: #FAF7F2;
+  --color-foreground: #1E1E1E;
+  --color-surface:    #FFFFFF;
+  --color-border:     #E8DDD0;
+  --color-border-subtle: #F0EBE3;
+
+  /* Primary – Terracotta */
+  --color-primary:            #C65D3B;
+  --color-primary-hover:      #A84D2F;
+  --color-primary-light:      #FBF0EB;
+  --color-primary-foreground: #FFFFFF;
+
+  /* Secondary – Desert Sand */
+  --color-secondary:            #D4A373;
+  --color-secondary-hover:      #C49060;
+  --color-secondary-light:      #FDF6EE;
+  --color-secondary-foreground: #1E1E1E;
+
+  /* Accent – Palm Green */
+  --color-accent:            #5B8C5A;
+  --color-accent-hover:      #4A7349;
+  --color-accent-light:      #EDF4ED;
+  --color-accent-foreground: #FFFFFF;
+
+  /* Neutrals */
+  --color-charcoal:  #1E1E1E;
+  --color-muted:     #7A6B5E;
+  --color-subtle:    #A89480;
+  --color-faint:     #C8B8A8;
+  --color-muted-bg:  #F5F0EA;
+
+  /* Semantic */
+  --color-success:         #5B8C5A;
+  --color-success-light:   #EDF4ED;
+  --color-warning:         #C8860A;
+  --color-warning-light:   #FFF8E6;
+  --color-danger:          #C0392B;
+  --color-danger-light:    #FEF0EE;
+  --color-info:            #2471A3;
+  --color-info-light:      #EAF4FB;
+
+  /* Typography */
+  --font-sans: var(--font-arabic), "Segoe UI", system-ui, Arial, sans-serif;
+
+  /* Border radius */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius:    12px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs:       0 1px 2px 0 rgb(30 30 30 / 0.06);
+  --shadow-sm:       0 1px 4px 0 rgb(30 30 30 / 0.08);
+  --shadow-card:     0 2px 8px 0 rgb(30 30 30 / 0.06), 0 1px 2px 0 rgb(30 30 30 / 0.04);
+  --shadow-elevated: 0 8px 24px 0 rgb(30 30 30 / 0.10);
+  --shadow-sheet:    0 -4px 32px 0 rgb(30 30 30 / 0.14);
+
+  /* Z-index */
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-drawer: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+}
+
+/* ── Base Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  min-height: 100svh;
+}
+
+/* ── Mobile UX ──────────────────────────────────────────────────── */
+button, a, [role="button"], label {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 16px; /* prevent iOS zoom */
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-faint);
+  border-radius: var(--radius-full);
+}
+
+/* ── RTL Utilities ──────────────────────────────────────────────── */
+[dir="rtl"] .flip-x { transform: scaleX(-1); }
+
+/* ── Animations ─────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes pulse-brand {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animate-fade-in  { animation: fadeIn 0.2s ease-out both; }
+.animate-slide-up { animation: slideUp 0.25s ease-out both; }
+.animate-slide-down { animation: slideDown 0.2s ease-out both; }
+.animate-sheet-up { animation: sheetUp 0.3s cubic-bezier(0.32, 0.72, 0, 1) both; }
+.animate-pulse-brand { animation: pulse-brand 1.5s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 2s linear infinite; }
+
+/* ── Focus ──────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* ── Leaflet overrides ──────────────────────────────────────────── */
+
+/* Inherit brand font inside the map */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: #EDE8E0;
+}
+
+/* Remove default blue outline on map focus */
+.leaflet-container:focus {
+  outline: none;
+}
+
+/* Price bubble markers: no default leaflet wrapper background */
+.maqar-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* User location dot: no default wrapper */
+.maqar-user-location {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Move Leaflet attribution to not clash with bottom nav */
+.leaflet-bottom.leaflet-right .leaflet-control-attribution {
+  margin-bottom: 72px;
+  border-radius: 8px 0 0 0;
+  font-size: 10px;
+}
+
+/* Leaflet zoom controls — hidden (we use custom controls) */
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+/* Tile layer loading placeholder */
+.leaflet-tile-pane {
+  opacity: 1;
+}
+
+/* ── Map page: suppress body scroll when map is full-screen ─────── */
+body:has(.maqar-map-page) {
+  overflow: hidden;
+}

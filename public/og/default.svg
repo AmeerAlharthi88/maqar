@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#FAF7F4"/>
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="8" height="630" fill="#C65D3B"/>
+  <!-- Icon circle -->
+  <circle cx="600" cy="240" r="90" fill="#C65D3B"/>
+  <text x="600" y="240" font-family="system-ui,-apple-system,sans-serif" font-size="80" font-weight="bold" fill="#FAF7F4" text-anchor="middle" dominant-baseline="central" lang="ar">مقر</text>
+  <!-- Tagline -->
+  <text x="600" y="380" font-family="system-ui,-apple-system,sans-serif" font-size="36" font-weight="600" fill="#1E1E1E" text-anchor="middle" lang="ar">منصة العقارات العُمانية الأولى</text>
+  <!-- Subtitle -->
+  <text x="600" y="440" font-family="system-ui,-apple-system,sans-serif" font-size="24" fill="#7A6B5E" text-anchor="middle" lang="ar">ابحث · أعلن · تواصل</text>
+  <!-- Domain -->
+  <text x="600" y="560" font-family="system-ui,-apple-system,sans-serif" font-size="20" fill="#A89480" text-anchor="middle">maqar.om</text>
+</svg>
