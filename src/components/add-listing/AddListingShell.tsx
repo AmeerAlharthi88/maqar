@@ -38,6 +38,7 @@ export function AddListingShell() {
     isDirty,
     isSubmitting,
     submitSuccess,
+    submitError,
     qualityScore,
     duplicateRisk,
     suspiciousPrice,
@@ -186,6 +187,7 @@ export function AddListingShell() {
             isSubmitting={isSubmitting}
             submitSuccess={submitSuccess}
             termsAccepted={termsAccepted}
+            submitError={submitError}
             onSubmit={handleStepSubmit}
             onSaveDraft={saveDraft}
             onReset={resetFlow}

@@ -2,8 +2,11 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
+import { useFavoritesStore } from "@/store/favorites.store";
+import { useSavedSearchesStore, rowToSavedSearch } from "@/store/saved-searches.store";
 import { createClient } from "@/lib/supabase/client";
 import { getCurrentProfile } from "@/lib/supabase/profile";
+import { fetchSavedSearches } from "@/lib/supabase/saved-searches";
 import type { AppRole } from "@/config/roles";
 
 function userFromSupabase(
@@ -21,21 +24,73 @@ function userFromSupabase(
   };
 }
 
+const DEV_SKIP_AUTH = process.env.NEXT_PUBLIC_DEV_SKIP_AUTH === "true";
+const DEV_USER_ID = process.env.DEV_BYPASS_USER_ID ?? "83dc5029-d4dc-42c7-ba36-b312260c51c6";
+
+/** Hydrates per-user Supabase data into local stores after authentication. */
+async function hydrateUserStores(userId: string) {
+  const favoritesStore = useFavoritesStore.getState();
+  const savedSearchesStore = useSavedSearchesStore.getState();
+
+  // Run both fetches in parallel — neither depends on the other
+  const [, savedSearchRows] = await Promise.allSettled([
+    favoritesStore.fetchAndHydrate(userId),
+    fetchSavedSearches(userId),
+  ]);
+
+  // Apply saved searches if fetch succeeded
+  if (savedSearchRows.status === "fulfilled" && savedSearchRows.value.length > 0) {
+    savedSearchesStore.setItems(savedSearchRows.value.map(rowToSavedSearch));
+  }
+}
+
 export function AuthSessionProvider({ children }: { children: React.ReactNode }) {
   const { setUser, setProfile, clearSession } = useAuthStore();
 
   useEffect(() => {
+    // ── Dev bypass ───────────────────────────────────────────────────────────
+    // Skips all Supabase auth calls when NEXT_PUBLIC_DEV_SKIP_AUTH=true.
+    // Allows Phase B/C testing without a working Supabase auth connection.
+    // Favorites and saved searches stay local-only in bypass mode.
+    if (DEV_SKIP_AUTH) {
+      setUser({
+        id: DEV_USER_ID,
+        phone: "+96892961266",
+        nameAr: "مستخدم تطوير",
+        role: "agent",
+        isVerified: false,
+      });
+      setProfile(null); // profile optional — onboarding check skipped below
+      return; // no subscription needed
+    }
+
     const supabase = createClient();
 
     // ── Hydrate on mount ─────────────────────────────────────────────────────
+    // Safety timeout: if getSession() hangs (slow network / Supabase unreachable),
+    // unblock the UI after 6 seconds rather than spinning forever.
+    const authTimeoutId = setTimeout(() => {
+      console.warn("[Auth] getSession() timed out — clearing session to unblock UI");
+      clearSession();
+    }, 6000);
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      clearTimeout(authTimeoutId);
       if (session?.user) {
         setUser(userFromSupabase(session.user));
         const profile = await getCurrentProfile();
         setProfile(profile);
+        // Hydrate user-specific stores from Supabase
+        hydrateUserStores(session.user.id).catch((err) =>
+          console.error("[Auth] hydrateUserStores error:", err)
+        );
       } else {
         clearSession();
       }
+    }).catch((err) => {
+      clearTimeout(authTimeoutId);
+      console.error("[Auth] getSession() error:", err);
+      clearSession();
     });
 
     // ── Listen for future changes ────────────────────────────────────────────
@@ -47,9 +102,18 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           const profile = await getCurrentProfile();
           setProfile(profile);
+          // Hydrate user-specific stores on sign-in
+          if (event === "SIGNED_IN") {
+            hydrateUserStores(session.user.id).catch((err) =>
+              console.error("[Auth] hydrateUserStores error:", err)
+            );
+          }
         }
       } else {
         clearSession();
+        // Clear user-specific stores on sign-out
+        useFavoritesStore.getState().reset();
+        useSavedSearchesStore.getState().reset();
       }
     });
 

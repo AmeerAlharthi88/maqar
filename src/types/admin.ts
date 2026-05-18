@@ -106,16 +106,17 @@ export const REPORT_REASON_AR: Record<ReportReason, string> = {
   other:             "سبب آخر",
 };
 
-export type ReportStatus = "new" | "reviewing" | "resolved" | "dismissed";
+export type ReportStatus = "new" | "reviewing" | "resolved" | "dismissed" | "escalated";
 
 export const REPORT_STATUS_AR: Record<ReportStatus, string> = {
   new:       "جديد",
   reviewing: "قيد المراجعة",
   resolved:  "تم الحل",
   dismissed: "تم الرفض",
+  escalated: "مُصعَّد",
 };
 
-export type ReportTargetType = "listing" | "agent" | "agency";
+export type ReportTargetType = "listing" | "agent" | "agency" | "review";
 
 export interface AdminReport {
   id: string;
@@ -259,7 +260,10 @@ export type AuditCategory =
   | "listing_action"
   | "verification_action"
   | "user_action"
-  | "payment_action";
+  | "payment_action"
+  | "ai_action"
+  | "security_action"
+  | "system_action";
 
 export const AUDIT_CATEGORY_AR: Record<AuditCategory, string> = {
   admin_action:        "إجراء إداري",
@@ -267,6 +271,9 @@ export const AUDIT_CATEGORY_AR: Record<AuditCategory, string> = {
   verification_action: "إجراء توثيق",
   user_action:         "إجراء مستخدم",
   payment_action:      "إجراء دفع",
+  ai_action:           "إجراء ذكاء اصطناعي",
+  security_action:     "إجراء أمني",
+  system_action:       "إجراء نظام",
 };
 
 export interface AuditLog {

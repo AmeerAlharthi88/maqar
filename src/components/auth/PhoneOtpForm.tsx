@@ -35,10 +35,24 @@ export function PhoneOtpForm() {
     setIsLoading(true);
 
     const phone = formatPhone(digits);
-    const { error: authError } = await signInWithPhone(phone);
+
+    // Race signInWithPhone against a 15-second timeout
+    const otpTimeout = new Promise<{ error: { message: string } }>(
+      (resolve) =>
+        setTimeout(
+          () => resolve({ error: { message: "timeout" } }),
+          15_000
+        )
+    );
+
+    const { error: authError } = await Promise.race([signInWithPhone(phone), otpTimeout]);
 
     if (authError) {
-      setError("تعذّر إرسال رمز التحقق. تأكد من رقم الجوال وحاول مرة أخرى.");
+      setError(
+        authError.message === "timeout"
+          ? "انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وأعد المحاولة."
+          : "تعذّر إرسال رمز التحقق. تأكد من رقم الجوال وحاول مرة أخرى."
+      );
       setIsLoading(false);
       return;
     }

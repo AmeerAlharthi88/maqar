@@ -1,28 +1,63 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { ReportCard } from "@/components/admin/ReportCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { MOCK_ADMIN_REPORTS } from "@/mock/admin";
-import type { AdminReport, ReportStatus, ReportTargetType } from "@/types/admin";
+import type { AdminReport, ReportStatus } from "@/types/admin";
 import { REPORT_STATUS_AR } from "@/types/admin";
 
-const STATUS_FILTERS: (ReportStatus | "all")[] = ["all", "new", "reviewing", "resolved", "dismissed"];
+const STATUS_FILTERS: (ReportStatus | "all")[] = ["all", "new", "reviewing", "resolved", "dismissed", "escalated"];
 const STATUS_AR: Record<ReportStatus | "all", string> = {
-  all: "الكل", new: "جديد", reviewing: "قيد المراجعة", resolved: "محلول", dismissed: "مرفوض",
+  all: "الكل", ...REPORT_STATUS_AR,
 };
 
 function useReportQueue() {
-  const [items, setItems] = useState<AdminReport[]>(MOCK_ADMIN_REPORTS);
-  const update = (id: string, status: ReportStatus, note?: string) =>
+  const [items, setItems] = useState<AdminReport[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const reload = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/reports");
+      if (res.ok) {
+        const json = await res.json();
+        const data: AdminReport[] = json.data ?? [];
+        setItems(data.length > 0 ? data : MOCK_ADMIN_REPORTS);
+      } else {
+        setItems(MOCK_ADMIN_REPORTS);
+      }
+    } catch {
+      setItems(MOCK_ADMIN_REPORTS);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { reload(); }, [reload]);
+
+  const update = useCallback(async (id: string, status: ReportStatus, note?: string) => {
+    // Optimistic update
     setItems((prev) => prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r));
-  return { items, update };
+    try {
+      await fetch(`/api/admin/reports/${id}`, {
+        method:  "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ status, adminNote: note }),
+      });
+    } catch {
+      // Optimistic update stands
+    }
+  }, []);
+
+  return { items, loading, update };
 }
 
 export default function AdminReportsPage() {
   const [filter, setFilter] = useState<ReportStatus | "all">("all");
-  const { items, update } = useReportQueue();
+  const { items, loading, update } = useReportQueue();
 
   const filtered = filter === "all" ? items : items.filter((r) => r.status === filter);
   const newCount = items.filter((r) => r.status === "new").length;
@@ -47,7 +82,9 @@ export default function AdminReportsPage() {
           })}
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+        ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد بلاغات" descriptionAr="البلاغات الواردة من المستخدمين ستظهر هنا." />
         ) : (
           <div className="space-y-3">
@@ -57,7 +94,7 @@ export default function AdminReportsPage() {
                 report={report}
                 onResolve={(id) => update(id, "resolved")}
                 onDismiss={(id) => update(id, "dismissed")}
-                onEscalate={(id) => update(id, "reviewing")}
+                onEscalate={(id) => update(id, "escalated")}
               />
             ))}
           </div>

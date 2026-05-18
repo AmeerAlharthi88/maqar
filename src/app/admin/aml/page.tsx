@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AMLFlagCard } from "@/components/admin/AMLFlagCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
@@ -12,15 +12,49 @@ const STATUS_FILTERS: (AMLStatus | "all")[] = ["all", "flagged", "cleared", "esc
 const STATUS_FILTER_AR: Record<AMLStatus | "all", string> = { all: "الكل", ...AML_STATUS_AR };
 
 function useAmlQueue() {
-  const [items, setItems] = useState<AMLFlag[]>(MOCK_AML_FLAGS);
-  const update = (id: string, status: AMLStatus, note?: string) =>
+  const [items, setItems] = useState<AMLFlag[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const reload = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/aml");
+      if (res.ok) {
+        const json = await res.json();
+        const data: AMLFlag[] = json.data ?? [];
+        setItems(data.length > 0 ? data : MOCK_AML_FLAGS);
+      } else {
+        setItems(MOCK_AML_FLAGS);
+      }
+    } catch {
+      setItems(MOCK_AML_FLAGS);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { reload(); }, [reload]);
+
+  const update = useCallback(async (id: string, status: AMLStatus, note?: string) => {
     setItems((prev) => prev.map((f) => f.id === id ? { ...f, status, adminNote: note ?? f.adminNote } : f));
-  return { items, update };
+    try {
+      await fetch(`/api/admin/aml/${id}`, {
+        method:  "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ status, adminNote: note }),
+      });
+    } catch {
+      // Optimistic update stands
+    }
+  }, []);
+
+  return { items, loading, update };
 }
 
 export default function AdminAmlPage() {
   const [filter, setFilter] = useState<AMLStatus | "all">("all");
-  const { items, update } = useAmlQueue();
+  const { items, loading, update } = useAmlQueue();
   const filtered = filter === "all" ? items : items.filter((f) => f.status === filter);
   const flaggedCount = items.filter((f) => f.status === "flagged").length;
 
@@ -51,7 +85,9 @@ export default function AdminAmlPage() {
           })}
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+        ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد أعلام AML" descriptionAr="الإعلانات المشتبه بها ستظهر هنا تلقائياً." />
         ) : (
           <div className="space-y-3">

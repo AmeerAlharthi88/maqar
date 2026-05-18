@@ -11,6 +11,8 @@ import { BookViewingModal } from "./BookViewingModal";
 import { MakeOfferModal } from "./MakeOfferModal";
 import { ReportListingModal } from "./ReportListingModal";
 import { LoginRequiredModal } from "@/components/auth/LoginRequiredModal";
+import { createLead } from "@/lib/supabase/crm";
+import { trackEvent } from "@/lib/supabase/analytics";
 import type { Listing } from "@/types/listing";
 
 interface ListingDetailClientProps {
@@ -22,7 +24,7 @@ type ProtectedModal = "bookViewing" | "makeOffer" | "report" | null;
 export function ListingDetailClient({ listing }: ListingDetailClientProps) {
   const { add: addRecentlyViewed } = useRecentlyViewedStore();
   const { toggle, isFavorite } = useFavoritesStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   const [bookViewingOpen, setBookViewingOpen] = useState(false);
   const [makeOfferOpen, setMakeOfferOpen] = useState(false);
@@ -36,7 +38,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
   const favorite = isFavorite(listing.id);
   const listingUrl = `/listing/${listing.id}`;
 
-  // Track recently viewed on mount
+  // Track recently viewed + analytics view event on mount
   useEffect(() => {
     addRecentlyViewed({
       id: listing.id,
@@ -47,6 +49,19 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
       areaAr: listing.location.areaAr,
       viewedAt: new Date().toISOString(),
     });
+
+    // Session-dedup guard: fire view event at most once per browser session per listing.
+    const sessionKey = `maqar_view_${listing.id}`;
+    if (typeof sessionStorage !== "undefined" && !sessionStorage.getItem(sessionKey)) {
+      sessionStorage.setItem(sessionKey, "1");
+      trackEvent({
+        listingId: listing.id,
+        agentId:   listing.agentId ?? null,
+        userId:    user?.id ?? null,
+        eventType: "view",
+        source:    "listing_detail",
+      }).catch((err) => console.error("[ListingDetail] trackEvent view error:", err));
+    }
   }, [listing.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const agent = MOCK_AGENTS.find((a) => a.id === listing.agentId) ?? MOCK_AGENTS[0];
@@ -94,6 +109,41 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
     requireAuth(null, () => toggle(listing.id));
   }
 
+  // ── WhatsApp click — create lead + track analytics, then navigate ─────────
+  // The <a> tag handles navigation normally; we fire-and-forget both the lead
+  // creation and the analytics event in the background.
+  function handleWhatsAppClick() {
+    if (isAuthenticated && user?.id) {
+      createLead({
+        listingId: listing.id,
+        agentId: listing.agentId,
+        userId: user.id,
+        source: "whatsapp",
+      }).catch((err) => console.error("[ListingDetail] createLead error:", err));
+    }
+    // Track whatsapp_click analytics event regardless of auth state
+    trackEvent({
+      listingId: listing.id,
+      agentId:   listing.agentId ?? null,
+      userId:    user?.id ?? null,
+      eventType: "whatsapp_click",
+      source:    "listing_detail",
+    }).catch((err) => console.error("[ListingDetail] trackEvent whatsapp error:", err));
+    // Navigation proceeds naturally via the <a> href
+  }
+
+  // ── Call click — track analytics, then navigate via tel link ──────────────
+  function handleCallClick() {
+    trackEvent({
+      listingId: listing.id,
+      agentId:   listing.agentId ?? null,
+      userId:    user?.id ?? null,
+      eventType: "call_click",
+      source:    "listing_detail",
+    }).catch((err) => console.error("[ListingDetail] trackEvent call error:", err));
+    // Navigation proceeds naturally via the <a> href (tel:)
+  }
+
   // Login modal reason text per action
   const loginReasonAr: Record<NonNullable<ProtectedModal>, string> = {
     bookViewing: "لحجز موعد معاينة يجب تسجيل الدخول أولاً.",
@@ -112,11 +162,12 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
         }}
       >
         <div className="flex items-center gap-2 px-4 pt-3 pb-1">
-          {/* WhatsApp — primary CTA */}
+          {/* WhatsApp — primary CTA — creates lead on click */}
           <a
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleWhatsAppClick}
             className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white text-sm font-bold py-3 rounded-2xl"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -128,6 +179,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
           {/* Call */}
           <a
             href={callHref}
+            onClick={handleCallClick}
             className="flex items-center justify-center gap-1.5 bg-[#F5F0EA] text-[#1E1E1E] text-sm font-semibold py-3 px-4 rounded-2xl border border-[#E8DDD0]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -197,7 +249,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
                 <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
               </svg>
-              مشاركة
+              {shareSuccess ? "تم النسخ" : "مشاركة"}
             </button>
 
             {/* Report — auth-gated */}
@@ -231,16 +283,20 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
         reasonAr={blockedModal ? loginReasonAr[blockedModal] : "يجب تسجيل الدخول للمتابعة."}
       />
 
-      {/* Protected modals */}
+      {/* Protected modals — pass userId + agentId for Supabase inserts */}
       <BookViewingModal
         open={bookViewingOpen}
         onClose={() => setBookViewingOpen(false)}
         listing={listing}
+        userId={user?.id}
+        agentId={listing.agentId}
       />
       <MakeOfferModal
         open={makeOfferOpen}
         onClose={() => setMakeOfferOpen(false)}
         listing={listing}
+        userId={user?.id}
+        agentId={listing.agentId}
       />
       <ReportListingModal
         open={reportOpen}

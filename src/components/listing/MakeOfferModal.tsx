@@ -4,12 +4,15 @@ import { useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Input } from "@/components/ui/Input";
 import { formatOMR, toArabicNumerals } from "@/lib/formatters";
+import { createOffer } from "@/lib/supabase/crm";
 import type { Listing } from "@/types/listing";
 
 interface MakeOfferModalProps {
   open: boolean;
   onClose: () => void;
   listing: Listing;
+  userId?: string;  // authenticated user id
+  agentId: string;  // listing.agentId
 }
 
 type FinancingType = "cash" | "mortgage" | "installment";
@@ -21,7 +24,7 @@ const FINANCING_OPTIONS: Array<{ value: FinancingType; labelAr: string }> = [
   { value: "installment", labelAr: "أقساط" },
 ];
 
-export function MakeOfferModal({ open, onClose, listing }: MakeOfferModalProps) {
+export function MakeOfferModal({ open, onClose, listing, userId, agentId }: MakeOfferModalProps) {
   const [step, setStep] = useState<Step>("form");
   const [offerAmount, setOfferAmount] = useState("");
   const [name, setName] = useState("");
@@ -56,7 +59,23 @@ export function MakeOfferModal({ open, onClose, listing }: MakeOfferModalProps) 
     setErrors(e);
     if (Object.keys(e).length > 0) return;
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
+    if (userId) {
+      // Authenticated — insert into Supabase; navigate to success regardless of outcome
+      await createOffer({
+        listingId: listing.id,
+        agentId,
+        userId,
+        offerAmountOmr: numAmount,
+        askingPriceOmr: listing.price,
+        financingType: financing,
+        customerName: name.trim(),
+        customerPhone: phone.trim(),
+        notes: notes.trim() || undefined,
+      }).catch((err) => console.error("[MakeOffer] createOffer error:", err));
+    } else {
+      // Dev bypass / guest fallback
+      await new Promise((r) => setTimeout(r, 800));
+    }
     setSubmitting(false);
     setStep("success");
   }

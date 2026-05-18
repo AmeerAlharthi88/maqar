@@ -1,15 +1,64 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AgentDashboardShell } from "@/components/agent/AgentDashboardShell";
 import { ListingPerformanceCard } from "@/components/dashboard/ListingPerformanceCard";
-import { MOCK_AGENT_LISTINGS } from "@/mock/agent-analytics";
+import { MOCK_AGENT_LISTINGS, type AgentListingMeta } from "@/mock/agent-analytics";
 import { ROUTES } from "@/config/routes";
+import { useAuthStore } from "@/store/auth.store";
+import { getAgentListingsClient } from "@/lib/supabase/listings";
+
+// Map DB listing_status to the AgentListingMeta status union
+function mapStatus(dbStatus: string): AgentListingMeta["status"] {
+  switch (dbStatus) {
+    case "active":   return "active";
+    case "draft":    return "draft";
+    case "rejected": return "rejected";
+    case "expired":  return "expired";
+    case "sold":
+    case "rented":
+    case "needs_changes":
+    case "pending_review":
+    default:
+      return "pending_review";
+  }
+}
 
 export default function AgentListingsPage() {
-  const activeCount  = MOCK_AGENT_LISTINGS.filter((l) => l.status === "active").length;
-  const draftCount   = MOCK_AGENT_LISTINGS.filter((l) => l.status === "draft").length;
-  const pendingCount = MOCK_AGENT_LISTINGS.filter((l) => l.status === "pending_review").length;
+  const { user } = useAuthStore();
+  const [listings, setListings] = useState<AgentListingMeta[]>(MOCK_AGENT_LISTINGS);
+  const [isLoading, setIsLoading] = useState(false);
+
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!user?.id) return; // not logged in → keep mock
+
+    setIsLoading(true);
+    getAgentListingsClient(user.id).then(({ listings: rows, error }) => {
+      setIsLoading(false);
+      if (error || rows.length === 0) return; // keep mock on error or empty DB
+
+      // Map DB rows to AgentListingMeta (what ListingPerformanceCard expects)
+      const mapped: AgentListingMeta[] = rows.map((row) => ({
+        listingId: row.id,
+        titleAr:   row.title_ar,
+        price:     row.price_omr ? Number(row.price_omr) : 0,
+        status:    mapStatus(row.status),
+        views:     row.view_count ?? 0,
+        leads:     row.lead_count ?? 0,
+        createdAt: row.created_at ?? new Date().toISOString(),
+        expiresAt: row.expires_at ?? undefined,
+      }));
+
+      setListings(mapped);
+    });
+  }, [user?.id]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  const activeCount  = listings.filter((l) => l.status === "active").length;
+  const draftCount   = listings.filter((l) => l.status === "draft").length;
+  const pendingCount = listings.filter((l) => l.status === "pending_review").length;
 
   return (
     <AgentDashboardShell titleAr="إعلاناتي">
@@ -37,16 +86,27 @@ export default function AgentListingsPage() {
           </Link>
         </div>
 
+        {/* Loading skeletons */}
+        {isLoading && (
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-24 rounded-2xl bg-[#F5F0EA] animate-pulse" />
+            ))}
+          </div>
+        )}
+
         {/* Listing cards */}
-        <div className="space-y-3">
-          {MOCK_AGENT_LISTINGS.map((listing) => (
-            <ListingPerformanceCard
-              key={listing.listingId}
-              listing={listing}
-              onEdit={() => {}}
-            />
-          ))}
-        </div>
+        {!isLoading && (
+          <div className="space-y-3">
+            {listings.map((listing) => (
+              <ListingPerformanceCard
+                key={listing.listingId}
+                listing={listing}
+                onEdit={() => {}}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </AgentDashboardShell>
   );

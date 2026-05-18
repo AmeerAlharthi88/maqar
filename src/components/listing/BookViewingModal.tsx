@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Input } from "@/components/ui/Input";
+import { createAppointment } from "@/lib/supabase/crm";
 import type { Listing } from "@/types/listing";
 
 interface BookViewingModalProps {
   open: boolean;
   onClose: () => void;
   listing: Listing;
+  userId?: string;  // authenticated user id
+  agentId: string;  // listing.agentId
 }
 
 const TIME_SLOTS = [
@@ -19,7 +22,7 @@ const TIME_SLOTS = [
 
 type Step = "form" | "success";
 
-export function BookViewingModal({ open, onClose, listing }: BookViewingModalProps) {
+export function BookViewingModal({ open, onClose, listing, userId, agentId }: BookViewingModalProps) {
   const [step, setStep] = useState<Step>("form");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -47,7 +50,22 @@ export function BookViewingModal({ open, onClose, listing }: BookViewingModalPro
     if (Object.keys(e).length > 0) return;
 
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800)); // simulate
+    if (userId) {
+      // Authenticated — insert into Supabase; navigate to success regardless of outcome
+      await createAppointment({
+        listingId: listing.id,
+        agentId,
+        userId,
+        preferredDate: date,
+        preferredTime: time,
+        customerName: name.trim(),
+        customerPhone: phone.trim(),
+        notes: notes.trim() || undefined,
+      }).catch((err) => console.error("[BookViewing] createAppointment error:", err));
+    } else {
+      // Dev bypass / guest fallback
+      await new Promise((r) => setTimeout(r, 800));
+    }
     setSubmitting(false);
     setStep("success");
   }

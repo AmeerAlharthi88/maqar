@@ -8,13 +8,15 @@ const STATUS_VARIANT: Record<ReportStatus, "success" | "warning" | "danger" | "i
   reviewing: "warning",
   resolved:  "success",
   dismissed: "neutral",
+  escalated: "purple",
 };
 
-const TARGET_TYPE_AR = {
+const TARGET_TYPE_AR: Record<string, string> = {
   listing: "إعلان",
   agent:   "وسيط",
   agency:  "وكالة",
-} as const;
+  review:  "تقييم",
+};
 
 interface ReportCardProps {
   report: AdminReport;

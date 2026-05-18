@@ -142,6 +142,7 @@ export async function generateDescription(
       return DEV_MOCK_DESCRIPTION;
     }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "generate-description", inputTokenEstimate: inputEst, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("generate-description", code, "تعذّر توليد الوصف.");
   }
 }
@@ -172,8 +173,12 @@ export async function valuation(
     await logAIUsage({ userId, feature: "valuation", inputTokenEstimate: inputEst, outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_VALUATION;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "valuation", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_VALUATION;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "valuation", inputTokenEstimate: inputEst, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("valuation", code, "تعذّر تحليل السعر.");
   }
 }
@@ -203,8 +208,12 @@ export async function assistant(
     await logAIUsage({ userId, feature: "assistant", inputTokenEstimate: inputEst, outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_ASSISTANT;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "assistant", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_ASSISTANT;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "assistant", inputTokenEstimate: inputEst, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("assistant", code, "تعذّر الرد.");
   }
 }
@@ -214,6 +223,9 @@ export async function roiExplanation(
   req: ROIExplanationRequest,
   userId?: string
 ): Promise<ROIExplanationResponse> {
+  const { allowed } = await checkUsageLimit("roi-explanation", userId);
+  if (!allowed) return errorResponse("roi-explanation", "usage_limit_reached", "تم الوصول إلى الحد اليومي لتحليل العائد.");
+
   const prompt = buildROIPrompt(req);
   try {
     const raw = await callAI({ systemPrompt: SYSTEM_BASE, userPrompt: prompt });
@@ -229,8 +241,12 @@ export async function roiExplanation(
     await logAIUsage({ userId, feature: "roi-explanation", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_ROI;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "roi-explanation", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_ROI;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "roi-explanation", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("roi-explanation", code, "تعذّر تحليل العائد.");
   }
 }
@@ -240,6 +256,9 @@ export async function marketSummary(
   req: MarketSummaryRequest,
   userId?: string
 ): Promise<MarketSummaryResponse> {
+  const { allowed } = await checkUsageLimit("market-summary", userId);
+  if (!allowed) return errorResponse("market-summary", "usage_limit_reached", "تم الوصول إلى الحد اليومي لملخص السوق.");
+
   const prompt = buildMarketSummaryPrompt(req);
   try {
     const raw = await callAI({ systemPrompt: SYSTEM_BASE, userPrompt: prompt });
@@ -255,8 +274,12 @@ export async function marketSummary(
     await logAIUsage({ userId, feature: "market-summary", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_MARKET;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "market-summary", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_MARKET;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "market-summary", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("market-summary", code, "تعذّر توليد ملخص السوق.");
   }
 }
@@ -266,6 +289,9 @@ export async function duplicateRisk(
   req: DuplicateRiskRequest,
   userId?: string
 ): Promise<DuplicateRiskResponse> {
+  const { allowed } = await checkUsageLimit("duplicate-risk", userId);
+  if (!allowed) return errorResponse("duplicate-risk", "usage_limit_reached", "تم الوصول إلى الحد اليومي لتحليل التكرار.");
+
   const prompt = buildDuplicateRiskPrompt(req);
   try {
     const raw = await callAI({ systemPrompt: SYSTEM_BASE, userPrompt: prompt });
@@ -280,8 +306,12 @@ export async function duplicateRisk(
     await logAIUsage({ userId, feature: "duplicate-risk", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_DUPLICATE;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "duplicate-risk", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_DUPLICATE;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "duplicate-risk", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("duplicate-risk", code, "تعذّر تحليل التكرار.");
   }
 }
@@ -291,6 +321,9 @@ export async function listingQuality(
   req: ListingQualityRequest,
   userId?: string
 ): Promise<ListingQualityResponse> {
+  const { allowed } = await checkUsageLimit("listing-quality", userId);
+  if (!allowed) return errorResponse("listing-quality", "usage_limit_reached", "تم الوصول إلى الحد اليومي لتحليل جودة الإعلان.");
+
   const prompt = buildListingQualityPrompt(req);
   try {
     const raw = await callAI({ systemPrompt: SYSTEM_BASE, userPrompt: prompt });
@@ -303,8 +336,12 @@ export async function listingQuality(
     await logAIUsage({ userId, feature: "listing-quality", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_QUALITY;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "listing-quality", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_QUALITY;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "listing-quality", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("listing-quality", code, "تعذّر تحليل الجودة.");
   }
 }
@@ -314,6 +351,9 @@ export async function smartReply(
   req: SmartReplyRequest,
   userId?: string
 ): Promise<SmartReplyResponse> {
+  const { allowed } = await checkUsageLimit("smart-reply", userId);
+  if (!allowed) return errorResponse("smart-reply", "usage_limit_reached", "تم الوصول إلى الحد اليومي للردود الذكية.");
+
   const prompt = buildSmartReplyPrompt(req);
   try {
     const raw = await callAI({ systemPrompt: SYSTEM_BASE, userPrompt: prompt });
@@ -325,8 +365,12 @@ export async function smartReply(
     await logAIUsage({ userId, feature: "smart-reply", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: estimateTokens(raw), timestamp: new Date().toISOString(), success: true, isMockFallback: false });
     return result;
   } catch (err) {
-    if (isKeyMissing(err)) return DEV_MOCK_SMART_REPLY;
+    if (isKeyMissing(err)) {
+      await logAIUsage({ userId, feature: "smart-reply", inputTokenEstimate: 0, outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: true });
+      return DEV_MOCK_SMART_REPLY;
+    }
     const code = err instanceof AIProviderError ? err.code : "unknown" as AIErrorCode;
+    await logAIUsage({ userId, feature: "smart-reply", inputTokenEstimate: estimateTokens(prompt), outputTokenEstimate: 0, timestamp: new Date().toISOString(), success: false, isMockFallback: false });
     return errorResponse("smart-reply", code, "تعذّر إنشاء الردود.");
   }
 }
