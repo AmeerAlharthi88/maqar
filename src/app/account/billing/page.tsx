@@ -1,4 +1,10 @@
-import type { Metadata } from "next";
+"use client";
+
+// ── /account/billing — subscription & billing history page ───────────────────
+// Loads real subscription data from Supabase (RLS: user sees own rows only).
+// Falls back to mock data in dev (DEV_SKIP_AUTH=true) or when no data exists.
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { SubscriptionStatusCard } from "@/components/subscriptions/SubscriptionStatusCard";
@@ -12,18 +18,45 @@ import {
 } from "@/mock/subscriptions";
 import { ADDON_LABELS_AR } from "@/lib/payments/plans";
 import { formatOMR } from "@/lib/formatters";
-
-export const metadata: Metadata = {
-  title: "الفواتير والاشتراك | مقر",
-  description: "إدارة اشتراكك، عرض الفواتير، وإلغاء أو تغيير خطتك في مقر.",
-};
+import { useAuthStore } from "@/store/auth.store";
+import {
+  fetchUserSubscription,
+  fetchBillingRecords,
+  fetchUserAddOns,
+  fetchUserUsageLimits,
+} from "@/lib/supabase/subscriptions";
+import type { UserSubscription, BillingRecord, AddOnPurchase, UsageLimit } from "@/lib/payments/types";
 
 export default function BillingPage() {
-  // TODO Phase 15+: load real subscription from Supabase session
-  const subscription = MOCK_AGENT_PRO_SUBSCRIPTION;
-  const billingHistory = MOCK_BILLING_HISTORY;
-  const usageLimits = MOCK_AGENT_PRO_USAGE_LIMITS;
-  const addOnPurchases = MOCK_ADDON_PURCHASES;
+  const { user } = useAuthStore();
+
+  const [subscription, setSubscription] = useState<UserSubscription>(MOCK_AGENT_PRO_SUBSCRIPTION);
+  const [billingHistory, setBillingHistory] = useState<BillingRecord[]>(MOCK_BILLING_HISTORY);
+  const [usageLimits, setUsageLimits] = useState<UsageLimit[]>(MOCK_AGENT_PRO_USAGE_LIMITS);
+  const [addOnPurchases, setAddOnPurchases] = useState<AddOnPurchase[]>(MOCK_ADDON_PURCHASES);
+  const [isLive, setIsLive] = useState(false);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const userId = user.id;
+
+    Promise.all([
+      fetchUserSubscription(userId),
+      fetchBillingRecords(userId),
+      fetchUserAddOns(userId),
+      fetchUserUsageLimits(userId),
+    ])
+      .then(([sub, records, addOns, limits]) => {
+        let anyLive = false;
+        if (sub)             { setSubscription(sub);     anyLive = true; }
+        if (records.length)  { setBillingHistory(records); anyLive = true; }
+        if (addOns.length)   { setAddOnPurchases(addOns); anyLive = true; }
+        if (limits.length)   { setUsageLimits(limits);    anyLive = true; }
+        setIsLive(anyLive);
+      })
+      .catch(() => {/* keep mock data */});
+  }, [user?.id]);
 
   const activeAddOns = addOnPurchases.filter((a) => a.isActive);
 
@@ -40,15 +73,17 @@ export default function BillingPage() {
           </p>
         </div>
 
-        {/* Mock notice */}
-        <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl px-4 py-3">
-          <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
-            وضع المعاينة
-          </p>
-          <p className="text-xs text-[#7A6B5E]">
-            معالجة المدفوعات غير مفعّلة بعد. البيانات المعروضة للتجربة فقط.
-          </p>
-        </div>
+        {/* Data source notice */}
+        {!isLive && (
+          <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl px-4 py-3">
+            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
+              وضع المعاينة
+            </p>
+            <p className="text-xs text-[#7A6B5E]">
+              معالجة المدفوعات غير مفعّلة بعد. البيانات المعروضة للتجربة فقط.
+            </p>
+          </div>
+        )}
 
         {/* Current subscription */}
         <SubscriptionStatusCard

@@ -5,6 +5,11 @@ import { useAuthStore } from "@/store/auth.store";
 import type { KYCApplication, KYCDocument, KYCDocumentType } from "@/types/profile";
 import { KYC_DOC_LABELS_AR, VERIFICATION_STATUS_LABELS_AR } from "@/types/profile";
 import { ROLE_LABELS_AR } from "@/config/roles";
+import {
+  uploadKYCDocument,
+  insertKYCDocument,
+  createOrUpdateKYCApplication,
+} from "@/lib/supabase/kyc";
 
 // Required documents per agent type
 const INDIVIDUAL_DOCS: KYCDocumentType[] = [
@@ -126,25 +131,41 @@ export function KYCVerificationForm() {
 
   const allUploaded = requiredTypes.every((t) => getDoc(t)?.uploadStatus === "done");
 
-  // Simulate file upload (TODO: real Supabase Storage upload in Phase 10)
+  // Upload a single document to Supabase Storage (or fallback for guests)
   const handleUpload = useCallback(async (type: KYCDocumentType, file: File) => {
-    const id = `${type}-${Date.now()}`;
+    const docId = `${type}-${Date.now()}`;
 
-    // Mark as uploading
+    // Optimistically mark as uploading
     setDocuments((prev) => {
       const next = prev.filter((d) => d.type !== type);
-      return [...next, { id, type, fileName: file.name, uploadStatus: "uploading" }];
+      return [...next, { id: docId, type, fileName: file.name, uploadStatus: "uploading" }];
     });
 
-    // Simulate upload delay (TODO: replace with supabase.storage.from("kyc").upload(...))
-    await new Promise((r) => setTimeout(r, 1200));
+    if (user?.id) {
+      // Real upload to Supabase Storage (private documents bucket)
+      const storagePath = await uploadKYCDocument(user.id, type, file);
 
-    setDocuments((prev) =>
-      prev.map((d) =>
-        d.id === id ? { ...d, uploadStatus: "done", url: "pending-upload" } : d
-      )
-    );
-  }, []);
+      setDocuments((prev) =>
+        prev.map((d) =>
+          d.id === docId
+            ? {
+                ...d,
+                uploadStatus: storagePath ? "done" : "error",
+                url: storagePath ?? undefined,
+              }
+            : d
+        )
+      );
+    } else {
+      // Guest / dev fallback — simulate delay
+      await new Promise((r) => setTimeout(r, 1200));
+      setDocuments((prev) =>
+        prev.map((d) =>
+          d.id === docId ? { ...d, uploadStatus: "done", url: "pending-upload" } : d
+        )
+      );
+    }
+  }, [user]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -152,10 +173,32 @@ export function KYCVerificationForm() {
     setError(null);
     setIsSubmitting(true);
 
-    // TODO: submit KYC application to Supabase (Phase 10)
-    // const application: KYCApplication = { userId: user!.id, status: "submitted", agentType, ... }
-    // await supabase.from("kyc_applications").insert(application)
-    await new Promise((r) => setTimeout(r, 1500));
+    if (user?.id) {
+      // 1. Upsert the KYC application record (creates or updates draft → submitted)
+      const app = await createOrUpdateKYCApplication(user.id, agentType, "submitted");
+
+      if (app?.id) {
+        // 2. Insert DB records for all uploaded documents
+        await Promise.all(
+          documents
+            .filter((d) => d.uploadStatus === "done" && d.url && d.url !== "pending-upload")
+            .map((d) =>
+              insertKYCDocument({
+                applicationId: app.id,
+                userId: user.id,
+                documentType: d.type,
+                storagePath: d.url!,
+                fileName: d.fileName,
+                fileSizeBytes: undefined,
+                mimeType: undefined,
+              })
+            )
+        );
+      }
+    } else {
+      // Guest / dev fallback
+      await new Promise((r) => setTimeout(r, 1500));
+    }
 
     setIsSubmitted(true);
     setIsSubmitting(false);

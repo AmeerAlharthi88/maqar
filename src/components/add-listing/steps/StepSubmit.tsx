@@ -11,6 +11,7 @@ interface StepSubmitProps {
   isSubmitting: boolean;
   submitSuccess: boolean;
   termsAccepted: boolean;
+  submitError: string | null;
   onSubmit: () => void;
   onSaveDraft: () => void;
   onReset: () => void;
@@ -22,6 +23,7 @@ export function StepSubmit({
   isSubmitting,
   submitSuccess,
   termsAccepted,
+  submitError,
   onSubmit,
   onSaveDraft,
   onReset,
@@ -126,6 +128,14 @@ export function StepSubmit({
           <p className="text-xs text-[#C65D3B] font-semibold">
             يرجى قبول شروط النشر في الخطوة السابقة للمتابعة
           </p>
+        </div>
+      )}
+
+      {/* Submit error */}
+      {submitError && (
+        <div className="bg-[#FBF0EB] border border-[#C65D3B]/40 rounded-xl px-4 py-3">
+          <p className="text-xs font-semibold text-[#C65D3B] mb-1">فشل إرسال الإعلان</p>
+          <p className="text-xs text-[#7A6B5E] font-mono break-all">{submitError}</p>
         </div>
       )}
 

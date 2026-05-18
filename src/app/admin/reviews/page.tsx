@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { MOCK_ADMIN_REVIEWS } from "@/mock/admin";
 import type { AdminReviewItem, ReviewModerationStatus } from "@/types/admin";
 import { REVIEW_MOD_STATUS_AR } from "@/types/admin";
+import { fetchPendingReviewsAdmin, updateReviewModeration } from "@/lib/supabase/reviews";
+import type { ReviewItem } from "@/lib/supabase/reviews";
 
 const STATUS_VARIANT: Record<ReviewModerationStatus, "success" | "warning" | "danger" | "info" | "neutral" | "purple"> = {
   pending:  "warning",
@@ -20,10 +22,51 @@ const FILTER_AR: Record<ReviewModerationStatus | "all", string> = {
   all: "الكل", pending: "في الانتظار", approved: "مقبول", rejected: "مرفوض", hidden: "مخفي",
 };
 
+// ── Mapper: ReviewItem (Supabase) → AdminReviewItem (UI) ─────────────────────
+const TARGET_TYPE_AR: Record<"agent" | "agency", string> = { agent: "وسيط", agency: "وكالة" };
+
+function reviewItemToAdmin(r: ReviewItem): AdminReviewItem {
+  return {
+    id: r.id,
+    authorNameAr: r.authorName,
+    rating: r.rating,
+    bodyAr: r.body ?? "",
+    targetType: r.targetType,
+    // We don't have the target display name without an extra join; show type label
+    targetNameAr: TARGET_TYPE_AR[r.targetType],
+    targetId: r.targetId,
+    status: r.moderationStatus,
+    isReported: false,
+    createdAt: r.createdAt,
+  };
+}
+
 function useReviewQueue() {
   const [items, setItems] = useState<AdminReviewItem[]>(MOCK_ADMIN_REVIEWS);
-  const update = (id: string, status: ReviewModerationStatus, note?: string) =>
-    setItems((prev) => prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r));
+
+  useEffect(() => {
+    fetchPendingReviewsAdmin()
+      .then((rows) => {
+        if (rows.length > 0) {
+          setItems(rows.map(reviewItemToAdmin));
+        }
+        // if empty, keep mock data
+      })
+      .catch(() => {/* keep mock data */});
+  }, []);
+
+  async function update(id: string, status: ReviewModerationStatus, note?: string) {
+    // Optimistic update
+    setItems((prev) =>
+      prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r)
+    );
+    if (status === "approved" || status === "rejected" || status === "hidden") {
+      await updateReviewModeration(id, status).catch((err) =>
+        console.error("[Admin/Reviews] updateReviewModeration error:", err)
+      );
+    }
+  }
+
   return { items, update };
 }
 
@@ -108,15 +151,15 @@ export default function AdminReviewsPage() {
                   {/* Actions */}
                   {review.status === "pending" && (
                     <div className="flex gap-2">
-                      <button onClick={() => update(review.id, "approved")}
+                      <button onClick={() => void update(review.id, "approved")}
                         className="flex-1 py-2 rounded-xl bg-[#EDF4ED] text-[#5B8C5A] text-xs font-bold">
                         قبول
                       </button>
-                      <button onClick={() => update(review.id, "rejected", "محتوى غير مناسب.")}
+                      <button onClick={() => void update(review.id, "rejected", "محتوى غير مناسب.")}
                         className="flex-1 py-2 rounded-xl bg-[#FBF0EB] text-[#C65D3B] text-xs font-bold">
                         رفض
                       </button>
-                      <button onClick={() => update(review.id, "hidden")}
+                      <button onClick={() => void update(review.id, "hidden")}
                         className="flex-1 py-2 rounded-xl bg-[#F5F0EA] text-[#7A6B5E] text-xs font-bold">
                         إخفاء
                       </button>

@@ -10,6 +10,10 @@ import { AGENCY_MAP, MOCK_AGENCIES } from "@/mock/agencies";
 import { getReviews } from "@/mock/reviews";
 import { buildAgencyMetadata } from "@/lib/seo/metadata";
 import { agencyJsonLd, breadcrumbJsonLd, serializeJsonLd } from "@/lib/seo/jsonld";
+import { createClient as createServerClient } from "@/lib/supabase/server";
+
+// Re-render at most once every 5 minutes (ISR) so Supabase reviews stay fresh.
+export const revalidate = 300;
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -36,7 +40,41 @@ export default async function AgencyProfilePage({ params }: Props) {
 
   if (!agency) notFound();
 
-  const reviews = getReviews(id, 5);
+  // ── Reviews: try Supabase first, fall back to mock ────────────────────────
+  let reviews: Array<{
+    id: string;
+    authorNameAr: string;
+    rating: number;
+    bodyAr: string;
+    createdAt: string;
+  }>;
+
+  try {
+    const supabase = await createServerClient();
+    const { data } = await supabase
+      .from("reviews")
+      .select("id, rating, body, created_at, profiles ( full_name )")
+      .eq("target_id", id)
+      .eq("target_type", "agency")
+      .eq("moderation_status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    if (data && data.length > 0) {
+      reviews = data.map((r) => ({
+        id: r.id as string,
+        authorNameAr:
+          (r.profiles as unknown as { full_name: string | null } | null)?.full_name ?? "مستخدم",
+        rating: r.rating as number,
+        bodyAr: (r.body as string | null) ?? "",
+        createdAt: r.created_at as string,
+      }));
+    } else {
+      reviews = getReviews(id, 5);
+    }
+  } catch {
+    reviews = getReviews(id, 5);
+  }
 
   const agSchema = agencyJsonLd({
     nameAr: agency.nameAr,

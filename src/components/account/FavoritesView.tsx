@@ -1,18 +1,64 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFavoritesStore } from "@/store/favorites.store";
-import { ROUTES } from "@/config/routes";
+import { fetchListingsByIds } from "@/lib/supabase/listings";
 import { getListingById } from "@/lib/helpers/listing-detail";
+import { ROUTES } from "@/config/routes";
+import type { Listing } from "@/types/listing";
+
+const DEV_SKIP_AUTH = process.env.NEXT_PUBLIC_DEV_SKIP_AUTH === "true";
 
 export function FavoritesView() {
   const router = useRouter();
   const { _idsArray: ids, toggle } = useFavoritesStore();
 
-  const listings = ids
-    .map((id) => getListingById(id))
-    .filter(Boolean) as NonNullable<ReturnType<typeof getListingById>>[];
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (ids.length === 0) {
+      setListings([]);
+      return;
+    }
+
+    if (DEV_SKIP_AUTH) {
+      // Dev mode — pull from mock data
+      const mockListings = ids
+        .map((id) => getListingById(id))
+        .filter(Boolean) as Listing[];
+      setListings(mockListings);
+      return;
+    }
+
+    // Production — fetch from Supabase
+    setIsLoading(true);
+    fetchListingsByIds(ids)
+      .then((rows) => {
+        if (rows.length > 0) {
+          setListings(rows);
+        } else {
+          // Fallback to mock if Supabase returned nothing (e.g. listings not yet active)
+          const mockListings = ids
+            .map((id) => getListingById(id))
+            .filter(Boolean) as Listing[];
+          setListings(mockListings);
+        }
+      })
+      .catch((err) => {
+        console.error("[FavoritesView] fetchListingsByIds error:", err);
+        // Fallback to mock on error
+        const mockListings = ids
+          .map((id) => getListingById(id))
+          .filter(Boolean) as Listing[];
+        setListings(mockListings);
+      })
+      .finally(() => setIsLoading(false));
+  }, [ids]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   return (
     <div className="min-h-screen bg-[#FAF7F4] pb-24" dir="rtl">
@@ -46,6 +92,10 @@ export function FavoritesView() {
           >
             تصفح العقارات
           </Link>
+        </div>
+      ) : isLoading ? (
+        <div className="flex items-center justify-center py-20">
+          <span className="w-6 h-6 rounded-full border-2 border-[#C65D3B]/30 border-t-[#C65D3B] animate-spin" />
         </div>
       ) : (
         <div className="px-4 py-4 space-y-3">

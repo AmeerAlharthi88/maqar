@@ -1,10 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { AgentDashboardShell } from "@/components/agent/AgentDashboardShell";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
 import { DashboardChartCard } from "@/components/dashboard/DashboardChartCard";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { MOCK_AGENT_ANALYTICS } from "@/mock/agent-analytics";
+import type { AgentAnalyticsSummary } from "@/mock/agent-analytics";
+import { fetchAgentAnalyticsSummary } from "@/lib/supabase/analytics";
+import { useAuthStore } from "@/store/auth.store";
 
 const CHART_LINES_TRAFFIC = [
   { key: "views"          as const, labelAr: "مشاهدة", color: "#C65D3B" },
@@ -17,13 +21,38 @@ const CHART_LINES_LEADS = [
 ];
 
 export default function AgentAnalyticsPage() {
-  const a = MOCK_AGENT_ANALYTICS;
+  const { user } = useAuthStore();
+  const [analytics, setAnalytics] = useState<AgentAnalyticsSummary>(MOCK_AGENT_ANALYTICS);
+  const [isLive, setIsLive] = useState(false);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    fetchAgentAnalyticsSummary(user.id, 30)
+      .then((data) => {
+        if (data) {
+          setAnalytics(data);
+          setIsLive(true);
+        }
+        // if null — no data yet or dev mode — keep mock data, isLive stays false
+      })
+      .catch(() => {/* keep mock data */});
+  }, [user?.id]);
+
+  const a = analytics;
 
   return (
     <AgentDashboardShell titleAr="التحليلات">
       <div className="px-4 py-4 space-y-4" dir="rtl">
         {/* Period note */}
-        <p className="text-xs text-[#A89480]">إحصائيات آخر ٣٠ يوماً</p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-[#A89480]">إحصائيات آخر ٣٠ يوماً</p>
+          {!isLive && (
+            <span className="text-[10px] px-2 py-0.5 bg-[#F5F0EA] text-[#A89480] rounded-full">
+              بيانات تجريبية
+            </span>
+          )}
+        </div>
 
         {/* Overview metrics */}
         <div className="grid grid-cols-2 gap-3">
@@ -62,7 +91,7 @@ export default function AgentAnalyticsPage() {
         />
 
         {/* Top performing listings */}
-        {a.topListings.length > 0 && (
+        {a.topListings.length > 0 ? (
           <div>
             <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">أفضل الإعلانات أداءً</h2>
             <div className="space-y-2">
@@ -99,6 +128,13 @@ export default function AgentAnalyticsPage() {
               ))}
             </div>
           </div>
+        ) : (
+          /* Empty state — shown when Supabase data loads but is genuinely empty */
+          isLive && (
+            <div className="text-center py-8">
+              <p className="text-sm text-[#A89480]">لا توجد بيانات بعد. ستظهر الإحصائيات بعد أول مشاهدة لإعلاناتك.</p>
+            </div>
+          )
         )}
       </div>
     </AgentDashboardShell>

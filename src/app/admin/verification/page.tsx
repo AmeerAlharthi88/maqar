@@ -1,22 +1,87 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { VerificationRequestCard } from "@/components/admin/VerificationRequestCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { MOCK_VERIFICATION_REQUESTS } from "@/mock/admin";
 import type { AdminVerificationRequest, VerificationRequestStatus, VerificationRequestType } from "@/types/admin";
+import { fetchKYCApplicationsAdmin, updateKYCApplicationStatus } from "@/lib/supabase/kyc";
+import type { KycApplicationAdmin, KycStatus } from "@/lib/supabase/kyc";
+import type { KYCDocumentType } from "@/types/profile";
 
 const TYPE_FILTERS: (VerificationRequestType | "all")[] = ["all", "agent", "agency"];
 const TYPE_AR: Record<VerificationRequestType | "all", string> = {
   all: "الكل", agent: "وسيط", agency: "وكالة", property: "عقار",
 };
 
-// Mock action handler — TODO: replace with server action in Phase 12
+// ── Mapper: KycApplicationAdmin → AdminVerificationRequest ─────────────────────
+const KYC_STATUS_MAP: Record<KycStatus, VerificationRequestStatus> = {
+  not_started:    "pending",
+  draft:          "pending",
+  submitted:      "pending",
+  under_review:   "under_review",
+  approved:       "approved",
+  rejected:       "rejected",
+  needs_more_info:"needs_more_info",
+};
+
+const KYC_DOC_TYPE_MAP: Record<KYCDocumentType, "civil_id" | "agent_license" | "cr" | "property_deed" | "other"> = {
+  civil_id_front: "civil_id",
+  civil_id_back:  "civil_id",
+  cr_number:      "cr",
+  agency_license: "other",
+  agent_card:     "agent_license",
+  selfie:         "other",
+};
+
+function kycToVerificationRequest(app: KycApplicationAdmin): AdminVerificationRequest {
+  return {
+    id: app.id,
+    applicantNameAr: app.authorName,
+    applicantId: app.userId,
+    type: app.entityType === "individual" ? "agent" : "agency",
+    status: KYC_STATUS_MAP[app.status] ?? "pending",
+    phone: "—",
+    isPhoneVerified: false,
+    documents: app.documents.map((d) => ({
+      type: KYC_DOC_TYPE_MAP[d.documentType] ?? "other",
+      labelAr: d.fileName,
+      submitted: true,
+      verified: false,
+    })),
+    submittedAt: app.submittedAt ?? app.createdAt,
+    riskLevel: "low",
+    adminNote: app.adminNotes ?? undefined,
+  };
+}
+
 function useVerificationQueue() {
   const [items, setItems] = useState<AdminVerificationRequest[]>(MOCK_VERIFICATION_REQUESTS);
-  const update = (id: string, status: VerificationRequestStatus, note?: string) =>
-    setItems((prev) => prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r));
+
+  useEffect(() => {
+    fetchKYCApplicationsAdmin()
+      .then((rows) => {
+        if (rows.length > 0) {
+          setItems(rows.map(kycToVerificationRequest));
+        }
+        // if empty, keep mock data
+      })
+      .catch(() => {/* keep mock data */});
+  }, []);
+
+  async function update(id: string, status: VerificationRequestStatus, note?: string) {
+    // Optimistic update
+    setItems((prev) =>
+      prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r)
+    );
+    // Map VerificationRequestStatus back to KycStatus for DB update
+    const kycStatus = status as KycStatus;
+    await updateKYCApplicationStatus(id, kycStatus, note).catch((err) =>
+      console.error("[Admin/Verification] updateKYCApplicationStatus error:", err)
+    );
+  }
+
   return { items, update };
 }
 
@@ -56,9 +121,9 @@ export default function AdminVerificationPage() {
               <VerificationRequestCard
                 key={req.id}
                 request={req}
-                onApprove={(id) => update(id, "approved")}
-                onReject={(id) => update(id, "rejected")}
-                onRequestInfo={(id) => update(id, "needs_more_info", "يرجى إرسال المستندات المطلوبة.")}
+                onApprove={(id) => void update(id, "approved")}
+                onReject={(id) => void update(id, "rejected")}
+                onRequestInfo={(id) => void update(id, "needs_more_info", "يرجى إرسال المستندات المطلوبة.")}
               />
             ))}
           </div>

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
 import { filterListings, sortListings } from "@/lib/helpers/listing-filters";
 import { MOCK_LISTINGS } from "@/mock/listings";
+import { searchListingsClient } from "@/lib/supabase/listings";
+import type { Listing } from "@/types/listing";
 import { ListingCardInteractive } from "@/components/real-estate/ListingCardInteractive";
 import { SmartSearch } from "./SmartSearch";
 import { SortDropdown } from "./SortDropdown";
@@ -14,14 +16,42 @@ import { SearchFilterSheet } from "./SearchFilterSheet";
 import { SearchEmptyState, SearchResultsSkeletonGrid } from "./SearchSkeletons";
 import { toArabicNumerals } from "@/lib/formatters";
 
+// Env vars are fixed at module load time — no need for useRef.
+// When false, fall back to local MOCK_LISTINGS filtering.
+const SUPABASE_LIVE: boolean = (() => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  return url.startsWith("https://") && url.includes(".supabase.co");
+})();
+
 type DisplayMode = "grid" | "list";
 
 export function SearchPageClient() {
   const { filters, activeFilterCount } = useSearchStore();
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<DisplayMode>("grid");
-  const [isLoading] = useState(false); // Phase 6: real loading state
+  const [isLoading, setIsLoading] = useState(false);
+  // null = not yet fetched or Supabase not configured → use mock
+  const [dbListings, setDbListings] = useState<Listing[] | null>(null);
 
+  // Fetch from Supabase whenever filters change
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!SUPABASE_LIVE) return; // skip if not configured
+
+    let cancelled = false;
+    setIsLoading(true);
+
+    searchListingsClient(filters, 50).then(({ listings }) => {
+      if (cancelled) return;
+      setDbListings(listings);
+      setIsLoading(false);
+    });
+
+    return () => { cancelled = true; };
+  }, [filters]);
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  // Mock fallback: local filter + sort (used when Supabase is not configured)
   const filteredListings = useMemo(
     () => filterListings(MOCK_LISTINGS, filters),
     [filters]
@@ -30,6 +60,12 @@ export function SearchPageClient() {
     () => sortListings(filteredListings, filters.sortBy),
     [filteredListings, filters.sortBy]
   );
+
+  // Decide which list to display
+  const displayListings: Listing[] =
+    SUPABASE_LIVE && dbListings !== null
+      ? dbListings          // DB results (already sorted by Supabase)
+      : sortedListings;     // local mock fallback
 
   return (
     <div className="flex flex-col min-h-full">
@@ -113,25 +149,25 @@ export function SearchPageClient() {
       <div className="flex-1 px-4 py-4">
         {isLoading ? (
           <SearchResultsSkeletonGrid />
-        ) : sortedListings.length === 0 ? (
+        ) : displayListings.length === 0 ? (
           <SearchEmptyState query={filters.query} />
         ) : (
           <>
             {/* Result count */}
             <p className="text-sm text-[#7A6B5E] mb-4">
-              <span className="font-bold text-[#1E1E1E]">{toArabicNumerals(sortedListings.length)}</span> عقار متاح
+              <span className="font-bold text-[#1E1E1E]">{toArabicNumerals(displayListings.length)}</span> عقار متاح
             </p>
 
             {/* Listings */}
             {displayMode === "grid" ? (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {sortedListings.map((listing) => (
+                {displayListings.map((listing) => (
                   <ListingCardInteractive key={listing.id} listing={listing} variant="card" />
                 ))}
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {sortedListings.map((listing) => (
+                {displayListings.map((listing) => (
                   <ListingCardInteractive key={listing.id} listing={listing} variant="row" />
                 ))}
               </div>
@@ -144,7 +180,7 @@ export function SearchPageClient() {
       <SearchFilterSheet
         open={filterSheetOpen}
         onClose={() => setFilterSheetOpen(false)}
-        resultCount={sortedListings.length}
+        resultCount={displayListings.length}
       />
     </div>
   );

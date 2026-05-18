@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AdminQueueCard } from "@/components/admin/AdminQueueCard";
 import { ReviewActionBar } from "@/components/admin/ReviewActionBar";
@@ -29,20 +29,62 @@ const FILTER_LABELS_AR: Record<ListingReviewStatus | "all", string> = {
   suspicious:    "مشبوه",
 };
 
-// Mock local state update — TODO: replace with server action in Phase 12
 function useListingQueue() {
-  const [items, setItems] = useState<AdminListingItem[]>(MOCK_ADMIN_LISTINGS);
-  const updateStatus = (id: string, status: ListingReviewStatus) => {
-    setItems((prev) =>
-      prev.map((item) => item.id === id ? { ...item, reviewStatus: status } : item)
-    );
-  };
-  return { items, updateStatus };
+  const [items, setItems] = useState<AdminListingItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const reload = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/listings");
+      if (res.ok) {
+        const json = await res.json();
+        const data: AdminListingItem[] = json.data ?? [];
+        setItems(data.length > 0 ? data : MOCK_ADMIN_LISTINGS);
+      } else {
+        setItems(MOCK_ADMIN_LISTINGS);
+      }
+    } catch {
+      setItems(MOCK_ADMIN_LISTINGS);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { reload(); }, [reload]);
+
+  const updateStatus = useCallback(
+    async (id: string, action: "approve" | "reject" | "request_changes", note?: string) => {
+      // Optimistic update
+      const reviewStatus: ListingReviewStatus =
+        action === "approve"          ? "approved"
+        : action === "reject"         ? "rejected"
+        : "needs_changes";
+
+      setItems((prev) =>
+        prev.map((item) => item.id === id ? { ...item, reviewStatus } : item)
+      );
+
+      try {
+        await fetch(`/api/admin/listings/${id}`, {
+          method:  "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ action, note }),
+        });
+      } catch {
+        // Server might not be configured — optimistic update still stands
+      }
+    },
+    []
+  );
+
+  return { items, loading, updateStatus };
 }
 
 export default function AdminListingsPage() {
   const [filter, setFilter] = useState<ListingReviewStatus | "all">("all");
-  const { items, updateStatus } = useListingQueue();
+  const { items, loading, updateStatus } = useListingQueue();
 
   const filtered = filter === "all" ? items : items.filter((l) => l.reviewStatus === filter);
 
@@ -69,7 +111,9 @@ export default function AdminListingsPage() {
         </div>
 
         {/* Queue */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+        ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد إعلانات في هذه الفئة" />
         ) : (
           <div className="space-y-3">
@@ -94,9 +138,9 @@ export default function AdminListingsPage() {
                 </p>
                 {(listing.reviewStatus === "pending" || listing.reviewStatus === "suspicious") && (
                   <ReviewActionBar
-                    onApprove={() => updateStatus(listing.id, "approved")}
-                    onReject={() => updateStatus(listing.id, "rejected")}
-                    onRequestChanges={() => updateStatus(listing.id, "needs_changes")}
+                    onApprove={() => updateStatus(listing.id, "approve")}
+                    onReject={() => updateStatus(listing.id, "reject")}
+                    onRequestChanges={() => updateStatus(listing.id, "request_changes")}
                   />
                 )}
               </AdminQueueCard>

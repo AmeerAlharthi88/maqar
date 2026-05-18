@@ -76,10 +76,31 @@ export function OtpVerificationForm() {
     setIsVerifying(true);
     setError(null);
 
-    const { user, error: authError } = await verifyPhoneOtp(phone, token);
+    // Race verifyOtp against a 15-second timeout — Supabase can hang on slow networks
+    const verifyTimeout = new Promise<{ user: null; session: null; error: { message: string } }>(
+      (resolve) =>
+        setTimeout(
+          () =>
+            resolve({
+              user: null,
+              session: null,
+              error: { message: "انتهت مهلة التحقق (١٥ ثانية). تحقق من اتصالك بالإنترنت وأعد المحاولة." },
+            }),
+          15_000
+        )
+    );
+
+    const { user, error: authError } = await Promise.race([
+      verifyPhoneOtp(phone, token),
+      verifyTimeout,
+    ]);
 
     if (authError || !user) {
-      setError("رمز التحقق غير صحيح أو منتهي الصلاحية. حاول مرة أخرى.");
+      setError(
+        authError?.message.startsWith("انتهت مهلة")
+          ? authError.message
+          : "رمز التحقق غير صحيح أو منتهي الصلاحية. حاول مرة أخرى."
+      );
       setDigits(Array(OTP_LENGTH).fill(""));
       focusInput(0);
       setIsVerifying(false);
@@ -98,7 +119,9 @@ export function OtpVerificationForm() {
       avatarUrl: meta.avatar_url as string | undefined,
     });
 
-    const profile = await getCurrentProfile();
+    // Fetch profile with timeout — non-blocking if Supabase is slow
+    const profileTimeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 8_000));
+    const profile = await Promise.race([getCurrentProfile(), profileTimeout]);
     setProfile(profile);
 
     // Redirect: to onboarding if not completed, else to redirectTo

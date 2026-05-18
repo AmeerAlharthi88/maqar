@@ -10,6 +10,7 @@ import {
   getMockPriceHistory,
   getMockNearbyServices,
 } from "@/lib/helpers/listing-detail";
+import { getListingByIdServer } from "@/lib/supabase/listings.server";
 
 import { ListingGallery } from "@/components/listing/ListingGallery";
 import { ListingHeader } from "@/components/listing/ListingHeader";
@@ -32,7 +33,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const listing = getListingById(id);
+  // Try DB first; fall back to mock data if Supabase is not configured or listing not found
+  const listing = (await getListingByIdServer(id)) ?? getListingById(id);
 
   if (!listing) {
     return {
@@ -59,7 +61,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ListingDetailPage({ params }: Props) {
   const { id } = await params;
-  const listing = getListingById(id);
+  // Try DB first; fall back to mock data if Supabase is not configured or listing not found
+  const listing = (await getListingByIdServer(id)) ?? getListingById(id);
 
   if (!listing) {
     notFound();

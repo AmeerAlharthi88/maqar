@@ -9,29 +9,78 @@ import { AGENT_MAP, MOCK_AGENTS } from "@/mock/agents";
 import { getReviews } from "@/mock/reviews";
 import { buildAgentMetadata } from "@/lib/seo/metadata";
 import { agentJsonLd, breadcrumbJsonLd, serializeJsonLd } from "@/lib/seo/jsonld";
+import { createClient as createServerClient } from "@/lib/supabase/server";
+import { getAgentProfile } from "@/lib/supabase/agents";
+import type { Agent } from "@/types/agent";
+
+// Re-render at most once every 5 minutes (ISR) so Supabase reviews stay fresh.
+export const revalidate = 300;
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
+// Static params from mock agents — guarantees build succeeds.
+// UUID-based DB agent pages are served on-demand via ISR (revalidate = 300).
 export async function generateStaticParams() {
   return MOCK_AGENTS.map((a) => ({ id: a.id }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const agent = AGENT_MAP[id];
+
+  // Prefer DB agent; fall back to mock
+  const dbAgent = await getAgentProfile(id);
+  const agent: Agent | undefined = dbAgent ?? AGENT_MAP[id];
+
   if (!agent) return { title: "الوسيط غير موجود | مقر" };
   return buildAgentMetadata({ nameAr: agent.nameAr, id: agent.id, areasAr: agent.areasAr });
 }
 
 export default async function AgentProfilePage({ params }: Props) {
   const { id } = await params;
-  const agent = AGENT_MAP[id];
+
+  // ── Resolve agent: DB first, then mock ─────────────────────────────────────
+  const dbAgent = await getAgentProfile(id);
+  const agent: Agent | undefined = dbAgent ?? AGENT_MAP[id];
 
   if (!agent) notFound();
 
-  const reviews = getReviews(id, 5);
+  // ── Reviews: try Supabase first, fall back to mock ─────────────────────────
+  let reviews: Array<{
+    id: string;
+    authorNameAr: string;
+    rating: number;
+    bodyAr: string;
+    createdAt: string;
+  }>;
+
+  try {
+    const supabase = await createServerClient();
+    const { data } = await supabase
+      .from("reviews")
+      .select("id, rating, body, created_at, profiles ( name_ar )")
+      .eq("target_id", id)
+      .eq("target_type", "agent")
+      .eq("moderation_status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(5);
+
+    if (data && data.length > 0) {
+      reviews = data.map((r) => ({
+        id: r.id as string,
+        authorNameAr:
+          (r.profiles as unknown as { name_ar: string | null } | null)?.name_ar ?? "مستخدم",
+        rating: r.rating as number,
+        bodyAr: (r.body as string | null) ?? "",
+        createdAt: r.created_at as string,
+      }));
+    } else {
+      reviews = getReviews(id, 5);
+    }
+  } catch {
+    reviews = getReviews(id, 5);
+  }
 
   const agentSchema = agentJsonLd({
     nameAr: agent.nameAr,
@@ -89,7 +138,7 @@ export default async function AgentProfilePage({ params }: Props) {
         {reviews.length > 0 && (
           <div>
             <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
-              تقييمات العملاء ({agent.stats.reviewCount})
+              تقييمات العملاء ({agent.stats.reviewCount > 0 ? agent.stats.reviewCount : reviews.length})
             </h2>
             <div className="space-y-3">
               {reviews.map((review) => {

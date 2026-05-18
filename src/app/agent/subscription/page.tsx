@@ -1,8 +1,10 @@
 "use client";
 
-// ── Agent subscription page — Phase 14 overhaul ───────────────────────────────
+// ── Agent subscription page — Phase G wiring ─────────────────────────────────
+// Loads real subscription + usage from Supabase (RLS: own rows only).
+// Falls back to mock data in dev or when Supabase returns nothing.
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AgentDashboardShell } from "@/components/agent/AgentDashboardShell";
 import { SubscriptionStatusCard } from "@/components/subscriptions/SubscriptionStatusCard";
@@ -16,12 +18,38 @@ import {
 } from "@/mock/subscriptions";
 import { canCreateListing, canFeatureListing } from "@/lib/payments/usage-limits";
 import { ADDON_PRICES } from "@/lib/payments/plans";
+import { useAuthStore } from "@/store/auth.store";
+import {
+  fetchUserSubscription,
+  fetchUserUsageLimits,
+} from "@/lib/supabase/subscriptions";
+import type { UserSubscription, UsageLimit } from "@/lib/payments/types";
 
 export default function AgentSubscriptionPage() {
-  // TODO Phase 15+: load from Supabase session
-  const subscription = MOCK_AGENT_PRO_SUBSCRIPTION;
-  const usageLimits = MOCK_AGENT_PRO_USAGE_LIMITS;
+  const { user } = useAuthStore();
+
+  const [subscription, setSubscription] = useState<UserSubscription>(MOCK_AGENT_PRO_SUBSCRIPTION);
+  const [usageLimits, setUsageLimits] = useState<UsageLimit[]>(MOCK_AGENT_PRO_USAGE_LIMITS);
+  const [isLive, setIsLive] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const userId = user.id;
+
+    Promise.all([
+      fetchUserSubscription(userId),
+      fetchUserUsageLimits(userId),
+    ])
+      .then(([sub, limits]) => {
+        let anyLive = false;
+        if (sub)           { setSubscription(sub);    anyLive = true; }
+        if (limits.length) { setUsageLimits(limits);  anyLive = true; }
+        setIsLive(anyLive);
+      })
+      .catch(() => {/* keep mock data */});
+  }, [user?.id]);
 
   const listingUsage = usageLimits.find((u) => u.feature === "listing");
   const listingCount = listingUsage?.current ?? 0;
@@ -32,13 +60,15 @@ export default function AgentSubscriptionPage() {
     <AgentDashboardShell titleAr="الاشتراك">
       <div className="px-4 py-4 space-y-5" dir="rtl">
 
-        {/* Mock notice */}
-        <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl px-4 py-3">
-          <p className="text-xs font-semibold text-[#C8860A]">وضع المعاينة</p>
-          <p className="text-[10px] text-[#7A6B5E] mt-0.5">
-            معالجة المدفوعات غير مفعّلة. البيانات تجريبية.
-          </p>
-        </div>
+        {/* Data source notice */}
+        {!isLive && (
+          <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl px-4 py-3">
+            <p className="text-xs font-semibold text-[#C8860A]">وضع المعاينة</p>
+            <p className="text-[10px] text-[#7A6B5E] mt-0.5">
+              معالجة المدفوعات غير مفعّلة. البيانات تجريبية.
+            </p>
+          </div>
+        )}
 
         {/* Current subscription card */}
         <SubscriptionStatusCard subscription={subscription} />

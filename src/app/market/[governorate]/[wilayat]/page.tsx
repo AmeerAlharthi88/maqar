@@ -11,6 +11,7 @@ import { DemandBadge } from "@/components/market/DemandBadge";
 import { YieldBadge } from "@/components/market/YieldBadge";
 import { getWilayatBySlug, ALL_GOVERNORATES, getAllWilayats } from "@/mock/market-data";
 import { formatOMR, toArabicNumerals } from "@/lib/formatters";
+import { fetchMarketDataByArea } from "@/lib/supabase/market-data";
 
 interface Props {
   params: Promise<{ governorate: string; wilayat: string }>;
@@ -40,6 +41,23 @@ export default async function WilayatPage({ params }: Props) {
   const wil = getWilayatBySlug(govSlug, wilSlug);
 
   if (!wil) notFound();
+
+  // ── Overlay real DB market stats when available ─────────────────────────────
+  // fetchMarketDataByArea returns [] if DB not configured — falls back to mock.
+  const dbStats = await fetchMarketDataByArea({
+    governorate: wil.governorateAr,
+    wilayat:     wil.nameAr,
+    // no area → wilayat-level row (area IS NULL)
+  });
+  const dbRow   = dbStats.find((r) => r.area === null && r.propertyType === null) ?? null;
+  const stats   = {
+    avgSalePrice: dbRow?.avgSalePriceOmr  ?? wil.avgSalePrice,
+    avgRentPrice: dbRow?.avgRentOmr       ?? wil.avgRentPrice,
+    pricePerSqm:  dbRow?.pricePerSqmOmr   ?? wil.pricePerSqm,
+    rentalYield:  dbRow?.rentalYieldPercent ?? wil.rentalYield,
+    demandScore:  dbRow?.demandScore       ?? wil.demandScore,
+  };
+  // ────────────────────────────────────────────────────────────────────────────
 
   const areaRows = wil.areas.map((a) => ({
     nameAr: a.nameAr,
@@ -72,8 +90,8 @@ export default async function WilayatPage({ params }: Props) {
               سوق عقارات {wil.nameAr}
             </h1>
             <div className="flex flex-col items-end gap-1">
-              <DemandBadge score={wil.demandScore} />
-              <YieldBadge pct={wil.rentalYield} />
+              <DemandBadge score={stats.demandScore} />
+              <YieldBadge pct={stats.rentalYield} />
             </div>
           </div>
           <p className="text-sm text-[#7A6B5E]">
@@ -87,21 +105,21 @@ export default async function WilayatPage({ params }: Props) {
         <div className="grid grid-cols-2 gap-3">
           <MarketOverviewCard
             label="متوسط سعر البيع"
-            value={formatOMR(wil.avgSalePrice, { arabic: true, compact: true })}
+            value={formatOMR(stats.avgSalePrice, { arabic: true, compact: true })}
             trend={wil.priceChangePct}
             sub="تغيّر سنوي"
           />
           <MarketOverviewCard
             label="متوسط الإيجار الشهري"
-            value={formatOMR(wil.avgRentPrice, { arabic: true, compact: true })}
+            value={formatOMR(stats.avgRentPrice, { arabic: true, compact: true })}
           />
           <MarketOverviewCard
             label="العائد الإيجاري التقديري"
-            value={`${toArabicNumerals(wil.rentalYield)}%`}
+            value={`${toArabicNumerals(stats.rentalYield)}%`}
           />
           <MarketOverviewCard
             label="سعر المتر المربع"
-            value={`${toArabicNumerals(wil.pricePerSqm)} ر.ع./م²`}
+            value={`${toArabicNumerals(stats.pricePerSqm)} ر.ع./م²`}
           />
         </div>
 
@@ -128,10 +146,10 @@ export default async function WilayatPage({ params }: Props) {
           <MarketInsightPanel
             wilayatAr={wil.nameAr}
             governorateAr={wil.governorateAr}
-            avgSalePrice={wil.avgSalePrice}
-            avgRentPrice={wil.avgRentPrice}
-            rentalYield={wil.rentalYield}
-            demandScore={wil.demandScore}
+            avgSalePrice={stats.avgSalePrice}
+            avgRentPrice={stats.avgRentPrice}
+            rentalYield={stats.rentalYield}
+            demandScore={stats.demandScore}
             priceChangePct={wil.priceChangePct}
           />
         </div>

@@ -2,18 +2,38 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSearchStore } from "@/store/search.store";
+import {
+  useSavedSearchesStore,
+  type SavedSearch,
+} from "@/store/saved-searches.store";
+import { deleteSavedSearch } from "@/lib/supabase/saved-searches";
 import { ROUTES } from "@/config/routes";
 
-const PURPOSE_LABELS: Record<string, string> = {
-  all: "الكل",
-  sale: "للبيع",
-  rent: "للإيجار",
-};
+function buildSearchHref(search: SavedSearch): string {
+  const params = new URLSearchParams();
+  if (search.query) params.set("q", search.query);
+  if (search.filters.purpose && search.filters.purpose !== "all") {
+    params.set("purpose", search.filters.purpose);
+  }
+  if (search.filters.governorateId) {
+    params.set("governorateId", search.filters.governorateId);
+  }
+  const qs = params.toString();
+  return qs ? `${ROUTES.search}?${qs}` : ROUTES.search;
+}
 
 export function SavedSearchesView() {
   const router = useRouter();
-  const { recentSearches, clearRecentSearches } = useSearchStore();
+  const { items, removeItem } = useSavedSearchesStore();
+
+  async function handleDelete(search: SavedSearch) {
+    // Optimistic remove
+    removeItem(search.id);
+    // Persist deletion to Supabase (fire-and-forget; already removed locally)
+    await deleteSavedSearch(search.id).catch((err) =>
+      console.error("[SavedSearchesView] delete error:", err)
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF7F4] pb-24" dir="rtl">
@@ -26,19 +46,11 @@ export function SavedSearchesView() {
         </button>
         <div className="flex-1">
           <h1 className="text-sm font-bold text-[#1E1E1E]">البحث المحفوظ</h1>
-          <p className="text-xs text-[#A89480]">{recentSearches.length} بحث</p>
+          <p className="text-xs text-[#A89480]">{items.length} بحث</p>
         </div>
-        {recentSearches.length > 0 && (
-          <button
-            onClick={clearRecentSearches}
-            className="text-xs text-[#C65D3B] font-semibold"
-          >
-            مسح الكل
-          </button>
-        )}
       </div>
 
-      {recentSearches.length === 0 ? (
+      {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
           <div className="w-16 h-16 rounded-full bg-[#F5F0EA] flex items-center justify-center mb-4">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.5">
@@ -48,7 +60,7 @@ export function SavedSearchesView() {
           </div>
           <h2 className="text-base font-bold text-[#1E1E1E] mb-2">لا يوجد بحث محفوظ</h2>
           <p className="text-sm text-[#7A6B5E] mb-6 leading-relaxed">
-            عمليات البحث الأخيرة ستظهر هنا تلقائياً
+            احفظ بحثك من صفحة البحث لتجده هنا
           </p>
           <Link
             href={ROUTES.search}
@@ -66,21 +78,17 @@ export function SavedSearchesView() {
             </p>
           </div>
 
-          {recentSearches.map((search, i) => {
-            const params = new URLSearchParams();
-            if (search.query) params.set("q", search.query);
-            const href = `${ROUTES.search}?${params.toString()}`;
-
-            const date = new Date(search.timestamp);
+          {items.map((search) => {
+            const href = buildSearchHref(search);
+            const date = new Date(search.createdAt);
             const formattedDate = date.toLocaleDateString("ar-OM", {
               day: "numeric",
               month: "short",
             });
 
             return (
-              <Link
-                key={i}
-                href={href}
+              <div
+                key={search.id}
                 className="bg-white rounded-2xl border border-[#F0EBE3] flex items-center gap-3 px-4 py-3.5"
               >
                 {/* Icon */}
@@ -92,17 +100,27 @@ export function SavedSearchesView() {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
+                <Link href={href} className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-[#1E1E1E] truncate">
-                    {search.query || "بحث بدون كلمة مفتاحية"}
+                    {search.name || search.query || "بحث بدون كلمة مفتاحية"}
                   </p>
                   <p className="text-xs text-[#A89480] mt-0.5">{formattedDate}</p>
-                </div>
+                </Link>
 
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4B5A5" strokeWidth="2">
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </Link>
+                {/* Delete */}
+                <button
+                  onClick={() => handleDelete(search)}
+                  className="w-8 h-8 flex items-center justify-center text-[#C4B5A5] hover:text-[#C65D3B] transition-colors"
+                  aria-label="حذف البحث المحفوظ"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14H6L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4h6v2" />
+                  </svg>
+                </button>
+              </div>
             );
           })}
         </div>
