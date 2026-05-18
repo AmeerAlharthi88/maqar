@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { BOTTOM_NAV_ITEMS } from "@/config/navigation";
+import { MaqarLogo } from "@/components/brand/MaqarLogo";
+import { ROUTES } from "@/config/routes";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -14,15 +16,56 @@ export function AppShell({ children }: AppShellProps) {
 
   return (
     <div className="flex flex-col min-h-svh">
-      <main className="flex-1 pb-20">{children}</main>
+      {/* ── Desktop-only top header (lg+) ── */}
+      <header className="hidden lg:flex sticky top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-[#F0EBE3] h-14 items-center px-6 gap-6">
+        <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
+          <MaqarLogo size="sm" />
+        </Link>
+        <nav className="flex items-center gap-1 flex-1" aria-label="التنقل الرئيسي">
+          {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
+            const isActive =
+              pathname === item.href ||
+              (item.href !== "/" && pathname.startsWith(item.href));
+            return (
+              <Link
+                key={item.key}
+                href={item.href}
+                className={cn(
+                  "px-3 h-9 rounded-xl text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-[#FBF0EB] text-[#C65D3B]"
+                    : "text-[#7A6B5E] hover:bg-[#FAF7F2] hover:text-[#1E1E1E]"
+                )}
+              >
+                {item.labelAr}
+              </Link>
+            );
+          })}
+        </nav>
+        {/* Add listing CTA on desktop */}
+        <Link
+          href={ROUTES.addListing}
+          className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#C65D3B] text-white text-sm font-semibold hover:bg-[#B34F2F] transition-colors"
+          aria-label="إضافة عقار"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          أضف عقار
+        </Link>
+      </header>
 
-      {/* Bottom Tab Bar */}
+      {/* Page content — bottom padding only on mobile for the tab bar */}
+      <main className="flex-1 pb-20 lg:pb-0">{children}</main>
+
+      {/* ── Mobile/tablet bottom tab bar (hidden on lg+) ── */}
       <nav
-        className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#F0EBE3]"
+        className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#F0EBE3] lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label="التنقل الرئيسي"
       >
-        <div className="flex items-stretch h-16">
+        {/* overflow-visible so the raised Add button can extend above the bar */}
+        <div className="flex items-stretch h-16 overflow-visible">
           {BOTTOM_NAV_ITEMS.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -33,16 +76,22 @@ export function AppShell({ children }: AppShellProps) {
                 <Link
                   key={item.key}
                   href={item.href}
-                  className="flex-1 flex flex-col items-center justify-center"
+                  className="flex-1 flex flex-col items-center justify-center relative"
                   aria-label={item.labelAr}
+                  style={{ overflow: "visible" }}
                 >
-                  <span className="flex items-center justify-center w-12 h-12 rounded-full bg-[#C65D3B] shadow-lg -mt-5">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                  {/* Raised circle — extends above bar; pointer-events inherit from Link */}
+                  <span
+                    className="flex items-center justify-center w-14 h-14 rounded-full bg-[#C65D3B] shadow-[0_4px_20px_rgba(198,93,59,0.45)]"
+                    style={{ marginTop: "-28px" }}
+                    aria-hidden="true"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
                       <line x1="12" y1="5" x2="12" y2="19" />
                       <line x1="5" y1="12" x2="19" y2="12" />
                     </svg>
                   </span>
-                  <span className="text-[10px] font-medium leading-none mt-1 text-[#C65D3B]">
+                  <span className="text-[10px] font-semibold leading-none mt-1 text-[#C65D3B]">
                     {item.labelAr}
                   </span>
                 </Link>
@@ -57,6 +106,7 @@ export function AppShell({ children }: AppShellProps) {
                   "flex-1 flex flex-col items-center justify-center gap-1 min-w-0 transition-colors",
                   isActive ? "text-[#C65D3B]" : "text-[#A89480]"
                 )}
+                aria-current={isActive ? "page" : undefined}
               >
                 <span className="flex-shrink-0">
                   <NavIcon itemKey={item.key} filled={isActive} />

@@ -75,8 +75,8 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           <span className="text-xs text-[#A89480]">{formatRelativeDate(listing.createdAt)}</span>
         </div>
 
-        {/* Title */}
-        <h3 className="text-sm font-semibold text-[#1E1E1E] leading-snug line-clamp-2">
+        {/* Title — min-h prevents collapse during font-load or hydration */}
+        <h3 className="text-sm font-semibold text-[#1E1E1E] leading-snug line-clamp-2 min-h-[2.5rem]">
           {listing.titleAr}
         </h3>
 
@@ -97,6 +97,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
             purpose={listing.purpose}
             pricePerSqm={listing.pricePerSqm}
             size="sm"
+            compact
           />
           {listing.roiEstimate && <ROIChip roiPct={listing.roiEstimate} />}
         </div>
@@ -132,7 +133,7 @@ function ListingRow({ listing, className, favoriteButton }: { listing: Listing; 
           areaAr={listing.location.areaAr}
         />
         <PropertySpecs specs={listing.specs} propertyType={listing.propertyType} size="sm" />
-        <PropertyPrice amount={listing.price} purpose={listing.purpose} size="sm" />
+        <PropertyPrice amount={listing.price} purpose={listing.purpose} size="sm" compact />
       </div>
     </article>
   );

@@ -7,16 +7,16 @@ import { APP_CONFIG } from "@/config/app";
 
 export function HeroSearch() {
   return (
-    <section className="bg-gradient-to-b from-[#FAF7F2] to-white px-4 pt-5 pb-6">
-      {/* Logo + tagline */}
-      <div className="mb-5">
+    <section className="bg-gradient-to-b from-[#FAF7F2] to-white px-4 pt-4 pb-5 lg:pt-6 lg:pb-6 lg:max-w-3xl lg:mx-auto">
+      {/* Logo + tagline — hidden on desktop since header provides branding */}
+      <div className="mb-4 lg:hidden">
         <MaqarLogo size="sm" />
         <p className="mt-1.5 text-xs text-[#A89480] font-medium">{APP_CONFIG.taglineAr}</p>
       </div>
 
       {/* Greeting */}
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold text-[#1E1E1E] leading-tight">
+      <div className="mb-3 lg:mb-4 lg:text-center">
+        <h1 className="text-2xl lg:text-3xl font-bold text-[#1E1E1E] leading-tight">
           ابحث عن مقرك
           <span className="text-[#C65D3B]"> في عُمان</span>
         </h1>
@@ -29,7 +29,7 @@ export function HeroSearch() {
       <SmartSearch
         size="lg"
         placeholder="فيلا في بوشر، شقة في الخوير..."
-        className="mb-4"
+        className="mb-3"
       />
 
       {/* Property type chips */}

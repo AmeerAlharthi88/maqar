@@ -24,7 +24,7 @@ export function PriceText({ amount, purpose = "sale", size = "md", className, co
     <div className={cn("flex items-baseline gap-1.5", className)}>
       <span className={cn(s.price, "text-[#C65D3B]")}>{formatted}</span>
       {purpose === "rent" && (
-        <span className={cn(s.suffix, "text-[#7A6B5E]")}>/ شهر</span>
+        <span className={cn(s.suffix, "text-[#7A6B5E]")}>/ شهرياً</span>
       )}
     </div>
   );

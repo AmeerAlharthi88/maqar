@@ -14,23 +14,31 @@ export function formatOMR(
 ): string {
   const { arabic = true, compact = false } = opts;
 
-  let formatted: string;
-  if (compact && amount >= 1_000_000) {
-    formatted = `${(amount / 1_000_000).toFixed(1)} م`;
-  } else if (compact && amount >= 1_000) {
-    formatted = `${(amount / 1_000).toFixed(0)} ك`;
-  } else {
-    formatted = new Intl.NumberFormat("en-US", {
+  if (!arabic) {
+    const formatted = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
+    return `${formatted} OMR`;
   }
 
-  if (arabic) {
-    const digits = toArabicNumerals(formatted.replace(/,/g, "،"));
-    return `${digits} ر.ع.`;
+  // Arabic compact display — no Latin abbreviations ever
+  if (compact && amount >= 1_000_000) {
+    const val = (amount / 1_000_000).toFixed(1).replace(/\.0$/, "");
+    return `${toArabicNumerals(val)} مليون ر.ع`;
   }
-  return `${formatted} OMR`;
+  if (compact && amount >= 1_000) {
+    const val = Math.round(amount / 1_000).toString();
+    return `${toArabicNumerals(val)} ألف ر.ع`;
+  }
+
+  // Full number
+  const formatted = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+  const digits = toArabicNumerals(formatted.replace(/,/g, "،"));
+  return `${digits} ر.ع`;
 }
 
 export function formatArea(sqm: number, arabic = true): string {

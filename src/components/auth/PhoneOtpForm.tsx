@@ -25,6 +25,7 @@ export function PhoneOtpForm() {
   const [digits, setDigits] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [techDetail, setTechDetail] = useState<string | null>(null);
 
   const isValid = isValidOmaniNumber(digits);
 
@@ -32,6 +33,7 @@ export function PhoneOtpForm() {
     e.preventDefault();
     if (!isValid || isLoading) return;
     setError(null);
+    setTechDetail(null);
     setIsLoading(true);
 
     const phone = formatPhone(digits);
@@ -48,11 +50,26 @@ export function PhoneOtpForm() {
     const { error: authError } = await Promise.race([signInWithPhone(phone), otpTimeout]);
 
     if (authError) {
-      setError(
-        authError.message === "timeout"
-          ? "انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وأعد المحاولة."
-          : "تعذّر إرسال رمز التحقق. تأكد من رقم الجوال وحاول مرة أخرى."
-      );
+      if (authError.message === "timeout") {
+        setError("انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وأعد المحاولة.");
+      } else {
+        // Distinguish SMS provider errors from other issues
+        const isSmsProviderError =
+          authError.message?.toLowerCase().includes("sms") ||
+          authError.message?.toLowerCase().includes("provider") ||
+          authError.message?.toLowerCase().includes("phone") ||
+          authError.message?.toLowerCase().includes("otp") ||
+          authError.message?.toLowerCase().includes("send");
+        setError(
+          isSmsProviderError
+            ? "تعذّر إرسال رمز التحقق. تأكد من إعداد مزود الرسائل أو استخدم رقم اختبار مفعّل."
+            : "تعذّر إرسال رمز التحقق. تحقق من رقم الجوال وأعد المحاولة."
+        );
+        // Show technical detail on non-production environments
+        if (process.env.NODE_ENV !== "production") {
+          setTechDetail(authError.message);
+        }
+      }
       setIsLoading(false);
       return;
     }
@@ -113,8 +130,11 @@ export function PhoneOtpForm() {
 
         {/* Error */}
         {error && (
-          <div className="bg-[#FBF0EB] border border-[#C65D3B]/30 rounded-xl px-4 py-3">
+          <div className="bg-[#FBF0EB] border border-[#C65D3B]/30 rounded-xl px-4 py-3 space-y-1">
             <p className="text-xs text-[#C65D3B]">{error}</p>
+            {techDetail && (
+              <p className="text-[11px] text-[#A89480] font-mono break-all">{techDetail}</p>
+            )}
           </div>
         )}
 

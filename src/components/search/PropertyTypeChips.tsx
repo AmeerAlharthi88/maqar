@@ -72,7 +72,11 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
 
   return (
     <div
-      className={cn("flex gap-2 overflow-x-auto pb-1 scrollbar-none", className)}
+      className={cn(
+        "flex gap-2 overflow-x-auto pb-2 scrollbar-none",
+        "-mx-4 px-4", // bleed to edges, restore padding inside
+        className
+      )}
       role="group"
       aria-label="نوع العقار"
     >
