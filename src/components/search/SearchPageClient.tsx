@@ -24,6 +24,19 @@ const SUPABASE_LIVE: boolean = (() => {
   return url.startsWith("https://") && url.includes(".supabase.co");
 })();
 
+// Controls whether an empty Supabase result falls back to filtered mock listings.
+//
+// Set NEXT_PUBLIC_ALLOW_MOCK_FALLBACK=true in staging / dev environments where
+// the Supabase DB has no approved listings yet. This keeps chip-filter navigation
+// and QA testing functional without seeding real data.
+//
+// Must be false (or omitted) in production: a genuine empty Supabase result must
+// show the real empty state — never silently serve mock data to real users.
+//
+// Default: false (safe for production if the var is missing).
+const ALLOW_MOCK_FALLBACK: boolean =
+  process.env.NEXT_PUBLIC_ALLOW_MOCK_FALLBACK === "true";
+
 type DisplayMode = "grid" | "list";
 
 export function SearchPageClient() {
@@ -76,13 +89,19 @@ export function SearchPageClient() {
   );
 
   // Decide which list to display.
-  // When Supabase is configured but returns 0 results (empty DB on staging,
-  // or all listings are pending review), fall back to client-side filtered mock data.
-  // This keeps chip-filter navigation working on staging without real DB listings.
-  const displayListings: Listing[] =
-    SUPABASE_LIVE && dbListings !== null && dbListings.length > 0
-      ? dbListings          // DB results (already sorted by Supabase)
-      : sortedListings;     // local mock fallback (empty DB → show filtered mock)
+  //
+  // Decision tree:
+  //   1. Supabase not configured, or fetch not yet complete → use mock (filtered).
+  //   2. Supabase returned ≥1 result → always use DB results.
+  //   3. Supabase returned 0 results:
+  //        staging (ALLOW_MOCK_FALLBACK=true)  → fall back to filtered mock so QA works.
+  //        production (ALLOW_MOCK_FALLBACK=false) → show true empty state.
+  const displayListings: Listing[] = (() => {
+    if (!SUPABASE_LIVE || dbListings === null) return sortedListings;
+    if (dbListings.length > 0)               return dbListings;
+    // dbListings is empty — choose based on environment flag
+    return ALLOW_MOCK_FALLBACK ? sortedListings : dbListings;
+  })();
 
   return (
     <div className="flex flex-col min-h-full">
