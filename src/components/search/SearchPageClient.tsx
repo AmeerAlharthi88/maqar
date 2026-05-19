@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
 import { filterListings, sortListings } from "@/lib/helpers/listing-filters";
@@ -26,12 +27,25 @@ const SUPABASE_LIVE: boolean = (() => {
 type DisplayMode = "grid" | "list";
 
 export function SearchPageClient() {
-  const { filters, activeFilterCount } = useSearchStore();
+  const { filters, activeFilterCount, setFilter } = useSearchStore();
+  const searchParams = useSearchParams();
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
+
+  // Sync ?propertyType URL param to filter store on mount.
+  // Handles: direct links, page refresh, and chip-driven navigation from home.
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    const pt = searchParams.get("propertyType");
+    if (pt) {
+      setFilter("propertyTypes", [pt]);
+    }
+  }, []); // run once on mount only
+  /* eslint-enable react-hooks/exhaustive-deps */
   const [displayMode, setDisplayMode] = useState<DisplayMode>("grid");
   const [isLoading, setIsLoading] = useState(false);
   // null = not yet fetched or Supabase not configured → use mock
   const [dbListings, setDbListings] = useState<Listing[] | null>(null);
+
 
   // Fetch from Supabase whenever filters change
   /* eslint-disable react-hooks/set-state-in-effect */

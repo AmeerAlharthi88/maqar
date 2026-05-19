@@ -7,13 +7,14 @@ interface PropertyPriceProps {
   purpose: ListingPurpose;
   pricePerSqm?: number;
   size?: "sm" | "md" | "lg";
+  compact?: boolean;
   className?: string;
 }
 
-export function PropertyPrice({ amount, purpose, pricePerSqm, size = "md", className }: PropertyPriceProps) {
+export function PropertyPrice({ amount, purpose, pricePerSqm, size = "md", compact = false, className }: PropertyPriceProps) {
   return (
     <div className={cn("flex flex-col gap-0.5", className)}>
-      <PriceText amount={amount} purpose={purpose} size={size} />
+      <PriceText amount={amount} purpose={purpose} size={size} compact={compact} />
       {pricePerSqm && purpose === "sale" && (
         <PricePerSqm pricePerSqm={pricePerSqm} />
       )}

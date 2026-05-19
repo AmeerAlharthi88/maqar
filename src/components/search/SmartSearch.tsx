@@ -81,7 +81,14 @@ export function SmartSearch({
   const textClass = size === "sm" ? "text-sm" : size === "lg" ? "text-base" : "text-sm";
 
   return (
-    <div ref={containerRef} className={cn("relative", className)}>
+    <div
+      ref={containerRef}
+      className={cn("relative", className)}
+      role="combobox"
+      aria-expanded={showDropdown}
+      aria-haspopup="listbox"
+      aria-controls="smart-search-listbox"
+    >
       {/* Input */}
       <div
         className={cn(
@@ -109,7 +116,8 @@ export function SmartSearch({
 
         <input
           ref={inputRef}
-          type="search"
+          type="text"
+          inputMode="search"
           value={localQuery}
           onChange={(e) => setLocalQuery(e.target.value)}
           onFocus={() => setFocused(true)}
@@ -117,13 +125,14 @@ export function SmartSearch({
           placeholder={placeholder}
           dir="rtl"
           className={cn(
-            "flex-1 bg-transparent outline-none text-[#1E1E1E] placeholder:text-[#A89480]",
-            "appearance-none [&::-webkit-search-cancel-button]:hidden",
+            "flex-1 bg-transparent outline-none border-none ring-0 shadow-none",
+            "text-[#1E1E1E] placeholder:text-[#A89480]",
+            "[-webkit-appearance:none] [appearance:none]",
             textClass
           )}
           aria-label="البحث عن عقار"
-          aria-expanded={showDropdown}
           aria-autocomplete="list"
+          autoComplete="off"
         />
 
         {/* Clear button */}
@@ -160,7 +169,7 @@ export function SmartSearch({
 
       {/* Dropdown */}
       {showDropdown && (
-        <div className="absolute top-full start-0 end-0 mt-2 bg-white rounded-2xl border border-[#F0EBE3] shadow-[0_8px_32px_0_rgb(30_30_30/0.12)] z-50 overflow-hidden">
+        <div id="smart-search-listbox" role="listbox" className="absolute top-full start-0 end-0 mt-2 bg-white rounded-2xl border border-[#F0EBE3] shadow-[0_8px_32px_0_rgb(30_30_30/0.12)] z-50 overflow-hidden">
           {/* Recent searches */}
           {recentSearches.length > 0 && !localQuery && (
             <div>

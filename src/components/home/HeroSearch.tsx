@@ -4,32 +4,53 @@ import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { SmartSearch } from "@/components/search/SmartSearch";
 import { PropertyTypeChips } from "@/components/search/PropertyTypeChips";
 import { APP_CONFIG } from "@/config/app";
+import { useLanguageStore } from "@/store/language.store";
 
 export function HeroSearch() {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
+
   return (
-    <section className="bg-gradient-to-b from-[#FAF7F2] to-white px-4 pt-5 pb-6">
-      {/* Logo + tagline */}
-      <div className="mb-5">
+    <section className="bg-gradient-to-b from-[#FAF7F2] to-white px-4 pt-4 pb-5 lg:pt-6 lg:pb-6 lg:max-w-3xl lg:mx-auto">
+      {/* Logo + tagline — hidden on desktop since header provides branding */}
+      <div className="mb-4 lg:hidden">
         <MaqarLogo size="sm" />
-        <p className="mt-1.5 text-xs text-[#A89480] font-medium">{APP_CONFIG.taglineAr}</p>
+        <p className="mt-1.5 text-xs text-[#A89480] font-medium">
+          {isAr ? APP_CONFIG.taglineAr : "Oman's Premier Real Estate Platform"}
+        </p>
       </div>
 
       {/* Greeting */}
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold text-[#1E1E1E] leading-tight">
-          ابحث عن مقرك
-          <span className="text-[#C65D3B]"> في عُمان</span>
+      <div className="mb-3 lg:mb-4 lg:text-center">
+        <h1 className="text-2xl lg:text-3xl font-bold text-[#1E1E1E] leading-tight">
+          {isAr ? (
+            <>
+              ابحث عن مقرك
+              <span className="text-[#C65D3B]"> في عُمان</span>
+            </>
+          ) : (
+            <>
+              Find your place
+              <span className="text-[#C65D3B]"> in Oman</span>
+            </>
+          )}
         </h1>
         <p className="text-sm text-[#7A6B5E] mt-1">
-          آلاف العقارات في مسقط وصلالة وصحار وسائر المحافظات
+          {isAr
+            ? "آلاف العقارات في مسقط وصلالة وصحار وسائر المحافظات"
+            : "Thousands of properties across Muscat, Salalah, Sohar and all governorates"}
         </p>
       </div>
 
       {/* Search */}
       <SmartSearch
         size="lg"
-        placeholder="فيلا في بوشر، شقة في الخوير..."
-        className="mb-4"
+        placeholder={
+          isAr
+            ? "فيلا في بوشر، شقة في الخوير..."
+            : "Villa in Bousher, apartment in Khuwair..."
+        }
+        className="mb-3"
       />
 
       {/* Property type chips */}

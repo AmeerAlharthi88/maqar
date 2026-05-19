@@ -10,7 +10,7 @@ export interface PropertyTypeConfig {
 export const PROPERTY_TYPES: PropertyTypeConfig[] = [
   { value: "apartment",      labelAr: "شقة",               labelEn: "Apartment",      icon: "Buildings"    },
   { value: "villa",          labelAr: "فيلا",               labelEn: "Villa",          icon: "House"        },
-  { value: "duplex",         labelAr: "دوبلكس / تون فيلا", labelEn: "Duplex",         icon: "HouseLine"    },
+  { value: "duplex",         labelAr: "دوبلكس",             labelEn: "Duplex",         icon: "HouseLine"    },
   { value: "townhouse",      labelAr: "تاون هاوس",          labelEn: "Townhouse",      icon: "HouseSimple"  },
   { value: "land",           labelAr: "أرض",                labelEn: "Land",           icon: "MapTrifold"   },
   { value: "commercial",     labelAr: "محل تجاري",          labelEn: "Commercial",     icon: "Storefront"   },
@@ -19,7 +19,7 @@ export const PROPERTY_TYPES: PropertyTypeConfig[] = [
   { value: "arabic_house",   labelAr: "بيت عربي",           labelEn: "Arabic House",   icon: "House"        },
   { value: "farm",           labelAr: "مزرعة",              labelEn: "Farm",           icon: "Tree"         },
   { value: "chalet",         labelAr: "شاليه",              labelEn: "Chalet",         icon: "Umbrella"     },
-  { value: "building",       labelAr: "بناية / عمارة",      labelEn: "Building",       icon: "Building"     },
+  { value: "building",       labelAr: "بناية",              labelEn: "Building",       icon: "Building"     },
   { value: "hotel_apartment",labelAr: "شقة فندقية",         labelEn: "Hotel Apartment",icon: "Buildings"    },
 ];
 
