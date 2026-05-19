@@ -16,6 +16,7 @@ import { SaveSearchButton } from "./SaveSearchButton";
 import { SearchFilterSheet } from "./SearchFilterSheet";
 import { SearchEmptyState, SearchResultsSkeletonGrid } from "./SearchSkeletons";
 import { toArabicNumerals } from "@/lib/formatters";
+import { useLanguageStore } from "@/store/language.store";
 
 // Env vars are fixed at module load time — no need for useRef.
 // When false, fall back to local MOCK_LISTINGS filtering.
@@ -41,6 +42,8 @@ type DisplayMode = "grid" | "list";
 
 export function SearchPageClient() {
   const { filters, activeFilterCount, setFilter } = useSearchStore();
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
   const searchParams = useSearchParams();
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
 
@@ -110,7 +113,7 @@ export function SearchPageClient() {
         <SmartSearch
           size="md"
           onSearch={() => {}}
-          placeholder="ابحث بالنوع أو المنطقة أو العنوان..."
+          placeholder={isAr ? "ابحث بالنوع أو المنطقة أو العنوان..." : "Search by type, area or title..."}
         />
 
         {/* Toolbar */}
@@ -125,12 +128,12 @@ export function SearchPageClient() {
                 ? "bg-[#C65D3B] text-white border-[#C65D3B]"
                 : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
             )}
-            aria-label={`فتح الفلاتر${activeFilterCount > 0 ? ` — ${activeFilterCount} نشط` : ""}`}
+            aria-label={isAr ? `فتح الفلاتر${activeFilterCount > 0 ? ` — ${activeFilterCount} نشط` : ""}` : `Open filters${activeFilterCount > 0 ? ` — ${activeFilterCount} active` : ""}`}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
-            الفلاتر
+            {isAr ? "الفلاتر" : "Filters"}
             {activeFilterCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-white text-[#C65D3B] text-[10px] font-bold flex items-center justify-center">
                 {activeFilterCount}
@@ -191,7 +194,10 @@ export function SearchPageClient() {
           <>
             {/* Result count */}
             <p className="text-sm text-[#7A6B5E] mb-4">
-              <span className="font-bold text-[#1E1E1E]">{toArabicNumerals(displayListings.length)}</span> عقار متاح
+              <span className="font-bold text-[#1E1E1E]">
+                {isAr ? toArabicNumerals(displayListings.length) : displayListings.length}
+              </span>{" "}
+              {isAr ? "عقار متاح" : "properties found"}
             </p>
 
             {/* Listings */}
