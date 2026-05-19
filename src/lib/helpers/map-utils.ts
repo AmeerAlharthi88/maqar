@@ -11,20 +11,20 @@ export function formatPriceBubble(
   if (purpose === "sale") {
     if (price >= 1_000_000) {
       const val = (price / 1_000_000).toFixed(1).replace(/\.0$/, "");
-      return `${toArabicNumerals(val)} م ر.ع`;
+      return `${toArabicNumerals(val)} مليون ر.ع`;
     }
     if (price >= 1_000) {
       const val = Math.round(price / 1_000);
-      return `${toArabicNumerals(val)}ك ر.ع`;
+      return `${toArabicNumerals(val)} ألف ر.ع`;
     }
     return `${toArabicNumerals(price)} ر.ع`;
   }
   // Rent — show monthly price
   if (price >= 1_000) {
     const val = Math.round(price / 1_000);
-    return `${toArabicNumerals(val)}ك/شهر`;
+    return `${toArabicNumerals(val)} ألف / شهرياً`;
   }
-  return `${toArabicNumerals(price)} ر.ع/شهر`;
+  return `${toArabicNumerals(price)} ر.ع / شهرياً`;
 }
 
 // ── Coordinate validation ──────────────────────────────────────────────────────

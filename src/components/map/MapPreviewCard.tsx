@@ -46,19 +46,22 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
         <div className="flex gap-3 p-3">
           {/* Image */}
           <div className="relative w-24 h-[88px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F5F0EA]">
-            <img
-              src={listing.coverImage}
-              alt={listing.titleAr}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-            {/* Fallback illustration */}
-            <div className="absolute inset-0 flex items-center justify-center text-[#C8B8A8] pointer-events-none">
+            {listing.coverImage ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={listing.coverImage}
+                alt={listing.titleAr}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = "none";
+                }}
+              />
+            ) : null}
+            {/* Always-present fallback illustration (sits behind image) */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-[#C8B8A8] pointer-events-none -z-0">
               <svg
-                width="28"
-                height="28"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -68,6 +71,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
                 <circle cx="8.5" cy="8.5" r="1.5" />
                 <polyline points="21 15 16 10 5 21" />
               </svg>
+              <span className="text-[9px] text-center leading-tight px-1">صورة غير متوفرة</span>
             </div>
 
             {/* Purpose chip */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useAuthStore } from "@/store/auth.store";
 import { LoginRequiredModal } from "@/components/auth/LoginRequiredModal";
@@ -16,8 +16,14 @@ export function FavoriteButton({ listingId, size = "sm", className }: FavoriteBu
   const { isFavorite, toggle } = useFavoritesStore();
   const { isAuthenticated } = useAuthStore();
   const [loginOpen, setLoginOpen] = useState(false);
+  // Prevent hydration mismatch: localStorage state only applies after mount.
+  const [mounted, setMounted] = useState(false);
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => { setMounted(true); }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
-  const favorited = isFavorite(listingId);
+  // Before mount render identical to SSR (not favorited) to avoid layout shift
+  const favorited = mounted && isFavorite(listingId);
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
