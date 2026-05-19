@@ -8,11 +8,14 @@
 //   • Never cache auth tokens, payment data, or user-identifiable API responses
 //   • Never cache /api/auth/*, /api/payment/*, /api/admin/*
 //   • Cached responses are limited to public, non-sensitive resources
+//
+// CACHE VERSIONING: bump all three version strings together on every deploy
+// that changes JS bundles, so the activate event evicts all stale caches.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CACHE_NAME = "maqar-v1";
-const STATIC_CACHE = "maqar-static-v1";
-const DYNAMIC_CACHE = "maqar-dynamic-v1";
+const CACHE_NAME = "maqar-v2";
+const STATIC_CACHE = "maqar-static-v2";
+const DYNAMIC_CACHE = "maqar-dynamic-v2";
 
 // App shell — always cache these on install
 const APP_SHELL_URLS = [
@@ -53,8 +56,10 @@ self.addEventListener("install", (event) => {
 });
 
 // ── Activate ─────────────────────────────────────────────────────────────────
+// Delete every cache whose name is not in the current version set.
+// This evicts all stale bundles from previous deployments (e.g. maqar-v1).
 self.addEventListener("activate", (event) => {
-  const CURRENT_CACHES = [STATIC_CACHE, DYNAMIC_CACHE];
+  const CURRENT_CACHES = [CACHE_NAME, STATIC_CACHE, DYNAMIC_CACHE];
   event.waitUntil(
     caches
       .keys()
@@ -62,7 +67,10 @@ self.addEventListener("activate", (event) => {
         Promise.all(
           keys
             .filter((k) => !CURRENT_CACHES.includes(k))
-            .map((k) => caches.delete(k))
+            .map((k) => {
+              console.log("[SW] Deleting stale cache:", k);
+              return caches.delete(k);
+            })
         )
       )
       .then(() => self.clients.claim())
