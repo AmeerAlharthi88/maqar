@@ -46,6 +46,7 @@ export function SearchPageClient() {
   // null = not yet fetched or Supabase not configured → use mock
   const [dbListings, setDbListings] = useState<Listing[] | null>(null);
 
+
   // Fetch from Supabase whenever filters change
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
