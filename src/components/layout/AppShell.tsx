@@ -1,11 +1,22 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { BOTTOM_NAV_ITEMS } from "@/config/navigation";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { ROUTES } from "@/config/routes";
+import { useLanguageStore } from "@/store/language.store";
+
+// English equivalents of Arabic nav labels
+const NAV_LABEL_EN: Record<string, string> = {
+  home:      "Home",
+  map:       "Map",
+  add:       "Add",
+  favorites: "Favorites",
+  account:   "Account",
+};
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -13,6 +24,19 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
+  const { locale, setLocale } = useLanguageStore();
+  const isAr = locale === "ar";
+
+  // Keep <html lang> and <html dir> in sync with locale preference.
+  // suppressHydrationWarning on <html> in layout.tsx prevents SSR mismatch flash.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = isAr ? "rtl" : "ltr";
+  }, [locale, isAr]);
+
+  function navLabel(item: { key: string; labelAr: string }): string {
+    return isAr ? item.labelAr : (NAV_LABEL_EN[item.key] ?? item.labelAr);
+  }
 
   return (
     <div className="flex flex-col min-h-svh">
@@ -21,7 +45,7 @@ export function AppShell({ children }: AppShellProps) {
         <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
           <MaqarLogo size="sm" />
         </Link>
-        <nav className="flex items-center gap-1 flex-1" aria-label="التنقل الرئيسي">
+        <nav className="flex items-center gap-1 flex-1" aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}>
           {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
             const isActive =
               pathname === item.href ||
@@ -37,32 +61,61 @@ export function AppShell({ children }: AppShellProps) {
                     : "text-[#7A6B5E] hover:bg-[#FAF7F2] hover:text-[#1E1E1E]"
                 )}
               >
-                {item.labelAr}
+                {navLabel(item)}
               </Link>
             );
           })}
         </nav>
-        {/* Add listing CTA on desktop */}
+
+        {/* Language toggle */}
+        <button
+          onClick={() => setLocale(isAr ? "en" : "ar")}
+          aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
+          className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E8DDD0] text-xs font-semibold text-[#7A6B5E] hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+          {isAr ? "EN" : "عر"}
+        </button>
+
+        {/* Add listing CTA */}
         <Link
           href={ROUTES.addListing}
           className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#C65D3B] text-white text-sm font-semibold hover:bg-[#B34F2F] transition-colors"
-          aria-label="إضافة عقار"
+          aria-label={isAr ? "إضافة عقار" : "Add Property"}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
           </svg>
-          أضف عقار
+          {isAr ? "أضف عقار" : "Add Property"}
         </Link>
       </header>
 
       {/* Page content — bottom padding only on mobile for the tab bar */}
       <main className="flex-1 pb-20 lg:pb-0">{children}</main>
 
+      {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
+      <div className="fixed top-3 end-3 z-[95] lg:hidden">
+        <button
+          onClick={() => setLocale(isAr ? "en" : "ar")}
+          aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
+          className="flex items-center gap-1 px-2.5 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#E8DDD0] text-xs font-semibold text-[#7A6B5E] shadow-sm hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+          {isAr ? "EN" : "عر"}
+        </button>
+      </div>
+
       {/* ── Mobile/tablet bottom tab bar (hidden on lg+) ── */}
       <nav
         className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#F0EBE3] lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        aria-label="التنقل الرئيسي"
+        aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}
       >
         {/* overflow-visible so the raised Add button can extend above the bar */}
         <div className="flex items-stretch h-16 overflow-visible">
@@ -77,10 +130,10 @@ export function AppShell({ children }: AppShellProps) {
                   key={item.key}
                   href={item.href}
                   className="flex-1 flex flex-col items-center justify-center relative"
-                  aria-label={item.labelAr}
+                  aria-label={navLabel(item)}
                   style={{ overflow: "visible" }}
                 >
-                  {/* Raised circle — extends above bar; pointer-events inherit from Link */}
+                  {/* Raised circle */}
                   <span
                     className="flex items-center justify-center w-14 h-14 rounded-full bg-[#C65D3B] shadow-[0_4px_20px_rgba(198,93,59,0.45)]"
                     style={{ marginTop: "-28px" }}
@@ -92,7 +145,7 @@ export function AppShell({ children }: AppShellProps) {
                     </svg>
                   </span>
                   <span className="text-[10px] font-semibold leading-none mt-1 text-[#C65D3B]">
-                    {item.labelAr}
+                    {navLabel(item)}
                   </span>
                 </Link>
               );
@@ -112,7 +165,7 @@ export function AppShell({ children }: AppShellProps) {
                   <NavIcon itemKey={item.key} filled={isActive} />
                 </span>
                 <span className="text-[10px] font-medium leading-none">
-                  {item.labelAr}
+                  {navLabel(item)}
                 </span>
               </Link>
             );

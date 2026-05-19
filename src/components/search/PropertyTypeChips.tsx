@@ -2,7 +2,10 @@
 
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
+import { useLanguageStore } from "@/store/language.store";
 import { PROPERTY_TYPES } from "@/lib/constants/property-types";
+import { ROUTES } from "@/config/routes";
+import { usePathname, useRouter } from "next/navigation";
 import type { PropertyType } from "@/types/listing";
 
 const CHIP_ICONS: Record<string, React.ReactNode> = {
@@ -53,6 +56,28 @@ const CHIP_ICONS: Record<string, React.ReactNode> = {
       <path d="M9 12a3 3 0 0 0 6 0"/>
     </svg>
   ),
+  farm: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7z"/>
+    </svg>
+  ),
+  chalet: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M3 11l9-9 9 9v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>
+      <path d="M9 21V12h6v9"/>
+    </svg>
+  ),
+  building: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="4" y="2" width="16" height="20" rx="1"/>
+      <path d="M9 22V12h6v10M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01"/>
+    </svg>
+  ),
+  hotel_apartment: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
+    </svg>
+  ),
 };
 
 interface PropertyTypeChipsProps {
@@ -62,30 +87,46 @@ interface PropertyTypeChipsProps {
 
 export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProps) {
   const { filters, setFilter } = useSearchStore();
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
+  const pathname = usePathname();
+  const router = useRouter();
   const active = filters.propertyTypes[0] as PropertyType | undefined;
+  const isHome = pathname === "/";
 
   function handleSelect(value: PropertyType) {
-    const next = active === value ? [] : [value];
+    const isDeselect = active === value;
+    const next: PropertyType[] = isDeselect ? [] : [value];
     setFilter("propertyTypes", next);
-    onSelect?.(next.length ? next[0] : null);
+    const selected = next.length ? next[0] : null;
+    onSelect?.(selected);
+
+    // On the home page a specific chip navigates to /search with the type pre-selected.
+    // Deselecting (tapping the active chip again) stays on home and clears the filter.
+    if (isHome && !isDeselect) {
+      router.push(`${ROUTES.search}?propertyType=${value}`);
+    }
+  }
+
+  function handleAll() {
+    setFilter("propertyTypes", []);
+    onSelect?.(null);
+    // On home "All" just clears the store — no navigation needed.
   }
 
   return (
     <div
       className={cn(
         "flex gap-2 overflow-x-auto pb-2 scrollbar-none",
-        "-mx-4 px-4", // bleed to edges, restore padding inside
+        "-mx-4 px-4",
         className
       )}
       role="group"
-      aria-label="نوع العقار"
+      aria-label={isAr ? "نوع العقار" : "Property Type"}
     >
       {/* All chip */}
       <button
-        onClick={() => {
-          setFilter("propertyTypes", []);
-          onSelect?.(null);
-        }}
+        onClick={handleAll}
         className={cn(
           "flex-shrink-0 flex items-center gap-1.5 px-3 h-9 rounded-full text-xs font-semibold",
           "border transition-colors whitespace-nowrap",
@@ -95,7 +136,7 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
         )}
         aria-pressed={!active}
       >
-        الكل
+        {isAr ? "الكل" : "All"}
       </button>
 
       {PROPERTY_TYPES.map((pt) => (
@@ -112,7 +153,7 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
           aria-pressed={active === pt.value}
         >
           <span className="flex-shrink-0">{CHIP_ICONS[pt.value]}</span>
-          {pt.labelAr}
+          {isAr ? pt.labelAr : pt.labelEn}
         </button>
       ))}
     </div>

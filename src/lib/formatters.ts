@@ -15,6 +15,14 @@ export function formatOMR(
   const { arabic = true, compact = false } = opts;
 
   if (!arabic) {
+    if (compact && amount >= 1_000_000) {
+      const val = (amount / 1_000_000).toFixed(1).replace(/\.0$/, "");
+      return `${val}M OMR`;
+    }
+    if (compact && amount >= 1_000) {
+      const val = Math.round(amount / 1_000);
+      return `${val}K OMR`;
+    }
     const formatted = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
