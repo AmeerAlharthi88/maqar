@@ -75,11 +75,14 @@ export function SearchPageClient() {
     [filteredListings, filters.sortBy]
   );
 
-  // Decide which list to display
+  // Decide which list to display.
+  // When Supabase is configured but returns 0 results (empty DB on staging,
+  // or all listings are pending review), fall back to client-side filtered mock data.
+  // This keeps chip-filter navigation working on staging without real DB listings.
   const displayListings: Listing[] =
-    SUPABASE_LIVE && dbListings !== null
+    SUPABASE_LIVE && dbListings !== null && dbListings.length > 0
       ? dbListings          // DB results (already sorted by Supabase)
-      : sortedListings;     // local mock fallback
+      : sortedListings;     // local mock fallback (empty DB → show filtered mock)
 
   return (
     <div className="flex flex-col min-h-full">
