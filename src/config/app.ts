@@ -13,11 +13,12 @@ export const APP_CONFIG = {
   currency: "OMR",
   timezone: "Asia/Muscat",
   brand: {
-    primary: "#C65D3B",
-    secondary: "#D4A373",
-    accent: "#5B8C5A",
-    background: "#FAF7F2",
-    charcoal: "#1E1E1E",
+    primary:    "#0A3C36",  // Deep Emerald Teal
+    secondary:  "#E5BA73",  // Champagne Gold
+    accent:     "#1A5C54",  // Mid Emerald (hover / active tints)
+    background: "#F8F9FA",  // Ice White
+    charcoal:   "#102A43",  // Midnight Dark Blue
+    muted:      "#627D98",  // Muted Slate
   },
 } as const;
 

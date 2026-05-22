@@ -1,52 +1,52 @@
 @import "tailwindcss";
 
 @theme {
-  /* ── Maqar Brand Palette ─────────────────────────────────────── */
-  --color-background: #FAF7F2;
-  --color-foreground: #1E1E1E;
-  --color-surface:    #FFFFFF;
-  --color-border:     #E8DDD0;
-  --color-border-subtle: #F0EBE3;
+  /* ── Maqar Brand Palette — Cyber Luxury ─────────────────────── */
+  --color-background: #F8F9FA;       /* Ice White                  */
+  --color-foreground: #102A43;       /* Midnight Dark Blue         */
+  --color-surface:    #FFFFFF;       /* Pure White                 */
+  --color-border:     #E2E8F0;       /* Cool Gray border           */
+  --color-border-subtle: #F0F4F8;    /* Very subtle cool border    */
 
-  /* Primary – Terracotta */
-  --color-primary:            #C65D3B;
-  --color-primary-hover:      #A84D2F;
-  --color-primary-light:      #FBF0EB;
+  /* Primary – Deep Emerald Teal */
+  --color-primary:            #0A3C36;
+  --color-primary-hover:      #082E29;
+  --color-primary-light:      #E6F0EF;
   --color-primary-foreground: #FFFFFF;
 
-  /* Secondary – Desert Sand */
-  --color-secondary:            #D4A373;
-  --color-secondary-hover:      #C49060;
-  --color-secondary-light:      #FDF6EE;
-  --color-secondary-foreground: #1E1E1E;
+  /* Secondary – Champagne Gold */
+  --color-secondary:            #E5BA73;
+  --color-secondary-hover:      #D4A55E;
+  --color-secondary-light:      #FDF8EE;
+  --color-secondary-foreground: #102A43;
 
-  /* Accent – Palm Green */
-  --color-accent:            #5B8C5A;
-  --color-accent-hover:      #4A7349;
-  --color-accent-light:      #EDF4ED;
+  /* Accent – Mid Emerald (hover / active tint) */
+  --color-accent:            #1A5C54;
+  --color-accent-hover:      #0D4A42;
+  --color-accent-light:      #E6F0EF;
   --color-accent-foreground: #FFFFFF;
 
   /* Neutrals */
-  --color-charcoal:  #1E1E1E;
-  --color-muted:     #7A6B5E;
-  --color-subtle:    #A89480;
-  --color-faint:     #C8B8A8;
-  --color-muted-bg:  #F5F0EA;
+  --color-charcoal:  #102A43;        /* matches foreground         */
+  --color-muted:     #627D98;        /* Muted Slate                */
+  --color-subtle:    #A0AEC0;        /* Cool mid-gray              */
+  --color-faint:     #CBD5E0;        /* Very light cool-gray       */
+  --color-muted-bg:  #F0F4F8;        /* Tinted surface bg          */
 
-  /* Semantic */
-  --color-success:         #5B8C5A;
-  --color-success-light:   #EDF4ED;
-  --color-warning:         #C8860A;
-  --color-warning-light:   #FFF8E6;
+  /* Semantic — kept stable; only hue shifts within tolerance */
+  --color-success:         #2D7A4F;
+  --color-success-light:   #E6F4EC;
+  --color-warning:         #B7791F;
+  --color-warning-light:   #FFFBEB;
   --color-danger:          #C0392B;
   --color-danger-light:    #FEF0EE;
-  --color-info:            #2471A3;
-  --color-info-light:      #EAF4FB;
+  --color-info:            #2B6CB0;
+  --color-info-light:      #EBF4FF;
 
   /* Typography */
-  --font-sans: var(--font-arabic), "Segoe UI", system-ui, Arial, sans-serif;
+  --font-sans: var(--font-arabic), var(--font-arabic-fallback), "Inter", "Segoe UI", system-ui, Arial, sans-serif;
 
-  /* Border radius */
+  /* Border radius — unchanged, already matches brand spec */
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius:    12px;
@@ -56,12 +56,12 @@
   --radius-2xl: 32px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-xs:       0 1px 2px 0 rgb(30 30 30 / 0.06);
-  --shadow-sm:       0 1px 4px 0 rgb(30 30 30 / 0.08);
-  --shadow-card:     0 2px 8px 0 rgb(30 30 30 / 0.06), 0 1px 2px 0 rgb(30 30 30 / 0.04);
-  --shadow-elevated: 0 8px 24px 0 rgb(30 30 30 / 0.10);
-  --shadow-sheet:    0 -4px 32px 0 rgb(30 30 30 / 0.14);
+  /* Shadows — emerald-tinted soft shadows */
+  --shadow-xs:       0 1px 2px 0 rgb(10 60 54 / 0.04);
+  --shadow-sm:       0 1px 4px 0 rgb(10 60 54 / 0.06);
+  --shadow-card:     0 4px 20px 0 rgb(10 60 54 / 0.04);
+  --shadow-elevated: 0 8px 24px 0 rgb(10 60 54 / 0.10);
+  --shadow-sheet:    0 -4px 32px 0 rgb(10 60 54 / 0.14);
 
   /* Z-index */
   --z-sticky: 100;
@@ -105,7 +105,7 @@ input, textarea, select {
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-faint);
+  background: var(--color-subtle);
   border-radius: var(--radius-full);
 }
 
@@ -147,7 +147,7 @@ input, textarea, select {
 
 /* ── Focus ──────────────────────────────────────────────────────── */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-primary);   /* #0A3C36 Deep Emerald */
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
