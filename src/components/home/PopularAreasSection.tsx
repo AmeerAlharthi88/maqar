@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { AreaCard } from "./AreaCard";
 import { ROUTES } from "@/config/routes";
+import { useLanguageStore } from "@/store/language.store";
 import type { PopularArea } from "@/mock/popular-areas";
 
 interface PopularAreasSectionProps {
@@ -9,15 +12,20 @@ interface PopularAreasSectionProps {
 }
 
 export function PopularAreasSection({ areas }: PopularAreasSectionProps) {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
+
   return (
     <section className="px-4 py-5 bg-[#FAF7F2]">
       <SectionHeader
         titleAr="أكثر المناطق طلباً"
+        titleEn="Popular Areas"
         subtitleAr="أسعار وإحصاءات السوق لأبرز الأحياء"
+        subtitleEn="Market prices and stats for top neighbourhoods"
         size="md"
         action={
           <Link href={ROUTES.areas} className="text-xs font-semibold text-[#C65D3B] hover:underline">
-            جميع المناطق
+            {isAr ? "جميع المناطق" : "All Areas"}
           </Link>
         }
         className="mb-4"

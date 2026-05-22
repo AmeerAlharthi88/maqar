@@ -1,21 +1,48 @@
+"use client";
+
 import { formatOMR, formatRelativeDate, toArabicNumerals } from "@/lib/formatters";
 import { isBelowMarket } from "@/lib/helpers/listing-filters";
 import { PROPERTY_TYPE_MAP } from "@/lib/constants/property-types";
+import { useLanguageStore } from "@/store/language.store";
 import type { Listing } from "@/types/listing";
 
 interface ListingHeaderProps {
   listing: Listing;
 }
 
-const FURNISHING_AR: Record<string, string> = {
-  furnished:      "مفروشة",
-  semi_furnished: "شبه مفروشة",
-  unfurnished:    "غير مفروشة",
+const FURNISHING_LABELS: Record<string, { ar: string; en: string }> = {
+  furnished:      { ar: "مفروشة",       en: "Furnished" },
+  semi_furnished: { ar: "شبه مفروشة",   en: "Semi-Furnished" },
+  unfurnished:    { ar: "غير مفروشة",   en: "Unfurnished" },
 };
 
 export function ListingHeader({ listing }: ListingHeaderProps) {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
+
   const belowMkt = isBelowMarket(listing);
-  const propType = PROPERTY_TYPE_MAP[listing.propertyType]?.labelAr ?? listing.propertyType;
+  const propTypeMap = PROPERTY_TYPE_MAP[listing.propertyType];
+  const propType = isAr
+    ? (propTypeMap?.labelAr ?? listing.propertyType)
+    : (propTypeMap?.labelEn ?? listing.propertyType);
+
+  const title = isAr ? listing.titleAr : (listing.titleEn ?? listing.titleAr);
+  const furnishingLabel = FURNISHING_LABELS[listing.furnishing];
+
+  const governorate = isAr ? listing.location.governorateAr : (listing.location.governorateEn ?? listing.location.governorateAr);
+  const wilayat     = isAr ? listing.location.wilayatAr     : (listing.location.wilayatEn     ?? listing.location.wilayatAr);
+  const area        = isAr ? listing.location.areaAr        : (listing.location.areaEn        ?? listing.location.areaAr);
+  const address     = isAr ? listing.location.addressAr     : (listing.location.addressEn     ?? listing.location.addressAr);
+
+  const priceFormatted = formatOMR(listing.price, { arabic: isAr, compact: false });
+  const pricePerSqm = listing.pricePerSqm;
+  const pricePerSqmStr = pricePerSqm
+    ? isAr
+      ? `(${toArabicNumerals(pricePerSqm)} ر.ع/م²)`
+      : `(${pricePerSqm} OMR/sqm)`
+    : null;
+  const viewsLabel  = isAr ? `${toArabicNumerals(listing.viewCount)} مشاهدة`  : `${listing.viewCount} views`;
+  const rentSuffix  = listing.purpose === "rent" ? (isAr ? "/ شهر" : "/ month") : null;
 
   return (
     <div className="px-4 pt-4 pb-2">
@@ -28,26 +55,27 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
               : "bg-[#2471A3] text-white"
           }`}
         >
-          {listing.purpose === "sale" ? "للبيع" : "للإيجار"}
+          {listing.purpose === "sale"
+            ? (isAr ? "للبيع" : "For Sale")
+            : (isAr ? "للإيجار" : "For Rent")}
         </span>
 
         <span className="text-xs text-[#7A6B5E] bg-[#F5F0EA] px-2.5 py-0.5 rounded-full">
           {propType}
         </span>
 
-        {listing.furnishing !== "unfurnished" && (
+        {listing.furnishing !== "unfurnished" && furnishingLabel && (
           <span className="text-xs text-[#7A6B5E] bg-[#F5F0EA] px-2.5 py-0.5 rounded-full">
-            {FURNISHING_AR[listing.furnishing]}
+            {isAr ? furnishingLabel.ar : furnishingLabel.en}
           </span>
         )}
 
-        {/* Badges */}
         {listing.isVerified && (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EDF4ED] text-[#5B8C5A] text-xs font-semibold">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            موثق
+            {isAr ? "موثق" : "Verified"}
           </span>
         )}
         {belowMkt && (
@@ -55,38 +83,34 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <path d="M12 19V5M5 12l7-7 7 7" />
             </svg>
-            أقل من السوق
+            {isAr ? "أقل من السوق" : "Below Market"}
           </span>
         )}
         {listing.isFeatured && (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FBF0EB] text-[#C65D3B] text-xs font-semibold">
-            مميز
+            {isAr ? "مميز" : "Featured"}
           </span>
         )}
         {listing.isNew && (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EAF4FB] text-[#2471A3] text-xs font-semibold">
-            جديد
+            {isAr ? "جديد" : "New"}
           </span>
         )}
       </div>
 
       {/* Title */}
       <h1 className="text-xl font-bold text-[#1E1E1E] leading-snug mb-2">
-        {listing.titleAr}
+        {title}
       </h1>
 
       {/* Price */}
       <div className="flex items-baseline gap-2 mb-3">
-        <span className="text-2xl font-bold text-[#C65D3B]">
-          {formatOMR(listing.price, { arabic: true, compact: false })}
-        </span>
-        {listing.purpose === "rent" && (
-          <span className="text-sm text-[#7A6B5E]">/ شهر</span>
+        <span className="text-2xl font-bold text-[#C65D3B]">{priceFormatted}</span>
+        {rentSuffix && (
+          <span className="text-sm text-[#7A6B5E]">{rentSuffix}</span>
         )}
-        {listing.pricePerSqm && (
-          <span className="text-xs text-[#A89480]">
-            ({toArabicNumerals(listing.pricePerSqm)} ر.ع/م²)
-          </span>
+        {pricePerSqmStr && (
+          <span className="text-xs text-[#A89480]">{pricePerSqmStr}</span>
         )}
       </div>
 
@@ -96,15 +120,15 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
           <circle cx="12" cy="10" r="3" />
         </svg>
-        <span>{listing.location.governorateAr}</span>
+        <span>{governorate}</span>
         <span className="text-[#E8DDD0]">›</span>
-        <span>{listing.location.wilayatAr}</span>
+        <span>{wilayat}</span>
         <span className="text-[#E8DDD0]">›</span>
-        <span className="font-medium text-[#1E1E1E]">{listing.location.areaAr}</span>
-        {listing.location.addressAr && (
+        <span className="font-medium text-[#1E1E1E]">{area}</span>
+        {address && (
           <>
             <span className="text-[#E8DDD0]">›</span>
-            <span className="text-[#A89480]">{listing.location.addressAr}</span>
+            <span className="text-[#A89480]">{address}</span>
           </>
         )}
       </div>
@@ -122,7 +146,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
             <circle cx="12" cy="12" r="3" />
           </svg>
-          {toArabicNumerals(listing.viewCount)} مشاهدة
+          {viewsLabel}
         </span>
         <span className="flex items-center gap-1">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

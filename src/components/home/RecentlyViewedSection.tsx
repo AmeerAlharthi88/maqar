@@ -6,9 +6,12 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MOCK_LISTINGS } from "@/mock/listings";
 import { ListingCardInteractive } from "@/components/real-estate/ListingCardInteractive";
 import { ROUTES } from "@/config/routes";
+import { useLanguageStore } from "@/store/language.store";
 
 export function RecentlyViewedSection() {
   const { items } = useRecentlyViewedStore();
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
 
   if (items.length === 0) return null;
 
@@ -23,10 +26,11 @@ export function RecentlyViewedSection() {
     <section className="px-4 py-5">
       <SectionHeader
         titleAr="شاهدته مؤخراً"
+        titleEn="Recently Viewed"
         size="md"
         action={
           <Link href={ROUTES.recentlyViewed} className="text-xs font-semibold text-[#C65D3B] hover:underline">
-            الكل
+            {isAr ? "الكل" : "All"}
           </Link>
         }
         className="mb-4"

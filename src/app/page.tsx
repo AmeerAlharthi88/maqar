@@ -64,15 +64,19 @@ export default function HomePage() {
         {/* Recommended listings */}
         <RecommendedListingsSection
           listings={recommendedListings}
-          title="عقارات قد تعجبك"
-          subtitle="بناءً على أكثر العقارات مشاهدةً في مسقط"
+          titleAr="عقارات قد تعجبك"
+          titleEn="Recommended for You"
+          subtitleAr="بناءً على أكثر العقارات مشاهدةً في مسقط"
+          subtitleEn="Based on the most viewed listings in Muscat"
         />
 
         {/* Near you */}
         <RecommendedListingsSection
           listings={nearYouListings}
-          title="قريب منك"
-          subtitle="عقارات في محافظة مسقط"
+          titleAr="قريب منك"
+          titleEn="Near You"
+          subtitleAr="عقارات في محافظة مسقط"
+          subtitleEn="Properties in Muscat Governorate"
         />
 
         {/* Agents preview */}

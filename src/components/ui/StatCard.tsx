@@ -1,7 +1,11 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useLanguageStore } from "@/store/language.store";
 
 interface StatCardProps {
   labelAr: string;
+  labelEn?: string;
   value: string | number;
   change?: {
     pct: number;
@@ -11,7 +15,12 @@ interface StatCardProps {
   className?: string;
 }
 
-export function StatCard({ labelAr, value, change, icon, className }: StatCardProps) {
+export function StatCard({ labelAr, labelEn, value, change, icon, className }: StatCardProps) {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
+  const label = isAr ? labelAr : (labelEn ?? labelAr);
+  const changeLabel = isAr ? "مقارنة بالعام السابق" : "vs last year";
+
   return (
     <div
       className={cn(
@@ -21,7 +30,7 @@ export function StatCard({ labelAr, value, change, icon, className }: StatCardPr
       )}
     >
       <div className="flex items-start justify-between">
-        <p className="text-xs font-medium text-[#7A6B5E]">{labelAr}</p>
+        <p className="text-xs font-medium text-[#7A6B5E]">{label}</p>
         {icon && (
           <div className="w-8 h-8 rounded-lg bg-[#FBF0EB] flex items-center justify-center text-[#C65D3B]">
             {icon}
@@ -43,7 +52,7 @@ export function StatCard({ labelAr, value, change, icon, className }: StatCardPr
               {change.direction === "up" ? "+" : change.direction === "down" ? "-" : ""}
               {Math.abs(change.pct)}%
             </span>
-            <span className="text-xs text-[#A89480]">مقارنة بالعام السابق</span>
+            <span className="text-xs text-[#A89480]">{changeLabel}</span>
           </div>
         )}
       </div>

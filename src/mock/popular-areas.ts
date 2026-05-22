@@ -4,6 +4,7 @@ export interface PopularArea {
   nameAr: string;
   nameEn: string;
   governorateAr: string;
+  governorateEn?: string;
   avgSalePrice: number;   // OMR
   avgRentPrice: number;   // OMR/month
   listingCount: number;
@@ -18,6 +19,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "الخوير",
     nameEn: "Al Khuwair",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 84000,
     avgRentPrice: 350,
     listingCount: 112,
@@ -30,6 +32,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "الغبرة",
     nameEn: "Al Ghubrah",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 94000,
     avgRentPrice: 400,
     listingCount: 89,
@@ -42,6 +45,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "المعبيلة",
     nameEn: "Al Maabilah",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 54000,
     avgRentPrice: 215,
     listingCount: 156,
@@ -54,6 +58,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "الموالح",
     nameEn: "Al Mawleh",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 59000,
     avgRentPrice: 235,
     listingCount: 134,
@@ -66,6 +71,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "الحيل",
     nameEn: "Al Hail",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 63000,
     avgRentPrice: 255,
     listingCount: 98,
@@ -78,6 +84,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "مدينة السلطان قابوس",
     nameEn: "Madinat Sultan Qaboos",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 148000,
     avgRentPrice: 680,
     listingCount: 47,
@@ -90,6 +97,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "القرم",
     nameEn: "Al Qurm",
     governorateAr: "مسقط",
+    governorateEn: "Muscat",
     avgSalePrice: 128000,
     avgRentPrice: 590,
     listingCount: 63,
@@ -102,6 +110,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "النهضة",
     nameEn: "Al Nahdha",
     governorateAr: "ظفار",
+    governorateEn: "Dhofar",
     avgSalePrice: 45000,
     avgRentPrice: 180,
     listingCount: 41,
@@ -114,6 +123,7 @@ export const POPULAR_AREAS: PopularArea[] = [
     nameAr: "صحار",
     nameEn: "Sohar Centre",
     governorateAr: "شمال الباطنة",
+    governorateEn: "Al Batinah North",
     avgSalePrice: 38000,
     avgRentPrice: 160,
     listingCount: 57,

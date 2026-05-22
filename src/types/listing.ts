@@ -49,11 +49,15 @@ export interface Listing {
   location: {
     governorateId: string;
     governorateAr: string;
+    governorateEn?: string;
     wilayatId: string;
     wilayatAr: string;
+    wilayatEn?: string;
     areaId: string;
     areaAr: string;
+    areaEn?: string;
     addressAr?: string;
+    addressEn?: string;
     coordinates?: Coordinates;
   };
   agentId: string;
