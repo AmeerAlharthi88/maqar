@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ListingCardInteractive } from "@/components/real-estate/ListingCardInteractive";
 import { ROUTES } from "@/config/routes";
+import { useLanguageStore } from "@/store/language.store";
 import type { Listing } from "@/types/listing";
 
 interface FeaturedListingsSectionProps {
@@ -9,20 +12,25 @@ interface FeaturedListingsSectionProps {
 }
 
 export function FeaturedListingsSection({ listings }: FeaturedListingsSectionProps) {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
+
   if (listings.length === 0) return null;
 
   return (
     <section className="px-4 py-5">
       <SectionHeader
         titleAr="العقارات المميزة"
+        titleEn="Featured Properties"
         subtitleAr="أبرز العقارات في السوق العُماني"
+        subtitleEn="Top properties in the Oman real estate market"
         size="md"
         action={
           <Link
             href={ROUTES.search}
             className="text-xs font-semibold text-[#C65D3B] hover:underline"
           >
-            عرض الكل
+            {isAr ? "عرض الكل" : "View All"}
           </Link>
         }
         className="mb-4"

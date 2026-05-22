@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { formatOMR, toArabicNumerals } from "@/lib/formatters";
+import { useLanguageStore } from "@/store/language.store";
 import { ROUTES } from "@/config/routes";
 import type { PopularArea } from "@/mock/popular-areas";
 
@@ -10,10 +13,13 @@ interface AreaCardProps {
 }
 
 function DemandBar({ score }: { score: number }) {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
   const color =
     score >= 90 ? "#C65D3B" : score >= 75 ? "#D4A373" : "#5B8C5A";
-  const label =
-    score >= 90 ? "طلب مرتفع جداً" : score >= 75 ? "طلب مرتفع" : "طلب متوسط";
+  const label = isAr
+    ? (score >= 90 ? "طلب مرتفع جداً" : score >= 75 ? "طلب مرتفع" : "طلب متوسط")
+    : (score >= 90 ? "Very High Demand" : score >= 75 ? "High Demand" : "Moderate Demand");
   return (
     <div className="flex items-center gap-2">
       <div className="flex-1 h-1.5 rounded-full bg-[#F0EBE3] overflow-hidden">
@@ -28,8 +34,16 @@ function DemandBar({ score }: { score: number }) {
 }
 
 export function AreaCard({ area, className }: AreaCardProps) {
+  const { locale } = useLanguageStore();
+  const isAr = locale === "ar";
   const priceChange = area.priceChangePct;
   const isPositive = priceChange >= 0;
+
+  const areaName = isAr ? area.nameAr : (area.nameEn ?? area.nameAr);
+  const governorateName = isAr ? area.governorateAr : (area.governorateEn ?? area.governorateAr);
+  const listingCountStr = isAr
+    ? `${toArabicNumerals(area.listingCount)} إعلان متاح`
+    : `${area.listingCount} listings`;
 
   return (
     <Link
@@ -44,8 +58,8 @@ export function AreaCard({ area, className }: AreaCardProps) {
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="text-sm font-bold text-[#1E1E1E]">{area.nameAr}</h3>
-          <p className="text-xs text-[#A89480]">{area.governorateAr}</p>
+          <h3 className="text-sm font-bold text-[#1E1E1E]">{areaName}</h3>
+          <p className="text-xs text-[#A89480]">{governorateName}</p>
         </div>
         <span
           className={cn(
@@ -69,12 +83,20 @@ export function AreaCard({ area, className }: AreaCardProps) {
       {/* Prices */}
       <div className="flex flex-col gap-1 mb-3">
         <div className="flex justify-between items-baseline">
-          <span className="text-[10px] text-[#A89480]">متوسط البيع</span>
-          <span className="text-sm font-bold text-[#1E1E1E]">{formatOMR(area.avgSalePrice, { compact: true })}</span>
+          <span className="text-[10px] text-[#A89480]">
+            {isAr ? "متوسط البيع" : "Avg. Sale"}
+          </span>
+          <span className="text-sm font-bold text-[#1E1E1E]">
+            {formatOMR(area.avgSalePrice, { compact: true, arabic: isAr })}
+          </span>
         </div>
         <div className="flex justify-between items-baseline">
-          <span className="text-[10px] text-[#A89480]">متوسط الإيجار / شهر</span>
-          <span className="text-xs font-semibold text-[#7A6B5E]">{formatOMR(area.avgRentPrice)}</span>
+          <span className="text-[10px] text-[#A89480]">
+            {isAr ? "متوسط الإيجار / شهر" : "Avg. Rent / mo"}
+          </span>
+          <span className="text-xs font-semibold text-[#7A6B5E]">
+            {formatOMR(area.avgRentPrice, { arabic: isAr })}
+          </span>
         </div>
       </div>
 
@@ -82,9 +104,7 @@ export function AreaCard({ area, className }: AreaCardProps) {
       <DemandBar score={area.demandScore} />
 
       {/* Listing count */}
-      <p className="text-[10px] text-[#A89480] mt-2">
-        {toArabicNumerals(area.listingCount)} إعلان متاح
-      </p>
+      <p className="text-[10px] text-[#A89480] mt-2">{listingCountStr}</p>
     </Link>
   );
 }
