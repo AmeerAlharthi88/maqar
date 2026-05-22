@@ -29,7 +29,7 @@ export function RecentlyViewedSection() {
         titleEn="Recently Viewed"
         size="md"
         action={
-          <Link href={ROUTES.recentlyViewed} className="text-xs font-semibold text-[#C65D3B] hover:underline">
+          <Link href={ROUTES.recentlyViewed} className="text-xs font-semibold text-[#0A3C36] hover:underline">
             {isAr ? "الكل" : "All"}
           </Link>
         }
