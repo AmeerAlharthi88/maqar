@@ -96,8 +96,8 @@ export function SmartSearch({
           heightClass,
           "px-4",
           focused
-            ? "border-[#C65D3B] shadow-[0_0_0_3px_rgba(198,93,59,0.12)]"
-            : "border-[#E8DDD0] shadow-[0_2px_8px_0_rgb(30_30_30/0.06)]"
+            ? "border-[#0A3C36] shadow-[0_0_0_3px_rgba(10,60,54,0.12)]"
+            : "border-[#E2E8F0] shadow-[0_2px_8px_0_rgb(10_60_54/0.06)]"
         )}
       >
         {/* Search icon */}
@@ -106,7 +106,7 @@ export function SmartSearch({
           height="18"
           viewBox="0 0 24 24"
           fill="none"
-          stroke={focused ? "#C65D3B" : "#A89480"}
+          stroke={focused ? "#0A3C36" : "#627D98"}
           strokeWidth="2.5"
           className="flex-shrink-0 transition-colors"
         >
@@ -126,7 +126,7 @@ export function SmartSearch({
           dir="rtl"
           className={cn(
             "flex-1 bg-transparent outline-none border-none ring-0 shadow-none",
-            "text-[#1E1E1E] placeholder:text-[#A89480]",
+            "text-[#102A43] placeholder:text-[#627D98]",
             "[-webkit-appearance:none] [appearance:none]",
             textClass
           )}
@@ -144,7 +144,7 @@ export function SmartSearch({
               setFilter("query", "");
               inputRef.current?.focus();
             }}
-            className="flex-shrink-0 text-[#A89480] hover:text-[#7A6B5E] transition-colors"
+            className="flex-shrink-0 text-[#627D98] hover:text-[#102A43] transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M18 6 6 18M6 6l12 12" />
@@ -158,7 +158,7 @@ export function SmartSearch({
           onClick={() => handleSubmit(localQuery)}
           className={cn(
             "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-colors",
-            "bg-[#C65D3B] text-white hover:bg-[#B34F2F] active:scale-95"
+            "bg-[#0A3C36] text-white hover:bg-[#082E29] active:scale-95"
           )}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -169,15 +169,15 @@ export function SmartSearch({
 
       {/* Dropdown */}
       {showDropdown && (
-        <div id="smart-search-listbox" role="listbox" className="absolute top-full start-0 end-0 mt-2 bg-white rounded-2xl border border-[#F0EBE3] shadow-[0_8px_32px_0_rgb(30_30_30/0.12)] z-50 overflow-hidden">
+        <div id="smart-search-listbox" role="listbox" className="absolute top-full start-0 end-0 mt-2 bg-white rounded-2xl border border-[#E2E8F0] shadow-[0_8px_32px_0_rgb(10_60_54/0.12)] z-50 overflow-hidden">
           {/* Recent searches */}
           {recentSearches.length > 0 && !localQuery && (
             <div>
               <div className="flex items-center justify-between px-4 pt-3 pb-1">
-                <p className="text-xs font-semibold text-[#A89480]">عمليات البحث الأخيرة</p>
+                <p className="text-xs font-semibold text-[#627D98]">عمليات البحث الأخيرة</p>
                 <button
                   onClick={clearRecentSearches}
-                  className="text-xs text-[#C65D3B] hover:underline"
+                  className="text-xs text-[#0A3C36] hover:underline"
                 >
                   مسح الكل
                 </button>
@@ -189,12 +189,12 @@ export function SmartSearch({
                     setLocalQuery(r.query);
                     handleSubmit(r.query);
                   }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] transition-colors text-start"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F0F4F8] transition-colors text-start"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                     <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                   </svg>
-                  <span className="text-sm text-[#1E1E1E]">{r.query}</span>
+                  <span className="text-sm text-[#102A43]">{r.query}</span>
                 </button>
               ))}
             </div>
@@ -210,12 +210,12 @@ export function SmartSearch({
                     setLocalQuery(s);
                     handleSubmit(s);
                   }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] transition-colors text-start"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F0F4F8] transition-colors text-start"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                     <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
                   </svg>
-                  <span className="text-sm text-[#1E1E1E]">{s}</span>
+                  <span className="text-sm text-[#102A43]">{s}</span>
                 </button>
               ))}
             </div>
@@ -224,7 +224,7 @@ export function SmartSearch({
           {/* Example searches when empty and no recents */}
           {!localQuery && recentSearches.length === 0 && (
             <div>
-              <p className="px-4 pt-3 pb-1 text-xs font-semibold text-[#A89480]">اقتراحات</p>
+              <p className="px-4 pt-3 pb-1 text-xs font-semibold text-[#627D98]">اقتراحات</p>
               {EXAMPLE_SEARCHES.slice(0, 5).map((s) => (
                 <button
                   key={s}
@@ -232,12 +232,12 @@ export function SmartSearch({
                     setLocalQuery(s);
                     handleSubmit(s);
                   }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] transition-colors text-start"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F0F4F8] transition-colors text-start"
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                     <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
                   </svg>
-                  <span className="text-sm text-[#7A6B5E]">{s}</span>
+                  <span className="text-sm text-[#627D98]">{s}</span>
                 </button>
               ))}
             </div>
