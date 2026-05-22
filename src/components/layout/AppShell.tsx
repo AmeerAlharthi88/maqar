@@ -41,60 +41,63 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="flex flex-col min-h-svh">
       {/* ── Desktop-only top header (lg+) ── */}
-      <header className="hidden lg:flex sticky top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] h-14 items-center px-6 gap-6">
-        <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
-          <MaqarLogo size="sm" />
-        </Link>
-        <nav className="flex items-center gap-1 flex-1" aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}>
-          {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
-            return (
-              <Link
-                key={item.key}
-                href={item.href}
-                className={cn(
-                  "px-3 h-9 rounded-xl text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-[#E6F0EF] text-[#0A3C36]"
-                    : "text-[#627D98] hover:bg-[#F0F4F8] hover:text-[#102A43]"
-                )}
-              >
-                {navLabel(item)}
-              </Link>
-            );
-          })}
-        </nav>
+      <header className="hidden lg:flex sticky top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] h-14 px-6">
+        {/* Inner content capped at max-w-7xl for wide screens */}
+        <div className="max-w-7xl mx-auto w-full flex items-center gap-6">
+          <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
+            <MaqarLogo size="sm" />
+          </Link>
+          <nav className="flex items-center gap-1 flex-1" aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}>
+            {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className={cn(
+                    "px-3 h-9 rounded-xl text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-[#E6F0EF] text-[#0A3C36]"
+                      : "text-[#627D98] hover:bg-[#F0F4F8] hover:text-[#102A43]"
+                  )}
+                >
+                  {navLabel(item)}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {/* Language toggle */}
-        <button
-          onClick={() => setLocale(isAr ? "en" : "ar")}
-          aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
-          className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E2E8F0] text-xs font-semibold text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-          </svg>
-          {isAr ? "EN" : "عر"}
-        </button>
+          {/* Language toggle */}
+          <button
+            onClick={() => setLocale(isAr ? "en" : "ar")}
+            aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
+            className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E2E8F0] text-xs font-semibold text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            {isAr ? "EN" : "عر"}
+          </button>
 
-        {/* Add listing CTA */}
-        <Link
-          href={ROUTES.addListing}
-          className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
-          aria-label={isAr ? "إضافة عقار" : "Add Property"}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          {isAr ? "أضف عقار" : "Add Property"}
-        </Link>
+          {/* Add listing CTA */}
+          <Link
+            href={ROUTES.addListing}
+            className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
+            aria-label={isAr ? "إضافة عقار" : "Add Property"}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            {isAr ? "أضف عقار" : "Add Property"}
+          </Link>
+        </div>
       </header>
 
-      {/* Page content — bottom padding only on mobile for the tab bar */}
-      <main className="flex-1 pb-20 lg:pb-0">{children}</main>
+      {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections */}
+      <main className="flex-1 pb-20 lg:pb-0 overflow-x-clip">{children}</main>
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">

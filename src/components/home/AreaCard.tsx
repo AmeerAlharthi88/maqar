@@ -22,7 +22,7 @@ function DemandBar({ score }: { score: number }) {
     : (score >= 90 ? "Very High Demand" : score >= 75 ? "High Demand" : "Moderate Demand");
   return (
     <div className="flex items-center gap-2">
-      <div className="flex-1 h-1.5 rounded-full bg-[#E2E8F0] overflow-hidden">
+      <div className="flex-1 h-1 rounded-full bg-[#E2E8F0] overflow-hidden">
         <div
           className="h-full rounded-full transition-all"
           style={{ width: `${score}%`, background: color }}
@@ -49,14 +49,14 @@ export function AreaCard({ area, className }: AreaCardProps) {
     <Link
       href={ROUTES.area(area.slug)}
       className={cn(
-        "block bg-white rounded-2xl border border-[#E2E8F0] p-4",
+        "block bg-white rounded-2xl border border-[#E2E8F0] p-3",
         "shadow-[0_2px_8px_0_rgb(10_60_54/0.06)] hover:shadow-[0_6px_20px_0_rgb(10_60_54/0.10)]",
         "transition-shadow duration-200",
         className
       )}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between mb-2">
         <div>
           <h3 className="text-sm font-bold text-[#102A43]">{areaName}</h3>
           <p className="text-xs text-[#627D98]">{governorateName}</p>
@@ -81,7 +81,7 @@ export function AreaCard({ area, className }: AreaCardProps) {
       </div>
 
       {/* Prices */}
-      <div className="flex flex-col gap-1 mb-3">
+      <div className="flex flex-col gap-1 mb-2">
         <div className="flex justify-between items-baseline">
           <span className="text-[10px] text-[#627D98]">
             {isAr ? "متوسط البيع" : "Avg. Sale"}
@@ -104,7 +104,7 @@ export function AreaCard({ area, className }: AreaCardProps) {
       <DemandBar score={area.demandScore} />
 
       {/* Listing count */}
-      <p className="text-[10px] text-[#627D98] mt-2">{listingCountStr}</p>
+      <p className="text-[10px] text-[#627D98] mt-1.5">{listingCountStr}</p>
     </Link>
   );
 }

@@ -1,14 +1,9 @@
-import { MaqarLogo } from "@/components/brand/MaqarLogo";
-
+/**
+ * Auth layout — intentionally minimal.
+ * All auth pages use <AppShell> internally, which provides the full
+ * header/nav chrome. This layout is a passthrough so that AppShell
+ * renders full-width without being constrained by a legacy wrapper.
+ */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-svh flex flex-col bg-[#F8F9FA]">
-      <div className="flex justify-center pt-12 pb-8">
-        <MaqarLogo size="md" />
-      </div>
-      <div className="flex-1 px-4 pb-8">
-        <div className="max-w-sm mx-auto">{children}</div>
-      </div>
-    </div>
-  );
+  return <>{children}</>;
 }

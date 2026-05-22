@@ -70,7 +70,6 @@ export function ProfileCompletionForm() {
       return;
     }
 
-    // Refresh profile in store
     const profile = await getCurrentProfile();
     if (profile) {
       setProfile(profile);
@@ -81,115 +80,123 @@ export function ProfileCompletionForm() {
   }
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6" dir="rtl">
-      {/* Header */}
-      <div className="w-16 h-16 rounded-2xl bg-[#C65D3B] flex items-center justify-center mb-6">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-      </div>
+    <div
+      className="min-h-[calc(100svh-56px)] flex items-center justify-center px-4 py-10 bg-[#F8F9FA]"
+      dir="rtl"
+    >
+      <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
 
-      <h1 className="text-2xl font-bold text-[#1E1E1E] mb-1">أكمل ملفك الشخصي</h1>
-      <p className="text-sm text-[#7A6B5E] text-center mb-8 max-w-xs leading-relaxed">
-        خطوة أخيرة لتفعيل حسابك في مقر
-      </p>
-
-      <form onSubmit={handleSubmit} className="w-full max-w-xs space-y-5">
-        {/* Name */}
-        <div>
-          <label className="block text-xs font-semibold text-[#7A6B5E] mb-1.5">
-            الاسم الكامل بالعربية
-          </label>
-          <input
-            type="text"
-            placeholder="مثال: أحمد بن سالم"
-            value={nameAr}
-            onChange={(e) => { setNameAr(e.target.value); setError(null); }}
-            className="w-full px-4 py-3.5 rounded-2xl border border-[#E8DDD0] bg-white text-sm text-[#1E1E1E] placeholder-[#C4B5A5] outline-none focus:border-[#C65D3B] transition-colors"
-            autoFocus
-            autoComplete="name"
-          />
-          {nameAr.length > 0 && nameAr.trim().length < 2 && (
-            <p className="mt-1 text-xs text-[#C65D3B]">الاسم قصير جداً</p>
-          )}
+        {/* Header icon */}
+        <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
 
-        {/* Role selection */}
-        <div>
-          <label className="block text-xs font-semibold text-[#7A6B5E] mb-1.5">
-            كيف ستستخدم مقر؟
-          </label>
-          <div className="space-y-2">
-            {ROLE_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setRole(opt.value)}
-                className={[
-                  "w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 text-right transition-all",
-                  role === opt.value
-                    ? "border-[#C65D3B] bg-[#FBF0EB]"
-                    : "border-[#E8DDD0] bg-white",
-                ].join(" ")}
-              >
-                <span
+        <h1 className="text-2xl font-bold text-[#102A43] mb-1 text-center">أكمل ملفك الشخصي</h1>
+        <p className="text-sm text-[#627D98] text-center mb-7 max-w-xs leading-relaxed">
+          خطوة أخيرة لتفعيل حسابك في مقر
+        </p>
+
+        <form onSubmit={handleSubmit} className="w-full space-y-5">
+          {/* Name */}
+          <div>
+            <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
+              الاسم الكامل بالعربية
+            </label>
+            <input
+              type="text"
+              placeholder="مثال: أحمد بن سالم"
+              value={nameAr}
+              onChange={(e) => { setNameAr(e.target.value); setError(null); }}
+              className="w-full px-4 py-3.5 rounded-2xl border border-[#E2E8F0] bg-white text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:shadow-[0_0_0_3px_rgba(10,60,54,0.10)] transition-all"
+              autoFocus
+              autoComplete="name"
+            />
+            {nameAr.length > 0 && nameAr.trim().length < 2 && (
+              <p className="mt-1 text-xs text-[#C0392B]">الاسم قصير جداً</p>
+            )}
+          </div>
+
+          {/* Role selection */}
+          <div>
+            <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
+              كيف ستستخدم مقر؟
+            </label>
+            <div className="space-y-2">
+              {ROLE_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setRole(opt.value)}
                   className={[
-                    "flex-shrink-0",
-                    role === opt.value ? "text-[#C65D3B]" : "text-[#A89480]",
+                    "w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 text-right transition-all",
+                    role === opt.value
+                      ? "border-[#0A3C36] bg-[#E6F0EF]"
+                      : "border-[#E2E8F0] bg-white hover:border-[#0A3C36]/40",
                   ].join(" ")}
                 >
-                  {opt.icon}
-                </span>
-                <span className="flex-1">
                   <span
                     className={[
-                      "block text-sm font-bold",
-                      role === opt.value ? "text-[#C65D3B]" : "text-[#1E1E1E]",
+                      "flex-shrink-0",
+                      role === opt.value ? "text-[#0A3C36]" : "text-[#627D98]",
                     ].join(" ")}
                   >
-                    {opt.labelAr}
+                    {opt.icon}
                   </span>
-                  <span className="block text-xs text-[#7A6B5E] mt-0.5">
-                    {opt.descAr}
+                  <span className="flex-1">
+                    <span
+                      className={[
+                        "block text-sm font-bold",
+                        role === opt.value ? "text-[#0A3C36]" : "text-[#102A43]",
+                      ].join(" ")}
+                    >
+                      {opt.labelAr}
+                    </span>
+                    <span className="block text-xs text-[#627D98] mt-0.5">
+                      {opt.descAr}
+                    </span>
                   </span>
-                </span>
-                <span
-                  className={[
-                    "w-5 h-5 rounded-full border-2 flex-shrink-0",
-                    role === opt.value
-                      ? "border-[#C65D3B] bg-[#C65D3B]"
-                      : "border-[#E8DDD0]",
-                  ].join(" ")}
-                />
-              </button>
-            ))}
+                  <span
+                    className={[
+                      "w-5 h-5 rounded-full border-2 flex-shrink-0",
+                      role === opt.value
+                        ? "border-[#0A3C36] bg-[#0A3C36]"
+                        : "border-[#E2E8F0]",
+                    ].join(" ")}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Error */}
-        {error && (
-          <div className="bg-[#FBF0EB] border border-[#C65D3B]/30 rounded-xl px-4 py-3">
-            <p className="text-xs text-[#C65D3B]">{error}</p>
-          </div>
-        )}
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={!isValid || isLoading}
-          className="w-full py-3.5 rounded-2xl bg-[#C65D3B] text-white font-bold text-sm disabled:opacity-50 flex items-center justify-center gap-2 transition-opacity"
-        >
-          {isLoading ? (
-            <>
-              <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-              جاري الحفظ...
-            </>
-          ) : (
-            "ابدأ استخدام مقر"
+          {/* Error */}
+          {error && (
+            <div className="bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3">
+              <p className="text-xs text-[#C0392B]">{error}</p>
+            </div>
           )}
-        </button>
-      </form>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={!isValid || isLoading}
+            className="w-full py-3.5 rounded-2xl text-white font-bold text-sm flex items-center justify-center gap-2 transition-colors
+              bg-[#0A3C36] hover:bg-[#082E29]
+              disabled:bg-[#A0AEC0] disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <>
+                <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                جاري الحفظ...
+              </>
+            ) : (
+              "ابدأ استخدام مقر"
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -145,9 +145,13 @@ export function OtpVerificationForm() {
   const maskedPhone = phone.replace(/(\+968)(\d{2})(\d+)(\d{2})/, "$1 $2*****$4");
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6" dir="rtl">
+    <div
+      className="min-h-[calc(100svh-56px)] flex items-center justify-center px-4 py-10 bg-[#F8F9FA]"
+      dir="rtl"
+    >
+      <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
       {/* Icon */}
-      <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-6">
+      <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8">
           <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
           <line x1="12" y1="18" x2="12.01" y2="18" />
@@ -235,6 +239,7 @@ export function OtpVerificationForm() {
       >
         تغيير رقم الجوال
       </button>
+      </div>
     </div>
   );
 }
