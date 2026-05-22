@@ -40,7 +40,7 @@ export function RecommendedListingsSection({
         subtitleEn={subtitleEn}
         size="md"
         action={
-          <Link href={ROUTES.search} className="text-xs font-semibold text-[#C65D3B] hover:underline">
+          <Link href={ROUTES.search} className="text-xs font-semibold text-[#0A3C36] hover:underline">
             {isAr ? "المزيد" : "More"}
           </Link>
         }

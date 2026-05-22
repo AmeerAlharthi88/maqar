@@ -26,8 +26,8 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
   return (
     <article
       className={cn(
-        "group bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden",
-        "shadow-[0_2px_8px_0_rgb(30_30_30/0.06)] hover:shadow-[0_8px_24px_0_rgb(30_30_30/0.10)]",
+        "group bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden",
+        "shadow-[0_2px_8px_0_rgb(10_60_54/0.06)] hover:shadow-[0_8px_24px_0_rgb(10_60_54/0.10)]",
         "transition-shadow duration-200 cursor-pointer",
         className
       )}
@@ -55,7 +55,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           {favoriteButton ?? (
             <button
               aria-label="حفظ في المفضلة"
-              className="w-8 h-8 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#7A6B5E] shadow-sm"
+              className="w-8 h-8 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#627D98] shadow-sm"
             >
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -69,14 +69,14 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
       <div className="p-4 flex flex-col gap-2.5">
         {/* Property type + date */}
         <div className="flex items-center justify-between">
-          <span className="text-xs text-[#A89480]">
+          <span className="text-xs text-[#627D98]">
             {PROPERTY_TYPE_MAP[listing.propertyType]?.labelAr ?? listing.propertyType}
           </span>
-          <span className="text-xs text-[#A89480]">{formatRelativeDate(listing.createdAt)}</span>
+          <span className="text-xs text-[#627D98]">{formatRelativeDate(listing.createdAt)}</span>
         </div>
 
         {/* Title — min-h prevents collapse during font-load or hydration */}
-        <h3 className="text-sm font-semibold text-[#1E1E1E] leading-snug line-clamp-2 min-h-[2.5rem]">
+        <h3 className="text-sm font-semibold text-[#102A43] leading-snug line-clamp-2 min-h-[2.5rem]">
           {listing.titleAr}
         </h3>
 
@@ -91,7 +91,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         <PropertySpecs specs={listing.specs} propertyType={listing.propertyType} size="sm" />
 
         {/* Price row */}
-        <div className="flex items-end justify-between pt-1 border-t border-[#F5F0EA]">
+        <div className="flex items-end justify-between pt-1 border-t border-[#F0F4F8]">
           <PropertyPrice
             amount={listing.price}
             purpose={listing.purpose}
@@ -110,8 +110,8 @@ function ListingRow({ listing, className, favoriteButton }: { listing: Listing; 
   return (
     <article
       className={cn(
-        "group bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden flex gap-0",
-        "shadow-[0_2px_8px_0_rgb(30_30_30/0.06)] hover:shadow-[0_8px_24px_0_rgb(30_30_30/0.10)]",
+        "group bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden flex gap-0",
+        "shadow-[0_2px_8px_0_rgb(10_60_54/0.06)] hover:shadow-[0_8px_24px_0_rgb(10_60_54/0.10)]",
         "transition-shadow duration-200 cursor-pointer",
         className
       )}
@@ -126,7 +126,7 @@ function ListingRow({ listing, className, favoriteButton }: { listing: Listing; 
           </div>
           {favoriteButton && <div className="flex-shrink-0">{favoriteButton}</div>}
         </div>
-        <h3 className="text-sm font-semibold text-[#1E1E1E] line-clamp-1">{listing.titleAr}</h3>
+        <h3 className="text-sm font-semibold text-[#102A43] line-clamp-1">{listing.titleAr}</h3>
         <LocationBreadcrumb
           governorateAr={listing.location.governorateAr}
           wilayatAr={listing.location.wilayatAr}
