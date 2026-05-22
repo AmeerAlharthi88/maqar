@@ -38,33 +38,33 @@ export function LoginRequiredModal({
         dir="rtl"
       >
         {/* Handle */}
-        <div className="w-10 h-1 rounded-full bg-[#E8DDD0] mx-auto mb-5" />
+        <div className="w-10 h-1 rounded-full bg-[#E2E8F0] mx-auto mb-5" />
 
         {/* Icon */}
-        <div className="w-14 h-14 rounded-full bg-[#F5F0EA] flex items-center justify-center mx-auto mb-4">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.5">
+        <div className="w-14 h-14 rounded-full bg-[#0A3C36] flex items-center justify-center mx-auto mb-4">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5">
             <rect x="3" y="11" width="18" height="11" rx="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
         </div>
 
-        <h2 className="text-lg font-bold text-[#1E1E1E] text-center mb-2">
+        <h2 className="text-lg font-bold text-[#102A43] text-center mb-2">
           تسجيل الدخول مطلوب
         </h2>
-        <p className="text-sm text-[#7A6B5E] text-center mb-6 leading-relaxed">
+        <p className="text-sm text-[#627D98] text-center mb-6 leading-relaxed">
           {reasonAr}
         </p>
 
         <div className="space-y-3">
           <Link
             href={loginHref}
-            className="block w-full py-3.5 rounded-2xl bg-[#C65D3B] text-white font-bold text-sm text-center"
+            className="block w-full py-3.5 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm text-center hover:bg-[#082E29]"
           >
             تسجيل الدخول
           </Link>
           <button
             onClick={onClose}
-            className="w-full py-3 rounded-2xl bg-[#F5F0EA] text-[#1E1E1E] font-semibold text-sm border border-[#E8DDD0]"
+            className="w-full py-3 rounded-2xl bg-[#F0F4F8] text-[#102A43] font-semibold text-sm border border-[#E2E8F0]"
           >
             ليس الآن
           </button>

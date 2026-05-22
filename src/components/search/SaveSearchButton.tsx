@@ -41,7 +41,7 @@ export function SaveSearchButton({ className }: SaveSearchButtonProps) {
         onClick={handleSave}
         className={cn(
           "flex items-center gap-2 px-3 h-9 rounded-xl text-xs font-semibold",
-          "border border-[#E8DDD0] bg-white text-[#7A6B5E] hover:border-[#C65D3B] hover:text-[#C65D3B]",
+          "border border-[#E2E8F0] bg-white text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36]",
           "transition-colors whitespace-nowrap",
           saved && "bg-[#EAF4EB] border-[#5B8C5A] text-[#5B8C5A]",
           className
@@ -85,15 +85,15 @@ export function SaveSearchButton({ className }: SaveSearchButtonProps) {
             onChange={(e) => setSearchName(e.target.value)}
             placeholder="اسم البحث (اختياري)"
             dir="rtl"
-            className="w-full h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none focus:border-[#C65D3B]"
+            className="w-full h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36]"
           />
           <div className="mt-3 flex flex-col gap-2">
-            <p className="text-xs font-semibold text-[#7A6B5E]">إشعارات عبر</p>
+            <p className="text-xs font-semibold text-[#627D98]">إشعارات عبر</p>
             <div className="flex gap-3">
               {["واتساب", "البريد الإلكتروني", "داخل التطبيق"].map((m) => (
                 <label key={m} className="flex items-center gap-1.5 cursor-pointer">
-                  <input type="checkbox" defaultChecked={m === "داخل التطبيق"} className="accent-[#C65D3B]" />
-                  <span className="text-xs text-[#7A6B5E]">{m}</span>
+                  <input type="checkbox" defaultChecked={m === "داخل التطبيق"} className="accent-[#0A3C36]" />
+                  <span className="text-xs text-[#627D98]">{m}</span>
                 </label>
               ))}
             </div>

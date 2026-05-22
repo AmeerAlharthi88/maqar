@@ -2,7 +2,7 @@ import { MaqarLogo } from "@/components/brand/MaqarLogo";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-svh flex flex-col bg-[#FAF7F2]">
+    <div className="min-h-svh flex flex-col bg-[#F8F9FA]">
       <div className="flex justify-center pt-12 pb-8">
         <MaqarLogo size="md" />
       </div>

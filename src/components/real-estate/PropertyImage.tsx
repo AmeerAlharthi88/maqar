@@ -50,29 +50,37 @@ export function PropertyImage({
         />
       ) : (
         /* Maqar brand placeholder */
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#F0F4F8]">
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-            fill="none"
-            aria-hidden="true"
-            className="text-[#A0AEC0]"
-          >
-            <rect
-              x="4" y="8" width="32" height="24" rx="3"
-              stroke="currentColor" strokeWidth="1.5"
-            />
-            <circle cx="14" cy="17" r="3" stroke="currentColor" strokeWidth="1.5" />
-            <path
-              d="M4 26l9-8 6 6 4-4 9 8"
-              stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
-            />
-            {/* Maqar emerald accent dot */}
-            <circle cx="14" cy="17" r="1.5" fill="#0A3C36" opacity="0.35" />
-          </svg>
-          <span className="text-[10px] font-medium text-[#A0AEC0] leading-none text-center px-2">
-            صورة العقار غير متوفرة
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-[#E6F0EF] to-[#F0F4F8]">
+          <div className="w-14 h-14 rounded-2xl bg-white/70 flex items-center justify-center shadow-sm">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              {/* House outline */}
+              <path
+                d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"
+                stroke="#0A3C36"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+                fill="#0A3C36"
+                fillOpacity="0.08"
+              />
+              {/* Door */}
+              <path
+                d="M9 21V14h6v7"
+                stroke="#0A3C36"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+              />
+              {/* Gold accent window */}
+              <rect x="10.5" y="8" width="3" height="3" rx="0.5" fill="#E5BA73" opacity="0.8" />
+            </svg>
+          </div>
+          <span className="text-[11px] font-medium text-[#627D98] leading-none text-center px-4">
+            لا توجد صورة
           </span>
         </div>
       )}

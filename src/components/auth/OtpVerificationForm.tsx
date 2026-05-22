@@ -147,18 +147,18 @@ export function OtpVerificationForm() {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-6" dir="rtl">
       {/* Icon */}
-      <div className="w-16 h-16 rounded-2xl bg-[#F5F0EA] flex items-center justify-center mb-6">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.8">
+      <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-6">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8">
           <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
           <line x1="12" y1="18" x2="12.01" y2="18" />
         </svg>
       </div>
 
-      <h1 className="text-2xl font-bold text-[#1E1E1E] mb-1">أدخل رمز التحقق</h1>
-      <p className="text-sm text-[#7A6B5E] text-center mb-2 max-w-xs leading-relaxed">
+      <h1 className="text-2xl font-bold text-[#102A43] mb-1">أدخل رمز التحقق</h1>
+      <p className="text-sm text-[#627D98] text-center mb-2 max-w-xs leading-relaxed">
         أرسلنا رمزاً مكوناً من 6 أرقام إلى
       </p>
-      <p className="text-sm font-bold text-[#1E1E1E] mb-8" dir="ltr">
+      <p className="text-sm font-bold text-[#102A43] mb-8" dir="ltr">
         {maskedPhone || phone}
       </p>
 
@@ -177,9 +177,9 @@ export function OtpVerificationForm() {
             className={[
               "w-11 h-14 text-center text-xl font-bold rounded-2xl border-2 bg-white outline-none transition-colors",
               d
-                ? "border-[#C65D3B] text-[#C65D3B]"
-                : "border-[#E8DDD0] text-[#1E1E1E]",
-              "focus:border-[#C65D3B]",
+                ? "border-[#0A3C36] text-[#0A3C36]"
+                : "border-[#E2E8F0] text-[#102A43]",
+              "focus:border-[#0A3C36]",
             ].join(" ")}
             autoComplete="one-time-code"
             autoFocus={i === 0}
@@ -189,8 +189,8 @@ export function OtpVerificationForm() {
 
       {/* Error */}
       {error && (
-        <div className="w-full max-w-xs bg-[#FBF0EB] border border-[#C65D3B]/30 rounded-xl px-4 py-3 mb-4">
-          <p className="text-xs text-[#C65D3B] text-center">{error}</p>
+        <div className="w-full max-w-xs bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3 mb-4">
+          <p className="text-xs text-[#C0392B] text-center">{error}</p>
         </div>
       )}
 
@@ -198,15 +198,15 @@ export function OtpVerificationForm() {
       {digits.every((d) => d !== "") && !isVerifying && (
         <button
           onClick={() => submit(digits.join(""))}
-          className="w-full max-w-xs py-3.5 rounded-2xl bg-[#C65D3B] text-white font-bold text-sm mb-4"
+          className="w-full max-w-xs py-3.5 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm mb-4 hover:bg-[#082E29]"
         >
           تحقق
         </button>
       )}
 
       {isVerifying && (
-        <div className="flex items-center gap-2 text-sm text-[#7A6B5E] mb-4">
-          <span className="w-4 h-4 rounded-full border-2 border-[#E8DDD0] border-t-[#C65D3B] animate-spin" />
+        <div className="flex items-center gap-2 text-sm text-[#627D98] mb-4">
+          <span className="w-4 h-4 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
           جاري التحقق...
         </div>
       )}
@@ -214,14 +214,14 @@ export function OtpVerificationForm() {
       {/* Resend */}
       <div className="text-center">
         {cooldown > 0 ? (
-          <p className="text-xs text-[#A89480]">
+          <p className="text-xs text-[#627D98]">
             إعادة الإرسال بعد{" "}
-            <span className="font-bold text-[#7A6B5E]">{cooldown}</span> ثانية
+            <span className="font-bold text-[#102A43]">{cooldown}</span> ثانية
           </p>
         ) : (
           <button
             onClick={handleResend}
-            className="text-xs font-semibold text-[#C65D3B] underline"
+            className="text-xs font-semibold text-[#0A3C36] underline"
           >
             إعادة إرسال الرمز
           </button>
@@ -231,7 +231,7 @@ export function OtpVerificationForm() {
       {/* Change phone */}
       <button
         onClick={() => router.back()}
-        className="mt-6 text-xs text-[#A89480] underline"
+        className="mt-6 text-xs text-[#627D98] underline"
       >
         تغيير رقم الجوال
       </button>
