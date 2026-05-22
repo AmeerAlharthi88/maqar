@@ -131,8 +131,8 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
           "flex-shrink-0 flex items-center gap-1.5 px-3 h-9 rounded-full text-xs font-semibold",
           "border transition-colors whitespace-nowrap",
           !active
-            ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-            : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+            ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+            : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36] hover:text-[#0A3C36]"
         )}
         aria-pressed={!active}
       >
@@ -147,8 +147,8 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
             "flex-shrink-0 flex items-center gap-1.5 px-3 h-9 rounded-full text-xs font-semibold",
             "border transition-colors whitespace-nowrap",
             active === pt.value
-              ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-              : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+              ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+              : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36] hover:text-[#0A3C36]"
           )}
           aria-pressed={active === pt.value}
         >

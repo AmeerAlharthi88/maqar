@@ -16,26 +16,26 @@ export function PropertyBadges({ listing, className }: PropertyBadgesProps) {
   return (
     <div className={cn("flex flex-wrap gap-1.5", className)}>
       {listing.purpose === "sale" ? (
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#FBF0EB] text-[#C65D3B]">
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#E6F0EF] text-[#0A3C36]">
           {isAr ? "للبيع" : "For Sale"}
         </span>
       ) : (
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#EAF4FB] text-[#2471A3]">
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#EBF4FF] text-[#2B6CB0]">
           {isAr ? "للإيجار" : "For Rent"}
         </span>
       )}
       {listing.isFeatured && (
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#1E1E1E] text-[#D4A373]">
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#0A3C36] text-[#E5BA73]">
           {isAr ? "مميز" : "Featured"}
         </span>
       )}
       {listing.isNew && (
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#EDF4ED] text-[#5B8C5A]">
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#F0F4F8] text-[#627D98]">
           {isAr ? "جديد" : "New"}
         </span>
       )}
       {listing.isVerified && (
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#FDF6EE] text-[#C49060] flex items-center gap-1">
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#E6F0EF] text-[#0A3C36] flex items-center gap-1">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M20 6 9 17l-5-5" />
           </svg>

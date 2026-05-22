@@ -12,9 +12,9 @@ const sizes = {
 };
 
 const colors = {
-  brand: { mark: "#C65D3B", text: "#1E1E1E", dot: "#D4A373" },
-  white: { mark: "#FFFFFF", text: "#FFFFFF", dot: "#D4A373" },
-  dark:  { mark: "#1E1E1E", text: "#1E1E1E", dot: "#C65D3B" },
+  brand: { mark: "#0A3C36", text: "#0A3C36", dot: "#E5BA73" },
+  white: { mark: "#FFFFFF", text: "#FFFFFF", dot: "#E5BA73" },
+  dark:  { mark: "#102A43", text: "#102A43", dot: "#E5BA73" },
 };
 
 export function MaqarLogo({
@@ -57,23 +57,20 @@ function MaqarIconSVG({ size, primary, accent }: MaqarIconSVGProps) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* House silhouette */}
-      <path
-        d="M24 6L4 22h6v20h10V30h8v12h10V22h6L24 6z"
-        fill={primary}
-        fillOpacity="0.12"
-      />
+      {/* House outline — 2px stroke, premium line style */}
       <path
         d="M24 8L6 23.5h5V41h9V29h8v12h9V23.5h5L24 8z"
         stroke={primary}
-        strokeWidth="2.5"
+        strokeWidth="2"
         strokeLinejoin="round"
-        fill="none"
+        fill={primary}
+        fillOpacity="0.06"
       />
       {/* Door */}
-      <rect x="19" y="31" width="10" height="10" rx="1.5" fill={primary} fillOpacity="0.3" />
-      {/* Accent dot – Desert Sand */}
-      <circle cx="37" cy="11" r="5" fill={accent} />
+      <rect x="19" y="31" width="10" height="10" rx="1.5"
+        stroke={primary} strokeWidth="1.5" fill={primary} fillOpacity="0.12" />
+      {/* Champagne Gold accent dot */}
+      <circle cx="37" cy="11" r="4.5" fill={accent} />
     </svg>
   );
 }

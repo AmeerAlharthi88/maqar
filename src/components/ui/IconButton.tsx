@@ -15,9 +15,9 @@ const sizeClasses = {
 };
 
 const variantClasses = {
-  ghost:   "bg-transparent text-[#7A6B5E] hover:bg-[#F5F0EA] hover:text-[#1E1E1E]",
-  outline: "border border-[#E8DDD0] text-[#7A6B5E] hover:border-[#C65D3B] hover:text-[#C65D3B]",
-  filled:  "bg-[#C65D3B] text-white hover:bg-[#A84D2F]",
+  ghost:   "bg-transparent text-[#627D98] hover:bg-[#F0F4F8] hover:text-[#102A43]",
+  outline: "border border-[#E2E8F0] text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36]",
+  filled:  "bg-[#0A3C36] text-white hover:bg-[#082E29]",
   danger:  "bg-[#FEF0EE] text-[#C0392B] hover:bg-[#C0392B] hover:text-white",
 };
 

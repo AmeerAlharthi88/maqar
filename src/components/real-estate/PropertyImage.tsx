@@ -34,7 +34,7 @@ export function PropertyImage({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden bg-[#F5F0EA]",
+        "relative w-full overflow-hidden bg-[#F0F4F8]",
         aspectClasses[aspectRatio],
         className
       )}
@@ -49,15 +49,15 @@ export function PropertyImage({
           onError={() => setFailed(true)}
         />
       ) : (
-        /* Premium Maqar placeholder */
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#F5F0EA]">
+        /* Maqar brand placeholder */
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#F0F4F8]">
           <svg
             width="40"
             height="40"
             viewBox="0 0 40 40"
             fill="none"
             aria-hidden="true"
-            className="text-[#C8B4A4] opacity-60"
+            className="text-[#A0AEC0]"
           >
             <rect
               x="4" y="8" width="32" height="24" rx="3"
@@ -68,10 +68,10 @@ export function PropertyImage({
               d="M4 26l9-8 6 6 4-4 9 8"
               stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
             />
-            {/* Maqar terracotta accent dot */}
-            <circle cx="14" cy="17" r="1.5" fill="#C65D3B" opacity="0.45" />
+            {/* Maqar emerald accent dot */}
+            <circle cx="14" cy="17" r="1.5" fill="#0A3C36" opacity="0.35" />
           </svg>
-          <span className="text-[10px] font-medium text-[#A89480] leading-none text-center px-2">
+          <span className="text-[10px] font-medium text-[#A0AEC0] leading-none text-center px-2">
             صورة العقار غير متوفرة
           </span>
         </div>

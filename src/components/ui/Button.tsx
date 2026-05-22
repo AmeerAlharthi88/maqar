@@ -4,15 +4,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 font-semibold transition-all duration-150 select-none disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C65D3B]",
+  "inline-flex items-center justify-center gap-2 font-semibold transition-all duration-150 select-none disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0A3C36]",
   {
     variants: {
       variant: {
-        primary:   "bg-[#C65D3B] text-white hover:bg-[#A84D2F] active:scale-[0.98]",
-        secondary: "bg-[#D4A373] text-[#1E1E1E] hover:bg-[#C49060] active:scale-[0.98]",
-        accent:    "bg-[#5B8C5A] text-white hover:bg-[#4A7349] active:scale-[0.98]",
-        outline:   "border-2 border-[#C65D3B] text-[#C65D3B] bg-transparent hover:bg-[#FBF0EB] active:scale-[0.98]",
-        ghost:     "bg-transparent text-[#1E1E1E] hover:bg-[#F5F0EA] active:scale-[0.98]",
+        primary:   "bg-[#0A3C36] text-white hover:bg-[#082E29] active:scale-[0.98]",
+        secondary: "border border-[#0A3C36] text-[#0A3C36] bg-white hover:bg-[#E6F0EF] active:scale-[0.98]",
+        accent:    "bg-[#E5BA73] text-[#102A43] hover:bg-[#D4A55E] active:scale-[0.98]",
+        outline:   "border-2 border-[#0A3C36] text-[#0A3C36] bg-transparent hover:bg-[#E6F0EF] active:scale-[0.98]",
+        ghost:     "bg-transparent text-[#102A43] hover:bg-[#F0F4F8] active:scale-[0.98]",
         danger:    "bg-[#C0392B] text-white hover:bg-[#A93226] active:scale-[0.98]",
         whatsapp:  "bg-[#25D366] text-white hover:bg-[#1EBE58] active:scale-[0.98]",
       },

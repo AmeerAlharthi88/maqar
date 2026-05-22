@@ -57,12 +57,12 @@ export function BottomSheet({ open, onClose, title, children, className, snapToC
       >
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
-          <div className="w-10 h-1 rounded-full bg-[#E8DDD0]" />
+          <div className="w-10 h-1 rounded-full bg-[#E2E8F0]" />
         </div>
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-5 py-3 border-b border-[#F0EBE3] flex-shrink-0">
-            <h2 className="text-base font-semibold text-[#1E1E1E]">{title}</h2>
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[#F0F4F8] flex-shrink-0">
+            <h2 className="text-base font-semibold text-[#102A43]">{title}</h2>
             <IconButton
               label="إغلاق"
               size="sm"

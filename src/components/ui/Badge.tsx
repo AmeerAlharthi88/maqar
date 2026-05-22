@@ -19,15 +19,15 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default:   "bg-[#F5F0EA] text-[#7A6B5E]",
-  primary:   "bg-[#FBF0EB] text-[#C65D3B]",
-  secondary: "bg-[#FDF6EE] text-[#C49060]",
-  accent:    "bg-[#EDF4ED] text-[#4A7349]",
-  success:   "bg-[#EDF4ED] text-[#5B8C5A]",
-  warning:   "bg-[#FFF8E6] text-[#C8860A]",
+  default:   "bg-[#F0F4F8] text-[#627D98]",
+  primary:   "bg-[#E6F0EF] text-[#0A3C36]",
+  secondary: "bg-[#FDF8EE] text-[#D4A55E]",
+  accent:    "bg-[#FDF8EE] text-[#D4A55E]",
+  success:   "bg-[#E6F4EC] text-[#2D7A4F]",
+  warning:   "bg-[#FFFBEB] text-[#B7791F]",
   danger:    "bg-[#FEF0EE] text-[#C0392B]",
-  info:      "bg-[#EAF4FB] text-[#2471A3]",
-  outline:   "border border-[#E8DDD0] text-[#7A6B5E] bg-transparent",
+  info:      "bg-[#EBF4FF] text-[#2B6CB0]",
+  outline:   "border border-[#E2E8F0] text-[#627D98] bg-transparent",
 };
 
 const sizeClasses = {

@@ -22,8 +22,8 @@ export function Switch({ checked, onChange, label, helperText, disabled, classNa
         onClick={() => onChange(!checked)}
         className={cn(
           "relative w-11 h-6 rounded-full transition-colors duration-200 flex-shrink-0",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C65D3B]",
-          checked ? "bg-[#C65D3B]" : "bg-[#E8DDD0]"
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0A3C36]",
+          checked ? "bg-[#0A3C36]" : "bg-[#E2E8F0]"
         )}
       >
         <span
@@ -35,8 +35,8 @@ export function Switch({ checked, onChange, label, helperText, disabled, classNa
       </button>
       {(label ?? helperText) && (
         <div className="flex flex-col gap-0.5">
-          {label && <span className="text-sm font-medium text-[#1E1E1E]">{label}</span>}
-          {helperText && <span className="text-xs text-[#7A6B5E]">{helperText}</span>}
+          {label && <span className="text-sm font-medium text-[#102A43]">{label}</span>}
+          {helperText && <span className="text-xs text-[#627D98]">{helperText}</span>}
         </div>
       )}
     </label>
