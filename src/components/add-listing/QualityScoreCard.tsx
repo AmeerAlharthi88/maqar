@@ -22,7 +22,7 @@ export function QualityScoreCard({ score, draft, compact = false }: QualityScore
       >
         <div className="relative w-10 h-10 flex-shrink-0">
           <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" r="15" fill="none" stroke="#E8DDD0" strokeWidth="3" />
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E2E8F0" strokeWidth="3" />
             <circle
               cx="18"
               cy="18"
@@ -40,7 +40,7 @@ export function QualityScoreCard({ score, draft, compact = false }: QualityScore
         </div>
         <div>
           <p className="text-xs font-semibold" style={{ color: label.color }}>{label.labelAr}</p>
-          <p className="text-[10px] text-[#7A6B5E]">جودة الإعلان</p>
+          <p className="text-[10px] text-[#627D98]">جودة الإعلان</p>
         </div>
       </div>
     );
@@ -56,7 +56,7 @@ export function QualityScoreCard({ score, draft, compact = false }: QualityScore
         {/* Circular progress */}
         <div className="relative w-16 h-16 flex-shrink-0">
           <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" r="15" fill="none" stroke="#E8DDD0" strokeWidth="3" />
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E2E8F0" strokeWidth="3" />
             <circle
               cx="18"
               cy="18"
@@ -78,11 +78,11 @@ export function QualityScoreCard({ score, draft, compact = false }: QualityScore
         </div>
 
         <div>
-          <p className="text-xs text-[#7A6B5E] mb-0.5">جودة الإعلان</p>
+          <p className="text-xs text-[#627D98] mb-0.5">جودة الإعلان</p>
           <p className="text-xl font-bold" style={{ color: label.color }}>
             {label.labelAr}
           </p>
-          <p className="text-xs text-[#7A6B5E]">
+          <p className="text-xs text-[#627D98]">
             {score >= 90
               ? "إعلانك ممتاز وجاهز للنشر"
               : score >= 70
@@ -97,10 +97,10 @@ export function QualityScoreCard({ score, draft, compact = false }: QualityScore
       {/* Missing fields */}
       {missing.length > 0 && (
         <div className="border-t pt-3" style={{ borderColor: label.color + "30" }}>
-          <p className="text-xs font-semibold text-[#7A6B5E] mb-2">تحسينات مقترحة:</p>
+          <p className="text-xs font-semibold text-[#627D98] mb-2">تحسينات مقترحة:</p>
           <ul className="space-y-1">
             {missing.slice(0, 5).map((field, i) => (
-              <li key={i} className="flex items-center gap-2 text-xs text-[#7A6B5E]">
+              <li key={i} className="flex items-center gap-2 text-xs text-[#627D98]">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={label.color} strokeWidth="2.5">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="12" y1="8" x2="12" y2="12" />

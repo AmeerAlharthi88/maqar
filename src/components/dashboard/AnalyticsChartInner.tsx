@@ -18,8 +18,8 @@ function CustomTooltip({ active, payload, label }: {
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white border border-[#F0EBE3] rounded-xl px-3 py-2 shadow-sm text-right" dir="rtl">
-      <p className="text-[10px] text-[#A89480] mb-1">{label}</p>
+    <div className="bg-white border border-[#E2E8F0] rounded-xl px-3 py-2 shadow-sm text-right" dir="rtl">
+      <p className="text-[10px] text-[#627D98] mb-1">{label}</p>
       {payload.map((p, i) => (
         <p key={i} className="text-xs font-bold" style={{ color: p.color }}>
           {p.value} — {p.name}
@@ -44,15 +44,15 @@ export default function AnalyticsChartInner({ data, lines }: AnalyticsChartInner
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={formatted} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F0EBE3" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
         <XAxis
           dataKey="displayDate"
-          tick={{ fontSize: 10, fill: "#A89480" }}
+          tick={{ fontSize: 10, fill: "#627D98" }}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 10, fill: "#A89480" }}
+          tick={{ fontSize: 10, fill: "#627D98" }}
           axisLine={false}
           tickLine={false}
         />

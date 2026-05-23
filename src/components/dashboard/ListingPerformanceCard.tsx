@@ -35,11 +35,11 @@ export function ListingPerformanceCard({ listing, onEdit }: ListingPerformanceCa
     : "—";
 
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4" dir="rtl">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir="rtl">
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-[#1E1E1E] line-clamp-1">{listing.titleAr}</p>
-          <p className="text-sm font-bold text-[#C65D3B] mt-0.5">
+          <p className="text-sm font-bold text-[#102A43] line-clamp-1">{listing.titleAr}</p>
+          <p className="text-sm font-bold text-[#0A3C36] mt-0.5">
             {listing.price.toLocaleString("ar-OM")} ر.ع.
           </p>
         </div>
@@ -58,9 +58,9 @@ export function ListingPerformanceCard({ listing, onEdit }: ListingPerformanceCa
           { value: listing.status === "active" ? "نشط" : "—", label: "الحالة" },
           { value: daysRemaining, label: "يوم متبق" },
         ].map((m) => (
-          <div key={m.label} className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-            <p className="text-sm font-bold text-[#1E1E1E]">{m.value}</p>
-            <p className="text-[10px] text-[#A89480]">{m.label}</p>
+          <div key={m.label} className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+            <p className="text-sm font-bold text-[#102A43]">{m.value}</p>
+            <p className="text-[10px] text-[#627D98]">{m.label}</p>
           </div>
         ))}
       </div>
@@ -70,17 +70,17 @@ export function ListingPerformanceCard({ listing, onEdit }: ListingPerformanceCa
         <div className="flex gap-2">
           <button
             onClick={() => onEdit?.(listing.listingId)}
-            className="flex-1 py-2 rounded-xl border border-[#E8DDD0] bg-[#F5F0EA] text-xs font-semibold text-[#1E1E1E]"
+            className="flex-1 py-2 rounded-xl border border-[#E2E8F0] bg-[#F0F4F8] text-xs font-semibold text-[#102A43]"
           >
             تعديل
           </button>
           {listing.status === "active" && (
-            <button className="flex-1 py-2 rounded-xl border border-[#C65D3B]/30 bg-[#FBF0EB] text-xs font-semibold text-[#C65D3B]">
+            <button className="flex-1 py-2 rounded-xl border border-[#0A3C36]/30 bg-[#E6F0EF] text-xs font-semibold text-[#0A3C36]">
               تمييز الإعلان
             </button>
           )}
           {listing.status === "draft" && (
-            <button className="flex-1 py-2 rounded-xl bg-[#C65D3B] text-xs font-semibold text-white">
+            <button className="flex-1 py-2 rounded-xl bg-[#0A3C36] text-xs font-semibold text-white">
               نشر الإعلان
             </button>
           )}

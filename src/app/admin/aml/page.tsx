@@ -61,15 +61,15 @@ export default function AdminAmlPage() {
   return (
     <AdminDashboardShell titleAr="مراجعة AML">
       <div className="px-4 py-4 space-y-4" dir="rtl">
-        <div className="bg-[#FBF0EB] rounded-2xl border border-[#C65D3B]/20 px-4 py-3">
-          <p className="text-xs font-bold text-[#C65D3B] mb-1">سياسة مكافحة غسيل الأموال</p>
-          <p className="text-[10px] text-[#7A6B5E] leading-relaxed">
+        <div className="bg-[#FEF0EE] rounded-2xl border border-[#C0392B]/20 px-4 py-3">
+          <p className="text-xs font-bold text-[#C0392B] mb-1">سياسة مكافحة غسيل الأموال</p>
+          <p className="text-[10px] text-[#627D98] leading-relaxed">
             يُبلَّغ تلقائياً عن أي إعلان تجاوز ١٠٠،٠٠٠ ر.ع. وسعره أقل من متوسط السوق بأكثر من ٣٠٪.
             وجوب المراجعة اليدوية قبل النشر وفقاً للمتطلبات العُمانية.
           </p>
         </div>
 
-        <p className="text-xs text-[#A89480]">{flaggedCount} علم مفتوح · {items.length} إجمالي</p>
+        <p className="text-xs text-[#627D98]">{flaggedCount} علم مفتوح · {items.length} إجمالي</p>
 
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
           {STATUS_FILTERS.map((f) => {
@@ -77,7 +77,7 @@ export default function AdminAmlPage() {
             return (
               <button key={f} onClick={() => setFilter(f)}
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  filter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                  filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
                 {STATUS_FILTER_AR[f]} ({count})
               </button>
@@ -86,7 +86,7 @@ export default function AdminAmlPage() {
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد أعلام AML" descriptionAr="الإعلانات المشتبه بها ستظهر هنا تلقائياً." />
         ) : (

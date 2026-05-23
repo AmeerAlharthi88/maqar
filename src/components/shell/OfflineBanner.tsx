@@ -12,14 +12,14 @@ export function OfflineBanner() {
     <div
       className={cn(
         "fixed top-0 inset-x-0 z-[600]",
-        "bg-[#1E1E1E] text-white text-center text-xs font-medium py-2 px-4",
+        "bg-[#102A43] text-white text-center text-xs font-medium py-2 px-4",
         "animate-slide-down"
       )}
       role="alert"
       aria-live="assertive"
     >
       <span className="inline-flex items-center gap-1.5">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#C65D3B] animate-pulse-brand" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#E5BA73] animate-pulse-brand" />
         لا يوجد اتصال بالإنترنت — يتم العمل في وضع عدم الاتصال
       </span>
     </div>

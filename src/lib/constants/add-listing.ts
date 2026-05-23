@@ -173,9 +173,9 @@ export interface QualityLabel {
 }
 
 export const QUALITY_LABELS: QualityLabel[] = [
-  { minScore: 0,  labelAr: "ضعيف",   color: "#C65D3B", bgColor: "#FBF0EB" },
+  { minScore: 0,  labelAr: "ضعيف",   color: "#C0392B", bgColor: "#FEF0EE" },
   { minScore: 40, labelAr: "متوسط",  color: "#C8860A", bgColor: "#FDF6E3" },
-  { minScore: 70, labelAr: "جيد",    color: "#5B8C5A", bgColor: "#EDF4ED" },
+  { minScore: 70, labelAr: "جيد",    color: "#0A3C36", bgColor: "#E6F0EF" },
   { minScore: 90, labelAr: "ممتاز",  color: "#2471A3", bgColor: "#EAF4FB" },
 ];
 

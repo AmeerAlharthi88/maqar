@@ -73,20 +73,20 @@ export default async function WilayatPage({ params }: Props) {
     <AppShell>
       <div className="px-4 py-6 space-y-6 max-w-lg mx-auto" dir="rtl">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 text-xs text-[#A89480] flex-wrap">
-          <Link href="/market" className="hover:text-[#C65D3B]">السوق</Link>
+        <div className="flex items-center gap-1.5 text-xs text-[#627D98] flex-wrap">
+          <Link href="/market" className="hover:text-[#0A3C36]">السوق</Link>
           <span>/</span>
-          <Link href={`/market/${govSlug}`} className="hover:text-[#C65D3B]">
+          <Link href={`/market/${govSlug}`} className="hover:text-[#0A3C36]">
             {wil.governorateAr}
           </Link>
           <span>/</span>
-          <span className="text-[#1E1E1E] font-semibold">{wil.nameAr}</span>
+          <span className="text-[#102A43] font-semibold">{wil.nameAr}</span>
         </div>
 
         {/* Header */}
         <div>
           <div className="flex items-start justify-between gap-3 mb-1">
-            <h1 className="text-xl font-bold text-[#1E1E1E]">
+            <h1 className="text-xl font-bold text-[#102A43]">
               سوق عقارات {wil.nameAr}
             </h1>
             <div className="flex flex-col items-end gap-1">
@@ -94,7 +94,7 @@ export default async function WilayatPage({ params }: Props) {
               <YieldBadge pct={stats.rentalYield} />
             </div>
           </div>
-          <p className="text-sm text-[#7A6B5E]">
+          <p className="text-sm text-[#627D98]">
             {wil.governorateAr} · {toArabicNumerals(wil.listingCount)} إعلان · تغيّر{" "}
             {wil.priceChangePct > 0 ? "+" : ""}
             {toArabicNumerals(wil.priceChangePct)}% سنوياً
@@ -140,7 +140,7 @@ export default async function WilayatPage({ params }: Props) {
 
         {/* AI insight */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             تحليل ذكي للسوق
           </h2>
           <MarketInsightPanel
@@ -156,30 +156,30 @@ export default async function WilayatPage({ params }: Props) {
 
         {/* Other wilayats link */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-2">
+          <h2 className="text-base font-bold text-[#102A43] mb-2">
             ولايات أخرى في {wil.governorateAr}
           </h2>
           <Link
             href={`/market/${govSlug}`}
-            className="text-sm text-[#C65D3B] font-semibold"
+            className="text-sm text-[#0A3C36] font-semibold"
           >
             عرض جميع ولايات {wil.governorateAr}
           </Link>
         </div>
 
         {/* Tools CTA */}
-        <div className="bg-[#FBF0EB] rounded-2xl p-4 border border-[#C65D3B]/20">
-          <p className="text-sm font-semibold text-[#C65D3B] mb-1">
+        <div className="bg-[#E6F0EF] rounded-2xl p-4 border border-[#0A3C36]/20">
+          <p className="text-sm font-semibold text-[#0A3C36] mb-1">
             أدوات مالية لعقاراتك في {wil.nameAr}
           </p>
           <div className="flex gap-3 mt-2">
-            <Link href="/tools/roi-calculator" className="text-xs font-bold text-[#C65D3B]">
+            <Link href="/tools/roi-calculator" className="text-xs font-bold text-[#0A3C36]">
               حاسبة العائد
             </Link>
-            <Link href="/tools/mortgage-calculator" className="text-xs font-bold text-[#C65D3B]">
+            <Link href="/tools/mortgage-calculator" className="text-xs font-bold text-[#0A3C36]">
               حاسبة التمويل
             </Link>
-            <Link href="/tools/price-per-sqm" className="text-xs font-bold text-[#C65D3B]">
+            <Link href="/tools/price-per-sqm" className="text-xs font-bold text-[#0A3C36]">
               سعر المتر
             </Link>
           </div>

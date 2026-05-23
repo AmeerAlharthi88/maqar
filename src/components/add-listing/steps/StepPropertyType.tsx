@@ -104,12 +104,12 @@ export function StepPropertyType({ value, onChange, error }: StepPropertyTypePro
 
   return (
     <div className="px-4 py-6" dir="rtl">
-      <p className="text-sm text-[#7A6B5E] mb-6">اختر النوع الذي يصف عقارك بشكل أدق.</p>
+      <p className="text-sm text-[#627D98] mb-6">اختر النوع الذي يصف عقارك بشكل أدق.</p>
 
       <div className="space-y-5">
         {DRAFT_PROPERTY_TYPE_GROUPS.map((group) => (
           <div key={group.groupAr}>
-            <p className="text-xs font-semibold text-[#A89480] uppercase tracking-wide mb-2">{group.groupAr}</p>
+            <p className="text-xs font-semibold text-[#627D98] uppercase tracking-wide mb-2">{group.groupAr}</p>
             <div className="grid grid-cols-3 gap-2">
               {group.types.map((typeValue) => {
                 const config = typeMap[typeValue];
@@ -122,8 +122,8 @@ export function StepPropertyType({ value, onChange, error }: StepPropertyTypePro
                     className={cn(
                       "flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all text-center min-h-[80px] justify-center",
                       selected
-                        ? "border-[#C65D3B] bg-[#FBF0EB] text-[#C65D3B]"
-                        : "border-[#E8DDD0] bg-white text-[#7A6B5E] active:bg-[#F5F0EA]"
+                        ? "border-[#0A3C36] bg-[#E6F0EF] text-[#0A3C36]"
+                        : "border-[#E2E8F0] bg-white text-[#627D98] active:bg-[#F0F4F8]"
                     )}
                     aria-pressed={selected}
                   >

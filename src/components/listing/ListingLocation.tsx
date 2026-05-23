@@ -34,16 +34,16 @@ function NearbyServiceRow({ service }: { service: NearbyService }) {
       : `${toArabicNumerals(service.distanceKm.toFixed(1))} كم`;
 
   return (
-    <div className="flex items-center justify-between py-2 border-b border-[#F5F0EA] last:border-0">
+    <div className="flex items-center justify-between py-2 border-b border-[#E2E8F0] last:border-0">
       <div className="flex items-center gap-2">
         <span
-          className="text-[#7A6B5E]"
+          className="text-[#627D98]"
           dangerouslySetInnerHTML={{ __html: icon }}
         />
-        <span className="text-sm text-[#3D3330]">{label}</span>
-        <span className="text-[10px] text-[#A89480] bg-[#F5F0EA] px-1.5 py-0.5 rounded-full">تقديري</span>
+        <span className="text-sm text-[#102A43]">{label}</span>
+        <span className="text-[10px] text-[#627D98] bg-[#F0F4F8] px-1.5 py-0.5 rounded-full">تقديري</span>
       </div>
-      <span className="text-sm font-semibold text-[#1E1E1E]">{distLabel}</span>
+      <span className="text-sm font-semibold text-[#102A43]">{distLabel}</span>
     </div>
   );
 }
@@ -59,20 +59,20 @@ export function ListingLocation({ listing, nearbyServices }: ListingLocationProp
   ].filter(Boolean);
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">الموقع والخدمات القريبة</h2>
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
+      <h2 className="text-base font-bold text-[#102A43] mb-3">الموقع والخدمات القريبة</h2>
 
       {/* Address hierarchy */}
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-3 mb-3">
-        <div className="flex flex-wrap items-center gap-1 text-sm text-[#3D3330]" dir="rtl">
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3 mb-3">
+        <div className="flex flex-wrap items-center gap-1 text-sm text-[#102A43]" dir="rtl">
           {breadcrumbParts.map((part, idx) => (
             <span key={idx} className="flex items-center gap-1">
               {idx > 0 && (
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                   <path d="M15 18l-6-6 6-6" />
                 </svg>
               )}
-              <span className={idx === 0 ? "font-semibold text-[#1E1E1E]" : "text-[#7A6B5E]"}>
+              <span className={idx === 0 ? "font-semibold text-[#102A43]" : "text-[#627D98]"}>
                 {part}
               </span>
             </span>
@@ -82,7 +82,7 @@ export function ListingLocation({ listing, nearbyServices }: ListingLocationProp
 
       {/* Nearby services */}
       {nearbyServices.length > 0 && (
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
           <div className="px-4">
             {nearbyServices.map((service, idx) => (
               <NearbyServiceRow key={idx} service={service} />
@@ -91,7 +91,7 @@ export function ListingLocation({ listing, nearbyServices }: ListingLocationProp
         </div>
       )}
 
-      <p className="mt-2 text-[10px] text-[#A89480] text-center">
+      <p className="mt-2 text-[10px] text-[#627D98] text-center">
         المسافات تقديرية وقد تختلف عن الواقع
       </p>
     </div>

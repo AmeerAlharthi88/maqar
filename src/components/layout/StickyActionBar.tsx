@@ -11,7 +11,7 @@ export function StickyActionBar({ children, className, position = "bottom" }: St
     <div
       className={cn(
         "fixed start-0 end-0 z-[100]",
-        "bg-white/95 backdrop-blur-md border-[#F0EBE3]",
+        "bg-white/95 backdrop-blur-md border-[#E2E8F0]",
         "px-4 py-3",
         position === "bottom"
           ? "bottom-0 border-t pb-[calc(0.75rem+env(safe-area-inset-bottom))]"

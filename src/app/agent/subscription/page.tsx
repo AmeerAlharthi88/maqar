@@ -64,7 +64,7 @@ export default function AgentSubscriptionPage() {
         {!isLive && (
           <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl px-4 py-3">
             <p className="text-xs font-semibold text-[#C8860A]">وضع المعاينة</p>
-            <p className="text-[10px] text-[#7A6B5E] mt-0.5">
+            <p className="text-[10px] text-[#627D98] mt-0.5">
               معالجة المدفوعات غير مفعّلة. البيانات تجريبية.
             </p>
           </div>
@@ -75,10 +75,10 @@ export default function AgentSubscriptionPage() {
 
         {/* Usage limits */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">
             الاستخدام الحالي
           </h2>
-          <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-4">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-4">
             {usageLimits.map((u) => (
               <UsageMeter key={u.feature} usage={u} />
             ))}
@@ -97,8 +97,8 @@ export default function AgentSubscriptionPage() {
 
         {/* Add-ons */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-1">الإضافات</h2>
-          <p className="text-xs text-[#A89480] mb-3">
+          <h2 className="text-sm font-bold text-[#102A43] mb-1">الإضافات</h2>
+          <p className="text-xs text-[#627D98] mb-3">
             أدوات إضافية لتعزيز ظهورك وجذب عملاء محتملين.
           </p>
           <div className="space-y-3">
@@ -125,12 +125,12 @@ export default function AgentSubscriptionPage() {
         {subscription.planId !== "agency" && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-[#1E1E1E]">
+              <h2 className="text-sm font-bold text-[#102A43]">
                 ترقية خطتك
               </h2>
               <button
                 onClick={() => setShowUpgrade(!showUpgrade)}
-                className="text-xs text-[#C65D3B] font-semibold"
+                className="text-xs text-[#0A3C36] font-semibold"
                 aria-expanded={showUpgrade}
                 aria-label="عرض خيارات الترقية"
               >
@@ -152,7 +152,7 @@ export default function AgentSubscriptionPage() {
         <div className="text-center pb-2">
           <Link
             href="/account/billing"
-            className="text-sm text-[#C65D3B] font-semibold underline underline-offset-2"
+            className="text-sm text-[#0A3C36] font-semibold underline underline-offset-2"
           >
             عرض الفواتير وسجل الدفع
           </Link>

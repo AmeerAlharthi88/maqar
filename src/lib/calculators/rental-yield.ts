@@ -27,8 +27,8 @@ export function getYieldLabel(pct: number): YieldLabel {
 
 export function getYieldColor(label: YieldLabel): string {
   switch (label) {
-    case "ممتاز":  return "#5B8C5A";
-    case "جيد":   return "#5B8C5A";
+    case "ممتاز":  return "#0A3C36";
+    case "جيد":   return "#0A3C36";
     case "متوسط": return "#C8860A";
     case "منخفض": return "#C0392B";
   }

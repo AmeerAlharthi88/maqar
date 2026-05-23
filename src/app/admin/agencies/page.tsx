@@ -50,7 +50,7 @@ export default function AdminAgenciesPage() {
   return (
     <AdminDashboardShell titleAr="إدارة الشركات">
       <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#A89480]">{verifiedCount} شركة موثّقة · {agencies.length} إجمالي</p>
+        <p className="text-xs text-[#627D98]">{verifiedCount} شركة موثّقة · {agencies.length} إجمالي</p>
 
         {/* Filters */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
@@ -59,7 +59,7 @@ export default function AdminAgenciesPage() {
             return (
               <button key={f} onClick={() => setFilter(f)}
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  filter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                  filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
                 {FILTER_AR[f]} ({count})
               </button>
@@ -75,15 +75,15 @@ export default function AdminAgenciesPage() {
               const isSuspended = agency.verificationStatus === "suspended";
               const initials = agency.nameAr.slice(0, 2);
               return (
-                <div key={agency.id} className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4" dir="rtl">
+                <div key={agency.id} className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir="rtl">
                   {/* Header */}
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="w-11 h-11 rounded-full bg-[#C65D3B]/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-bold text-[#C65D3B]">{initials}</span>
+                    <div className="w-11 h-11 rounded-full bg-[#0A3C36]/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-bold text-[#0A3C36]">{initials}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-[#1E1E1E]">{agency.nameAr}</p>
-                      <p className="text-xs text-[#7A6B5E]">{agency.location.wilayatAr} · {agency.location.governorateAr}</p>
+                      <p className="text-sm font-bold text-[#102A43]">{agency.nameAr}</p>
+                      <p className="text-xs text-[#627D98]">{agency.location.wilayatAr} · {agency.location.governorateAr}</p>
                     </div>
                     <StatusBadge
                       label={STATUS_AR[agency.verificationStatus]}
@@ -94,23 +94,23 @@ export default function AdminAgenciesPage() {
 
                   {/* Stats */}
                   <div className="grid grid-cols-4 gap-2 mb-3">
-                    <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                      <p className="text-xs font-bold text-[#1E1E1E]">{agency.stats.activeListings}</p>
-                      <p className="text-[10px] text-[#A89480]">إعلان نشط</p>
+                    <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                      <p className="text-xs font-bold text-[#102A43]">{agency.stats.activeListings}</p>
+                      <p className="text-[10px] text-[#627D98]">إعلان نشط</p>
                     </div>
-                    <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                      <p className="text-xs font-bold text-[#1E1E1E]">{agency.stats.totalAgents}</p>
-                      <p className="text-[10px] text-[#A89480]">وسيط</p>
+                    <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                      <p className="text-xs font-bold text-[#102A43]">{agency.stats.totalAgents}</p>
+                      <p className="text-[10px] text-[#627D98]">وسيط</p>
                     </div>
-                    <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                      <p className="text-xs font-bold text-[#1E1E1E]">{agency.foundedYear}</p>
-                      <p className="text-[10px] text-[#A89480]">تأسست</p>
+                    <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                      <p className="text-xs font-bold text-[#102A43]">{agency.foundedYear}</p>
+                      <p className="text-[10px] text-[#627D98]">تأسست</p>
                     </div>
-                    <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                      <p className={["text-xs font-bold", agency.activeSubscription ? "text-[#5B8C5A]" : "text-[#C65D3B]"].join(" ")}>
+                    <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                      <p className={["text-xs font-bold", agency.activeSubscription ? "text-[#0A3C36]" : "text-[#C0392B]"].join(" ")}>
                         {agency.activeSubscription ? "نشط" : "لا"}
                       </p>
-                      <p className="text-[10px] text-[#A89480]">اشتراك</p>
+                      <p className="text-[10px] text-[#627D98]">اشتراك</p>
                     </div>
                   </div>
 
@@ -118,7 +118,7 @@ export default function AdminAgenciesPage() {
                   <div className="flex items-center gap-3 mb-3 flex-wrap">
                     {agency.crNumber && (
                       <span className={["text-[10px] font-semibold px-2 py-0.5 rounded-lg",
-                        agency.crValid ? "bg-[#EDF4ED] text-[#5B8C5A]" : "bg-[#FBF0EB] text-[#C65D3B]"].join(" ")}>
+                        agency.crValid ? "bg-[#E6F0EF] text-[#0A3C36]" : "bg-[#FEF0EE] text-[#C0392B]"].join(" ")}>
                         س.ت. {agency.crNumber}
                       </span>
                     )}
@@ -128,7 +128,7 @@ export default function AdminAgenciesPage() {
                       </span>
                     )}
                     {agency.email && (
-                      <span className="text-[10px] text-[#A89480]">{agency.email}</span>
+                      <span className="text-[10px] text-[#627D98]">{agency.email}</span>
                     )}
                   </div>
 
@@ -136,19 +136,19 @@ export default function AdminAgenciesPage() {
                   <div className="flex gap-2">
                     {!isSuspended ? (
                       <button onClick={() => suspend(agency.id)}
-                        className="flex-1 py-2 rounded-xl bg-[#FBF0EB] text-[#C65D3B] text-xs font-bold">
+                        className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold">
                         تعليق مؤقت
                       </button>
                     ) : (
                       <button onClick={() => reinstate(agency.id)}
-                        className="flex-1 py-2 rounded-xl bg-[#EDF4ED] text-[#5B8C5A] text-xs font-bold">
+                        className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold">
                         إعادة تفعيل
                       </button>
                     )}
                     {/* Role/plan changes are server-only — TODO: Phase 12 */}
-                    <div className="flex-1 py-2 rounded-xl bg-[#F5F0EA] text-center">
-                      <p className="text-[10px] text-[#A89480] font-semibold">تعديل الخطة</p>
-                      <p className="text-[9px] text-[#C4B5A5]">إجراء خادم فقط</p>
+                    <div className="flex-1 py-2 rounded-xl bg-[#F0F4F8] text-center">
+                      <p className="text-[10px] text-[#627D98] font-semibold">تعديل الخطة</p>
+                      <p className="text-[9px] text-[#627D98]">إجراء خادم فقط</p>
                     </div>
                   </div>
                 </div>

@@ -24,15 +24,15 @@ interface ValuationAssistantProps {
 }
 
 const POSITION_CONFIG = {
-  below: { labelAr: "أقل من المتوسط", color: "#5B8C5A", bg: "#EDF4ED", border: "#5B8C5A/20" },
-  above: { labelAr: "أعلى من المتوسط", color: "#C65D3B", bg: "#FBF0EB", border: "#C65D3B/20" },
+  below: { labelAr: "أقل من المتوسط", color: "#0A3C36", bg: "#E6F0EF", border: "#0A3C36/20" },
+  above: { labelAr: "أعلى من المتوسط", color: "#C0392B", bg: "#FEF0EE", border: "#C0392B/20" },
   fair:  { labelAr: "ضمن المتوسط",    color: "#2471A3", bg: "#EAF4FB", border: "#2471A3/20" },
 };
 
 const CONFIDENCE_COLOR: Record<string, string> = {
   "منخفض": "text-[#C8860A]",
   "متوسط": "text-[#2471A3]",
-  "مرتفع": "text-[#5B8C5A]",
+  "مرتفع": "text-[#0A3C36]",
 };
 
 export function ValuationAssistant(props: ValuationAssistantProps) {
@@ -132,16 +132,16 @@ export function ValuationAssistant(props: ValuationAssistantProps) {
 
           {/* Summary */}
           {result.summaryAr && (
-            <p className="text-sm text-[#3D3330] leading-relaxed mb-3">
+            <p className="text-sm text-[#102A43] leading-relaxed mb-3">
               {result.summaryAr}
             </p>
           )}
 
           {/* Confidence */}
           {result.confidence && (
-            <div className="flex items-center justify-between border-t border-[#F0EBE3] pt-3">
-              <span className="text-xs text-[#7A6B5E]">مستوى الثقة</span>
-              <span className={["text-xs font-bold", CONFIDENCE_COLOR[result.confidence] ?? "text-[#7A6B5E]"].join(" ")}>
+            <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-3">
+              <span className="text-xs text-[#627D98]">مستوى الثقة</span>
+              <span className={["text-xs font-bold", CONFIDENCE_COLOR[result.confidence] ?? "text-[#627D98]"].join(" ")}>
                 {result.confidence}
               </span>
             </div>
@@ -150,7 +150,7 @@ export function ValuationAssistant(props: ValuationAssistantProps) {
           {/* Reset */}
           <button
             onClick={() => { setResult(null); setErrorCode(undefined); }}
-            className="mt-3 text-xs text-[#A89480] underline underline-offset-2 hover:text-[#7A6B5E]"
+            className="mt-3 text-xs text-[#627D98] underline underline-offset-2 hover:text-[#102A43]"
           >
             إعادة التحليل
           </button>

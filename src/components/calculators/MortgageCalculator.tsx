@@ -33,8 +33,8 @@ export function MortgageCalculator() {
   return (
     <div className="space-y-5">
       {/* Inputs */}
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-4">
-        <h2 className="text-sm font-bold text-[#1E1E1E]">بيانات العقار والتمويل</h2>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-4">
+        <h2 className="text-sm font-bold text-[#102A43]">بيانات العقار والتمويل</h2>
 
         <CalculatorInput
           label="سعر العقار"

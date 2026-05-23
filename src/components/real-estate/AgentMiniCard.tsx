@@ -24,7 +24,7 @@ export function AgentMiniCard({
       <Avatar name={agent.nameAr} size="md" />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <p className="text-sm font-semibold text-[#1E1E1E] truncate">{agent.nameAr}</p>
+          <p className="text-sm font-semibold text-[#102A43] truncate">{agent.nameAr}</p>
           {agent.isVerified && (
             <span className="w-4 h-4 rounded-full bg-[#EAF4FB] flex items-center justify-center flex-shrink-0">
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#2471A3" strokeWidth="3">
@@ -34,9 +34,9 @@ export function AgentMiniCard({
           )}
         </div>
         {agent.agency && (
-          <p className="text-xs text-[#7A6B5E] truncate">{agent.agency.nameAr}</p>
+          <p className="text-xs text-[#627D98] truncate">{agent.agency.nameAr}</p>
         )}
-        <p className="text-xs text-[#A89480]" dir="ltr">{formatPhoneDisplay(agent.phone)}</p>
+        <p className="text-xs text-[#627D98]" dir="ltr">{formatPhoneDisplay(agent.phone)}</p>
       </div>
       {showWhatsApp && (
         <WhatsAppCTA

@@ -104,7 +104,7 @@ export default async function ListingDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbSchema as Record<string, unknown>) }}
       />
       <div
-        className="min-h-screen bg-[#FAF7F4]"
+        className="min-h-screen bg-[#F8F9FA]"
         dir="rtl"
         // Extra bottom padding for the sticky action bar (which itself has 64px nav padding + 3rem content)
         style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom, 0px))" }}
@@ -136,8 +136,8 @@ export default async function ListingDetailPage({ params }: Props) {
         <ListingMarketInsight listing={listing} marketData={marketData} />
 
         {/* AI Valuation Assistant */}
-        <div className="px-4 py-4 border-t border-[#F0EBE3]">
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">تحليل السعر بالذكاء الاصطناعي</h2>
+        <div className="px-4 py-4 border-t border-[#E2E8F0]">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">تحليل السعر بالذكاء الاصطناعي</h2>
           <ValuationAssistant
             propertyType={listing.propertyType}
             purpose={listing.purpose}
@@ -172,7 +172,7 @@ export default async function ListingDetailPage({ params }: Props) {
 
         {/* Report link */}
         <div className="px-4 py-6 text-center">
-          <p className="text-xs text-[#A89480]">
+          <p className="text-xs text-[#627D98]">
             هل هناك مشكلة في هذا الإعلان؟ يمكنك الإبلاغ عنه من خلال الزر أدناه.
           </p>
         </div>

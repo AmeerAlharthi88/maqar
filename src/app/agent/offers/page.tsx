@@ -102,7 +102,7 @@ export default function AgentOffersPage() {
     return (
       <AgentDashboardShell titleAr="العروض">
         <div className="flex items-center justify-center py-20">
-          <div className="w-6 h-6 rounded-full border-2 border-[#C65D3B] border-t-transparent animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-[#0A3C36] border-t-transparent animate-spin" />
         </div>
       </AgentDashboardShell>
     );
@@ -111,7 +111,7 @@ export default function AgentOffersPage() {
   return (
     <AgentDashboardShell titleAr="العروض">
       <div className="px-4 py-4 space-y-3" dir="rtl">
-        <p className="text-xs text-[#A89480]">{offers.length} عرض وارد</p>
+        <p className="text-xs text-[#627D98]">{offers.length} عرض وارد</p>
 
         {offers.map((offer) => {
           const discountPct = Math.round(
@@ -121,13 +121,13 @@ export default function AgentOffersPage() {
           return (
             <div
               key={offer.id}
-              className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4"
+              className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4"
             >
               {/* Header */}
               <div className="flex items-start justify-between gap-2 mb-3">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-[#1E1E1E]">{offer.buyerNameAr}</p>
-                  <p className="text-xs text-[#7A6B5E] mt-0.5 line-clamp-1">
+                  <p className="text-sm font-bold text-[#102A43]">{offer.buyerNameAr}</p>
+                  <p className="text-xs text-[#627D98] mt-0.5 line-clamp-1">
                     {offer.listingTitleAr}
                   </p>
                 </div>
@@ -140,28 +140,28 @@ export default function AgentOffersPage() {
 
               {/* Price comparison */}
               <div className="grid grid-cols-3 gap-2 mb-3">
-                <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                  <p className="text-xs font-bold text-[#1E1E1E]">
+                <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                  <p className="text-xs font-bold text-[#102A43]">
                     {offer.askingPrice.toLocaleString("ar-OM")}
                   </p>
-                  <p className="text-[10px] text-[#A89480]">السعر المطلوب</p>
+                  <p className="text-[10px] text-[#627D98]">السعر المطلوب</p>
                 </div>
-                <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                  <p className="text-xs font-bold text-[#C65D3B]">
+                <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                  <p className="text-xs font-bold text-[#0A3C36]">
                     {offer.offerAmount.toLocaleString("ar-OM")}
                   </p>
-                  <p className="text-[10px] text-[#A89480]">العرض المقدم</p>
+                  <p className="text-[10px] text-[#627D98]">العرض المقدم</p>
                 </div>
-                <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                  <p className="text-xs font-bold text-[#7A6B5E]">
+                <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                  <p className="text-xs font-bold text-[#627D98]">
                     {discountPct > 0 ? `-${discountPct}٪` : `${Math.abs(discountPct)}٪+`}
                   </p>
-                  <p className="text-[10px] text-[#A89480]">الفرق</p>
+                  <p className="text-[10px] text-[#627D98]">الفرق</p>
                 </div>
               </div>
 
               {/* Financing + date */}
-              <div className="flex items-center justify-between text-xs text-[#7A6B5E]">
+              <div className="flex items-center justify-between text-xs text-[#627D98]">
                 <span>{FINANCING_LABELS_AR[offer.financing]}</span>
                 <span>
                   {new Date(offer.createdAt).toLocaleDateString("ar-OM", {
@@ -176,19 +176,19 @@ export default function AgentOffersPage() {
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={() => void handleStatusUpdate(offer.id, "accepted")}
-                    className="flex-1 py-2 rounded-xl bg-[#EDF4ED] text-[#5B8C5A] text-xs font-bold"
+                    className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold"
                   >
                     قبول
                   </button>
                   <button
                     onClick={() => void handleStatusUpdate(offer.id, "rejected")}
-                    className="flex-1 py-2 rounded-xl bg-[#FBF0EB] text-[#C65D3B] text-xs font-bold"
+                    className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold"
                   >
                     رفض
                   </button>
                   <a
                     href={`tel:${offer.buyerPhone}`}
-                    className="px-3 py-2 rounded-xl bg-[#F5F0EA] text-[#7A6B5E] text-xs font-bold"
+                    className="px-3 py-2 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold"
                   >
                     اتصال
                   </a>
@@ -200,7 +200,7 @@ export default function AgentOffersPage() {
 
         {offers.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-sm text-[#A89480]">لا توجد عروض بعد</p>
+            <p className="text-sm text-[#627D98]">لا توجد عروض بعد</p>
           </div>
         )}
       </div>

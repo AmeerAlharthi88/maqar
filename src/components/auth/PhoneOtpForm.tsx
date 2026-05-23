@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPhone } from "@/lib/supabase/auth-actions";
+import { MaqarLogo } from "@/components/brand/MaqarLogo";
 
 const OMAN_PREFIX = "+968";
 
@@ -84,6 +85,11 @@ export function PhoneOtpForm() {
     >
       {/* Card: white surface on desktop, transparent on mobile */}
       <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
+
+        {/* Brand logo — mobile only (desktop header already shows logo) */}
+        <div className="lg:hidden mb-6">
+          <MaqarLogo variant="stacked" size="md" color="brand" />
+        </div>
 
         {/* Phone icon */}
         <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">

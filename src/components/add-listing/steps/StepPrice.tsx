@@ -28,18 +28,18 @@ function ToggleRow({
   return (
     <button
       onClick={() => onChange(!value)}
-      className="w-full flex items-center justify-between py-3 border-b border-[#F5F0EA] last:border-0"
+      className="w-full flex items-center justify-between py-3 border-b border-[#F0F4F8] last:border-0"
       role="switch"
       aria-checked={value}
     >
       <div className="text-right">
-        <p className="text-sm font-medium text-[#1E1E1E]">{label}</p>
-        {desc && <p className="text-xs text-[#A89480]">{desc}</p>}
+        <p className="text-sm font-medium text-[#102A43]">{label}</p>
+        {desc && <p className="text-xs text-[#627D98]">{desc}</p>}
       </div>
       <div
         className={cn(
           "w-11 h-6 rounded-full transition-all flex-shrink-0 relative ms-3",
-          value ? "bg-[#C65D3B]" : "bg-[#E8DDD0]"
+          value ? "bg-[#0A3C36]" : "bg-[#E2E8F0]"
         )}
       >
         <div
@@ -75,7 +75,7 @@ export function StepPrice({
 
       {/* Main price input */}
       <section>
-        <h3 className="text-sm font-bold text-[#1E1E1E] mb-1.5">
+        <h3 className="text-sm font-bold text-[#102A43] mb-1.5">
           {isRent ? "سعر الإيجار" : "سعر البيع"}
           <span className="text-[#C0392B] ms-1">*</span>
         </h3>
@@ -87,14 +87,14 @@ export function StepPrice({
             value={priceFormatted}
             onChange={(e) => handlePriceChange(e.target.value.replace(/,/g, ""))}
             className={cn(
-              "w-full h-14 bg-white border rounded-xl px-4 pe-16 text-xl font-bold text-[#1E1E1E] placeholder:text-[#E8DDD0] outline-none",
-              "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
-              errors.price ? "border-[#C0392B]" : "border-[#E8DDD0]"
+              "w-full h-14 bg-white border rounded-xl px-4 pe-16 text-xl font-bold text-[#102A43] placeholder:text-[#E2E8F0] outline-none",
+              "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+              errors.price ? "border-[#C0392B]" : "border-[#E2E8F0]"
             )}
             dir="ltr"
             aria-label="السعر بالريال العماني"
           />
-          <span className="absolute end-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#A89480] pointer-events-none">
+          <span className="absolute end-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#627D98] pointer-events-none">
             ر.ع
           </span>
         </div>
@@ -102,7 +102,7 @@ export function StepPrice({
           <p className="mt-1.5 text-xs text-[#C0392B]">{errors.price}</p>
         )}
         {priceNum > 0 && (
-          <p className="mt-1.5 text-xs text-[#7A6B5E]">
+          <p className="mt-1.5 text-xs text-[#627D98]">
             {toArabicNumerals(priceFormatted)} ريال عُماني
             {isRent && draft.rentPeriod === "yearly"
               ? ` — ${toArabicNumerals(Math.round(priceNum / 12).toLocaleString("en-US"))} شهرياً`
@@ -121,7 +121,7 @@ export function StepPrice({
           </svg>
           <div>
             <p className="text-xs font-semibold text-[#C8860A] mb-0.5">ملاحظة حول السعر</p>
-            <p className="text-xs text-[#7A6B5E] leading-relaxed">{suspiciousMessage}</p>
+            <p className="text-xs text-[#627D98] leading-relaxed">{suspiciousMessage}</p>
           </div>
         </div>
       )}
@@ -129,7 +129,7 @@ export function StepPrice({
       {/* Rent period */}
       {isRent && (
         <section>
-          <h3 className="text-sm font-bold text-[#1E1E1E] mb-3">
+          <h3 className="text-sm font-bold text-[#102A43] mb-3">
             فترة الإيجار <span className="text-[#C0392B]">*</span>
           </h3>
           <div className="grid grid-cols-2 gap-2">
@@ -140,8 +140,8 @@ export function StepPrice({
                 className={cn(
                   "py-3 rounded-xl border text-sm font-medium transition-all",
                   draft.rentPeriod === period.value
-                    ? "border-[#C65D3B] bg-[#FBF0EB] text-[#C65D3B]"
-                    : "border-[#E8DDD0] bg-white text-[#3D3330]"
+                    ? "border-[#0A3C36] bg-[#E6F0EF] text-[#0A3C36]"
+                    : "border-[#E2E8F0] bg-white text-[#102A43]"
                 )}
                 aria-pressed={draft.rentPeriod === period.value}
               >
@@ -154,7 +154,7 @@ export function StepPrice({
       )}
 
       {/* Toggles */}
-      <section className="bg-white rounded-2xl border border-[#F0EBE3] px-4">
+      <section className="bg-white rounded-2xl border border-[#E2E8F0] px-4">
         <ToggleRow
           label="السعر قابل للتفاوض"
           desc="يرى المشترون أن السعر مرن"
@@ -172,7 +172,7 @@ export function StepPrice({
       {/* Deposit (rent only) */}
       {isRent && (
         <section>
-          <h3 className="text-sm font-bold text-[#1E1E1E] mb-1.5">مبلغ التأمين (اختياري)</h3>
+          <h3 className="text-sm font-bold text-[#102A43] mb-1.5">مبلغ التأمين (اختياري)</h3>
           <div className="relative">
             <input
               type="number"
@@ -180,17 +180,17 @@ export function StepPrice({
               placeholder="0"
               value={draft.depositAmount ?? ""}
               onChange={(e) => onChange({ depositAmount: e.target.value ? parseFloat(e.target.value) : null })}
-              className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 pe-14 text-[#1E1E1E] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15"
+              className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 pe-14 text-[#102A43] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
               dir="ltr"
             />
-            <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#A89480] pointer-events-none">ر.ع</span>
+            <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#627D98] pointer-events-none">ر.ع</span>
           </div>
         </section>
       )}
 
       {/* Service charges */}
       <section>
-        <h3 className="text-sm font-bold text-[#1E1E1E] mb-1.5">رسوم الخدمات السنوية (اختياري)</h3>
+        <h3 className="text-sm font-bold text-[#102A43] mb-1.5">رسوم الخدمات السنوية (اختياري)</h3>
         <div className="relative">
           <input
             type="number"
@@ -198,10 +198,10 @@ export function StepPrice({
             placeholder="0"
             value={draft.serviceCharges ?? ""}
             onChange={(e) => onChange({ serviceCharges: e.target.value ? parseFloat(e.target.value) : null })}
-            className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 pe-14 text-[#1E1E1E] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15"
+            className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 pe-14 text-[#102A43] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
             dir="ltr"
           />
-          <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#A89480] pointer-events-none">ر.ع/سنة</span>
+          <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#627D98] pointer-events-none">ر.ع/سنة</span>
         </div>
       </section>
     </div>

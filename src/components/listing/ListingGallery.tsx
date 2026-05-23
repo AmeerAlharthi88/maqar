@@ -52,7 +52,7 @@ export function ListingGallery({
   return (
     <>
       {/* ── Gallery strip ─────────────────────────────────────────────── */}
-      <div className="relative w-full bg-[#1E1E1E] overflow-hidden">
+      <div className="relative w-full bg-[#102A43] overflow-hidden">
         {/* Main image */}
         <div
           className="relative w-full"
@@ -69,7 +69,7 @@ export function ListingGallery({
             className="absolute inset-0 w-full h-full object-cover"
             onError={(e) => {
               e.currentTarget.src =
-                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250' viewBox='0 0 400 250'%3E%3Crect fill='%23E8DDD0' width='400' height='250'/%3E%3Ctext fill='%23A89480' font-family='system-ui' font-size='18' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3Eلا توجد صورة%3C/text%3E%3C/svg%3E";
+                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250' viewBox='0 0 400 250'%3E%3Crect fill='%23E2E8F0' width='400' height='250'/%3E%3Ctext fill='%23627D98' font-family='system-ui' font-size='18' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3Eلا توجد صورة%3C/text%3E%3C/svg%3E";
             }}
             loading={current === 0 ? "eager" : "lazy"}
           />
@@ -203,7 +203,7 @@ export function ListingGallery({
               aria-label={`الصورة ${i + 1}`}
               className={cn(
                 "flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-colors",
-                i === current ? "border-[#C65D3B]" : "border-transparent"
+                i === current ? "border-[#0A3C36]" : "border-transparent"
               )}
             >
               <img
@@ -278,7 +278,7 @@ export function ListingGallery({
               <button key={i} onClick={() => setCurrent(i)} aria-label={`الصورة ${i + 1}`}
                 className={cn(
                   "flex-shrink-0 w-14 h-10 rounded-lg overflow-hidden border-2 transition-all",
-                  i === current ? "border-[#C65D3B] opacity-100" : "border-white/20 opacity-50"
+                  i === current ? "border-[#0A3C36] opacity-100" : "border-white/20 opacity-50"
                 )}>
                 <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
               </button>

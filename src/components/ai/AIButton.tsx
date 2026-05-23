@@ -54,11 +54,11 @@ export function AIButton({
       aria-busy={loading}
       className={cn(
         "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D3B]/50",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A3C36]/40",
         "disabled:opacity-60 disabled:cursor-not-allowed",
         variant === "primary"
-          ? "bg-[#C65D3B] text-white hover:bg-[#B24F30]"
-          : "bg-[#F5F0EA] text-[#7A6B5E] border border-[#E8DDD0] hover:bg-[#EDE8E0]",
+          ? "bg-[#0A3C36] text-white hover:bg-[#082E29]"
+          : "bg-[#F0F4F8] text-[#627D98] border border-[#E2E8F0] hover:bg-[#E2E8F0]",
         className
       )}
     >

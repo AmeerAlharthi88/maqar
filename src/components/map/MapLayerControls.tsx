@@ -32,13 +32,13 @@ function LayerToggle({
         <span
           className={cn(
             "text-xs font-medium truncate",
-            disabled ? "text-[#A89480]" : "text-[#1E1E1E]"
+            disabled ? "text-[#627D98]" : "text-[#102A43]"
           )}
         >
           {label}
         </span>
         {comingSoon && (
-          <span className="flex-shrink-0 text-[10px] text-[#A89480] bg-[#F5F0EA] px-1.5 py-0.5 rounded-full">
+          <span className="flex-shrink-0 text-[10px] text-[#627D98] bg-[#F0F4F8] px-1.5 py-0.5 rounded-full">
             قريباً
           </span>
         )}
@@ -57,12 +57,12 @@ function LayerToggle({
         aria-pressed={active}
         className={cn(
           "relative flex-shrink-0 w-9 h-5 rounded-full transition-colors duration-200",
-          "focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-[#C65D3B]",
+          "focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-[#0A3C36]",
           disabled
-            ? "bg-[#E8DDD0] cursor-not-allowed opacity-50"
+            ? "bg-[#E2E8F0] cursor-not-allowed opacity-50"
             : active
-            ? "bg-[#C65D3B]"
-            : "bg-[#E8DDD0]"
+            ? "bg-[#0A3C36]"
+            : "bg-[#E2E8F0]"
         )}
       >
         <span
@@ -102,18 +102,18 @@ export function MapLayerControls() {
       {/* Panel */}
       {open && (
         <div
-          className="absolute bottom-12 left-0 bg-white rounded-2xl border border-[#F0EBE3] shadow-elevated p-4 w-56 animate-slide-up"
+          className="absolute bottom-12 left-0 bg-white rounded-2xl border border-[#E2E8F0] shadow-elevated p-4 w-56 animate-slide-up"
           role="dialog"
           aria-label="طبقات الخريطة"
         >
           {/* Nearby services (placeholder) */}
-          <p className="text-[11px] font-bold text-[#7A6B5E] uppercase tracking-wide mb-2">
+          <p className="text-[11px] font-bold text-[#627D98] uppercase tracking-wide mb-2">
             خدمات قريبة
           </p>
-          <p className="text-[10px] text-[#A89480] mb-2">
+          <p className="text-[10px] text-[#627D98] mb-2">
             البيانات الحية غير متاحة حالياً
           </p>
-          <div className="divide-y divide-[#F5F0EA]">
+          <div className="divide-y divide-[#E2E8F0]">
             {nearbyLayers.map((key) => (
               <LayerToggle
                 key={key}
@@ -128,7 +128,7 @@ export function MapLayerControls() {
           </div>
 
           {/* Risk layers */}
-          <p className="text-[11px] font-bold text-[#7A6B5E] uppercase tracking-wide mt-4 mb-2">
+          <p className="text-[11px] font-bold text-[#627D98] uppercase tracking-wide mt-4 mb-2">
             طبقات المخاطر
           </p>
           <p className="text-[10px] text-[#C8860A] bg-[#FFF8E6] rounded-lg px-2 py-1 mb-2">
@@ -153,8 +153,8 @@ export function MapLayerControls() {
         className={cn(
           "w-11 h-11 rounded-full flex items-center justify-center shadow-elevated transition-colors",
           open
-            ? "bg-[#C65D3B] text-white border-2 border-[#A84D2F]"
-            : "bg-white text-[#7A6B5E] border border-[#E8DDD0] hover:border-[#C65D3B] hover:text-[#C65D3B]"
+            ? "bg-[#0A3C36] text-white border-2 border-[#082E29]"
+            : "bg-white text-[#627D98] border border-[#E2E8F0] hover:border-[#0A3C36] hover:text-[#0A3C36]"
         )}
       >
         {/* Layers icon */}

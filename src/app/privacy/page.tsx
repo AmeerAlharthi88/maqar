@@ -19,8 +19,8 @@ const DISCLAIMER =
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">{title}</h2>
-      <div className="text-sm text-[#7A6B5E] leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">{title}</h2>
+      <div className="text-sm text-[#627D98] leading-relaxed space-y-2">{children}</div>
     </div>
   );
 }
@@ -44,27 +44,27 @@ export default function PrivacyPage() {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold text-[#1E1E1E] mb-1">سياسة الخصوصية</h1>
-          <p className="text-xs text-[#A89480]">آخر تحديث: {new Date().toLocaleDateString("ar-OM", { year: "numeric", month: "long" })}</p>
+          <h1 className="text-xl font-bold text-[#102A43] mb-1">سياسة الخصوصية</h1>
+          <p className="text-xs text-[#627D98]">آخر تحديث: {new Date().toLocaleDateString("ar-OM", { year: "numeric", month: "long" })}</p>
         </div>
 
         <Section title="١. البيانات التي نجمعها">
           <p>عند استخدام منصة مقر قد نجمع البيانات التالية:</p>
           <ul className="space-y-1 list-none">
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B]">—</span>
+              <span className="text-[#627D98]">—</span>
               <span><strong>بيانات الحساب:</strong> رقم الهاتف المستخدم للتحقق عبر OTP، واسمك إذا أضفته</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B]">—</span>
+              <span className="text-[#627D98]">—</span>
               <span><strong>بيانات الإعلانات:</strong> معلومات العقار التي تنشرها، الصور، والمستندات المرفوعة لأغراض التوثيق</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B]">—</span>
+              <span className="text-[#627D98]">—</span>
               <span><strong>بيانات الاستخدام:</strong> صفحات تمت مشاهدتها، عمليات البحث، العقارات المحفوظة — لتحسين تجربتك</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B]">—</span>
+              <span className="text-[#627D98]">—</span>
               <span><strong>البيانات التقنية:</strong> نوع المتصفح، نظام التشغيل، عنوان IP — لأغراض الأمان والأداء</span>
             </li>
           </ul>
@@ -72,11 +72,11 @@ export default function PrivacyPage() {
 
         <Section title="٢. كيف نستخدم بياناتك">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>تشغيل المنصة وتقديم خدمات البحث والنشر</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>التحقق من هوية الوسطاء ومراجعة الإعلانات</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>تحسين خوارزميات البحث والتوصية</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>إرسال إشعارات متعلقة بحسابك وإعلاناتك</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>الامتثال للمتطلبات القانونية في سلطنة عُمان</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>تشغيل المنصة وتقديم خدمات البحث والنشر</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>التحقق من هوية الوسطاء ومراجعة الإعلانات</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>تحسين خوارزميات البحث والتوصية</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>إرسال إشعارات متعلقة بحسابك وإعلاناتك</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>الامتثال للمتطلبات القانونية في سلطنة عُمان</span></li>
           </ul>
         </Section>
 
@@ -115,12 +115,12 @@ export default function PrivacyPage() {
 
         <Section title="٨. حقوق المستخدم">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>الاطلاع على بياناتك المخزنة لدينا</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>تعديل بيانات حسابك</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>طلب حذف حسابك وبياناتك</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>الاعتراض على استخدام بياناتك في حالات معينة</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>الاطلاع على بياناتك المخزنة لدينا</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>تعديل بيانات حسابك</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>طلب حذف حسابك وبياناتك</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>الاعتراض على استخدام بياناتك في حالات معينة</span></li>
           </ul>
-          <p className="mt-2">لممارسة هذه الحقوق تواصل معنا على: <a href="mailto:privacy@maqar.om" className="text-[#C65D3B] underline underline-offset-2">privacy@maqar.om</a></p>
+          <p className="mt-2">لممارسة هذه الحقوق تواصل معنا على: <a href="mailto:privacy@maqar.om" className="text-[#0A3C36] underline underline-offset-2">privacy@maqar.om</a></p>
         </Section>
 
         <Section title="٩. تحديثات السياسة">
@@ -129,8 +129,8 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <div className="bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3">
-          <p className="text-[11px] text-[#A89480] leading-relaxed">{DISCLAIMER}</p>
+        <div className="bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3">
+          <p className="text-[11px] text-[#627D98] leading-relaxed">{DISCLAIMER}</p>
         </div>
       </main>
     </AppShell>

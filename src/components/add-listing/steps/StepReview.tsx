@@ -26,17 +26,17 @@ interface StepReviewProps {
 
 function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between py-2.5 border-b border-[#F5F0EA] last:border-0 gap-3">
-      <span className="text-sm text-[#7A6B5E] flex-shrink-0">{label}</span>
-      <span className="text-sm font-semibold text-[#1E1E1E] text-end">{value ?? "—"}</span>
+    <div className="flex items-start justify-between py-2.5 border-b border-[#F0F4F8] last:border-0 gap-3">
+      <span className="text-sm text-[#627D98] flex-shrink-0">{label}</span>
+      <span className="text-sm font-semibold text-[#102A43] text-end">{value ?? "—"}</span>
     </div>
   );
 }
 
 const PRIORITY_BADGE: Record<string, string> = {
-  high:   "bg-[#FBF0EB] text-[#C65D3B]",
+  high:   "bg-[#FEF0EE] text-[#C0392B]",
   medium: "bg-[#FDF6E3] text-[#C8860A]",
-  low:    "bg-[#F5F0EA] text-[#7A6B5E]",
+  low:    "bg-[#F0F4F8] text-[#627D98]",
 };
 const PRIORITY_AR: Record<string, string> = { high: "مهم", medium: "محسّن", low: "اختياري" };
 
@@ -159,21 +159,21 @@ export function StepReview({
         {qualityResult && !qualityLoading && (
           <AIResultCard isMockFallback={qualityResult.isMockFallback} title="اقتراحات التحسين">
             {qualityResult.overallFeedbackAr && (
-              <p className="text-xs text-[#3D3330] leading-relaxed mb-3">{qualityResult.overallFeedbackAr}</p>
+              <p className="text-xs text-[#102A43] leading-relaxed mb-3">{qualityResult.overallFeedbackAr}</p>
             )}
             {qualityResult.suggestions && qualityResult.suggestions.length > 0 && (
               <div className="space-y-2">
                 {qualityResult.suggestions.map((s, i) => (
                   <div key={i} className="flex items-start gap-2">
-                    <span className={["text-[10px] font-semibold px-2 py-0.5 rounded-lg flex-shrink-0 mt-0.5", PRIORITY_BADGE[s.priority] ?? "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}>
+                    <span className={["text-[10px] font-semibold px-2 py-0.5 rounded-lg flex-shrink-0 mt-0.5", PRIORITY_BADGE[s.priority] ?? "bg-[#F0F4F8] text-[#627D98]"].join(" ")}>
                       {s.categoryAr} · {PRIORITY_AR[s.priority] ?? s.priority}
                     </span>
-                    <p className="text-xs text-[#7A6B5E] leading-relaxed">{s.suggestionAr}</p>
+                    <p className="text-xs text-[#627D98] leading-relaxed">{s.suggestionAr}</p>
                   </div>
                 ))}
               </div>
             )}
-            <button onClick={() => setQualityResult(null)} className="mt-2 text-[10px] text-[#A89480] underline underline-offset-2">إغلاق</button>
+            <button onClick={() => setQualityResult(null)} className="mt-2 text-[10px] text-[#627D98] underline underline-offset-2">إغلاق</button>
           </AIResultCard>
         )}
       </div>
@@ -196,18 +196,18 @@ export function StepReview({
           )}
           {dupResult && !dupLoading && (
             <AIResultCard isMockFallback={dupResult.isMockFallback} title="تحليل التكرار">
-              {dupResult.summaryAr && <p className="text-xs text-[#3D3330] mb-2 leading-relaxed">{dupResult.summaryAr}</p>}
+              {dupResult.summaryAr && <p className="text-xs text-[#102A43] mb-2 leading-relaxed">{dupResult.summaryAr}</p>}
               {dupResult.similarFieldsAr && dupResult.similarFieldsAr.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {dupResult.similarFieldsAr.map((f, i) => (
-                    <span key={i} className="text-[10px] px-2 py-0.5 bg-[#FBF0EB] text-[#C65D3B] rounded-lg font-semibold">{f}</span>
+                    <span key={i} className="text-[10px] px-2 py-0.5 bg-[#E6F0EF] text-[#0A3C36] rounded-lg font-semibold">{f}</span>
                   ))}
                 </div>
               )}
               {dupResult.recommendedActionAr && (
-                <p className="text-xs text-[#7A6B5E] font-semibold">{dupResult.recommendedActionAr}</p>
+                <p className="text-xs text-[#627D98] font-semibold">{dupResult.recommendedActionAr}</p>
               )}
-              <button onClick={() => setDupResult(null)} className="mt-2 text-[10px] text-[#A89480] underline underline-offset-2">إغلاق</button>
+              <button onClick={() => setDupResult(null)} className="mt-2 text-[10px] text-[#627D98] underline underline-offset-2">إغلاق</button>
             </AIResultCard>
           )}
         </div>
@@ -221,7 +221,7 @@ export function StepReview({
           </svg>
           <div>
             <p className="text-xs font-semibold text-[#C8860A] mb-0.5">إعلان مشابه محتمل</p>
-            <p className="text-xs text-[#7A6B5E]">
+            <p className="text-xs text-[#627D98]">
               قد يكون هذا الإعلان مشابهاً لإعلان موجود في نفس المنطقة. يمكنك المتابعة وسيراجعه فريق مقر.
             </p>
           </div>
@@ -237,15 +237,15 @@ export function StepReview({
           </svg>
           <div>
             <p className="text-xs font-semibold text-[#C8860A] mb-0.5">ملاحظة حول السعر</p>
-            <p className="text-xs text-[#7A6B5E]">{suspiciousMessage}</p>
+            <p className="text-xs text-[#627D98]">{suspiciousMessage}</p>
           </div>
         </div>
       )}
 
       {/* Summary sections */}
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
-        <div className="px-4 py-3 bg-[#F5F0EA] border-b border-[#F0EBE3]">
-          <p className="text-xs font-bold text-[#7A6B5E] uppercase tracking-wide">ملخص الإعلان</p>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
+        <div className="px-4 py-3 bg-[#F0F4F8] border-b border-[#E2E8F0]">
+          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">ملخص الإعلان</p>
         </div>
         <div className="px-4">
           <ReviewRow label="الغرض" value={purposeLabel} />
@@ -256,9 +256,9 @@ export function StepReview({
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
-        <div className="px-4 py-3 bg-[#F5F0EA] border-b border-[#F0EBE3]">
-          <p className="text-xs font-bold text-[#7A6B5E] uppercase tracking-wide">المواصفات</p>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
+        <div className="px-4 py-3 bg-[#F0F4F8] border-b border-[#E2E8F0]">
+          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">المواصفات</p>
         </div>
         <div className="px-4">
           {!isLand && (
@@ -273,9 +273,9 @@ export function StepReview({
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
-        <div className="px-4 py-3 bg-[#F5F0EA] border-b border-[#F0EBE3]">
-          <p className="text-xs font-bold text-[#7A6B5E] uppercase tracking-wide">الوسائط والوثائق</p>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
+        <div className="px-4 py-3 bg-[#F0F4F8] border-b border-[#E2E8F0]">
+          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">الوسائط والوثائق</p>
         </div>
         <div className="px-4">
           <ReviewRow label="الصور" value={toArabicNumerals(draft.images.length)} />
@@ -288,8 +288,8 @@ export function StepReview({
       </div>
 
       {/* Publishing rules */}
-      <div className="bg-[#F5F0EA] rounded-2xl px-4 py-4">
-        <p className="text-xs font-semibold text-[#7A6B5E] mb-2">قواعد النشر في مقر</p>
+      <div className="bg-[#F0F4F8] rounded-2xl px-4 py-4">
+        <p className="text-xs font-semibold text-[#627D98] mb-2">قواعد النشر في مقر</p>
         <ul className="space-y-1.5">
           {[
             "جميع الإعلانات تخضع للمراجعة قبل النشر (١–٢ يوم عمل)",
@@ -297,8 +297,8 @@ export function StepReview({
             "السعر الظاهر يجب أن يطابق السعر الفعلي",
             "يُمنع نشر إعلانات وهمية أو مكررة",
           ].map((rule, i) => (
-            <li key={i} className="flex items-start gap-2 text-xs text-[#7A6B5E]">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2.5" className="flex-shrink-0 mt-0.5">
+            <li key={i} className="flex items-start gap-2 text-xs text-[#627D98]">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2.5" className="flex-shrink-0 mt-0.5">
                 <path d="M20 6L9 17l-5-5" />
               </svg>
               {rule}
@@ -316,7 +316,7 @@ export function StepReview({
       >
         <div
           className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-            termsAccepted ? "border-[#C65D3B] bg-[#C65D3B]" : "border-[#E8DDD0] bg-white"
+            termsAccepted ? "border-[#0A3C36] bg-[#0A3C36]" : "border-[#E2E8F0] bg-white"
           }`}
         >
           {termsAccepted && (
@@ -325,9 +325,9 @@ export function StepReview({
             </svg>
           )}
         </div>
-        <span className="text-sm text-[#3D3330] leading-relaxed">
+        <span className="text-sm text-[#102A43] leading-relaxed">
           أوافق على{" "}
-          <span className="text-[#C65D3B] font-semibold">شروط النشر في مقر</span>
+          <span className="text-[#0A3C36] font-semibold">شروط النشر في مقر</span>
           {" "}وأؤكد أن المعلومات المقدمة صحيحة ودقيقة
         </span>
       </button>

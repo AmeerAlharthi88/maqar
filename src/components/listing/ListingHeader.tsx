@@ -51,7 +51,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
             listing.purpose === "sale"
-              ? "bg-[#C65D3B] text-white"
+              ? "bg-[#0A3C36] text-white"
               : "bg-[#2471A3] text-white"
           }`}
         >
@@ -60,18 +60,18 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
             : (isAr ? "للإيجار" : "For Rent")}
         </span>
 
-        <span className="text-xs text-[#7A6B5E] bg-[#F5F0EA] px-2.5 py-0.5 rounded-full">
+        <span className="text-xs text-[#627D98] bg-[#F0F4F8] px-2.5 py-0.5 rounded-full">
           {propType}
         </span>
 
         {listing.furnishing !== "unfurnished" && furnishingLabel && (
-          <span className="text-xs text-[#7A6B5E] bg-[#F5F0EA] px-2.5 py-0.5 rounded-full">
+          <span className="text-xs text-[#627D98] bg-[#F0F4F8] px-2.5 py-0.5 rounded-full">
             {isAr ? furnishingLabel.ar : furnishingLabel.en}
           </span>
         )}
 
         {listing.isVerified && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EDF4ED] text-[#5B8C5A] text-xs font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E6F0EF] text-[#0A3C36] text-xs font-semibold">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
@@ -79,7 +79,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
           </span>
         )}
         {belowMkt && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EDF4ED] text-[#5B8C5A] text-xs font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E6F0EF] text-[#0A3C36] text-xs font-semibold">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
               <path d="M12 19V5M5 12l7-7 7 7" />
             </svg>
@@ -87,7 +87,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
           </span>
         )}
         {listing.isFeatured && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FBF0EB] text-[#C65D3B] text-xs font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFF8E7] text-[#D4A017] text-xs font-semibold">
             {isAr ? "مميز" : "Featured"}
           </span>
         )}
@@ -99,42 +99,42 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
       </div>
 
       {/* Title */}
-      <h1 className="text-xl font-bold text-[#1E1E1E] leading-snug mb-2">
+      <h1 className="text-xl font-bold text-[#102A43] leading-snug mb-2">
         {title}
       </h1>
 
       {/* Price */}
       <div className="flex items-baseline gap-2 mb-3">
-        <span className="text-2xl font-bold text-[#C65D3B]">{priceFormatted}</span>
+        <span className="text-2xl font-bold text-[#0A3C36]">{priceFormatted}</span>
         {rentSuffix && (
-          <span className="text-sm text-[#7A6B5E]">{rentSuffix}</span>
+          <span className="text-sm text-[#627D98]">{rentSuffix}</span>
         )}
         {pricePerSqmStr && (
-          <span className="text-xs text-[#A89480]">{pricePerSqmStr}</span>
+          <span className="text-xs text-[#627D98]">{pricePerSqmStr}</span>
         )}
       </div>
 
       {/* Location breadcrumb */}
-      <div className="flex items-center gap-1.5 text-sm text-[#7A6B5E] mb-3 flex-wrap">
+      <div className="flex items-center gap-1.5 text-sm text-[#627D98] mb-3 flex-wrap">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
           <circle cx="12" cy="10" r="3" />
         </svg>
         <span>{governorate}</span>
-        <span className="text-[#E8DDD0]">›</span>
+        <span className="text-[#E2E8F0]">›</span>
         <span>{wilayat}</span>
-        <span className="text-[#E8DDD0]">›</span>
-        <span className="font-medium text-[#1E1E1E]">{area}</span>
+        <span className="text-[#E2E8F0]">›</span>
+        <span className="font-medium text-[#102A43]">{area}</span>
         {address && (
           <>
-            <span className="text-[#E8DDD0]">›</span>
-            <span className="text-[#A89480]">{address}</span>
+            <span className="text-[#E2E8F0]">›</span>
+            <span className="text-[#627D98]">{address}</span>
           </>
         )}
       </div>
 
       {/* Meta row */}
-      <div className="flex items-center gap-4 text-xs text-[#A89480]">
+      <div className="flex items-center gap-4 text-xs text-[#627D98]">
         <span className="flex items-center gap-1">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />

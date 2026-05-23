@@ -72,10 +72,10 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
   return (
     <div className="px-4 py-6 space-y-5" dir="rtl">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-[#7A6B5E]">
+        <p className="text-sm text-[#627D98]">
           أضف حتى {toArabicNumerals(IMAGE_CONSTRAINTS.maxCount)} صورة بصيغة JPG أو PNG أو WebP (٨ ميغابايت لكل صورة).
         </p>
-        <span className="text-xs font-semibold text-[#A89480] flex-shrink-0 ms-2">
+        <span className="text-xs font-semibold text-[#627D98] flex-shrink-0 ms-2">
           {toArabicNumerals(draft.images.length)} / {toArabicNumerals(IMAGE_CONSTRAINTS.maxCount)}
         </span>
       </div>
@@ -84,19 +84,19 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
       {canAddMore && (
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="w-full border-2 border-dashed border-[#E8DDD0] rounded-2xl py-8 flex flex-col items-center gap-3 bg-[#FAF7F4] active:bg-[#F5F0EA] transition-colors"
+          className="w-full border-2 border-dashed border-[#E2E8F0] rounded-2xl py-8 flex flex-col items-center gap-3 bg-[#F8F9FA] active:bg-[#F0F4F8] transition-colors"
           aria-label="رفع صور"
         >
-          <div className="w-12 h-12 rounded-full bg-[#F5F0EA] flex items-center justify-center">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="1.5">
+          <div className="w-12 h-12 rounded-full bg-[#E6F0EF] flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.5">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="17 8 12 3 7 8" />
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
           </div>
           <div className="text-center">
-            <p className="text-sm font-semibold text-[#1E1E1E]">اضغط لاختيار الصور</p>
-            <p className="text-xs text-[#A89480]">أو اسحب وأفلت الصور هنا</p>
+            <p className="text-sm font-semibold text-[#102A43]">اضغط لاختيار الصور</p>
+            <p className="text-xs text-[#627D98]">أو اسحب وأفلت الصور هنا</p>
           </div>
         </button>
       )}
@@ -125,13 +125,13 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
       {/* Image grid */}
       {draft.images.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-[#7A6B5E] mb-2">
+          <p className="text-xs font-semibold text-[#627D98] mb-2">
             اضغط على أي صورة لتعيينها كصورة رئيسية
           </p>
           <div className="grid grid-cols-3 gap-2">
             {draft.images.map((img) => (
               <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden border-2 transition-all"
-                style={{ borderColor: img.isMain ? "#C65D3B" : "transparent" }}
+                style={{ borderColor: img.isMain ? "#0A3C36" : "transparent" }}
               >
                 {/* Preview */}
                 {img.previewUrl ? (
@@ -141,8 +141,8 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-[#F5F0EA] flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="1.5">
+                  <div className="w-full h-full bg-[#F0F4F8] flex items-center justify-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="1.5">
                       <rect x="3" y="3" width="18" height="18" rx="2" />
                       <circle cx="8.5" cy="8.5" r="1.5" />
                       <polyline points="21 15 16 10 5 21" />
@@ -152,7 +152,7 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
 
                 {/* Main badge */}
                 {img.isMain && (
-                  <div className="absolute top-1 start-1 bg-[#C65D3B] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                  <div className="absolute top-1 start-1 bg-[#0A3C36] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
                     رئيسية
                   </div>
                 )}
@@ -164,7 +164,7 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
                     className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 active:opacity-100 flex items-center justify-center transition-opacity"
                     aria-label="تعيين كصورة رئيسية"
                   >
-                    <span className="bg-white/90 text-[#1E1E1E] text-[10px] font-semibold px-2 py-1 rounded-full">
+                    <span className="bg-white/90 text-[#102A43] text-[10px] font-semibold px-2 py-1 rounded-full">
                       تعيين رئيسية
                     </span>
                   </button>
@@ -188,28 +188,28 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
 
       {/* Video / 360 tour */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold text-[#1E1E1E]">وسائط إضافية (اختياري)</h3>
+        <h3 className="text-sm font-bold text-[#102A43]">وسائط إضافية (اختياري)</h3>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-[#7A6B5E]">رابط فيديو (YouTube / Vimeo)</label>
+          <label className="text-xs font-medium text-[#627D98]">رابط فيديو (YouTube / Vimeo)</label>
           <input
             type="url"
             inputMode="url"
             placeholder="https://youtube.com/watch?v=..."
             value={draft.videoLink}
             onChange={(e) => onChange({ videoLink: e.target.value })}
-            className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15"
+            className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
             dir="ltr"
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-[#7A6B5E]">رابط الجولة الافتراضية 360°</label>
+          <label className="text-xs font-medium text-[#627D98]">رابط الجولة الافتراضية 360°</label>
           <input
             type="url"
             inputMode="url"
             placeholder="https://my360tour.com/..."
             value={draft.tourLink}
             onChange={(e) => onChange({ tourLink: e.target.value })}
-            className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15"
+            className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
             dir="ltr"
           />
         </div>

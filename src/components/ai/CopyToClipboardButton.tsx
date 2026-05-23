@@ -50,8 +50,8 @@ export function CopyToClipboardButton({
         aria-label={ariaLabel ?? label}
         className={cn(
           "inline-flex items-center gap-1 text-[10px] font-semibold transition-colors",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D3B]/50 rounded",
-          copied ? "text-[#5B8C5A]" : "text-[#7A6B5E] hover:text-[#C65D3B]",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A3C36]/40 rounded",
+          copied ? "text-[#0A3C36]" : "text-[#627D98] hover:text-[#0A3C36]",
           className
         )}
       >
@@ -76,10 +76,10 @@ export function CopyToClipboardButton({
       aria-label={ariaLabel ?? label}
       className={cn(
         "inline-flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D3B]/50",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A3C36]/40",
         copied
-          ? "bg-[#EDF4ED] text-[#5B8C5A] border border-[#5B8C5A]/20"
-          : "bg-[#F5F0EA] text-[#7A6B5E] border border-[#E8DDD0] hover:bg-[#EDE8E0]",
+          ? "bg-[#E6F0EF] text-[#0A3C36] border border-[#0A3C36]/20"
+          : "bg-[#F0F4F8] text-[#627D98] border border-[#E2E8F0] hover:bg-[#E2E8F0]",
         className
       )}
     >

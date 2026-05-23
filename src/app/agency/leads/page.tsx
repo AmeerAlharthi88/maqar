@@ -28,7 +28,7 @@ export default function AgencyLeadsPage() {
             onClick={() => setActiveFilter("all")}
             className={[
               "px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-              activeFilter === "all" ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]",
+              activeFilter === "all" ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
             ].join(" ")}
           >
             الكل ({MOCK_LEADS.length})
@@ -42,7 +42,7 @@ export default function AgencyLeadsPage() {
                 onClick={() => setActiveFilter(status)}
                 className={[
                   "px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  activeFilter === status ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]",
+                  activeFilter === status ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
                 ].join(" ")}
               >
                 {LEAD_STATUS_LABELS_AR[status]} ({count})
@@ -60,7 +60,7 @@ export default function AgencyLeadsPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-sm text-[#A89480]">لا توجد عملاء في هذه الفئة</p>
+            <p className="text-sm text-[#627D98]">لا توجد عملاء في هذه الفئة</p>
           </div>
         )}
       </div>

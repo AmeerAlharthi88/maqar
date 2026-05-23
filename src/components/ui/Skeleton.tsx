@@ -16,7 +16,7 @@ export function Skeleton({ className, rounded = "md" }: SkeletonProps) {
   return (
     <div
       className={cn(
-        "bg-[#F0EBE3] animate-pulse",
+        "bg-[#E2E8F0] animate-pulse",
         roundedClasses[rounded],
         className
       )}
@@ -27,7 +27,7 @@ export function Skeleton({ className, rounded = "md" }: SkeletonProps) {
 
 export function ListingCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
       <Skeleton className="h-48 w-full" rounded="sm" />
       <div className="p-4 flex flex-col gap-3">
         <Skeleton className="h-5 w-3/4" />

@@ -99,24 +99,24 @@ export function MarketInsightPanel({
           title="تحليل السوق بالذكاء الاصطناعي"
         >
           {result.summaryAr && (
-            <p className="text-sm text-[#3D3330] leading-relaxed mb-2">
+            <p className="text-sm text-[#102A43] leading-relaxed mb-2">
               {result.summaryAr}
             </p>
           )}
           {result.demandTrendAr && (
-            <p className="text-xs text-[#7A6B5E] mb-1">
+            <p className="text-xs text-[#627D98] mb-1">
               <span className="font-semibold">الطلب: </span>
               {result.demandTrendAr}
             </p>
           )}
           {result.priceTrendAr && (
-            <p className="text-xs text-[#7A6B5E]">
+            <p className="text-xs text-[#627D98]">
               <span className="font-semibold">الأسعار: </span>
               {result.priceTrendAr}
             </p>
           )}
           {result.disclaimer && (
-            <p className="text-[10px] text-[#A89480] mt-2 border-t border-[#F0EBE3] pt-2">
+            <p className="text-[10px] text-[#627D98] mt-2 border-t border-[#E2E8F0] pt-2">
               {result.disclaimer}
             </p>
           )}

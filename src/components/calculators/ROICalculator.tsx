@@ -35,8 +35,8 @@ export function ROICalculator() {
   return (
     <div className="space-y-5">
       {/* Inputs */}
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-4">
-        <h2 className="text-sm font-bold text-[#1E1E1E]">بيانات العقار والإيجار</h2>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-4">
+        <h2 className="text-sm font-bold text-[#102A43]">بيانات العقار والإيجار</h2>
 
         <CalculatorInput
           label="سعر الشراء"
@@ -79,7 +79,7 @@ export function ROICalculator() {
       <CalculatorSummary title="نتائج العائد على الاستثمار">
         {/* Yield badge */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-[#7A6B5E]">تصنيف العائد الصافي:</span>
+          <span className="text-sm text-[#627D98]">تصنيف العائد الصافي:</span>
           <YieldBadge pct={result.netYieldPct} />
         </div>
 
@@ -124,7 +124,7 @@ export function ROICalculator() {
 
       {/* AI insight */}
       <div>
-        <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+        <h2 className="text-base font-bold text-[#102A43] mb-3">
           تحليل السوق بالذكاء الاصطناعي
         </h2>
         <MarketInsightPanel />

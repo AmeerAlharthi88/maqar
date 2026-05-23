@@ -155,7 +155,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
     <>
       {/* Sticky action bar — sits above the bottom nav */}
       <div
-        className="fixed start-0 end-0 z-[110] bg-white/95 backdrop-blur-md border-t border-[#F0EBE3]"
+        className="fixed start-0 end-0 z-[110] bg-white/95 backdrop-blur-md border-t border-[#E2E8F0]"
         style={{
           bottom: 0,
           paddingBottom: "calc(64px + env(safe-area-inset-bottom, 0px))",
@@ -180,7 +180,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
           <a
             href={callHref}
             onClick={handleCallClick}
-            className="flex items-center justify-center gap-1.5 bg-[#F5F0EA] text-[#1E1E1E] text-sm font-semibold py-3 px-4 rounded-2xl border border-[#E8DDD0]"
+            className="flex items-center justify-center gap-1.5 bg-[#F0F4F8] text-[#102A43] text-sm font-semibold py-3 px-4 rounded-2xl border border-[#E2E8F0]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -192,7 +192,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
           {listing.purpose === "sale" && (
             <button
               onClick={() => requireAuth("bookViewing", () => setBookViewingOpen(true))}
-              className="flex items-center justify-center gap-1.5 bg-[#1E1E1E] text-white text-sm font-semibold py-3 px-4 rounded-2xl"
+              className="flex items-center justify-center gap-1.5 bg-[#102A43] text-white text-sm font-semibold py-3 px-4 rounded-2xl"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -208,14 +208,14 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
           <button
             onClick={handleFavoriteToggle}
             aria-label={favorite ? "إزالة من المفضلة" : "إضافة للمفضلة"}
-            className="flex items-center justify-center w-11 h-11 rounded-2xl bg-[#F5F0EA] border border-[#E8DDD0] flex-shrink-0"
+            className="flex items-center justify-center w-11 h-11 rounded-2xl bg-[#F0F4F8] border border-[#E2E8F0] flex-shrink-0"
           >
             <svg
               width="18"
               height="18"
               viewBox="0 0 24 24"
-              fill={favorite ? "#C65D3B" : "none"}
-              stroke="#C65D3B"
+              fill={favorite ? "#0A3C36" : "none"}
+              stroke="#0A3C36"
               strokeWidth="2"
             >
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -228,7 +228,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
           {listing.purpose === "sale" ? (
             <button
               onClick={() => requireAuth("makeOffer", () => setMakeOfferOpen(true))}
-              className="text-xs font-semibold text-[#C65D3B] underline underline-offset-2"
+              className="text-xs font-semibold text-[#0A3C36] underline underline-offset-2"
             >
               تقديم عرض سعر
             </button>
@@ -240,7 +240,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
             {/* Share */}
             <button
               onClick={handleShare}
-              className="text-xs text-[#A89480] flex items-center gap-1"
+              className="text-xs text-[#627D98] flex items-center gap-1"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="18" cy="5" r="3" />
@@ -255,7 +255,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
             {/* Report — auth-gated */}
             <button
               onClick={() => requireAuth("report", () => setReportOpen(true))}
-              className="text-xs text-[#A89480] flex items-center gap-1"
+              className="text-xs text-[#627D98] flex items-center gap-1"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
@@ -270,7 +270,7 @@ export function ListingDetailClient({ listing }: ListingDetailClientProps) {
 
       {/* Share toast */}
       {shareSuccess && (
-        <div className="fixed top-16 start-1/2 -translate-x-1/2 z-[200] bg-[#1E1E1E] text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg">
+        <div className="fixed top-16 start-1/2 -translate-x-1/2 z-[200] bg-[#102A43] text-white text-xs font-medium px-4 py-2 rounded-full shadow-lg">
           تم نسخ الرابط
         </div>
       )}

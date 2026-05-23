@@ -99,12 +99,12 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
   const roleLabel = ROLE_LABELS_AR[(profile.role as AppRole) ?? "user"];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] pb-24" dir="rtl">
+    <div className="min-h-screen bg-[#F8F9FA] pb-24" dir="rtl">
       {/* Profile header card */}
-      <div className="bg-white px-4 py-6 border-b border-[#F0EBE3]">
+      <div className="bg-white px-4 py-6 border-b border-[#E2E8F0]">
         <div className="flex items-center gap-4">
           {/* Avatar */}
-          <div className="w-16 h-16 rounded-full bg-[#C65D3B] flex items-center justify-center flex-shrink-0">
+          <div className="w-16 h-16 rounded-full bg-[#0A3C36] flex items-center justify-center flex-shrink-0">
             {profile.avatarUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -122,9 +122,9 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
           {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-lg font-bold text-[#1E1E1E] truncate">{profile.nameAr}</h1>
+              <h1 className="text-lg font-bold text-[#102A43] truncate">{profile.nameAr}</h1>
               {profile.isVerified && (
-                <span className="flex items-center gap-1 bg-[#EDF4ED] text-[#5B8C5A] text-[10px] font-bold px-2 py-0.5 rounded-full">
+                <span className="flex items-center gap-1 bg-[#E6F0EF] text-[#0A3C36] text-[10px] font-bold px-2 py-0.5 rounded-full">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
@@ -132,17 +132,17 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
                 </span>
               )}
             </div>
-            <p className="text-sm text-[#7A6B5E] mt-0.5" dir="ltr">{profile.phone}</p>
-            <p className="text-xs text-[#A89480] mt-0.5">{roleLabel}</p>
+            <p className="text-sm text-[#627D98] mt-0.5" dir="ltr">{profile.phone}</p>
+            <p className="text-xs text-[#627D98] mt-0.5">{roleLabel}</p>
           </div>
 
           {/* Settings link */}
           <Link
             href={ROUTES.accountSettings}
-            className="w-9 h-9 rounded-xl bg-[#F5F0EA] flex items-center justify-center flex-shrink-0"
+            className="w-9 h-9 rounded-xl bg-[#F0F4F8] flex items-center justify-center flex-shrink-0"
             aria-label="الإعدادات"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A6B5E" strokeWidth="2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
               <circle cx="12" cy="12" r="3" />
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
             </svg>
@@ -151,13 +151,13 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
 
         {/* Stats row */}
         <div className="grid grid-cols-2 gap-3 mt-5">
-          <div className="bg-[#FAF7F4] rounded-2xl px-4 py-3 text-center">
-            <p className="text-2xl font-bold text-[#C65D3B]">{favCount}</p>
-            <p className="text-xs text-[#7A6B5E] mt-0.5">في المفضلة</p>
+          <div className="bg-[#F0F4F8] rounded-2xl px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-[#0A3C36]">{favCount}</p>
+            <p className="text-xs text-[#627D98] mt-0.5">في المفضلة</p>
           </div>
-          <div className="bg-[#FAF7F4] rounded-2xl px-4 py-3 text-center">
-            <p className="text-2xl font-bold text-[#1E1E1E]">{recentCount}</p>
-            <p className="text-xs text-[#7A6B5E] mt-0.5">شوهدت مؤخراً</p>
+          <div className="bg-[#F0F4F8] rounded-2xl px-4 py-3 text-center">
+            <p className="text-2xl font-bold text-[#102A43]">{recentCount}</p>
+            <p className="text-xs text-[#627D98] mt-0.5">شوهدت مؤخراً</p>
           </div>
         </div>
       </div>
@@ -171,8 +171,8 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
               <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
             <div className="flex-1">
-              <p className="text-sm font-bold text-[#1E1E1E] mb-1">أكمل توثيق حسابك</p>
-              <p className="text-xs text-[#7A6B5E] leading-relaxed">
+              <p className="text-sm font-bold text-[#102A43] mb-1">أكمل توثيق حسابك</p>
+              <p className="text-xs text-[#627D98] leading-relaxed">
                 لنشر إعلاناتك والحصول على شارة الوسيط الموثوق في مقر.
               </p>
             </div>
@@ -188,7 +188,7 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
 
       {/* Quick links grid */}
       <div className="px-4 mt-5">
-        <p className="text-xs font-semibold text-[#A89480] mb-3 uppercase tracking-wide">
+        <p className="text-xs font-semibold text-[#627D98] mb-3 uppercase tracking-wide">
           الخدمات السريعة
         </p>
         <div className="grid grid-cols-3 gap-2">
@@ -196,10 +196,10 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
             <Link
               key={item.href}
               href={item.href}
-              className="bg-white rounded-2xl border border-[#F0EBE3] flex flex-col items-center gap-2 py-4 px-2 text-center"
+              className="bg-white rounded-2xl border border-[#E2E8F0] flex flex-col items-center gap-2 py-4 px-2 text-center"
             >
-              <span className="text-[#7A6B5E]">{item.icon}</span>
-              <span className="text-[11px] font-semibold text-[#1E1E1E] leading-tight">
+              <span className="text-[#627D98]">{item.icon}</span>
+              <span className="text-[11px] font-semibold text-[#102A43] leading-tight">
                 {item.labelAr}
               </span>
             </Link>

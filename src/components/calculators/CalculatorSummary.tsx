@@ -11,7 +11,7 @@ export function CalculatorSummary({ title, children }: CalculatorSummaryProps) {
   return (
     <div className="mt-6">
       {title && (
-        <h2 className="text-base font-bold text-[#1E1E1E] mb-3">{title}</h2>
+        <h2 className="text-base font-bold text-[#102A43] mb-3">{title}</h2>
       )}
       <div className="space-y-3">{children}</div>
     </div>

@@ -22,16 +22,16 @@ export function UsageMeter({ usage, className }: UsageMeterProps) {
     ? "bg-[#C0392B]"
     : isNearLimit
     ? "bg-[#C8860A]"
-    : "bg-[#5B8C5A]";
+    : "bg-[#0A3C36]";
 
   return (
     <div className={cn("", className)}>
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-xs text-[#1E1E1E] font-medium">{usage.labelAr}</span>
+        <span className="text-xs text-[#102A43] font-medium">{usage.labelAr}</span>
         <span
           className={cn(
             "text-xs font-semibold",
-            isAtLimit ? "text-[#C0392B]" : isNearLimit ? "text-[#C8860A]" : "text-[#7A6B5E]"
+            isAtLimit ? "text-[#C0392B]" : isNearLimit ? "text-[#C8860A]" : "text-[#627D98]"
           )}
         >
           {isUnlimited ? (
@@ -47,7 +47,7 @@ export function UsageMeter({ usage, className }: UsageMeterProps) {
       </div>
 
       {!isUnlimited && usage.limit !== null && usage.limit > 0 && (
-        <div className="h-1.5 bg-[#F0EBE3] rounded-full overflow-hidden">
+        <div className="h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
           <div
             className={cn("h-full rounded-full transition-all", barColor)}
             style={{ width: `${pct}%` }}
@@ -56,7 +56,7 @@ export function UsageMeter({ usage, className }: UsageMeterProps) {
       )}
 
       {usage.resetsAt && (
-        <p className="text-[10px] text-[#A89480] mt-1">
+        <p className="text-[10px] text-[#627D98] mt-1">
           يتجدد:{" "}
           {new Date(usage.resetsAt).toLocaleDateString("ar-OM", {
             day: "numeric",

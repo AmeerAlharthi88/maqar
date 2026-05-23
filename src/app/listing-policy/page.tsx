@@ -21,8 +21,8 @@ const DISCLAIMER =
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">{title}</h2>
-      <div className="text-sm text-[#7A6B5E] leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">{title}</h2>
+      <div className="text-sm text-[#627D98] leading-relaxed space-y-2">{children}</div>
     </div>
   );
 }
@@ -75,16 +75,16 @@ export default function ListingPolicyPage() {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold text-[#1E1E1E] mb-1">سياسة الإعلانات</h1>
-          <p className="text-sm text-[#7A6B5E]">معايير نشر الإعلانات العقارية على منصة مقر</p>
+          <h1 className="text-xl font-bold text-[#102A43] mb-1">سياسة الإعلانات</h1>
+          <p className="text-sm text-[#627D98]">معايير نشر الإعلانات العقارية على منصة مقر</p>
         </div>
 
         <Section title="١. ما يُسمح بنشره">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#5B8C5A]">✓</span><span>عقارات سكنية وتجارية للبيع والإيجار في سلطنة عُمان</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#5B8C5A]">✓</span><span>أراضي سكنية وتجارية وزراعية بأوراق ملكية واضحة</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#5B8C5A]">✓</span><span>عقارات قيد الإنشاء مع توضيح واضح لحالتها</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#5B8C5A]">✓</span><span>غرف ومساحات للإيجار مع توضيح الشروط</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#0A3C36]">✓</span><span>عقارات سكنية وتجارية للبيع والإيجار في سلطنة عُمان</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#0A3C36]">✓</span><span>أراضي سكنية وتجارية وزراعية بأوراق ملكية واضحة</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#0A3C36]">✓</span><span>عقارات قيد الإنشاء مع توضيح واضح لحالتها</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#0A3C36]">✓</span><span>غرف ومساحات للإيجار مع توضيح الشروط</span></li>
           </ul>
         </Section>
 
@@ -114,19 +114,19 @@ export default function ListingPolicyPage() {
 
         <Section title="٥. الصور والمستندات">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>الصور يجب أن تمثل العقار الفعلي لا صور تعبيرية من الإنترنت</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>صور يجب أن تكون واضحة وغير مضللة</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>المستندات المرفوعة للتوثيق تُستخدم فقط لأغراض مراجعة الإعلان</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>يُحظر رفع صور تحتوي على معلومات شخصية للغير</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>الصور يجب أن تمثل العقار الفعلي لا صور تعبيرية من الإنترنت</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>صور يجب أن تكون واضحة وغير مضللة</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>المستندات المرفوعة للتوثيق تُستخدم فقط لأغراض مراجعة الإعلان</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>يُحظر رفع صور تحتوي على معلومات شخصية للغير</span></li>
           </ul>
         </Section>
 
         <Section title="٦. المحتوى المحظور">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">✕</span><span>إعلانات وهمية لعقارات غير موجودة</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">✕</span><span>تأجير عقارات بدون إذن المالك</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">✕</span><span>عقارات تنتهك قوانين التملك الأجنبي في عُمان</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">✕</span><span>أي نشاط مرتبط بغسيل الأموال أو الاحتيال العقاري</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#C0392B]">✕</span><span>إعلانات وهمية لعقارات غير موجودة</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#C0392B]">✕</span><span>تأجير عقارات بدون إذن المالك</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#C0392B]">✕</span><span>عقارات تنتهك قوانين التملك الأجنبي في عُمان</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#C0392B]">✕</span><span>أي نشاط مرتبط بغسيل الأموال أو الاحتيال العقاري</span></li>
           </ul>
         </Section>
 
@@ -137,12 +137,12 @@ export default function ListingPolicyPage() {
         </Section>
 
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">أسئلة شائعة حول الإعلانات</h2>
+          <h2 className="text-base font-bold text-[#102A43] mb-3">أسئلة شائعة حول الإعلانات</h2>
           <FAQAccordion faqs={POLICY_FAQS} />
         </div>
 
-        <div className="bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3">
-          <p className="text-[11px] text-[#A89480] leading-relaxed">{DISCLAIMER}</p>
+        <div className="bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3">
+          <p className="text-[11px] text-[#627D98] leading-relaxed">{DISCLAIMER}</p>
         </div>
       </main>
     </AppShell>

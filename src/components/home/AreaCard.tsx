@@ -64,7 +64,7 @@ export function AreaCard({ area, className }: AreaCardProps) {
         <span
           className={cn(
             "flex items-center gap-0.5 text-xs font-semibold",
-            isPositive ? "text-[#5B8C5A]" : "text-[#C0392B]"
+            isPositive ? "text-[#0A3C36]" : "text-[#C0392B]"
           )}
         >
           {isPositive ? (

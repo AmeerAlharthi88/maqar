@@ -45,7 +45,7 @@ export function FavoriteButton({ listingId, size = "sm", className }: FavoriteBu
           "rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center shadow-sm",
           "transition-colors hover:bg-white active:scale-95",
           size === "sm" ? "w-8 h-8" : "w-10 h-10",
-          favorited ? "text-[#C65D3B]" : "text-[#7A6B5E]",
+          favorited ? "text-[#0A3C36]" : "text-[#627D98]",
           className
         )}
       >

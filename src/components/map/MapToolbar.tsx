@@ -41,8 +41,8 @@ export function MapToolbar({
               "relative flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center",
               "border shadow-sm transition-colors",
               activeFilterCount > 0
-                ? "bg-[#C65D3B] border-[#C65D3B] text-white"
-                : "bg-white border-[#E8DDD0] text-[#7A6B5E] hover:border-[#C65D3B] hover:text-[#C65D3B]"
+                ? "bg-[#0A3C36] border-[#0A3C36] text-white"
+                : "bg-white border-[#E2E8F0] text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36]"
             )}
           >
             <svg
@@ -62,7 +62,7 @@ export function MapToolbar({
             {/* Badge */}
             {activeFilterCount > 0 && (
               <span
-                className="absolute -top-1.5 -end-1.5 min-w-[18px] h-[18px] rounded-full bg-white text-[#C65D3B] text-[10px] font-bold flex items-center justify-center border border-[#C65D3B] px-1"
+                className="absolute -top-1.5 -end-1.5 min-w-[18px] h-[18px] rounded-full bg-white text-[#0A3C36] text-[10px] font-bold flex items-center justify-center border border-[#0A3C36] px-1"
                 aria-hidden="true"
               >
                 {activeFilterCount}
@@ -76,8 +76,8 @@ export function MapToolbar({
             aria-label={viewMode === "map" ? "عرض القائمة" : "عرض الخريطة"}
             className={cn(
               "flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center",
-              "bg-white border border-[#E8DDD0] text-[#7A6B5E]",
-              "hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors shadow-sm"
+              "bg-white border border-[#E2E8F0] text-[#627D98]",
+              "hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors shadow-sm"
             )}
           >
             {viewMode === "map" ? (

@@ -61,48 +61,48 @@ export function FavoritesView() {
   /* eslint-enable react-hooks/set-state-in-effect */
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] pb-24" dir="rtl">
+    <div className="min-h-screen bg-[#F8F9FA] pb-24" dir="rtl">
       {/* Header */}
-      <div className="bg-white border-b border-[#F0EBE3] px-4 py-3 flex items-center gap-3">
+      <div className="bg-white border-b border-[#E2E8F0] px-4 py-3 flex items-center gap-3">
         <button onClick={() => router.back()} className="w-8 h-8 flex items-center justify-center">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" strokeWidth="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#102A43" strokeWidth="2">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
         <div>
-          <h1 className="text-sm font-bold text-[#1E1E1E]">المفضلة</h1>
-          <p className="text-xs text-[#A89480]">{ids.length} عقار</p>
+          <h1 className="text-sm font-bold text-[#102A43]">المفضلة</h1>
+          <p className="text-xs text-[#627D98]">{ids.length} عقار</p>
         </div>
       </div>
 
       {ids.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#F5F0EA] flex items-center justify-center mb-4">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.5">
+          <div className="w-16 h-16 rounded-full bg-[#E6F0EF] flex items-center justify-center mb-4">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.5">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
             </svg>
           </div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-2">لا توجد عقارات مفضلة</h2>
-          <p className="text-sm text-[#7A6B5E] mb-6 leading-relaxed">
+          <h2 className="text-base font-bold text-[#102A43] mb-2">لا توجد عقارات مفضلة</h2>
+          <p className="text-sm text-[#627D98] mb-6 leading-relaxed">
             اضغط على أيقونة القلب في أي إعلان لحفظه هنا
           </p>
           <Link
             href={ROUTES.home}
-            className="py-3 px-6 rounded-2xl bg-[#C65D3B] text-white font-bold text-sm"
+            className="py-3 px-6 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm hover:bg-[#082E29] transition-colors"
           >
             تصفح العقارات
           </Link>
         </div>
       ) : isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <span className="w-6 h-6 rounded-full border-2 border-[#C65D3B]/30 border-t-[#C65D3B] animate-spin" />
+          <span className="w-6 h-6 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
         </div>
       ) : (
         <div className="px-4 py-4 space-y-3">
           {listings.map((listing) => (
             <div
               key={listing.id}
-              className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden flex gap-3"
+              className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden flex gap-3"
             >
               {/* Image */}
               <Link href={ROUTES.listing(listing.id)} className="w-24 h-24 flex-shrink-0">
@@ -116,14 +116,14 @@ export function FavoritesView() {
               {/* Info */}
               <div className="flex-1 min-w-0 py-3 pr-0 pl-3">
                 <Link href={ROUTES.listing(listing.id)}>
-                  <p className="text-sm font-bold text-[#1E1E1E] line-clamp-1">{listing.titleAr}</p>
-                  <p className="text-xs text-[#7A6B5E] mt-0.5 line-clamp-1">
+                  <p className="text-sm font-bold text-[#102A43] line-clamp-1">{listing.titleAr}</p>
+                  <p className="text-xs text-[#627D98] mt-0.5 line-clamp-1">
                     {listing.location.areaAr}
                   </p>
-                  <p className="text-sm font-bold text-[#C65D3B] mt-1">
+                  <p className="text-sm font-bold text-[#0A3C36] mt-1">
                     {listing.price.toLocaleString("ar-OM")} ر.ع.
                     {listing.purpose === "rent" && (
-                      <span className="text-xs font-normal text-[#A89480]"> / شهر</span>
+                      <span className="text-xs font-normal text-[#627D98]"> / شهر</span>
                     )}
                   </p>
                 </Link>
@@ -132,7 +132,7 @@ export function FavoritesView() {
               {/* Remove */}
               <button
                 onClick={() => toggle(listing.id)}
-                className="px-3 flex items-center justify-center text-[#C65D3B]"
+                className="px-3 flex items-center justify-center text-[#0A3C36]"
                 aria-label="إزالة من المفضلة"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="1.5">

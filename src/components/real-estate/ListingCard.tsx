@@ -44,7 +44,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         <div className="absolute top-3 end-3 flex flex-col gap-1.5 items-end">
           <PropertyBadges listing={listing} />
           {belowMarket && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#5B8C5A] text-white text-[10px] font-semibold">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#0A3C36] text-white text-[10px] font-semibold">
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
               أقل من السوق
             </span>

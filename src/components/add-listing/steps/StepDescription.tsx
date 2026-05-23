@@ -28,7 +28,7 @@ function CharCounter({ current, max, min }: { current: number; max: number; min:
   const isUnder = current < min;
   const isOver = current > max;
   return (
-    <span className={cn("text-xs", isOver ? "text-[#C0392B]" : isUnder ? "text-[#A89480]" : "text-[#7A6B5E]")}>
+    <span className={cn("text-xs", isOver ? "text-[#C0392B]" : isUnder ? "text-[#627D98]" : "text-[#627D98]")}>
       {toArabicNumerals(current)} / {toArabicNumerals(max)}
     </span>
   );
@@ -117,7 +117,7 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
       {/* Title */}
       <section>
         <div className="flex items-center justify-between mb-1.5">
-          <label className="text-sm font-bold text-[#1E1E1E]">
+          <label className="text-sm font-bold text-[#102A43]">
             عنوان الإعلان <span className="text-[#C0392B]">*</span>
           </label>
           <CharCounter current={titleLen} max={MAX_TITLE_LENGTH} min={MIN_TITLE_LENGTH} />
@@ -129,9 +129,9 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
           onChange={(e) => onChange({ titleAr: e.target.value })}
           maxLength={MAX_TITLE_LENGTH}
           className={cn(
-            "w-full h-11 bg-white border rounded-xl px-3.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none",
-            "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
-            errors.titleAr ? "border-[#C0392B]" : "border-[#E8DDD0]"
+            "w-full h-11 bg-white border rounded-xl px-3.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none",
+            "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+            errors.titleAr ? "border-[#C0392B]" : "border-[#E2E8F0]"
           )}
           dir="rtl"
           aria-label="عنوان الإعلان"
@@ -143,7 +143,7 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
           <div className="mt-2">
             <button
               onClick={() => setShowSuggestions(!showSuggestions)}
-              className="text-xs text-[#C65D3B] font-semibold underline underline-offset-2"
+              className="text-xs text-[#0A3C36] font-semibold underline underline-offset-2"
             >
               {showSuggestions ? "إخفاء الاقتراحات" : "عرض عناوين مقترحة"}
             </button>
@@ -153,7 +153,7 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
                   <button
                     key={i}
                     onClick={() => { onChange({ titleAr: s }); setShowSuggestions(false); }}
-                    className="w-full text-right px-3 py-2 bg-[#F5F0EA] rounded-xl text-xs text-[#3D3330] border border-[#E8DDD0] active:bg-[#EDE8E0]"
+                    className="w-full text-right px-3 py-2 bg-[#F0F4F8] rounded-xl text-xs text-[#102A43] border border-[#E2E8F0] active:bg-[#E6F0EF]"
                   >
                     {s}
                   </button>
@@ -167,7 +167,7 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
       {/* Description */}
       <section>
         <div className="flex items-center justify-between mb-1.5">
-          <label className="text-sm font-bold text-[#1E1E1E]">
+          <label className="text-sm font-bold text-[#102A43]">
             وصف العقار <span className="text-[#C0392B]">*</span>
           </label>
           <CharCounter current={descLen} max={MAX_DESCRIPTION_LENGTH} min={MIN_DESCRIPTION_LENGTH} />
@@ -179,9 +179,9 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
           maxLength={MAX_DESCRIPTION_LENGTH}
           rows={6}
           className={cn(
-            "w-full bg-white border rounded-xl px-3.5 py-2.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none resize-none leading-relaxed",
-            "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
-            errors.descriptionAr ? "border-[#C0392B]" : "border-[#E8DDD0]"
+            "w-full bg-white border rounded-xl px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none resize-none leading-relaxed",
+            "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+            errors.descriptionAr ? "border-[#C0392B]" : "border-[#E2E8F0]"
           )}
           dir="rtl"
           aria-label="وصف العقار"
@@ -207,26 +207,26 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
             <AIResultCard isMockFallback={aiResult.isMockFallback} title="اقتراح الذكاء الاصطناعي">
               {aiResult.titleAr && (
                 <div className="mb-2">
-                  <p className="text-[10px] font-bold text-[#A89480] mb-1">العنوان المقترح</p>
-                  <p className="text-sm font-semibold text-[#1E1E1E]">{aiResult.titleAr}</p>
+                  <p className="text-[10px] font-bold text-[#627D98] mb-1">العنوان المقترح</p>
+                  <p className="text-sm font-semibold text-[#102A43]">{aiResult.titleAr}</p>
                 </div>
               )}
               {aiResult.descriptionAr && (
                 <div className="mb-3">
-                  <p className="text-[10px] font-bold text-[#A89480] mb-1">الوصف المقترح</p>
-                  <p className="text-xs text-[#3D3330] leading-relaxed line-clamp-4">{aiResult.descriptionAr}</p>
+                  <p className="text-[10px] font-bold text-[#627D98] mb-1">الوصف المقترح</p>
+                  <p className="text-xs text-[#102A43] leading-relaxed line-clamp-4">{aiResult.descriptionAr}</p>
                 </div>
               )}
               <div className="flex gap-2">
                 <button
                   onClick={applyAiResult}
-                  className="flex-1 py-2 rounded-xl bg-[#C65D3B] text-white text-xs font-bold"
+                  className="flex-1 py-2 rounded-xl bg-[#0A3C36] text-white text-xs font-bold"
                 >
                   تطبيق الاقتراح
                 </button>
                 <button
                   onClick={() => setAiResult(null)}
-                  className="px-4 py-2 rounded-xl bg-[#F5F0EA] text-[#7A6B5E] text-xs font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-semibold"
                 >
                   تجاهل
                 </button>
@@ -238,7 +238,7 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
 
       {/* Key highlights */}
       <section>
-        <label className="text-sm font-bold text-[#1E1E1E] mb-2 block">
+        <label className="text-sm font-bold text-[#102A43] mb-2 block">
           أبرز المميزات (اختياري — حتى {toArabicNumerals(MAX_HIGHLIGHTS)})
         </label>
         <div className="flex gap-2 mb-2">
@@ -250,13 +250,13 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addHighlight(); } }}
             maxLength={60}
             disabled={draft.highlights.length >= MAX_HIGHLIGHTS}
-            className="flex-1 h-10 bg-white border border-[#E8DDD0] rounded-xl px-3 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none focus:border-[#C65D3B] disabled:opacity-50"
+            className="flex-1 h-10 bg-white border border-[#E2E8F0] rounded-xl px-3 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] disabled:opacity-50"
             dir="rtl"
           />
           <button
             onClick={addHighlight}
             disabled={!highlightInput.trim() || draft.highlights.length >= MAX_HIGHLIGHTS}
-            className="px-4 py-2 bg-[#C65D3B] text-white text-sm font-semibold rounded-xl disabled:opacity-40"
+            className="px-4 py-2 bg-[#0A3C36] text-white text-sm font-semibold rounded-xl disabled:bg-[#A0AEC0] disabled:cursor-not-allowed"
           >
             إضافة
           </button>
@@ -266,12 +266,12 @@ export function StepDescription({ draft, onChange, errors }: StepDescriptionProp
             {draft.highlights.map((h, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1.5 bg-[#FBF0EB] border border-[#C65D3B]/30 text-[#C65D3B] text-xs font-medium px-3 py-1.5 rounded-full"
+                className="inline-flex items-center gap-1.5 bg-[#E6F0EF] border border-[#0A3C36]/30 text-[#0A3C36] text-xs font-medium px-3 py-1.5 rounded-full"
               >
                 {h}
                 <button
                   onClick={() => removeHighlight(i)}
-                  className="text-[#C65D3B]/70 hover:text-[#C65D3B]"
+                  className="text-[#0A3C36]/70 hover:text-[#0A3C36]"
                   aria-label={`حذف ${h}`}
                 >
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

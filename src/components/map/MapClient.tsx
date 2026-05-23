@@ -33,7 +33,7 @@ function createPriceMarker(
   const scale = isSelected ? "scale(1.14)" : "scale(1)";
 
   // Verified dot color inside bubble
-  const dotColor = state === "normal" || state === "featured" ? "#C65D3B" : "#FFFFFF";
+  const dotColor = state === "normal" ? "#0A3C36" : state === "featured" ? "#D4A017" : "#FFFFFF";
 
   const html = `
     <div style="
@@ -140,7 +140,7 @@ function CurrentLocationControl() {
           width: "44px",
           height: "44px",
           background: "white",
-          border: "1.5px solid #E8DDD0",
+          border: "1.5px solid #E2E8F0",
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",
@@ -156,7 +156,7 @@ function CurrentLocationControl() {
             height="18"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#C65D3B"
+            stroke="#0A3C36"
             strokeWidth="2.5"
             style={{ animation: "spin-slow 1s linear infinite" }}
           >
@@ -168,7 +168,7 @@ function CurrentLocationControl() {
             height="18"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#C65D3B"
+            stroke="#0A3C36"
             strokeWidth="2.5"
           >
             <circle cx="12" cy="12" r="3" />
@@ -212,7 +212,7 @@ function ResetMapControl() {
           width: "44px",
           height: "44px",
           background: "white",
-          border: "1.5px solid #E8DDD0",
+          border: "1.5px solid #E2E8F0",
           borderRadius: "50%",
           display: "flex",
           alignItems: "center",
@@ -226,7 +226,7 @@ function ResetMapControl() {
           height="16"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#7A6B5E"
+          stroke="#627D98"
           strokeWidth="2.5"
           strokeLinecap="round"
         >

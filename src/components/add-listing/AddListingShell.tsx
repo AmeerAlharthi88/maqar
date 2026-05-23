@@ -64,7 +64,7 @@ export function AddListingShell() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="w-8 h-8 rounded-full border-2 border-[#E8DDD0] border-t-[#C65D3B] animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
       </div>
     );
   }
@@ -201,7 +201,7 @@ export function AddListingShell() {
 
   return (
     <div
-      className="min-h-screen bg-[#FAF7F4]"
+      className="min-h-screen bg-[#F8F9FA]"
       dir="rtl"
       style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom, 0px))" }}
     >
@@ -210,11 +210,11 @@ export function AddListingShell() {
 
       {/* Validation error summary (if any) */}
       {Object.keys(validationErrors).length > 0 && currentStep !== 10 && (
-        <div className="mx-4 mt-3 bg-[#FBF0EB] border border-[#C65D3B]/30 rounded-xl px-4 py-3">
-          <p className="text-xs font-semibold text-[#C65D3B] mb-1">يرجى تصحيح الأخطاء التالية:</p>
+        <div className="mx-4 mt-3 bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3">
+          <p className="text-xs font-semibold text-[#C0392B] mb-1">يرجى تصحيح الأخطاء التالية:</p>
           <ul className="space-y-0.5">
             {Object.values(validationErrors).map((err, i) => (
-              <li key={i} className="text-xs text-[#C65D3B]">• {err}</li>
+              <li key={i} className="text-xs text-[#C0392B]">• {err}</li>
             ))}
           </ul>
         </div>
@@ -241,7 +241,7 @@ export function AddListingShell() {
           <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
             لا يوجد اتصال بالإنترنت
           </p>
-          <p className="text-[11px] text-[#7A6B5E]">
+          <p className="text-[11px] text-[#627D98]">
             يمكنك حفظ المسودة وإرسال الإعلان عند استعادة الاتصال.
           </p>
         </div>

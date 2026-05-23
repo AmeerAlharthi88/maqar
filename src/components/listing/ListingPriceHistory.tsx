@@ -19,9 +19,9 @@ export function ListingPriceHistory({
 }: ListingPriceHistoryProps) {
   if (history.length === 0) {
     return (
-      <div className="px-4 py-4 border-t border-[#F0EBE3]">
-        <h2 className="text-base font-bold text-[#1E1E1E] mb-2">سجل الأسعار</h2>
-        <p className="text-sm text-[#A89480]">لا تتوفر بيانات تاريخية للسعر</p>
+      <div className="px-4 py-4 border-t border-[#E2E8F0]">
+        <h2 className="text-base font-bold text-[#102A43] mb-2">سجل الأسعار</h2>
+        <p className="text-sm text-[#627D98]">لا تتوفر بيانات تاريخية للسعر</p>
       </div>
     );
   }
@@ -33,10 +33,10 @@ export function ListingPriceHistory({
   const trend = priceDiff >= 0 ? "up" : "down";
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
       <div className="flex items-start justify-between mb-1">
-        <h2 className="text-base font-bold text-[#1E1E1E]">سجل الأسعار</h2>
-        <span className="text-[10px] text-[#A89480] bg-[#F5F0EA] border border-[#E8DDD0] px-2 py-0.5 rounded-full">
+        <h2 className="text-base font-bold text-[#102A43]">سجل الأسعار</h2>
+        <span className="text-[10px] text-[#627D98] bg-[#F0F4F8] border border-[#E2E8F0] px-2 py-0.5 rounded-full">
           بيانات تقديرية
         </span>
       </div>
@@ -45,7 +45,7 @@ export function ListingPriceHistory({
       <div className="flex items-center gap-2 mb-4">
         <span
           className={`flex items-center gap-1 text-xs font-semibold ${
-            trend === "up" ? "text-[#5B8C5A]" : "text-[#C65D3B]"
+            trend === "up" ? "text-[#0A3C36]" : "text-[#C0392B]"
           }`}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -56,7 +56,7 @@ export function ListingPriceHistory({
           </svg>
           {trend === "up" ? "+" : ""}{toArabicNumerals(pctChange)}% خلال ١٢ شهراً
         </span>
-        <span className="text-xs text-[#A89480]">
+        <span className="text-xs text-[#627D98]">
           النطاق: {toArabicNumerals(min.toLocaleString("en-US"))} — {toArabicNumerals(max.toLocaleString("en-US"))} ر.ع
         </span>
       </div>

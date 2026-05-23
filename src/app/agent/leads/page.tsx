@@ -75,7 +75,7 @@ export default function AgentLeadsPage() {
     return (
       <AgentDashboardShell titleAr="العملاء المحتملون">
         <div className="flex items-center justify-center py-20">
-          <div className="w-6 h-6 rounded-full border-2 border-[#C65D3B] border-t-transparent animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-[#0A3C36] border-t-transparent animate-spin" />
         </div>
       </AgentDashboardShell>
     );
@@ -90,7 +90,7 @@ export default function AgentLeadsPage() {
             onClick={() => setActiveFilter("all")}
             className={[
               "px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-              activeFilter === "all" ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]",
+              activeFilter === "all" ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
             ].join(" ")}
           >
             الكل ({leads.length})
@@ -104,7 +104,7 @@ export default function AgentLeadsPage() {
                 onClick={() => setActiveFilter(status)}
                 className={[
                   "px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  activeFilter === status ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]",
+                  activeFilter === status ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
                 ].join(" ")}
               >
                 {LEAD_STATUS_LABELS_AR[status]} ({count})
@@ -133,7 +133,7 @@ export default function AgentLeadsPage() {
                     onClick={() =>
                       setSmartReplyLeadId(lead.id === smartReplyLeadId ? null : lead.id)
                     }
-                    className="flex items-center gap-1.5 text-[10px] font-semibold text-[#7A6B5E] hover:text-[#C65D3B] transition-colors"
+                    className="flex items-center gap-1.5 text-[10px] font-semibold text-[#627D98] hover:text-[#0A3C36] transition-colors"
                     aria-label="رد ذكي على هذا العميل"
                   >
                     <svg
@@ -156,7 +156,7 @@ export default function AgentLeadsPage() {
                     onChange={(e) =>
                       void handleStatusChange(lead.id, e.target.value as LeadStatus)
                     }
-                    className="text-[10px] font-semibold text-[#7A6B5E] bg-[#F5F0EA] border-none rounded-lg px-2 py-1 outline-none cursor-pointer"
+                    className="text-[10px] font-semibold text-[#627D98] bg-[#F0F4F8] border-none rounded-lg px-2 py-1 outline-none cursor-pointer"
                     aria-label="تحديث حالة العميل"
                   >
                     {STATUS_ORDER.map((s) => (
@@ -171,7 +171,7 @@ export default function AgentLeadsPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-sm text-[#A89480]">لا توجد عملاء في هذه الفئة</p>
+            <p className="text-sm text-[#627D98]">لا توجد عملاء في هذه الفئة</p>
           </div>
         )}
       </div>

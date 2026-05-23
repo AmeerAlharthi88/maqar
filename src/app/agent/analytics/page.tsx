@@ -11,13 +11,13 @@ import { fetchAgentAnalyticsSummary } from "@/lib/supabase/analytics";
 import { useAuthStore } from "@/store/auth.store";
 
 const CHART_LINES_TRAFFIC = [
-  { key: "views"          as const, labelAr: "مشاهدة", color: "#C65D3B" },
+  { key: "views"          as const, labelAr: "مشاهدة", color: "#0A3C36" },
   { key: "whatsappClicks" as const, labelAr: "واتساب", color: "#25D366" },
   { key: "callClicks"     as const, labelAr: "اتصال",  color: "#4B90D9" },
 ];
 
 const CHART_LINES_LEADS = [
-  { key: "leads" as const, labelAr: "عميل محتمل", color: "#C65D3B" },
+  { key: "leads" as const, labelAr: "عميل محتمل", color: "#0A3C36" },
 ];
 
 export default function AgentAnalyticsPage() {
@@ -46,9 +46,9 @@ export default function AgentAnalyticsPage() {
       <div className="px-4 py-4 space-y-4" dir="rtl">
         {/* Period note */}
         <div className="flex items-center justify-between">
-          <p className="text-xs text-[#A89480]">إحصائيات آخر ٣٠ يوماً</p>
+          <p className="text-xs text-[#627D98]">إحصائيات آخر ٣٠ يوماً</p>
           {!isLive && (
-            <span className="text-[10px] px-2 py-0.5 bg-[#F5F0EA] text-[#A89480] rounded-full">
+            <span className="text-[10px] px-2 py-0.5 bg-[#F0F4F8] text-[#627D98] rounded-full">
               بيانات تجريبية
             </span>
           )}
@@ -93,20 +93,20 @@ export default function AgentAnalyticsPage() {
         {/* Top performing listings */}
         {a.topListings.length > 0 ? (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">أفضل الإعلانات أداءً</h2>
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">أفضل الإعلانات أداءً</h2>
             <div className="space-y-2">
               {a.topListings.map((listing, idx) => (
                 <div
                   key={listing.listingId}
-                  className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-3"
+                  className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3"
                 >
                   <div className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-[#C65D3B]/10 flex items-center justify-center text-xs font-bold text-[#C65D3B] flex-shrink-0">
+                    <span className="w-7 h-7 rounded-full bg-[#0A3C36]/10 flex items-center justify-center text-xs font-bold text-[#0A3C36] flex-shrink-0">
                       {idx + 1}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-[#1E1E1E] line-clamp-1">{listing.titleAr}</p>
-                      <p className="text-xs font-bold text-[#C65D3B] mt-0.5">
+                      <p className="text-sm font-bold text-[#102A43] line-clamp-1">{listing.titleAr}</p>
+                      <p className="text-xs font-bold text-[#0A3C36] mt-0.5">
                         {listing.price.toLocaleString("ar-OM")} ر.ع.
                       </p>
                     </div>
@@ -118,9 +118,9 @@ export default function AgentAnalyticsPage() {
                       { value: listing.saves.toString(),              label: "حفظ" },
                       { value: listing.leads.toString(),              label: "عميل" },
                     ].map((m) => (
-                      <div key={m.label} className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-                        <p className="text-xs font-bold text-[#1E1E1E]">{m.value}</p>
-                        <p className="text-[10px] text-[#A89480]">{m.label}</p>
+                      <div key={m.label} className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+                        <p className="text-xs font-bold text-[#102A43]">{m.value}</p>
+                        <p className="text-[10px] text-[#627D98]">{m.label}</p>
                       </div>
                     ))}
                   </div>
@@ -132,7 +132,7 @@ export default function AgentAnalyticsPage() {
           /* Empty state — shown when Supabase data loads but is genuinely empty */
           isLive && (
             <div className="text-center py-8">
-              <p className="text-sm text-[#A89480]">لا توجد بيانات بعد. ستظهر الإحصائيات بعد أول مشاهدة لإعلاناتك.</p>
+              <p className="text-sm text-[#627D98]">لا توجد بيانات بعد. ستظهر الإحصائيات بعد أول مشاهدة لإعلاناتك.</p>
             </div>
           )
         )}

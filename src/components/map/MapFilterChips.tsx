@@ -51,8 +51,8 @@ export function MapFilterChips({ onFilterOpen }: MapFilterChipsProps) {
           aria-label="فتح لوحة الفلاتر"
           className={cn(
             "flex-shrink-0 flex items-center gap-1.5 px-3 h-8 rounded-full text-xs font-semibold",
-            "bg-[#C65D3B] text-white border border-[#C65D3B]",
-            "hover:bg-[#B34F2F] transition-colors"
+            "bg-[#0A3C36] text-white border border-[#0A3C36]",
+            "hover:bg-[#082E29] transition-colors"
           )}
         >
           <svg
@@ -78,8 +78,8 @@ export function MapFilterChips({ onFilterOpen }: MapFilterChipsProps) {
             onClick={() => removeFilter(label.key)}
             className={cn(
               "flex-shrink-0 flex items-center gap-1.5 px-3 h-8 rounded-full text-xs font-medium",
-              "bg-white text-[#C65D3B] border border-[#F5C4B0]",
-              "hover:bg-[#FDEEE9] transition-colors shadow-sm"
+              "bg-white text-[#0A3C36] border border-[#0A3C36]/30",
+              "hover:bg-[#E6F0EF] transition-colors shadow-sm"
             )}
             aria-label={`إزالة فلتر: ${label.label}`}
           >
@@ -100,7 +100,7 @@ export function MapFilterChips({ onFilterOpen }: MapFilterChipsProps) {
         {/* Clear all */}
         <button
           onClick={resetFilters}
-          className="flex-shrink-0 flex items-center gap-1 px-3 h-8 rounded-full text-xs font-medium text-[#7A6B5E] bg-white border border-[#E8DDD0] hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors shadow-sm whitespace-nowrap"
+          className="flex-shrink-0 flex items-center gap-1 px-3 h-8 rounded-full text-xs font-medium text-[#627D98] bg-white border border-[#E2E8F0] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors shadow-sm whitespace-nowrap"
           aria-label="مسح جميع الفلاتر"
         >
           مسح الكل

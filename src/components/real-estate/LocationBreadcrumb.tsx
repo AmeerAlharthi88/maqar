@@ -16,20 +16,20 @@ export function LocationBreadcrumb({
   const textSize = size === "sm" ? "text-xs" : "text-sm";
 
   return (
-    <div className={cn("flex items-center gap-1 flex-wrap", textSize, "text-[#7A6B5E]", className)}>
+    <div className={cn("flex items-center gap-1 flex-wrap", textSize, "text-[#627D98]", className)}>
       <PinIcon />
       <span>{governorateAr}</span>
       <Separator />
       <span>{wilayatAr}</span>
       <Separator />
-      <span className="font-medium text-[#1E1E1E]">{areaAr}</span>
+      <span className="font-medium text-[#102A43]">{areaAr}</span>
     </div>
   );
 }
 
 function PinIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0 text-[#C65D3B]">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="flex-shrink-0 text-[#0A3C36]">
       <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
       <circle cx="12" cy="10" r="3" />
     </svg>
@@ -37,5 +37,5 @@ function PinIcon() {
 }
 
 function Separator() {
-  return <span className="text-[#E8DDD0]" aria-hidden="true">/</span>;
+  return <span className="text-[#E2E8F0]" aria-hidden="true">/</span>;
 }

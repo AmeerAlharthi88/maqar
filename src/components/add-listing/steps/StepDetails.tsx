@@ -34,19 +34,19 @@ function NumericStepper({
   const current = value ?? 0;
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-medium text-[#7A6B5E]">{label}</label>
-      <div className={cn("flex items-center gap-2 bg-white border rounded-xl p-1", error ? "border-[#C0392B]" : "border-[#E8DDD0]")}>
+      <label className="text-xs font-medium text-[#627D98]">{label}</label>
+      <div className={cn("flex items-center gap-2 bg-white border rounded-xl p-1", error ? "border-[#C0392B]" : "border-[#E2E8F0]")}>
         <button
           onClick={() => onChange(Math.max(min, current - 1))}
-          className="w-9 h-9 rounded-lg bg-[#F5F0EA] text-[#1E1E1E] text-lg font-bold flex items-center justify-center active:bg-[#E8DDD0] flex-shrink-0"
+          className="w-9 h-9 rounded-lg bg-[#F0F4F8] text-[#102A43] text-lg font-bold flex items-center justify-center active:bg-[#E2E8F0] flex-shrink-0"
           aria-label={`تقليل ${label}`}
         >
           −
         </button>
-        <span className="flex-1 text-center text-base font-bold text-[#1E1E1E]">{current}</span>
+        <span className="flex-1 text-center text-base font-bold text-[#102A43]">{current}</span>
         <button
           onClick={() => onChange(Math.min(max, current + 1))}
-          className="w-9 h-9 rounded-lg bg-[#F5F0EA] text-[#1E1E1E] text-lg font-bold flex items-center justify-center active:bg-[#E8DDD0] flex-shrink-0"
+          className="w-9 h-9 rounded-lg bg-[#F0F4F8] text-[#102A43] text-lg font-bold flex items-center justify-center active:bg-[#E2E8F0] flex-shrink-0"
           aria-label={`زيادة ${label}`}
         >
           +
@@ -75,7 +75,7 @@ function NumberInput({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-[#1E1E1E]">{label}</label>
+      <label className="text-sm font-medium text-[#102A43]">{label}</label>
       <div className="relative flex items-center">
         <input
           type="number"
@@ -87,15 +87,15 @@ function NumberInput({
             onChange(v === "" ? null : parseFloat(v));
           }}
           className={cn(
-            "w-full h-11 bg-white border rounded-xl px-3.5 text-[#1E1E1E] placeholder:text-[#A89480] outline-none",
-            "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
+            "w-full h-11 bg-white border rounded-xl px-3.5 text-[#102A43] placeholder:text-[#627D98] outline-none",
+            "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
             suffix ? "pe-12" : "",
-            error ? "border-[#C0392B]" : "border-[#E8DDD0]"
+            error ? "border-[#C0392B]" : "border-[#E2E8F0]"
           )}
           dir="ltr"
         />
         {suffix && (
-          <span className="absolute end-3 text-xs text-[#A89480] pointer-events-none">{suffix}</span>
+          <span className="absolute end-3 text-xs text-[#627D98] pointer-events-none">{suffix}</span>
         )}
       </div>
       {error && <p className="text-xs text-[#C0392B]">{error}</p>}
@@ -119,8 +119,8 @@ function FeatureToggle({
       className={cn(
         "flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border text-xs font-medium transition-all",
         value
-          ? "border-[#C65D3B] bg-[#FBF0EB] text-[#C65D3B]"
-          : "border-[#E8DDD0] bg-white text-[#7A6B5E]"
+          ? "border-[#0A3C36] bg-[#E6F0EF] text-[#0A3C36]"
+          : "border-[#E2E8F0] bg-white text-[#627D98]"
       )}
       aria-pressed={value}
     >
@@ -146,7 +146,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
       {/* Bedrooms / Bathrooms */}
       {!isLand && (
         <section>
-          <h3 className="text-sm font-bold text-[#1E1E1E] mb-3">الغرف</h3>
+          <h3 className="text-sm font-bold text-[#102A43] mb-3">الغرف</h3>
           <div className="grid grid-cols-2 gap-3">
             <NumericStepper
               label="غرف النوم"
@@ -170,7 +170,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
 
       {/* Areas */}
       <section>
-        <h3 className="text-sm font-bold text-[#1E1E1E] mb-3">المساحة</h3>
+        <h3 className="text-sm font-bold text-[#102A43] mb-3">المساحة</h3>
         <div className="space-y-3">
           <NumberInput
             label="المساحة الإجمالية"
@@ -195,7 +195,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
       {/* Floors / Parking */}
       {!isLand && (
         <section>
-          <h3 className="text-sm font-bold text-[#1E1E1E] mb-3">الطوابق والمواقف</h3>
+          <h3 className="text-sm font-bold text-[#102A43] mb-3">الطوابق والمواقف</h3>
           <div className="grid grid-cols-2 gap-3">
             <NumericStepper
               label="عدد الطوابق"
@@ -218,7 +218,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
       {/* Furnishing */}
       {!isLand && (
         <section>
-          <h3 className="text-sm font-bold text-[#1E1E1E] mb-3">حالة الأثاث</h3>
+          <h3 className="text-sm font-bold text-[#102A43] mb-3">حالة الأثاث</h3>
           <div className="flex flex-col gap-2">
             {FURNISHING_OPTIONS.map((opt) => (
               <button
@@ -227,8 +227,8 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 className={cn(
                   "w-full py-3 rounded-xl border text-sm font-medium transition-all text-center",
                   draft.furnishing === opt.value
-                    ? "border-[#C65D3B] bg-[#FBF0EB] text-[#C65D3B]"
-                    : "border-[#E8DDD0] bg-white text-[#3D3330]"
+                    ? "border-[#0A3C36] bg-[#E6F0EF] text-[#0A3C36]"
+                    : "border-[#E2E8F0] bg-white text-[#102A43]"
                 )}
                 aria-pressed={draft.furnishing === opt.value}
               >
@@ -242,7 +242,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
 
       {/* Property age */}
       <section>
-        <h3 className="text-sm font-bold text-[#1E1E1E] mb-3">عمر العقار</h3>
+        <h3 className="text-sm font-bold text-[#102A43] mb-3">عمر العقار</h3>
         <div className="grid grid-cols-2 gap-2">
           {PROPERTY_AGE_OPTIONS.map((opt) => (
             <button
@@ -251,8 +251,8 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
               className={cn(
                 "py-2.5 rounded-xl border text-xs font-medium transition-all text-center",
                 draft.propertyAge === opt.value
-                  ? "border-[#C65D3B] bg-[#FBF0EB] text-[#C65D3B]"
-                  : "border-[#E8DDD0] bg-white text-[#3D3330]"
+                  ? "border-[#0A3C36] bg-[#E6F0EF] text-[#0A3C36]"
+                  : "border-[#E2E8F0] bg-white text-[#102A43]"
               )}
               aria-pressed={draft.propertyAge === opt.value}
             >
@@ -264,13 +264,13 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
 
       {/* Availability date */}
       <section>
-        <h3 className="text-sm font-bold text-[#1E1E1E] mb-1.5">تاريخ الإتاحة (اختياري)</h3>
+        <h3 className="text-sm font-bold text-[#102A43] mb-1.5">تاريخ الإتاحة (اختياري)</h3>
         <input
           type="date"
           value={draft.availabilityDate ?? ""}
           onChange={(e) => onChange({ availabilityDate: e.target.value || null })}
           min={new Date().toISOString().split("T")[0]}
-          className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 text-[#1E1E1E] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15"
+          className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 text-[#102A43] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
           dir="ltr"
         />
       </section>
@@ -278,8 +278,8 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
       {/* Oman-specific features */}
       {!isLand && !isCommercial && (
         <section>
-          <h3 className="text-sm font-bold text-[#1E1E1E] mb-1">خصائص عُمانية</h3>
-          <p className="text-xs text-[#A89480] mb-3">اختر ما ينطبق على عقارك</p>
+          <h3 className="text-sm font-bold text-[#102A43] mb-1">خصائص عُمانية</h3>
+          <p className="text-xs text-[#627D98] mb-3">اختر ما ينطبق على عقارك</p>
           <div className="flex flex-wrap gap-2">
             {OMAN_FEATURES.map((feat) => (
               <FeatureToggle

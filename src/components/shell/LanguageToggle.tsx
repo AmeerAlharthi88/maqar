@@ -16,8 +16,8 @@ export function LanguageToggle({ className }: LanguageToggleProps) {
       onClick={() => setLocale(isAr ? "en" : "ar")}
       className={cn(
         "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold",
-        "border border-[#E8DDD0] bg-white hover:bg-[#F5F0EA] transition-colors",
-        "text-[#7A6B5E]",
+        "border border-[#E2E8F0] bg-white hover:bg-[#F0F4F8] transition-colors",
+        "text-[#627D98]",
         className
       )}
       aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}

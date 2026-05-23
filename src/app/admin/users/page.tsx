@@ -37,7 +37,7 @@ export default function AdminUsersPage() {
   return (
     <AdminDashboardShell titleAr="إدارة المستخدمين">
       <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#A89480]">{activeCount} مستخدم نشط · {users.length} إجمالي</p>
+        <p className="text-xs text-[#627D98]">{activeCount} مستخدم نشط · {users.length} إجمالي</p>
 
         {/* Search */}
         <input
@@ -45,7 +45,7 @@ export default function AdminUsersPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="ابحث بالاسم أو الهاتف أو البريد..."
-          className="w-full px-4 py-2.5 rounded-2xl border border-[#F0EBE3] bg-white text-sm text-[#1E1E1E] placeholder:text-[#A89480] focus:outline-none focus:border-[#C65D3B]"
+          className="w-full px-4 py-2.5 rounded-2xl border border-[#E2E8F0] bg-white text-sm text-[#102A43] placeholder:text-[#627D98] focus:outline-none focus:border-[#0A3C36]"
         />
 
         {/* Status filters */}
@@ -55,7 +55,7 @@ export default function AdminUsersPage() {
             return (
               <button key={f} onClick={() => setStatusFilter(f)}
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  statusFilter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                  statusFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
                 {STATUS_AR[f]} ({count})
               </button>

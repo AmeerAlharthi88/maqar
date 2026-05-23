@@ -74,16 +74,16 @@ const PLANS: PlanId[] = ["free", "agent_pro", "agency"];
 function CellValue({ value }: { value: string | boolean }) {
   if (typeof value === "boolean") {
     return value ? (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2.5" className="mx-auto" aria-label="متاح">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5" className="mx-auto" aria-label="متاح">
         <polyline points="20 6 9 17 4 12" />
       </svg>
     ) : (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4B5A5" strokeWidth="2.5" className="mx-auto" aria-label="غير متاح">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2.5" className="mx-auto" aria-label="غير متاح">
         <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
       </svg>
     );
   }
-  return <span className="text-xs font-semibold text-[#1E1E1E]">{value}</span>;
+  return <span className="text-xs font-semibold text-[#102A43]">{value}</span>;
 }
 
 interface FeatureComparisonTableProps {
@@ -99,8 +99,8 @@ export function FeatureComparisonTable({
     <div className={cn("overflow-x-auto", className)} dir="rtl">
       <table className="w-full text-right border-collapse">
         <thead>
-          <tr className="border-b-2 border-[#F0EBE3]">
-            <th className="py-3 px-3 text-xs font-bold text-[#7A6B5E] text-right w-1/2">
+          <tr className="border-b-2 border-[#E2E8F0]">
+            <th className="py-3 px-3 text-xs font-bold text-[#627D98] text-right w-1/2">
               الميزة
             </th>
             {PLANS.map((p) => (
@@ -108,7 +108,7 @@ export function FeatureComparisonTable({
                 key={p}
                 className={cn(
                   "py-3 px-2 text-xs font-bold text-center",
-                  p === highlightPlan ? "text-[#C65D3B]" : "text-[#1E1E1E]"
+                  p === highlightPlan ? "text-[#0A3C36]" : "text-[#102A43]"
                 )}
               >
                 {PLAN_NAMES_AR[p]}
@@ -121,17 +121,17 @@ export function FeatureComparisonTable({
             <tr
               key={row.labelAr}
               className={cn(
-                "border-b border-[#F5F0EA]",
-                i % 2 === 0 ? "bg-white" : "bg-[#FAF7F4]/50"
+                "border-b border-[#E2E8F0]",
+                i % 2 === 0 ? "bg-white" : "bg-[#F8F9FA]/50"
               )}
             >
-              <td className="py-2.5 px-3 text-xs text-[#3D3330]">{row.labelAr}</td>
+              <td className="py-2.5 px-3 text-xs text-[#102A43]">{row.labelAr}</td>
               {PLANS.map((p) => (
                 <td
                   key={p}
                   className={cn(
                     "py-2.5 px-2 text-center",
-                    p === highlightPlan && "bg-[#FBF0EB]/30"
+                    p === highlightPlan && "bg-[#E6F0EF]/30"
                   )}
                 >
                   <CellValue value={row.getValue(p)} />

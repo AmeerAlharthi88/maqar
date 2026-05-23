@@ -65,19 +65,19 @@ export function TrustBlock({ variant, className = "" }: TrustBlockProps) {
 
   return (
     <div
-      className={`bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3 ${className}`}
+      className={`bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3 ${className}`}
       dir="rtl"
     >
       <div className="flex items-start gap-2">
         <span
           aria-hidden="true"
-          className="text-sm font-bold text-[#5B8C5A] flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#EDF4ED] flex items-center justify-center text-[10px]"
+          className="text-sm font-bold text-[#0A3C36] flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#E6F0EF] flex items-center justify-center text-[10px]"
         >
           {content.icon}
         </span>
         <div>
-          <p className="text-xs font-bold text-[#1E1E1E] mb-0.5">{content.titleAr}</p>
-          <p className="text-[11px] text-[#7A6B5E] leading-relaxed">{content.bodyAr}</p>
+          <p className="text-xs font-bold text-[#102A43] mb-0.5">{content.titleAr}</p>
+          <p className="text-[11px] text-[#627D98] leading-relaxed">{content.bodyAr}</p>
         </div>
       </div>
     </div>

@@ -22,11 +22,11 @@ export function ListingDescription({
       : description;
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-base font-bold text-[#1E1E1E]">وصف العقار</h2>
+        <h2 className="text-base font-bold text-[#102A43]">وصف العقار</h2>
         {aiGenerated && (
-          <span className="text-[10px] text-[#7A6B5E] bg-[#F5F0EA] px-2 py-0.5 rounded-full border border-[#E8DDD0]">
+          <span className="text-[10px] text-[#627D98] bg-[#F0F4F8] px-2 py-0.5 rounded-full border border-[#E2E8F0]">
             وصف مُنشأ بالذكاء الاصطناعي
           </span>
         )}
@@ -35,7 +35,7 @@ export function ListingDescription({
       {/* Sanitized text — only plain text, no HTML injection */}
       <p
         className={cn(
-          "text-sm text-[#3D3330] leading-relaxed whitespace-pre-line",
+          "text-sm text-[#102A43] leading-relaxed whitespace-pre-line",
           !expanded && needsTruncate && "line-clamp-5"
         )}
         dir="rtl"
@@ -46,7 +46,7 @@ export function ListingDescription({
       {needsTruncate && (
         <button
           onClick={() => setExpanded((e) => !e)}
-          className="mt-2 text-sm font-semibold text-[#C65D3B] hover:underline focus-visible:outline-none focus-visible:underline"
+          className="mt-2 text-sm font-semibold text-[#0A3C36] hover:underline focus-visible:outline-none focus-visible:underline"
           aria-expanded={expanded}
         >
           {expanded ? "عرض أقل" : "قراءة المزيد"}

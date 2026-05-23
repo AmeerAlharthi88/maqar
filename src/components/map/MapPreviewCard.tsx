@@ -41,11 +41,11 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
         paddingBottom: "calc(64px + env(safe-area-inset-bottom, 0px))",
       }}
     >
-      <div className="mx-3 bg-white rounded-2xl shadow-[0_-4px_32px_0_rgb(30_30_30/0.18)] border border-[#F0EBE3] overflow-hidden">
+      <div className="mx-3 bg-white rounded-2xl shadow-[0_-4px_32px_0_rgb(16_42_67/0.14)] border border-[#E2E8F0] overflow-hidden">
         {/* Main content row */}
         <div className="flex gap-3 p-3">
           {/* Image */}
-          <div className="relative w-24 h-[88px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F5F0EA]">
+          <div className="relative w-24 h-[88px] flex-shrink-0 rounded-xl overflow-hidden bg-[#F0F4F8]">
             {listing.coverImage ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
@@ -58,7 +58,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
               />
             ) : null}
             {/* Always-present fallback illustration (sits behind image) */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-[#C8B8A8] pointer-events-none -z-0">
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-[#E2E8F0] pointer-events-none -z-0">
               <svg
                 width="24"
                 height="24"
@@ -79,7 +79,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
               <span
                 className={`inline-block w-full py-0.5 text-[10px] font-semibold text-white ${
                   listing.purpose === "sale"
-                    ? "bg-[#C65D3B]/90"
+                    ? "bg-[#0A3C36]/90"
                     : "bg-[#2471A3]/90"
                 }`}
               >
@@ -93,15 +93,15 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0 flex-1">
                 {/* Price */}
-                <p className="text-[15px] font-bold text-[#C65D3B] leading-tight">
+                <p className="text-[15px] font-bold text-[#0A3C36] leading-tight">
                   {formatPriceBubble(listing.price, listing.purpose)}
                 </p>
                 {/* Title */}
-                <h3 className="text-sm font-semibold text-[#1E1E1E] leading-snug line-clamp-1 mt-0.5">
+                <h3 className="text-sm font-semibold text-[#102A43] leading-snug line-clamp-1 mt-0.5">
                   {listing.titleAr}
                 </h3>
                 {/* Location */}
-                <p className="text-xs text-[#7A6B5E] mt-0.5">
+                <p className="text-xs text-[#627D98] mt-0.5">
                   {listing.location.areaAr} · {listing.location.wilayatAr}
                 </p>
               </div>
@@ -110,7 +110,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
               <button
                 onClick={onClose}
                 aria-label="إغلاق"
-                className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[#A89480] hover:text-[#1E1E1E] hover:bg-[#F5F0EA] transition-colors"
+                className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[#627D98] hover:text-[#102A43] hover:bg-[#F0F4F8] transition-colors"
               >
                 <svg
                   width="14"
@@ -128,7 +128,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
             {/* Specs */}
             <div className="flex items-center gap-2 mt-2 flex-wrap">
               {listing.specs.bedrooms > 0 && (
-                <span className="flex items-center gap-1 text-xs text-[#7A6B5E]">
+                <span className="flex items-center gap-1 text-xs text-[#627D98]">
                   <svg
                     width="12"
                     height="12"
@@ -145,7 +145,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
                 </span>
               )}
               {listing.specs.bathrooms > 0 && (
-                <span className="flex items-center gap-1 text-xs text-[#7A6B5E]">
+                <span className="flex items-center gap-1 text-xs text-[#627D98]">
                   <svg
                     width="12"
                     height="12"
@@ -161,7 +161,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
                   {toArabicNumerals(listing.specs.bathrooms)}
                 </span>
               )}
-              <span className="text-xs text-[#7A6B5E]">
+              <span className="text-xs text-[#627D98]">
                 {toArabicNumerals(listing.specs.area)} م²
               </span>
             </div>
@@ -169,17 +169,17 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
             {/* Badges */}
             <div className="flex items-center gap-1.5 mt-2">
               {listing.isVerified && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C65D3B]/10 text-[#C65D3B] text-[10px] font-semibold">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E6F0EF] text-[#0A3C36] text-[10px] font-semibold">
                   موثق
                 </span>
               )}
               {belowMkt && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#5B8C5A]/10 text-[#5B8C5A] text-[10px] font-semibold">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E6F0EF] text-[#0A3C36] text-[10px] font-semibold">
                   أقل من السوق
                 </span>
               )}
               {listing.isFeatured && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C65D3B]/10 text-[#C65D3B] text-[10px] font-semibold">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFF8E7] text-[#D4A017] text-[10px] font-semibold">
                   مميز
                 </span>
               )}
@@ -191,7 +191,7 @@ export function MapPreviewCard({ listing, onClose }: MapPreviewCardProps) {
         <div className="flex items-center gap-2 px-3 pb-3">
           <Link
             href={ROUTES.listing(listing.id)}
-            className="flex-1 h-10 rounded-xl bg-[#C65D3B] text-white text-sm font-semibold flex items-center justify-center hover:bg-[#B34F2F] transition-colors"
+            className="flex-1 h-10 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold flex items-center justify-center hover:bg-[#082E29] transition-colors"
             aria-label={`عرض تفاصيل ${listing.titleAr}`}
           >
             عرض التفاصيل

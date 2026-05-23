@@ -109,31 +109,31 @@ export function getMarkerColors(state: MarkerState): MarkerColors {
   switch (state) {
     case "selected":
       return {
-        bg: "#C65D3B",
+        bg: "#0A3C36",
         text: "#FFFFFF",
-        border: "#A84D2F",
-        shadow: "0 4px 16px rgba(198,93,59,0.45)",
+        border: "#082E29",
+        shadow: "0 4px 16px rgba(10,60,54,0.45)",
       };
     case "below_market":
       return {
-        bg: "#5B8C5A",
+        bg: "#0A3C36",
         text: "#FFFFFF",
-        border: "#4A7349",
-        shadow: "0 2px 8px rgba(91,140,90,0.35)",
+        border: "#082E29",
+        shadow: "0 2px 8px rgba(10,60,54,0.35)",
       };
     case "featured":
       return {
-        bg: "#FBF0EB",
-        text: "#C65D3B",
-        border: "#C65D3B",
-        shadow: "0 2px 8px rgba(198,93,59,0.22)",
+        bg: "#FFF8E7",
+        text: "#D4A017",
+        border: "#D4A017",
+        shadow: "0 2px 8px rgba(212,160,23,0.22)",
       };
     default:
       return {
         bg: "#FFFFFF",
-        text: "#1E1E1E",
-        border: "#E8DDD0",
-        shadow: "0 2px 8px rgba(30,30,30,0.14)",
+        text: "#102A43",
+        border: "#E2E8F0",
+        shadow: "0 2px 8px rgba(16,42,67,0.12)",
       };
   }
 }

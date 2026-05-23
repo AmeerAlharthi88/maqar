@@ -14,11 +14,11 @@ export default function AgencyTeamPage() {
       <div className="px-4 py-4 space-y-4" dir="rtl">
         {/* Header row */}
         <div className="flex items-center justify-between">
-          <p className="text-xs text-[#A89480]">
+          <p className="text-xs text-[#627D98]">
             {members.length} من {agency.stats.totalAgents} وسيط
           </p>
           <button
-            className="px-3 py-1.5 bg-[#C65D3B] text-white text-xs font-bold rounded-xl"
+            className="px-3 py-1.5 bg-[#0A3C36] text-white text-xs font-bold rounded-xl"
             onClick={() => alert("دعوة وسيط — قيد التطوير")}
           >
             + دعوة وسيط
@@ -40,11 +40,11 @@ export default function AgencyTeamPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-sm text-[#A89480]">لا يوجد أعضاء بعد</p>
+            <p className="text-sm text-[#627D98]">لا يوجد أعضاء بعد</p>
           </div>
         )}
 
-        <p className="text-center text-[10px] text-[#C4B5A5] pb-2">
+        <p className="text-center text-[10px] text-[#627D98] pb-2">
           إدارة الصلاحيات والدعوات مرتبطة بقاعدة البيانات في Phase 11
         </p>
       </div>

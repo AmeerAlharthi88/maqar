@@ -44,14 +44,14 @@ export default function MarketPage() {
         {/* Header */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <h1 className="text-xl font-bold text-[#1E1E1E]">
+            <h1 className="text-xl font-bold text-[#102A43]">
               سوق العقارات — سلطنة عُمان
             </h1>
-            <span className="text-[10px] text-[#A89480] bg-[#F5F0EA] border border-[#E8DDD0] px-2 py-0.5 rounded-full">
+            <span className="text-[10px] text-[#627D98] bg-[#F0F4F8] border border-[#E2E8F0] px-2 py-0.5 rounded-full">
               بيانات تقديرية
             </span>
           </div>
-          <p className="text-sm text-[#7A6B5E]">
+          <p className="text-sm text-[#627D98]">
             نظرة عامة على توجهات السوق في المحافظات والولايات
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function MarketPage() {
 
         {/* Governorate links */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             استعراض بالمحافظة
           </h2>
           <div className="space-y-2">
@@ -104,13 +104,13 @@ export default function MarketPage() {
               <Link
                 key={g.slug}
                 href={`/market/${g.slug}`}
-                className="flex items-center justify-between bg-white border border-[#F0EBE3] rounded-2xl px-4 py-3 active:bg-[#FAF7F4]"
+                className="flex items-center justify-between bg-white border border-[#E2E8F0] rounded-2xl px-4 py-3 active:bg-[#F8F9FA]"
               >
                 <div>
-                  <p className="text-sm font-semibold text-[#1E1E1E]">
+                  <p className="text-sm font-semibold text-[#102A43]">
                     {g.nameAr}
                   </p>
-                  <p className="text-xs text-[#A89480]">
+                  <p className="text-xs text-[#627D98]">
                     {toArabicNumerals(g.listingCount)} إعلان ·{" "}
                     {formatOMR(g.avgSalePrice, { arabic: true, compact: true })} متوسط
                   </p>
@@ -120,7 +120,7 @@ export default function MarketPage() {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#A89480"
+                  stroke="#627D98"
                   strokeWidth="2"
                   strokeLinecap="round"
                   className="rtl:rotate-180"
@@ -143,7 +143,7 @@ export default function MarketPage() {
           <p className="text-sm font-semibold text-[#2471A3] mb-1">
             الأدوات المالية
           </p>
-          <p className="text-xs text-[#7A6B5E] mb-3">
+          <p className="text-xs text-[#627D98] mb-3">
             احسب العائد الإيجاري، القسط الشهري، وسعر المتر لعقارك.
           </p>
           <Link

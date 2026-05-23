@@ -41,16 +41,16 @@ export function PricePerSqmCalculator() {
 
   const positionColor =
     result.position === "above"
-      ? "text-[#C65D3B]"
+      ? "text-[#C0392B]"
       : result.position === "below"
-      ? "text-[#5B8C5A]"
-      : "text-[#7A6B5E]";
+      ? "text-[#0A3C36]"
+      : "text-[#627D98]";
 
   return (
     <div className="space-y-5">
       {/* Inputs */}
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-4">
-        <h2 className="text-sm font-bold text-[#1E1E1E]">بيانات العقار</h2>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-4">
+        <h2 className="text-sm font-bold text-[#102A43]">بيانات العقار</h2>
 
         <CalculatorInput
           label="سعر العقار"
@@ -71,13 +71,13 @@ export function PricePerSqmCalculator() {
 
         {/* Area selector for comparison */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-[#1E1E1E]">
+          <label className="block text-sm font-semibold text-[#102A43]">
             مقارنة بمتوسط منطقة (اختياري)
           </label>
           <select
             value={selectedAreaId}
             onChange={(e) => setSelectedAreaId(e.target.value)}
-            className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 text-sm text-[#1E1E1E] outline-none focus:border-[#C65D3B]"
+            className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 text-sm text-[#102A43] outline-none focus:border-[#0A3C36]"
             dir="rtl"
           >
             <option value="">— اختر منطقة للمقارنة —</option>
@@ -88,7 +88,7 @@ export function PricePerSqmCalculator() {
             ))}
           </select>
           {selectedArea && (
-            <p className="text-xs text-[#7A6B5E]">
+            <p className="text-xs text-[#627D98]">
               متوسط المنطقة:{" "}
               <span className="font-semibold">
                 {toArabicNumerals(selectedArea.avgPricePerSqm)} ر.ع./م²
@@ -108,13 +108,13 @@ export function PricePerSqmCalculator() {
         />
 
         {selectedArea && result.pricePerSqm > 0 && (
-          <div className="bg-[#F5F0EA] rounded-2xl p-4 border border-[#E8DDD0]">
-            <p className="text-xs text-[#7A6B5E] mb-1">المقارنة بمتوسط {selectedArea.label}</p>
+          <div className="bg-[#F0F4F8] rounded-2xl p-4 border border-[#E2E8F0]">
+            <p className="text-xs text-[#627D98] mb-1">المقارنة بمتوسط {selectedArea.label}</p>
             <p className={`text-sm font-bold ${positionColor}`}>
               {result.positionLabel}
             </p>
             {result.comparisonPct !== undefined && (
-              <p className="text-xs text-[#A89480] mt-0.5">
+              <p className="text-xs text-[#627D98] mt-0.5">
                 متوسط المنطقة: {toArabicNumerals(selectedArea.avgPricePerSqm)} ر.ع./م²
               </p>
             )}

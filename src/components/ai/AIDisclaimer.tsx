@@ -16,7 +16,7 @@ export function AIDisclaimer({ textAr, className, variant = "default" }: AIDiscl
   const text = textAr ?? TEXTS[variant];
   return (
     <p
-      className={cn("text-[10px] text-[#A89480] leading-relaxed", className)}
+      className={cn("text-[10px] text-[#627D98] leading-relaxed", className)}
       dir="rtl"
     >
       {text}

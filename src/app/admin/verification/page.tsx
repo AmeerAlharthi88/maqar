@@ -96,7 +96,7 @@ export default function AdminVerificationPage() {
     <AdminDashboardShell titleAr="طلبات التوثيق">
       <div className="px-4 py-4 space-y-4" dir="rtl">
         <div className="flex items-center justify-between">
-          <p className="text-xs text-[#A89480]">{pending} طلب في الانتظار · {items.length} إجمالي</p>
+          <p className="text-xs text-[#627D98]">{pending} طلب في الانتظار · {items.length} إجمالي</p>
         </div>
 
         <div className="flex gap-2">
@@ -105,7 +105,7 @@ export default function AdminVerificationPage() {
             return (
               <button key={f} onClick={() => setTypeFilter(f)}
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl flex-shrink-0 transition-colors",
-                  typeFilter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                  typeFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
                 {TYPE_AR[f]} ({count})
               </button>

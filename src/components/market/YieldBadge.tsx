@@ -11,8 +11,8 @@ interface YieldBadgeProps {
 }
 
 const styleMap: Record<YieldLabel, string> = {
-  "ممتاز": "bg-[#EDF4ED] text-[#5B8C5A] border-[#5B8C5A]/20",
-  "جيد":   "bg-[#EDF4ED] text-[#5B8C5A] border-[#5B8C5A]/20",
+  "ممتاز": "bg-[#E6F0EF] text-[#0A3C36] border-[#0A3C36]/20",
+  "جيد":   "bg-[#E6F0EF] text-[#0A3C36] border-[#0A3C36]/20",
   "متوسط": "bg-[#FEF9EC] text-[#C8860A] border-[#C8860A]/20",
   "منخفض": "bg-[#FEF0F0] text-[#C0392B] border-[#C0392B]/20",
 };

@@ -92,24 +92,24 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
     <BottomSheet open={open} onClose={handleClose} title="تقديم عرض سعر">
       {step === "success" ? (
         <div className="flex flex-col items-center justify-center px-6 py-10 gap-4 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#EDF4ED] flex items-center justify-center">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2.5">
+          <div className="w-16 h-16 rounded-full bg-[#E6F0EF] flex items-center justify-center">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5">
               <path d="M20 6L9 17l-5-5" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-[#1E1E1E]">تم إرسال عرضك بنجاح</h3>
-          <p className="text-sm text-[#7A6B5E]">
+          <h3 className="text-lg font-bold text-[#102A43]">تم إرسال عرضك بنجاح</h3>
+          <p className="text-sm text-[#627D98]">
             سيراجع المعلن عرضك ويتواصل معك قريباً
           </p>
-          <div className="w-full bg-[#F5F0EA] rounded-2xl p-4 text-sm text-right" dir="rtl">
-            <p className="text-[#7A6B5E] mb-1">مبلغ العرض:</p>
-            <p className="text-xl font-bold text-[#C65D3B]">
+          <div className="w-full bg-[#E6F0EF] rounded-2xl p-4 text-sm text-right" dir="rtl">
+            <p className="text-[#627D98] mb-1">مبلغ العرض:</p>
+            <p className="text-xl font-bold text-[#0A3C36]">
               {formatOMR(numAmount, { arabic: true })}
             </p>
           </div>
           <button
             onClick={handleClose}
-            className="w-full py-3 rounded-2xl bg-[#C65D3B] text-white font-semibold text-sm"
+            className="w-full py-3 rounded-2xl bg-[#0A3C36] text-white font-semibold text-sm"
           >
             حسناً
           </button>
@@ -117,30 +117,30 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
       ) : (
         <div className="px-5 py-4 space-y-4" dir="rtl">
           {/* Price reference */}
-          <div className="bg-[#F5F0EA] rounded-xl px-4 py-3">
-            <p className="text-xs text-[#7A6B5E] mb-1">السعر المطلوب</p>
-            <p className="text-base font-bold text-[#1E1E1E]">
+          <div className="bg-[#F0F4F8] rounded-xl px-4 py-3">
+            <p className="text-xs text-[#627D98] mb-1">السعر المطلوب</p>
+            <p className="text-base font-bold text-[#102A43]">
               {formatOMR(listing.price, { arabic: true })}
             </p>
           </div>
 
           {/* Offer amount */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-[#1E1E1E]">مبلغ العرض (ر.ع)</label>
+            <label className="text-sm font-medium text-[#102A43]">مبلغ العرض (ر.ع)</label>
             <input
               type="number"
               inputMode="numeric"
               placeholder="0"
               value={offerAmount}
               onChange={(e) => setOfferAmount(e.target.value)}
-              className="w-full h-12 bg-white border border-[#E8DDD0] rounded-xl px-4 text-lg font-bold text-[#1E1E1E] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15"
+              className="w-full h-12 bg-white border border-[#E2E8F0] rounded-xl px-4 text-lg font-bold text-[#102A43] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
               dir="ltr"
             />
             {errors.offerAmount && (
               <p className="text-xs text-[#C0392B]">{errors.offerAmount}</p>
             )}
             {numAmount > 0 && (
-              <p className={`text-xs font-medium ${isBelow ? "text-[#C65D3B]" : isAbove ? "text-[#5B8C5A]" : "text-[#7A6B5E]"}`}>
+              <p className={`text-xs font-medium ${isBelow ? "text-[#C0392B]" : isAbove ? "text-[#0A3C36]" : "text-[#627D98]"}`}>
                 {isBelow
                   ? `أقل من السعر المطلوب بـ ${toArabicNumerals(Math.abs(parseFloat(diffPct)).toFixed(1))}%`
                   : isAbove
@@ -152,7 +152,7 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
 
           {/* Financing type */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-[#1E1E1E]">طريقة الدفع</label>
+            <label className="text-sm font-medium text-[#102A43]">طريقة الدفع</label>
             <div className="grid grid-cols-3 gap-2">
               {FINANCING_OPTIONS.map((opt) => (
                 <button
@@ -160,8 +160,8 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
                   onClick={() => setFinancing(opt.value)}
                   className={`py-2.5 rounded-xl text-sm font-medium border transition-all ${
                     financing === opt.value
-                      ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                      : "bg-white text-[#3D3330] border-[#E8DDD0]"
+                      ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                      : "bg-white text-[#102A43] border-[#E2E8F0]"
                   }`}
                 >
                   {opt.labelAr}
@@ -190,20 +190,20 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-[#1E1E1E]">ملاحظات (اختياري)</label>
+            <label className="text-sm font-medium text-[#102A43]">ملاحظات (اختياري)</label>
             <textarea
               placeholder="أي شروط أو تفاصيل إضافية..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
-              className="w-full bg-white border border-[#E8DDD0] rounded-xl px-3.5 py-2.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15 resize-none"
+              className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15 resize-none"
             />
           </div>
 
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="w-full py-3.5 rounded-2xl bg-[#C65D3B] text-white font-semibold text-sm disabled:opacity-60 mb-safe"
+            className="w-full py-3.5 rounded-2xl bg-[#0A3C36] text-white font-semibold text-sm disabled:bg-[#A0AEC0] disabled:cursor-not-allowed mb-safe"
           >
             {submitting ? "جاري الإرسال..." : "إرسال العرض"}
           </button>

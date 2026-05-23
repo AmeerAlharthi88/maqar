@@ -1,20 +1,33 @@
+// MaqarLogo — brand wordmark system
+// Variants: full (mark + Arabic), horizontal (mark + Arabic + MAQAR), stacked (mark above text),
+//           mark-only, white-on-emerald (inverse card)
+// Sizes: xs | sm | md | lg
+// Colors: brand | white | dark
+
+import { MaqarLogoMark } from "./MaqarLogoMark";
+
+type LogoVariant = "full" | "horizontal" | "stacked" | "mark-only" | "white-on-emerald";
+type LogoSize   = "xs" | "sm" | "md" | "lg";
+type LogoColor  = "brand" | "white" | "dark";
+
 interface MaqarLogoProps {
-  variant?: "full" | "wordmark";
-  size?: "sm" | "md" | "lg";
-  color?: "brand" | "white" | "dark";
+  variant?: LogoVariant;
+  size?: LogoSize;
+  color?: LogoColor;
   className?: string;
 }
 
-const sizes = {
-  sm: { mark: 28, font: "text-lg" },
-  md: { mark: 36, font: "text-2xl" },
-  lg: { mark: 48, font: "text-3xl" },
+const sizes: Record<LogoSize, { mark: number; arAr: string; enAr: string; gap: string }> = {
+  xs: { mark: 22, arAr: "text-sm",   enAr: "text-[9px]",  gap: "gap-1.5" },
+  sm: { mark: 28, arAr: "text-lg",   enAr: "text-[10px]", gap: "gap-2"   },
+  md: { mark: 36, arAr: "text-2xl",  enAr: "text-xs",     gap: "gap-2.5" },
+  lg: { mark: 48, arAr: "text-3xl",  enAr: "text-sm",     gap: "gap-3"   },
 };
 
-const colors = {
-  brand: { mark: "#0A3C36", text: "#0A3C36", dot: "#E5BA73" },
-  white: { mark: "#FFFFFF", text: "#FFFFFF", dot: "#E5BA73" },
-  dark:  { mark: "#102A43", text: "#102A43", dot: "#E5BA73" },
+const colors: Record<LogoColor, { primary: string; accent: string; text: string; sub: string }> = {
+  brand: { primary: "#0A3C36", accent: "#E5BA73", text: "#0A3C36", sub: "#627D98" },
+  white: { primary: "#FFFFFF", accent: "#E5BA73", text: "#FFFFFF", sub: "rgba(255,255,255,0.7)" },
+  dark:  { primary: "#102A43", accent: "#E5BA73", text: "#102A43", sub: "#627D98" },
 };
 
 export function MaqarLogo({
@@ -26,51 +39,86 @@ export function MaqarLogo({
   const s = sizes[size];
   const c = colors[color];
 
-  return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
-      <MaqarIconSVG size={s.mark} primary={c.mark} accent={c.dot} />
-      {variant === "full" && (
-        <span
-          className={`${s.font} font-bold tracking-tight leading-none`}
-          style={{ color: c.text, fontFamily: "var(--font-arabic), sans-serif" }}
-        >
-          مقر
-        </span>
-      )}
-    </div>
-  );
-}
+  // ── white-on-emerald: pill/card with emerald bg ─────────────────────────────
+  if (variant === "white-on-emerald") {
+    return (
+      <div
+        className={`inline-flex items-center ${s.gap} px-3 py-2 rounded-2xl ${className}`}
+        style={{ background: "#0A3C36" }}
+      >
+        <MaqarLogoMark size={s.mark} primary="#FFFFFF" accent="#E5BA73" />
+        <div className="flex flex-col leading-none" style={{ fontFamily: "var(--font-arabic), sans-serif" }}>
+          <span className={`${s.arAr} font-bold tracking-tight`} style={{ color: "#FFFFFF" }}>
+            مقر
+          </span>
+          {size !== "xs" && (
+            <span className={`${s.enAr} font-semibold tracking-widest`} style={{ color: "#E5BA73" }}>
+              MAQAR
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-interface MaqarIconSVGProps {
-  size: number;
-  primary: string;
-  accent: string;
-}
-
-function MaqarIconSVG({ size, primary, accent }: MaqarIconSVGProps) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 48 48"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      {/* House outline — 2px stroke, premium line style */}
-      <path
-        d="M24 8L6 23.5h5V41h9V29h8v12h9V23.5h5L24 8z"
-        stroke={primary}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        fill={primary}
-        fillOpacity="0.06"
+  // ── mark-only ───────────────────────────────────────────────────────────────
+  if (variant === "mark-only") {
+    return (
+      <MaqarLogoMark
+        size={s.mark}
+        primary={c.primary}
+        accent={c.accent}
+        className={className}
       />
-      {/* Door */}
-      <rect x="19" y="31" width="10" height="10" rx="1.5"
-        stroke={primary} strokeWidth="1.5" fill={primary} fillOpacity="0.12" />
-      {/* Champagne Gold accent dot */}
-      <circle cx="37" cy="11" r="4.5" fill={accent} />
-    </svg>
+    );
+  }
+
+  // ── stacked: mark above text (centered) ─────────────────────────────────────
+  if (variant === "stacked") {
+    return (
+      <div className={`flex flex-col items-center gap-1 ${className}`}>
+        <MaqarLogoMark size={s.mark} primary={c.primary} accent={c.accent} />
+        <div className="flex flex-col items-center leading-none" style={{ fontFamily: "var(--font-arabic), sans-serif" }}>
+          <span className={`${s.arAr} font-bold tracking-tight`} style={{ color: c.text }}>
+            مقر
+          </span>
+          {size !== "xs" && (
+            <span className={`${s.enAr} font-semibold tracking-widest mt-0.5`} style={{ color: c.sub }}>
+              MAQAR
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ── horizontal: mark + Arabic + MAQAR tagline ───────────────────────────────
+  if (variant === "horizontal") {
+    return (
+      <div className={`inline-flex items-center ${s.gap} ${className}`}>
+        <MaqarLogoMark size={s.mark} primary={c.primary} accent={c.accent} />
+        <div className="flex flex-col leading-none" style={{ fontFamily: "var(--font-arabic), sans-serif" }}>
+          <span className={`${s.arAr} font-bold tracking-tight`} style={{ color: c.text }}>
+            مقر
+          </span>
+          <span className={`${s.enAr} font-semibold tracking-widest mt-0.5`} style={{ color: c.sub }}>
+            MAQAR
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // ── full (default): mark + Arabic wordmark ──────────────────────────────────
+  return (
+    <div className={`inline-flex items-center ${s.gap} ${className}`}>
+      <MaqarLogoMark size={s.mark} primary={c.primary} accent={c.accent} />
+      <span
+        className={`${s.arAr} font-bold tracking-tight leading-none`}
+        style={{ color: c.text, fontFamily: "var(--font-arabic), sans-serif" }}
+      >
+        مقر
+      </span>
+    </div>
   );
 }

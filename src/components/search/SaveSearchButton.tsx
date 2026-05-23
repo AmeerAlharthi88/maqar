@@ -43,7 +43,7 @@ export function SaveSearchButton({ className }: SaveSearchButtonProps) {
           "flex items-center gap-2 px-3 h-9 rounded-xl text-xs font-semibold",
           "border border-[#E2E8F0] bg-white text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36]",
           "transition-colors whitespace-nowrap",
-          saved && "bg-[#EAF4EB] border-[#5B8C5A] text-[#5B8C5A]",
+          saved && "bg-[#E6F0EF] border-[#0A3C36] text-[#0A3C36]",
           className
         )}
         aria-label="حفظ البحث الحالي"

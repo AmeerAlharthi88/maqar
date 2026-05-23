@@ -22,19 +22,19 @@ export function UpgradePrompt({
     return (
       <div
         className={cn(
-          "flex items-center justify-between gap-3 bg-[#FBF0EB] border border-[#C65D3B]/20 rounded-2xl px-4 py-3",
+          "flex items-center justify-between gap-3 bg-[#E6F0EF] border border-[#0A3C36]/20 rounded-2xl px-4 py-3",
           className
         )}
         role="alert"
         dir="rtl"
       >
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-bold text-[#C65D3B]">{titleAr}</p>
-          <p className="text-xs text-[#7A6B5E] mt-0.5 leading-relaxed">{messageAr}</p>
+          <p className="text-xs font-bold text-[#0A3C36]">{titleAr}</p>
+          <p className="text-xs text-[#627D98] mt-0.5 leading-relaxed">{messageAr}</p>
         </div>
         <Link
           href="/pricing"
-          className="flex-shrink-0 px-3 py-2 bg-[#C65D3B] text-white text-xs font-bold rounded-xl whitespace-nowrap"
+          className="flex-shrink-0 px-3 py-2 bg-[#0A3C36] text-white text-xs font-bold rounded-xl whitespace-nowrap"
           aria-label={ctaAr}
         >
           {ctaAr}
@@ -47,17 +47,17 @@ export function UpgradePrompt({
   return (
     <div
       className={cn(
-        "bg-[#FBF0EB] border border-[#C65D3B]/20 rounded-2xl p-4",
+        "bg-[#E6F0EF] border border-[#0A3C36]/20 rounded-2xl p-4",
         className
       )}
       role="alert"
       dir="rtl"
     >
-      <p className="text-sm font-bold text-[#C65D3B] mb-1">{titleAr}</p>
-      <p className="text-xs text-[#7A6B5E] leading-relaxed mb-3">{messageAr}</p>
+      <p className="text-sm font-bold text-[#0A3C36] mb-1">{titleAr}</p>
+      <p className="text-xs text-[#627D98] leading-relaxed mb-3">{messageAr}</p>
       <Link
         href="/pricing"
-        className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#C65D3B] text-white text-sm font-bold rounded-xl"
+        className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0A3C36] text-white text-sm font-bold rounded-xl"
         aria-label={ctaAr}
       >
         {ctaAr}

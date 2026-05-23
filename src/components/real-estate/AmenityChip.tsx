@@ -12,8 +12,8 @@ export function AmenityChip({ nameAr, className, variant = "default" }: AmenityC
       className={cn(
         "inline-flex items-center text-xs px-2.5 py-1 rounded-lg font-medium whitespace-nowrap",
         variant === "active"
-          ? "bg-[#FBF0EB] text-[#C65D3B] border border-[#C65D3B]/20"
-          : "bg-[#F5F0EA] text-[#7A6B5E]",
+          ? "bg-[#E6F0EF] text-[#0A3C36] border border-[#0A3C36]/20"
+          : "bg-[#F0F4F8] text-[#627D98]",
         className
       )}
     >
@@ -38,7 +38,7 @@ export function AmenityList({ amenities, max = 6, className }: AmenityListProps)
         <AmenityChip key={a} nameAr={a} />
       ))}
       {remaining > 0 && (
-        <span className="inline-flex items-center text-xs px-2.5 py-1 rounded-lg bg-[#F5F0EA] text-[#A89480]">
+        <span className="inline-flex items-center text-xs px-2.5 py-1 rounded-lg bg-[#F0F4F8] text-[#627D98]">
           +{remaining}
         </span>
       )}

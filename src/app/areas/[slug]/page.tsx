@@ -20,7 +20,6 @@ import {
   AREA_GUIDE_MAP,
   AREA_GUIDES,
   AREA_TAG_AR,
-  SUITABLE_FOR_AR,
 } from "@/mock/areas";
 import { MOCK_LISTINGS } from "@/mock/listings";
 
@@ -54,28 +53,28 @@ function StatCard({
   return (
     <div
       className={`rounded-2xl px-3 py-3 text-center ${
-        highlight ? "bg-[#FBF0EB]" : "bg-[#FAF7F4]"
+        highlight ? "bg-[#E6F0EF]" : "bg-[#F8F9FA]"
       }`}
     >
-      <p className={`text-base font-bold ${highlight ? "text-[#C65D3B]" : "text-[#1E1E1E]"}`}>
+      <p className={`text-base font-bold ${highlight ? "text-[#0A3C36]" : "text-[#102A43]"}`}>
         {value}
       </p>
-      <p className="text-[10px] text-[#A89480]">{label}</p>
-      {sub && <p className="text-[9px] text-[#A89480] mt-0.5">{sub}</p>}
+      <p className="text-[10px] text-[#627D98]">{label}</p>
+      {sub && <p className="text-[9px] text-[#627D98] mt-0.5">{sub}</p>}
     </div>
   );
 }
 
 function DemandBar({ score }: { score: number }) {
   const color =
-    score >= 85 ? "bg-[#5B8C5A]" : score >= 70 ? "bg-[#C8860A]" : "bg-[#A89480]";
+    score >= 85 ? "bg-[#0A3C36]" : score >= 70 ? "bg-[#C8860A]" : "bg-[#627D98]";
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-[11px]">
-        <span className="text-[#7A6B5E]">مؤشر الطلب</span>
-        <span className="font-semibold text-[#1E1E1E]">{score}/100</span>
+        <span className="text-[#627D98]">مؤشر الطلب</span>
+        <span className="font-semibold text-[#102A43]">{score}/100</span>
       </div>
-      <div className="h-2 bg-[#F0EBE3] rounded-full overflow-hidden">
+      <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
         <div
           className={`h-full ${color} rounded-full`}
           style={{ width: `${score}%` }}
@@ -153,8 +152,8 @@ export default async function AreaDetailPage({ params }: Props) {
         <div>
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h1 className="text-xl font-bold text-[#1E1E1E]">{area.nameAr}</h1>
-              <p className="text-sm text-[#7A6B5E] mt-0.5">
+              <h1 className="text-xl font-bold text-[#102A43]">{area.nameAr}</h1>
+              <p className="text-sm text-[#627D98] mt-0.5">
                 {area.wilayatAr}، {area.governorateAr}
               </p>
             </div>
@@ -162,28 +161,28 @@ export default async function AreaDetailPage({ params }: Props) {
               <span
                 className={`text-[10px] font-bold px-2 py-1 rounded-full ${
                   area.demandScore >= 85
-                    ? "bg-[#EDF4ED] text-[#5B8C5A]"
+                    ? "bg-[#E6F0EF] text-[#0A3C36]"
                     : "bg-[#FEF9EC] text-[#C8860A]"
                 }`}
               >
                 طلب {area.demandScore}٪
               </span>
-              <span className="text-[10px] text-[#A89480]">{area.listingCount} إعلان</span>
+              <span className="text-[10px] text-[#627D98]">{area.listingCount} إعلان</span>
             </div>
           </div>
         </div>
 
         {/* Overview */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-2">نظرة عامة</h2>
-          <p className="text-sm text-[#7A6B5E] leading-relaxed">{area.overviewAr}</p>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <h2 className="text-sm font-bold text-[#102A43] mb-2">نظرة عامة</h2>
+          <p className="text-sm text-[#627D98] leading-relaxed">{area.overviewAr}</p>
         </div>
 
         {/* Market stats grid */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">
             إحصاءات السوق
-            <span className="text-[10px] font-normal text-[#A89480] mr-2">(تقديرية)</span>
+            <span className="text-[10px] font-normal text-[#627D98] mr-2">(تقديرية)</span>
           </h2>
           <div className="grid grid-cols-2 gap-2">
             <StatCard
@@ -206,13 +205,13 @@ export default async function AreaDetailPage({ params }: Props) {
             />
           </div>
 
-          <div className="mt-3 bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-3">
+          <div className="mt-3 bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-3">
             <DemandBar score={area.demandScore} />
             <div className="flex justify-between text-[11px]">
-              <span className="text-[#7A6B5E]">تغير السعر (سنوي)</span>
+              <span className="text-[#627D98]">تغير السعر (سنوي)</span>
               <span
                 className={`font-bold ${
-                  area.priceChangePct > 0 ? "text-[#5B8C5A]" : "text-[#C65D3B]"
+                  area.priceChangePct > 0 ? "text-[#0A3C36]" : "text-[#C0392B]"
                 }`}
               >
                 {priceChangeLabel}
@@ -222,14 +221,14 @@ export default async function AreaDetailPage({ params }: Props) {
         </div>
 
         {/* Popular property types */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">أنواع العقارات الشائعة</h2>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">أنواع العقارات الشائعة</h2>
           <div className="flex flex-wrap gap-2">
             {area.popularPropertyTypes.map((type) => (
               <Link
                 key={type}
                 href={`/search?area=${area.slug}&type=${encodeURIComponent(type)}`}
-                className="px-3 py-1.5 bg-[#F5F0EA] text-xs text-[#1E1E1E] rounded-xl font-medium hover:bg-[#F0EBE3] transition-colors"
+                className="px-3 py-1.5 bg-[#F0F4F8] text-xs text-[#102A43] rounded-xl font-medium hover:bg-[#E2E8F0] transition-colors"
               >
                 {type}
               </Link>
@@ -238,13 +237,13 @@ export default async function AreaDetailPage({ params }: Props) {
         </div>
 
         {/* Suitable for */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">مناسب لـ</h2>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">مناسب لـ</h2>
           <div className="flex flex-wrap gap-2">
             {area.suitableForAr.map((who) => (
               <span
                 key={who}
-                className="px-3 py-1.5 bg-[#EDF4ED] text-xs text-[#5B8C5A] rounded-xl font-medium"
+                className="px-3 py-1.5 bg-[#E6F0EF] text-xs text-[#0A3C36] rounded-xl font-medium"
               >
                 {who}
               </span>
@@ -253,19 +252,19 @@ export default async function AreaDetailPage({ params }: Props) {
         </div>
 
         {/* Lifestyle */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-2">نمط الحياة</h2>
-          <p className="text-sm text-[#7A6B5E] leading-relaxed">{area.lifestyleAr}</p>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <h2 className="text-sm font-bold text-[#102A43] mb-2">نمط الحياة</h2>
+          <p className="text-sm text-[#627D98] leading-relaxed">{area.lifestyleAr}</p>
         </div>
 
         {/* Nearby services */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">الخدمات المجاورة</h2>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">الخدمات المجاورة</h2>
           <div className="grid grid-cols-2 gap-2">
             {area.nearbyServicesAr.map((service) => (
               <div key={service} className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#C65D3B] flex-shrink-0" aria-hidden="true" />
-                <span className="text-xs text-[#7A6B5E]">{service}</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0A3C36] flex-shrink-0" aria-hidden="true" />
+                <span className="text-xs text-[#627D98]">{service}</span>
               </div>
             ))}
           </div>
@@ -276,7 +275,7 @@ export default async function AreaDetailPage({ params }: Props) {
           {area.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[11px] px-3 py-1 bg-[#F5F0EA] text-[#7A6B5E] rounded-full"
+              className="text-[11px] px-3 py-1 bg-[#F0F4F8] text-[#627D98] rounded-full"
             >
               {AREA_TAG_AR[tag]}
             </span>
@@ -286,7 +285,7 @@ export default async function AreaDetailPage({ params }: Props) {
         {/* Browse listings CTA */}
         <Link
           href={`/search?area=${area.slug}`}
-          className="block w-full py-3.5 rounded-2xl bg-[#C65D3B] text-white text-sm font-bold text-center min-h-[52px] flex items-center justify-center"
+          className="block w-full py-3.5 rounded-2xl bg-[#0A3C36] text-white text-sm font-bold text-center min-h-[52px] flex items-center justify-center"
           aria-label={`تصفح العقارات في ${area.nameAr}`}
         >
           تصفح العقارات في {area.nameAr}
@@ -295,7 +294,7 @@ export default async function AreaDetailPage({ params }: Props) {
         {/* Featured listings */}
         {areaListings.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">
               عقارات متاحة في {area.nameAr}
             </h2>
             <div className="space-y-3">
@@ -303,10 +302,10 @@ export default async function AreaDetailPage({ params }: Props) {
                 <Link
                   key={listing.id}
                   href={`/listing/${listing.id}`}
-                  className="flex items-center gap-3 bg-white rounded-xl border border-[#F0EBE3] px-3 py-3"
+                  className="flex items-center gap-3 bg-white rounded-xl border border-[#E2E8F0] px-3 py-3"
                   aria-label={listing.titleAr}
                 >
-                  <div className="w-14 h-14 rounded-xl bg-[#F0EBE3] flex-shrink-0 overflow-hidden">
+                  <div className="w-14 h-14 rounded-xl bg-[#E2E8F0] flex-shrink-0 overflow-hidden">
                     {listing.coverImage && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -318,10 +317,10 @@ export default async function AreaDetailPage({ params }: Props) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-[#1E1E1E] truncate">
+                    <p className="text-xs font-semibold text-[#102A43] truncate">
                       {listing.titleAr}
                     </p>
-                    <p className="text-[10px] text-[#A89480]">
+                    <p className="text-[10px] text-[#627D98]">
                       {listing.purpose === "sale" ? "للبيع" : "للإيجار"} ·{" "}
                       {listing.price.toLocaleString("ar")} ر.ع.
                     </p>
@@ -335,13 +334,13 @@ export default async function AreaDetailPage({ params }: Props) {
         {/* Related areas */}
         {relatedAreas.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">مناطق مشابهة</h2>
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">مناطق مشابهة</h2>
             <div className="flex gap-2 flex-wrap">
               {relatedAreas.map((related) => (
                 <Link
                   key={related.slug}
                   href={`/areas/${related.slug}`}
-                  className="px-3 py-2 bg-white border border-[#F0EBE3] rounded-xl text-xs text-[#1E1E1E] font-medium hover:border-[#C65D3B]/30 transition-colors"
+                  className="px-3 py-2 bg-white border border-[#E2E8F0] rounded-xl text-xs text-[#102A43] font-medium hover:border-[#0A3C36]/30 transition-colors"
                 >
                   {related.nameAr}
                 </Link>
@@ -354,8 +353,8 @@ export default async function AreaDetailPage({ params }: Props) {
         <TrustBlock variant="market-estimates" />
 
         {/* Market disclaimer */}
-        <div className="bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3">
-          <p className="text-[11px] text-[#A89480] leading-relaxed">
+        <div className="bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3">
+          <p className="text-[11px] text-[#627D98] leading-relaxed">
             البيانات المعروضة هي تقديرات إرشادية من إعلانات مقر وليست تقييمات رسمية معتمدة. للحصول على تقييم دقيق يُرجى التواصل مع وسيط مرخص.
           </p>
         </div>

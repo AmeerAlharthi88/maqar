@@ -23,10 +23,10 @@ export function Checkbox({ label, helperText, className, id, ...props }: Checkbo
         />
         <div
           className={cn(
-            "w-5 h-5 rounded-md border-2 border-[#E8DDD0] bg-white transition-all duration-150",
-            "peer-checked:bg-[#C65D3B] peer-checked:border-[#C65D3B]",
-            "peer-focus-visible:ring-2 peer-focus-visible:ring-[#C65D3B]/30",
-            "group-hover:border-[#C65D3B]",
+            "w-5 h-5 rounded-md border-2 border-[#E2E8F0] bg-white transition-all duration-150",
+            "peer-checked:bg-[#0A3C36] peer-checked:border-[#0A3C36]",
+            "peer-focus-visible:ring-2 peer-focus-visible:ring-[#0A3C36]/30",
+            "group-hover:border-[#0A3C36]",
             className
           )}
         />
@@ -42,8 +42,8 @@ export function Checkbox({ label, helperText, className, id, ...props }: Checkbo
       </div>
       {(label ?? helperText) && (
         <div className="flex flex-col gap-0.5">
-          {label && <span className="text-sm font-medium text-[#1E1E1E]">{label}</span>}
-          {helperText && <span className="text-xs text-[#7A6B5E]">{helperText}</span>}
+          {label && <span className="text-sm font-medium text-[#102A43]">{label}</span>}
+          {helperText && <span className="text-xs text-[#627D98]">{helperText}</span>}
         </div>
       )}
     </label>

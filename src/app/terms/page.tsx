@@ -19,8 +19,8 @@ const DISCLAIMER =
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">{title}</h2>
-      <div className="text-sm text-[#7A6B5E] leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">{title}</h2>
+      <div className="text-sm text-[#627D98] leading-relaxed space-y-2">{children}</div>
     </div>
   );
 }
@@ -44,8 +44,8 @@ export default function TermsPage() {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold text-[#1E1E1E] mb-1">الشروط والأحكام</h1>
-          <p className="text-xs text-[#A89480]">بالاستخدام فأنت تقبل هذه الشروط</p>
+          <h1 className="text-xl font-bold text-[#102A43] mb-1">الشروط والأحكام</h1>
+          <p className="text-xs text-[#627D98]">بالاستخدام فأنت تقبل هذه الشروط</p>
         </div>
 
         <Section title="١. القبول والاستخدام">
@@ -59,10 +59,10 @@ export default function TermsPage() {
 
         <Section title="٢. مسؤولية المعلن">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>أنت مسؤول عن دقة جميع المعلومات التي تنشرها</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>يُحظر نشر إعلانات وهمية أو مضللة أو مكررة بقصد التضليل</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>يجب أن تكون مخولاً قانونياً لبيع أو تأجير العقار المعلن عنه</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>الأسعار المعلنة يجب أن تعكس القيمة الفعلية المطلوبة</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>أنت مسؤول عن دقة جميع المعلومات التي تنشرها</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>يُحظر نشر إعلانات وهمية أو مضللة أو مكررة بقصد التضليل</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>يجب أن تكون مخولاً قانونياً لبيع أو تأجير العقار المعلن عنه</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>الأسعار المعلنة يجب أن تعكس القيمة الفعلية المطلوبة</span></li>
           </ul>
         </Section>
 
@@ -86,10 +86,10 @@ export default function TermsPage() {
 
         <Section title="٦. المحتوى المحظور">
           <ul className="space-y-1 list-none">
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>إعلانات وهمية أو مكررة بقصد التلاعب</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>عقارات تنتهك القوانين العُمانية للتملك الأجنبي</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>أسعار مشبوهة تخالف ضوابط مكافحة غسيل الأموال</span></li>
-            <li className="flex items-start gap-2"><span className="text-[#C65D3B]">—</span><span>صور أو محتوى غير لائق أو مضلل</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>إعلانات وهمية أو مكررة بقصد التلاعب</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>عقارات تنتهك القوانين العُمانية للتملك الأجنبي</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>أسعار مشبوهة تخالف ضوابط مكافحة غسيل الأموال</span></li>
+            <li className="flex items-start gap-2"><span className="text-[#627D98]">—</span><span>صور أو محتوى غير لائق أو مضلل</span></li>
           </ul>
         </Section>
 
@@ -113,12 +113,12 @@ export default function TermsPage() {
 
         <Section title="١٠. التواصل">
           <p>
-            للاستفسارات القانونية: <a href="mailto:legal@maqar.om" className="text-[#C65D3B] underline underline-offset-2">legal@maqar.om</a>
+            للاستفسارات القانونية: <a href="mailto:legal@maqar.om" className="text-[#0A3C36] underline underline-offset-2">legal@maqar.om</a>
           </p>
         </Section>
 
-        <div className="bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3">
-          <p className="text-[11px] text-[#A89480] leading-relaxed">{DISCLAIMER}</p>
+        <div className="bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3">
+          <p className="text-[11px] text-[#627D98] leading-relaxed">{DISCLAIMER}</p>
         </div>
       </main>
     </AppShell>

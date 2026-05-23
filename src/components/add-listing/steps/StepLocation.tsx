@@ -31,7 +31,7 @@ function SelectField({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-[#1E1E1E]">
+      <label className="text-sm font-medium text-[#102A43]">
         {label}
         {required && <span className="text-[#C0392B] ms-1">*</span>}
       </label>
@@ -40,10 +40,10 @@ function SelectField({
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         className={cn(
-          "w-full h-11 bg-white border rounded-xl px-3.5 text-[#1E1E1E] outline-none appearance-none",
-          "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
-          disabled ? "opacity-40 cursor-not-allowed bg-[#F5F0EA]" : "",
-          error ? "border-[#C0392B]" : "border-[#E8DDD0]"
+          "w-full h-11 bg-white border rounded-xl px-3.5 text-[#102A43] outline-none appearance-none",
+          "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+          disabled ? "opacity-40 cursor-not-allowed bg-[#F0F4F8]" : "",
+          error ? "border-[#C0392B]" : "border-[#E2E8F0]"
         )}
         dir="rtl"
       >
@@ -72,16 +72,16 @@ function TextInput({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-medium text-[#1E1E1E]">{label}</label>
+      <label className="text-sm font-medium text-[#102A43]">{label}</label>
       <input
         type="text"
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         className={cn(
-          "w-full h-11 bg-white border rounded-xl px-3.5 text-[#1E1E1E] placeholder:text-[#A89480] outline-none",
-          "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
-          error ? "border-[#C0392B]" : "border-[#E8DDD0]"
+          "w-full h-11 bg-white border rounded-xl px-3.5 text-[#102A43] placeholder:text-[#627D98] outline-none",
+          "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+          error ? "border-[#C0392B]" : "border-[#E2E8F0]"
         )}
         dir="rtl"
       />
@@ -141,7 +141,7 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
 
   return (
     <div className="px-4 py-6 space-y-4" dir="rtl">
-      <p className="text-sm text-[#7A6B5E] leading-relaxed">
+      <p className="text-sm text-[#627D98] leading-relaxed">
         حدد موقع عقارك بدقة. كلما كانت المعلومات أكثر تفصيلاً، زاد اهتمام المشترين.
       </p>
 
@@ -196,31 +196,31 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
 
       {/* Location notes */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-[#1E1E1E]">ملاحظات الموقع (اختياري)</label>
+        <label className="text-sm font-medium text-[#102A43]">ملاحظات الموقع (اختياري)</label>
         <textarea
           value={draft.locationNotes}
           placeholder="مثال: بجانب مسجد X، أمام مدرسة Y..."
           onChange={(e) => onChange({ locationNotes: e.target.value })}
           rows={2}
-          className="w-full bg-white border border-[#E8DDD0] rounded-xl px-3.5 py-2.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15 resize-none"
+          className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15 resize-none"
         />
       </div>
 
       {/* Hide exact location toggle */}
       <button
         onClick={() => onChange({ hideExactLocation: !draft.hideExactLocation })}
-        className="w-full flex items-center justify-between py-3 px-4 bg-white rounded-2xl border border-[#F0EBE3]"
+        className="w-full flex items-center justify-between py-3 px-4 bg-white rounded-2xl border border-[#E2E8F0]"
         role="switch"
         aria-checked={draft.hideExactLocation}
       >
         <div className="text-right">
-          <p className="text-sm font-medium text-[#1E1E1E]">إخفاء الموقع الدقيق</p>
-          <p className="text-xs text-[#A89480]">يُظهر الموقع التقريبي فقط على الخريطة</p>
+          <p className="text-sm font-medium text-[#102A43]">إخفاء الموقع الدقيق</p>
+          <p className="text-xs text-[#627D98]">يُظهر الموقع التقريبي فقط على الخريطة</p>
         </div>
         <div
           className={cn(
             "w-11 h-6 rounded-full transition-all flex-shrink-0 ms-3 relative",
-            draft.hideExactLocation ? "bg-[#C65D3B]" : "bg-[#E8DDD0]"
+            draft.hideExactLocation ? "bg-[#0A3C36]" : "bg-[#E2E8F0]"
           )}
         >
           <div
@@ -233,13 +233,13 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
       </button>
 
       {/* Map pin placeholder */}
-      <div className="bg-[#F5F0EA] rounded-2xl border border-dashed border-[#E8DDD0] px-4 py-5 text-center">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="1.5" className="mx-auto mb-2">
+      <div className="bg-[#F0F4F8] rounded-2xl border border-dashed border-[#E2E8F0] px-4 py-5 text-center">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="1.5" className="mx-auto mb-2">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
           <circle cx="12" cy="10" r="3" />
         </svg>
-        <p className="text-sm font-medium text-[#7A6B5E] mb-1">تحديد الموقع على الخريطة</p>
-        <p className="text-xs text-[#A89480]">
+        <p className="text-sm font-medium text-[#627D98] mb-1">تحديد الموقع على الخريطة</p>
+        <p className="text-xs text-[#627D98]">
           سيتم توفير رابط الموقع التفاعلي في التحديث القادم
         </p>
       </div>
