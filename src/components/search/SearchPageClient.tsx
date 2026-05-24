@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
 import { filterListings, sortListings } from "@/lib/helpers/listing-filters";
@@ -41,21 +41,72 @@ const ALLOW_MOCK_FALLBACK: boolean =
 type DisplayMode = "grid" | "list";
 
 export function SearchPageClient() {
-  const { filters, activeFilterCount, setFilter } = useSearchStore();
+  const { filters, activeFilterCount, setFilters } = useSearchStore();
   const { locale } = useLanguageStore();
   const isAr = locale === "ar";
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
 
-  // Sync ?propertyType URL param to filter store on mount.
-  // Handles: direct links, page refresh, and chip-driven navigation from home.
+  // ── Phase 1: Restore filters from URL on mount ───────────────────────────────
+  // Handles: direct links, page refresh, chip-driven navigation from home.
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
+    const patch: Parameters<typeof setFilters>[0] = {};
+
+    const purpose = searchParams.get("purpose");
+    if (purpose === "sale" || purpose === "rent") patch.purpose = purpose;
+
     const pt = searchParams.get("propertyType");
-    if (pt) {
-      setFilter("propertyTypes", [pt]);
-    }
+    if (pt) patch.propertyTypes = [pt];
+
+    const gov = searchParams.get("governorate");
+    if (gov) patch.governorateId = gov;
+
+    const wil = searchParams.get("wilayat");
+    if (wil) patch.wilayatId = wil;
+
+    const area = searchParams.get("area");
+    if (area) patch.areaId = area;
+
+    const minPrice = searchParams.get("minPrice");
+    if (minPrice) patch.minPrice = Number(minPrice);
+
+    const maxPrice = searchParams.get("maxPrice");
+    if (maxPrice) patch.maxPrice = Number(maxPrice);
+
+    const beds = searchParams.get("bedrooms");
+    if (beds) patch.minBeds = Number(beds);
+
+    const baths = searchParams.get("bathrooms");
+    if (baths) patch.minBaths = Number(baths);
+
+    if (Object.keys(patch).length > 0) setFilters(patch);
   }, []); // run once on mount only
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  // ── Phase 2: Write filters → URL whenever they change (skip first render) ────
+  const isFirstRender = useRef(true);
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const params = new URLSearchParams();
+    if (filters.purpose !== "all")         params.set("purpose",     filters.purpose);
+    if (filters.propertyTypes.length > 0)  params.set("propertyType", filters.propertyTypes[0]);
+    if (filters.governorateId)             params.set("governorate",  filters.governorateId);
+    if (filters.wilayatId)                 params.set("wilayat",      filters.wilayatId);
+    if (filters.areaId)                    params.set("area",         filters.areaId);
+    if (filters.minPrice !== null)         params.set("minPrice",     String(filters.minPrice));
+    if (filters.maxPrice !== null)         params.set("maxPrice",     String(filters.maxPrice));
+    if (filters.minBeds > 0)              params.set("bedrooms",     String(filters.minBeds));
+    if (filters.minBaths > 0)             params.set("bathrooms",    String(filters.minBaths));
+
+    const qs = params.toString();
+    router.replace(qs ? `/search?${qs}` : "/search", { scroll: false });
+  }, [filters]);
   /* eslint-enable react-hooks/exhaustive-deps */
   const [displayMode, setDisplayMode] = useState<DisplayMode>("grid");
   const [isLoading, setIsLoading] = useState(false);

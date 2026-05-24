@@ -112,7 +112,6 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
       maxArea: null,
       furnishing: [] as string[],
       isVerified: null,
-      directOwner: null,
       isFreehold: null,
       hasMajlis: null,
       hasMaidRoom: null,

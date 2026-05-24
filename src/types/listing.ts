@@ -64,6 +64,10 @@ export interface Listing {
   isVerified: boolean;
   isFeatured: boolean;
   isNew: boolean;
+  // Oman-specific boolean attributes (optional for mock compatibility)
+  isFreehold?: boolean;
+  isExpatAllowed?: boolean;
+  isFamilyOnly?: boolean;
   qualityScore: number;    // 1-100
   roiEstimate?: number;    // % annual for investment
   viewCount: number;
