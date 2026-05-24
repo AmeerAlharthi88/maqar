@@ -112,7 +112,6 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
       maxArea: null,
       furnishing: [] as string[],
       isVerified: null,
-      directOwner: null,
       isFreehold: null,
       hasMajlis: null,
       hasMaidRoom: null,
@@ -122,6 +121,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
       hasMountainView: null,
       expatAllowed: null,
       familyOnly: null,
+      directOwner: null,
       amenities: [] as string[],
     };
     setDraft((d) => ({ ...d, ...reset }));
@@ -328,6 +328,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
             <BoolChip label="تملك حر" active={!!draft.isFreehold} onClick={() => update("isFreehold", draft.isFreehold ? null : true)} />
             <BoolChip label="متاح للوافدين" active={!!draft.expatAllowed} onClick={() => update("expatAllowed", draft.expatAllowed ? null : true)} />
             <BoolChip label="للعائلات فقط" active={!!draft.familyOnly} onClick={() => update("familyOnly", draft.familyOnly ? null : true)} />
+            <BoolChip label="مالك مباشر" active={!!draft.directOwner} onClick={() => update("directOwner", draft.directOwner ? null : true)} />
           </div>
         </FilterSection>
       </div>

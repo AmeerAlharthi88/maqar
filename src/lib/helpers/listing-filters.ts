@@ -83,6 +83,11 @@ export function filterListings(
     if (filters.hasDriverRoom && !l.amenities.includes("غرفة سائق")) return false;
     if (filters.hasParking && !(l.specs.parkingSpots && l.specs.parkingSpots > 0))
       return false;
+    // Oman-specific boolean filters — only applied when the listing declares the field
+    if (filters.isFreehold === true && l.isFreehold !== true) return false;
+    if (filters.expatAllowed === true && l.isExpatAllowed !== true) return false;
+    if (filters.familyOnly === true && l.isFamilyOnly !== true) return false;
+    // directOwner: requires backend field on Listing — deferred; store tracks the intent
     return true;
   });
 }
@@ -172,6 +177,13 @@ export function getActiveFilterLabels(
   if (filters.minBaths > 0) {
     labels.push({ key: "minBaths", label: `${filters.minBaths}+ حمامات` });
   }
+  if (filters.minArea !== null && filters.maxArea !== null) {
+    labels.push({ key: "area", label: `${filters.minArea}–${filters.maxArea} م²` });
+  } else if (filters.minArea !== null) {
+    labels.push({ key: "area", label: `من ${filters.minArea} م²` });
+  } else if (filters.maxArea !== null) {
+    labels.push({ key: "area", label: `حتى ${filters.maxArea} م²` });
+  }
   if (filters.furnishing.length > 0) {
     labels.push({ key: "furnishing", label: "الفرش" });
   }
@@ -190,6 +202,9 @@ export function getActiveFilterLabels(
   if (filters.hasMaidRoom) {
     labels.push({ key: "hasMaidRoom", label: "غرفة خادمة" });
   }
+  if (filters.hasDriverRoom) {
+    labels.push({ key: "hasDriverRoom", label: "غرفة سائق" });
+  }
   if (filters.hasParking) {
     labels.push({ key: "hasParking", label: "موقف سيارات" });
   }
@@ -201,6 +216,9 @@ export function getActiveFilterLabels(
   }
   if (filters.familyOnly) {
     labels.push({ key: "familyOnly", label: "للعائلات" });
+  }
+  if (filters.directOwner) {
+    labels.push({ key: "directOwner", label: "مالك مباشر" });
   }
   return labels;
 }
