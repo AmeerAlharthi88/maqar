@@ -240,7 +240,7 @@ const muscatGovernorate: GovernorateMarketData = {
       ],
     },
     {
-      id: "al-amerat",
+      id: "amerat",
       slug: "al-amerat",
       nameAr: "العامرات",
       nameEn: "Al Amerat",
@@ -600,8 +600,8 @@ const southBatinahGovernorate: GovernorateMarketData = {
 
 // ── Ad Dakhiliyah (الداخلية) ──────────────────────────────────────────────────
 const dakhiliyahGovernorate: GovernorateMarketData = {
-  id: "dakhiliyah",
-  slug: "dakhiliyah",
+  id: "ad-dakhiliyah",
+  slug: "ad-dakhiliyah",
   nameAr: "الداخلية",
   nameEn: "Ad Dakhiliyah",
   avgSalePrice: 33000,
@@ -618,9 +618,9 @@ const dakhiliyahGovernorate: GovernorateMarketData = {
       slug: "nizwa",
       nameAr: "نزوى",
       nameEn: "Nizwa",
-      governorateId: "dakhiliyah",
+      governorateId: "ad-dakhiliyah",
       governorateAr: "الداخلية",
-      governorateSlug: "dakhiliyah",
+      governorateSlug: "ad-dakhiliyah",
       avgSalePrice: 35000,
       avgRentPrice: 145,
       pricePerSqm: 270,
@@ -663,9 +663,9 @@ const dakhiliyahGovernorate: GovernorateMarketData = {
       slug: "bahla",
       nameAr: "بهلاء",
       nameEn: "Bahla",
-      governorateId: "dakhiliyah",
+      governorateId: "ad-dakhiliyah",
       governorateAr: "الداخلية",
-      governorateSlug: "dakhiliyah",
+      governorateSlug: "ad-dakhiliyah",
       avgSalePrice: 25000,
       avgRentPrice: 100,
       pricePerSqm: 210,
@@ -696,7 +696,7 @@ const dakhiliyahGovernorate: GovernorateMarketData = {
 // ── South Sharqiyah (جنوب الشرقية) ───────────────────────────────────────────
 const southSharqiyahGovernorate: GovernorateMarketData = {
   id: "south-sharqiyah",
-  slug: "south-sharqiyah",
+  slug: "south-sharqiyah",  // canonical ID — matches oman-locations.ts
   nameAr: "جنوب الشرقية",
   nameEn: "South Al Sharqiyah",
   avgSalePrice: 30000,
@@ -715,7 +715,7 @@ const southSharqiyahGovernorate: GovernorateMarketData = {
       nameEn: "Sur",
       governorateId: "south-sharqiyah",
       governorateAr: "جنوب الشرقية",
-      governorateSlug: "south-sharqiyah",
+      governorateSlug: "south-sharqiyah",  // canonical
       avgSalePrice: 32000,
       avgRentPrice: 135,
       pricePerSqm: 250,
