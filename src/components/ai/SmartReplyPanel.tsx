@@ -56,21 +56,21 @@ export function SmartReplyPanel({ lead, onClose }: SmartReplyPanelProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-[#C65D3B]/20 overflow-hidden" dir="rtl">
+    <div className="bg-white rounded-2xl border border-[#0A3C36]/20 overflow-hidden" dir="rtl">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#FBF0EB] border-b border-[#C65D3B]/15">
+      <div className="flex items-center justify-between px-4 py-3 bg-[#E6F0EF] border-b border-[#0A3C36]/15">
         <div className="flex items-center gap-2">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="2" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2" aria-hidden="true">
             <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
           </svg>
-          <span className="text-xs font-bold text-[#C65D3B]">رد ذكي — {lead.customerNameAr}</span>
+          <span className="text-xs font-bold text-[#0A3C36]">رد ذكي — {lead.customerNameAr}</span>
         </div>
         <button
           onClick={onClose}
           aria-label="إغلاق"
-          className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-[#C65D3B]/10 transition-colors"
+          className="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-[#0A3C36]/10 transition-colors"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="2.5" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5" aria-hidden="true">
             <path d="M18 6 6 18M6 6l12 12" />
           </svg>
         </button>
@@ -79,7 +79,7 @@ export function SmartReplyPanel({ lead, onClose }: SmartReplyPanelProps) {
       <div className="px-4 py-4 space-y-3">
         {/* Trigger selector */}
         <div>
-          <p className="text-[10px] font-bold text-[#A89480] mb-2">نوع رسالة العميل</p>
+          <p className="text-[10px] font-bold text-[#627D98] mb-2">نوع رسالة العميل</p>
           <div className="flex flex-wrap gap-1.5">
             {TRIGGER_LABELS.map((t) => (
               <button
@@ -87,7 +87,7 @@ export function SmartReplyPanel({ lead, onClose }: SmartReplyPanelProps) {
                 onClick={() => { setTrigger(t.value); setResult(null); }}
                 className={[
                   "px-3 py-1.5 text-[10px] font-semibold rounded-xl transition-colors",
-                  trigger === t.value ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]",
+                  trigger === t.value ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
                 ].join(" ")}
               >
                 {t.labelAr}
@@ -118,8 +118,8 @@ export function SmartReplyPanel({ lead, onClose }: SmartReplyPanelProps) {
               <p className="text-[10px] text-[#C8860A] font-semibold">(وضع تجريبي — لا يوجد مفتاح API)</p>
             )}
             {(result.replies ?? []).map((reply, i) => (
-              <div key={i} className="bg-[#FAF7F4] rounded-xl border border-[#F0EBE3] px-3 py-3">
-                <p className="text-xs text-[#1E1E1E] leading-relaxed mb-2">{reply}</p>
+              <div key={i} className="bg-[#F8F9FA] rounded-xl border border-[#E2E8F0] px-3 py-3">
+                <p className="text-xs text-[#102A43] leading-relaxed mb-2">{reply}</p>
                 <CopyToClipboardButton
                   text={reply}
                   label="نسخ للواتساب"

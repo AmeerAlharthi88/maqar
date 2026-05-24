@@ -17,9 +17,9 @@ export const metadata: Metadata = buildMetadata({
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] p-5">
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">{title}</h2>
-      <div className="text-sm text-[#7A6B5E] leading-relaxed space-y-2">{children}</div>
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5">
+      <h2 className="text-base font-bold text-[#102A43] mb-3">{title}</h2>
+      <div className="text-sm text-[#627D98] leading-relaxed space-y-2">{children}</div>
     </div>
   );
 }
@@ -45,7 +45,7 @@ export default function AboutPage() {
         />
 
         {/* Hero */}
-        <div className="bg-[#C65D3B] rounded-2xl px-5 py-6 text-white">
+        <div className="bg-[#0A3C36] rounded-2xl px-5 py-6 text-white">
           <p className="text-xs font-semibold opacity-80 mb-1">منصة عقارية عُمانية</p>
           <h1 className="text-2xl font-bold mb-2">مقر</h1>
           <p className="text-sm opacity-90 leading-relaxed">
@@ -65,27 +65,27 @@ export default function AboutPage() {
         <Section title="ما نقدمه">
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold flex-shrink-0">—</span>
+              <span className="text-[#0A3C36] font-bold flex-shrink-0">—</span>
               <span>بحث عقاري شامل مع فلاتر دقيقة حسب المنطقة والنوع والسعر والمساحة</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold flex-shrink-0">—</span>
+              <span className="text-[#0A3C36] font-bold flex-shrink-0">—</span>
               <span>توثيق الوسطاء والوكالات العقارية بالتحقق من السجل التجاري والترخيص</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold flex-shrink-0">—</span>
+              <span className="text-[#0A3C36] font-bold flex-shrink-0">—</span>
               <span>تحليلات السوق العقاري بمتوسطات الأسعار وعوائد الإيجار والاتجاهات</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold flex-shrink-0">—</span>
+              <span className="text-[#0A3C36] font-bold flex-shrink-0">—</span>
               <span>أدوات التحليل المالي: حاسبة الرهن، عائد الإيجار، العائد على الاستثمار</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold flex-shrink-0">—</span>
+              <span className="text-[#0A3C36] font-bold flex-shrink-0">—</span>
               <span>تواصل مباشر مع المعلنين عبر واتساب دون وسيط إضافي</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold flex-shrink-0">—</span>
+              <span className="text-[#0A3C36] font-bold flex-shrink-0">—</span>
               <span>مساعد ذكاء اصطناعي للاستفسار عن العقارات وتوليد الأوصاف وتقدير القيمة</span>
             </li>
           </ul>
@@ -118,7 +118,7 @@ export default function AboutPage() {
           </p>
           <p>
             البريد الإلكتروني:{" "}
-            <a href="mailto:support@maqar.om" className="text-[#C65D3B] underline underline-offset-2">
+            <a href="mailto:support@maqar.om" className="text-[#0A3C36] underline underline-offset-2">
               support@maqar.om
             </a>
           </p>

@@ -1,4 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="40" fill="#C65D3B"/>
-  <text x="96" y="96" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="bold" fill="#FAF7F4" text-anchor="middle" dominant-baseline="central" lang="ar">مقر</text>
+  <!-- Deep Emerald background -->
+  <rect width="192" height="192" rx="40" fill="#0A3C36"/>
+  <!-- House + Meem + Key mark (white), centred in 138×138 area with 27px padding -->
+  <svg x="27" y="27" width="138" height="138" viewBox="0 0 48 48" fill="none">
+    <!-- House arch + Meem outer form -->
+    <path d="M9 45 L9 24 C9 8 17 4 24 4 C31 4 39 8 39 24 L39 45"
+      stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+      fill="#FFFFFF" fill-opacity="0.08"/>
+    <!-- Inner ring — Meem head / keyhole -->
+    <circle cx="24" cy="21" r="6.5" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+    <!-- Key stem — Meem body -->
+    <line x1="24" y1="27.5" x2="24" y2="43" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    <!-- Key tooth — Meem tail -->
+    <line x1="24" y1="36" x2="28.5" y2="36" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    <!-- Champagne Gold pin -->
+    <circle cx="24" cy="21" r="2.5" fill="#E5BA73"/>
+  </svg>
 </svg>

@@ -65,7 +65,7 @@ export default function AdminReportsPage() {
   return (
     <AdminDashboardShell titleAr="البلاغات">
       <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#A89480]">{newCount} بلاغ جديد · {items.length} إجمالي</p>
+        <p className="text-xs text-[#627D98]">{newCount} بلاغ جديد · {items.length} إجمالي</p>
 
         {/* Filters */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
@@ -74,7 +74,7 @@ export default function AdminReportsPage() {
             return (
               <button key={f} onClick={() => setFilter(f)}
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  filter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                  filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
                 {STATUS_AR[f]} ({count})
               </button>
@@ -83,7 +83,7 @@ export default function AdminReportsPage() {
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد بلاغات" descriptionAr="البلاغات الواردة من المستخدمين ستظهر هنا." />
         ) : (

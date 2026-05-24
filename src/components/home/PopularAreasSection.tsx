@@ -16,7 +16,7 @@ export function PopularAreasSection({ areas }: PopularAreasSectionProps) {
   const isAr = locale === "ar";
 
   return (
-    <section className="px-4 py-5 bg-[#FAF7F2]">
+    <section className="px-4 py-5 bg-[#F0F4F8]">
       <SectionHeader
         titleAr="أكثر المناطق طلباً"
         titleEn="Popular Areas"
@@ -24,7 +24,7 @@ export function PopularAreasSection({ areas }: PopularAreasSectionProps) {
         subtitleEn="Market prices and stats for top neighbourhoods"
         size="md"
         action={
-          <Link href={ROUTES.areas} className="text-xs font-semibold text-[#C65D3B] hover:underline">
+          <Link href={ROUTES.areas} className="text-xs font-semibold text-[#0A3C36] hover:underline">
             {isAr ? "جميع المناطق" : "All Areas"}
           </Link>
         }

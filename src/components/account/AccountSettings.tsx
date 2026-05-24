@@ -22,8 +22,8 @@ function Toggle({
   return (
     <div className="flex items-center justify-between gap-4 py-3.5">
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[#1E1E1E]">{label}</p>
-        {desc && <p className="text-xs text-[#A89480] mt-0.5 leading-relaxed">{desc}</p>}
+        <p className="text-sm font-semibold text-[#102A43]">{label}</p>
+        {desc && <p className="text-xs text-[#627D98] mt-0.5 leading-relaxed">{desc}</p>}
       </div>
       <button
         type="button"
@@ -32,7 +32,7 @@ function Toggle({
         onClick={() => onChange(!checked)}
         className={[
           "relative w-11 h-6 rounded-full transition-colors flex-shrink-0",
-          checked ? "bg-[#C65D3B]" : "bg-[#E8DDD0]",
+          checked ? "bg-[#0A3C36]" : "bg-[#E2E8F0]",
         ].join(" ")}
       >
         <span
@@ -49,11 +49,11 @@ function Toggle({
 // ── Section wrapper ───────────────────────────────────────────────────────────
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 overflow-hidden">
-      <p className="text-xs font-bold text-[#A89480] uppercase tracking-wide pt-4 pb-2">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 overflow-hidden">
+      <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide pt-4 pb-2">
         {title}
       </p>
-      <div className="divide-y divide-[#F0EBE3]">{children}</div>
+      <div className="divide-y divide-[#E2E8F0]">{children}</div>
     </div>
   );
 }
@@ -107,22 +107,22 @@ export function AccountSettings() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] pb-24" dir="rtl">
+    <div className="min-h-screen bg-[#F8F9FA] pb-24" dir="rtl">
       {/* Header */}
-      <div className="bg-white border-b border-[#F0EBE3] px-4 py-3 flex items-center gap-3">
+      <div className="bg-white border-b border-[#E2E8F0] px-4 py-3 flex items-center gap-3">
         <button onClick={() => router.back()} className="w-8 h-8 flex items-center justify-center">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" strokeWidth="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#102A43" strokeWidth="2">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
-        <h1 className="text-sm font-bold text-[#1E1E1E]">الإعدادات</h1>
+        <h1 className="text-sm font-bold text-[#102A43]">الإعدادات</h1>
       </div>
 
       <div className="px-4 py-5 space-y-4">
         {/* Personal info */}
         <Section title="المعلومات الشخصية">
           <div className="py-3.5">
-            <label className="block text-xs font-semibold text-[#7A6B5E] mb-1.5">
+            <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
               الاسم بالعربية
             </label>
             <div className="flex gap-2">
@@ -130,23 +130,23 @@ export function AccountSettings() {
                 type="text"
                 value={nameAr}
                 onChange={(e) => setNameAr(e.target.value)}
-                className="flex-1 px-3 py-2.5 rounded-xl border border-[#E8DDD0] bg-white text-sm text-[#1E1E1E] outline-none focus:border-[#C65D3B]"
+                className="flex-1 px-3 py-2.5 rounded-xl border border-[#E2E8F0] bg-white text-sm text-[#102A43] outline-none focus:border-[#0A3C36]"
               />
               <button
                 onClick={handleSaveName}
                 disabled={nameAr.trim().length < 2 || isSavingName}
-                className="px-4 py-2.5 rounded-xl bg-[#C65D3B] text-white text-xs font-bold disabled:opacity-50"
+                className="px-4 py-2.5 rounded-xl bg-[#0A3C36] text-white text-xs font-bold disabled:bg-[#A0AEC0] disabled:cursor-not-allowed"
               >
                 {nameSaved ? "✓" : isSavingName ? "..." : "حفظ"}
               </button>
             </div>
           </div>
           <div className="py-3.5">
-            <p className="text-xs font-semibold text-[#7A6B5E] mb-1">رقم الجوال</p>
-            <p className="text-sm text-[#1E1E1E] font-bold" dir="ltr">
+            <p className="text-xs font-semibold text-[#627D98] mb-1">رقم الجوال</p>
+            <p className="text-sm text-[#102A43] font-bold" dir="ltr">
               {user?.phone ?? profile?.phone ?? "—"}
             </p>
-            <p className="text-xs text-[#A89480] mt-0.5">لا يمكن تغيير رقم الجوال حالياً</p>
+            <p className="text-xs text-[#627D98] mt-0.5">لا يمكن تغيير رقم الجوال حالياً</p>
           </div>
         </Section>
 
@@ -208,8 +208,8 @@ export function AccountSettings() {
               href={item.href}
               className="flex items-center justify-between py-3.5"
             >
-              <span className="text-sm text-[#1E1E1E]">{item.label}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2">
+              <span className="text-sm text-[#102A43]">{item.label}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </a>
@@ -220,10 +220,10 @@ export function AccountSettings() {
         <button
           onClick={handleSignOut}
           disabled={isSigningOut}
-          className="w-full py-3.5 rounded-2xl bg-[#FBF0EB] text-[#C65D3B] font-bold text-sm border border-[#C65D3B]/20 disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full py-3.5 rounded-2xl bg-[#FEF0EE] text-[#C0392B] font-bold text-sm border border-[#C0392B]/20 disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isSigningOut ? (
-            <span className="w-4 h-4 rounded-full border-2 border-[#C65D3B]/30 border-t-[#C65D3B] animate-spin" />
+            <span className="w-4 h-4 rounded-full border-2 border-[#C0392B]/30 border-t-[#C0392B] animate-spin" />
           ) : (
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -234,7 +234,7 @@ export function AccountSettings() {
           تسجيل الخروج
         </button>
 
-        <p className="text-center text-[10px] text-[#C4B5A5]">مقر — النسخة 1.0.0</p>
+        <p className="text-center text-[10px] text-[#627D98]">مقر — النسخة 1.0.0</p>
       </div>
     </div>
   );

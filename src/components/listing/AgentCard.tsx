@@ -16,8 +16,8 @@ function StarRating({ rating }: { rating: number }) {
           width="12"
           height="12"
           viewBox="0 0 24 24"
-          fill={i < Math.round(rating) ? "#C65D3B" : "none"}
-          stroke="#C65D3B"
+          fill={i < Math.round(rating) ? "#E5BA73" : "none"}
+          stroke="#E5BA73"
           strokeWidth="1.5"
         >
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -45,14 +45,14 @@ export function AgentCard({ listing }: AgentCardProps) {
     .join("");
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">المعلن</h2>
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
+      <h2 className="text-base font-bold text-[#102A43] mb-3">المعلن</h2>
 
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
         {/* Agent header */}
         <div className="flex items-center gap-3 mb-4">
           {/* Avatar */}
-          <div className="w-12 h-12 rounded-full bg-[#C65D3B]/15 flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 rounded-full bg-[#0A3C36]/15 flex items-center justify-center flex-shrink-0">
             {agent.avatar ? (
               <img
                 src={agent.avatar}
@@ -60,44 +60,44 @@ export function AgentCard({ listing }: AgentCardProps) {
                 className="w-full h-full rounded-full object-cover"
               />
             ) : (
-              <span className="text-sm font-bold text-[#C65D3B]">{initials}</span>
+              <span className="text-sm font-bold text-[#0A3C36]">{initials}</span>
             )}
           </div>
 
           {/* Name + agency */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-sm font-bold text-[#1E1E1E] truncate">{agent.nameAr}</span>
+              <span className="text-sm font-bold text-[#102A43] truncate">{agent.nameAr}</span>
               {agent.isVerified && (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#5B8C5A">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#0A3C36">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
                 </svg>
               )}
             </div>
             {agent.agency && (
-              <p className="text-xs text-[#7A6B5E] truncate">{agent.agency.nameAr}</p>
+              <p className="text-xs text-[#627D98] truncate">{agent.agency.nameAr}</p>
             )}
             {agent.licenseNumber && (
-              <p className="text-[10px] text-[#A89480]">ترخيص: {agent.licenseNumber}</p>
+              <p className="text-[10px] text-[#627D98]">ترخيص: {agent.licenseNumber}</p>
             )}
           </div>
         </div>
 
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="text-center bg-[#F5F0EA] rounded-xl py-2">
-            <p className="text-sm font-bold text-[#1E1E1E]">{toArabicNumerals(agent.stats.activeListings)}</p>
-            <p className="text-[10px] text-[#7A6B5E]">إعلان نشط</p>
+          <div className="text-center bg-[#F0F4F8] rounded-xl py-2">
+            <p className="text-sm font-bold text-[#102A43]">{toArabicNumerals(agent.stats.activeListings)}</p>
+            <p className="text-[10px] text-[#627D98]">إعلان نشط</p>
           </div>
-          <div className="text-center bg-[#F5F0EA] rounded-xl py-2">
+          <div className="text-center bg-[#F0F4F8] rounded-xl py-2">
             <div className="flex items-center justify-center gap-0.5 mb-0.5">
               <StarRating rating={agent.stats.rating} />
             </div>
-            <p className="text-[10px] text-[#7A6B5E]">{toArabicNumerals(agent.stats.reviewCount)} تقييم</p>
+            <p className="text-[10px] text-[#627D98]">{toArabicNumerals(agent.stats.reviewCount)} تقييم</p>
           </div>
-          <div className="text-center bg-[#F5F0EA] rounded-xl py-2">
-            <p className="text-sm font-bold text-[#1E1E1E]">{agent.stats.avgResponseTime}</p>
-            <p className="text-[10px] text-[#7A6B5E]">وقت الرد</p>
+          <div className="text-center bg-[#F0F4F8] rounded-xl py-2">
+            <p className="text-sm font-bold text-[#102A43]">{agent.stats.avgResponseTime}</p>
+            <p className="text-[10px] text-[#627D98]">وقت الرد</p>
           </div>
         </div>
 
@@ -116,7 +116,7 @@ export function AgentCard({ listing }: AgentCardProps) {
           </a>
           <a
             href={callHref}
-            className="flex items-center justify-center gap-2 bg-[#F5F0EA] text-[#1E1E1E] text-sm font-semibold py-2.5 rounded-xl border border-[#E8DDD0]"
+            className="flex items-center justify-center gap-2 bg-[#F0F4F8] text-[#102A43] text-sm font-semibold py-2.5 rounded-xl border border-[#E2E8F0]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />

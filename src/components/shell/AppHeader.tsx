@@ -27,7 +27,7 @@ export function AppHeader({
   return (
     <header
       className={cn(
-        "sticky top-0 z-[100] bg-white/92 backdrop-blur-md border-b border-[#F0EBE3]",
+        "sticky top-0 z-[100] bg-white/92 backdrop-blur-md border-b border-[#E2E8F0]",
         "safe-area-pt",
         className
       )}
@@ -50,7 +50,7 @@ export function AppHeader({
 
         {/* Logo or title */}
         {variant === "back" && titleAr ? (
-          <h1 className="flex-1 text-base font-bold text-[#1E1E1E] text-center truncate">{titleAr}</h1>
+          <h1 className="flex-1 text-base font-bold text-[#102A43] text-center truncate">{titleAr}</h1>
         ) : (
           <Link href={ROUTES.home} className="flex-shrink-0" aria-label="مقر — الرئيسية">
             <MaqarLogo size="sm" />

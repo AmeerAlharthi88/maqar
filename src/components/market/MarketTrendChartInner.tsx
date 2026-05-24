@@ -31,7 +31,7 @@ export default function MarketTrendChartInner({
   mode = "sale",
 }: MarketTrendChartInnerProps) {
   const dataKey = mode === "sale" ? "avgSalePrice" : "avgRentPrice";
-  const color = mode === "sale" ? "#C65D3B" : "#2471A3";
+  const color = mode === "sale" ? "#0A3C36" : "#2471A3";
   const label = mode === "sale" ? "متوسط سعر البيع" : "متوسط الإيجار الشهري";
 
   return (
@@ -43,16 +43,16 @@ export default function MarketTrendChartInner({
             <stop offset="95%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F0EBE3" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
         <XAxis
           dataKey="month"
-          tick={{ fontSize: 10, fill: "#A89480" }}
+          tick={{ fontSize: 10, fill: "#627D98" }}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
           tickFormatter={(v: number) => formatValue(v, mode)}
-          tick={{ fontSize: 10, fill: "#A89480" }}
+          tick={{ fontSize: 10, fill: "#627D98" }}
           axisLine={false}
           tickLine={false}
           width={36}
@@ -64,10 +64,10 @@ export default function MarketTrendChartInner({
               : String(value),
             label,
           ]}
-          labelStyle={{ fontFamily: "inherit", color: "#1E1E1E" }}
+          labelStyle={{ fontFamily: "inherit", color: "#102A43" }}
           contentStyle={{
             borderRadius: 12,
-            border: "1px solid #F0EBE3",
+            border: "1px solid #E2E8F0",
             fontSize: 12,
           }}
         />

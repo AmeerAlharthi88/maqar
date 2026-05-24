@@ -54,23 +54,23 @@ export default async function GovernoratePage({ params }: Props) {
     <AppShell>
       <div className="px-4 py-6 space-y-6 max-w-lg mx-auto" dir="rtl">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-1.5 text-xs text-[#A89480]">
-          <Link href="/market" className="hover:text-[#C65D3B]">
+        <div className="flex items-center gap-1.5 text-xs text-[#627D98]">
+          <Link href="/market" className="hover:text-[#0A3C36]">
             السوق
           </Link>
           <span>/</span>
-          <span className="text-[#1E1E1E] font-semibold">{gov.nameAr}</span>
+          <span className="text-[#102A43] font-semibold">{gov.nameAr}</span>
         </div>
 
         {/* Header */}
         <div>
           <div className="flex items-start justify-between gap-3 mb-1">
-            <h1 className="text-xl font-bold text-[#1E1E1E]">
+            <h1 className="text-xl font-bold text-[#102A43]">
               سوق عقارات {gov.nameAr}
             </h1>
             <DemandBadge score={gov.demandScore} />
           </div>
-          <p className="text-sm text-[#7A6B5E]">
+          <p className="text-sm text-[#627D98]">
             {toArabicNumerals(gov.listingCount)} إعلان · تغيّر سنوي{" "}
             {gov.priceChangePct > 0 ? "+" : ""}
             {toArabicNumerals(gov.priceChangePct)}%
@@ -108,7 +108,7 @@ export default async function GovernoratePage({ params }: Props) {
 
         {/* Wilayat links */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             الولايات
           </h2>
           <div className="space-y-2">
@@ -116,13 +116,13 @@ export default async function GovernoratePage({ params }: Props) {
               <Link
                 key={w.slug}
                 href={`/market/${gov.slug}/${w.slug}`}
-                className="flex items-center justify-between bg-white border border-[#F0EBE3] rounded-2xl px-4 py-3 active:bg-[#FAF7F4]"
+                className="flex items-center justify-between bg-white border border-[#E2E8F0] rounded-2xl px-4 py-3 active:bg-[#F8F9FA]"
               >
                 <div>
-                  <p className="text-sm font-semibold text-[#1E1E1E]">
+                  <p className="text-sm font-semibold text-[#102A43]">
                     {w.nameAr}
                   </p>
-                  <p className="text-xs text-[#A89480]">
+                  <p className="text-xs text-[#627D98]">
                     {toArabicNumerals(w.listingCount)} إعلان ·{" "}
                     {formatOMR(w.avgSalePrice, { arabic: true, compact: true })} متوسط
                   </p>
@@ -132,7 +132,7 @@ export default async function GovernoratePage({ params }: Props) {
                   height="16"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#A89480"
+                  stroke="#627D98"
                   strokeWidth="2"
                   strokeLinecap="round"
                   className="rtl:rotate-180"
@@ -152,7 +152,7 @@ export default async function GovernoratePage({ params }: Props) {
 
         {/* AI insight */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             تحليل ذكي للسوق
           </h2>
           <MarketInsightPanel
@@ -166,23 +166,23 @@ export default async function GovernoratePage({ params }: Props) {
         </div>
 
         {/* Tools CTA */}
-        <div className="bg-[#FBF0EB] rounded-2xl p-4 border border-[#C65D3B]/20">
-          <p className="text-sm font-semibold text-[#C65D3B] mb-1">
+        <div className="bg-[#E6F0EF] rounded-2xl p-4 border border-[#0A3C36]/20">
+          <p className="text-sm font-semibold text-[#0A3C36] mb-1">
             هل تفكّر في الاستثمار؟
           </p>
-          <p className="text-xs text-[#7A6B5E] mb-3">
+          <p className="text-xs text-[#627D98] mb-3">
             استخدم حاسبة العائد الإيجاري لتقييم عقارك في {gov.nameAr}.
           </p>
           <div className="flex gap-3">
             <Link
               href="/tools/roi-calculator"
-              className="text-xs font-bold text-[#C65D3B]"
+              className="text-xs font-bold text-[#0A3C36]"
             >
               حاسبة العائد
             </Link>
             <Link
               href="/tools/mortgage-calculator"
-              className="text-xs font-bold text-[#C65D3B]"
+              className="text-xs font-bold text-[#0A3C36]"
             >
               حاسبة التمويل
             </Link>

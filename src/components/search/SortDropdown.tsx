@@ -32,7 +32,7 @@ export function SortDropdown({ className }: SortDropdownProps) {
         aria-haspopup="listbox"
         className={cn(
           "flex items-center gap-2 px-3 h-9 rounded-xl text-xs font-semibold",
-          "border border-[#E8DDD0] bg-white text-[#7A6B5E] hover:border-[#C65D3B] transition-colors",
+          "border border-[#E2E8F0] bg-white text-[#627D98] hover:border-[#0A3C36] transition-colors",
           "whitespace-nowrap"
         )}
       >
@@ -53,7 +53,7 @@ export function SortDropdown({ className }: SortDropdownProps) {
         <div
           role="listbox"
           aria-label="ترتيب النتائج"
-          className="absolute top-full end-0 mt-1 bg-white border border-[#F0EBE3] rounded-2xl shadow-[0_8px_24px_0_rgb(30_30_30/0.10)] z-50 min-w-[180px] overflow-hidden"
+          className="absolute top-full end-0 mt-1 bg-white border border-[#E2E8F0] rounded-2xl shadow-[0_8px_24px_0_rgb(10_60_54/0.10)] z-50 min-w-[180px] overflow-hidden"
         >
           {options.map(([value, label]) => (
             <button
@@ -67,8 +67,8 @@ export function SortDropdown({ className }: SortDropdownProps) {
               className={cn(
                 "w-full flex items-center justify-between gap-3 px-4 py-3 text-sm transition-colors text-start",
                 filters.sortBy === value
-                  ? "bg-[#FAF7F2] text-[#C65D3B] font-semibold"
-                  : "text-[#1E1E1E] hover:bg-[#FAF7F2]"
+                  ? "bg-[#E6F0EF] text-[#0A3C36] font-semibold"
+                  : "text-[#102A43] hover:bg-[#F0F4F8]"
               )}
             >
               {label}

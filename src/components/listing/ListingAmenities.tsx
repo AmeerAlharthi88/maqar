@@ -90,15 +90,15 @@ export function ListingAmenities({ listing }: ListingAmenitiesProps) {
   if (listing.amenities.length === 0) return null;
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">المرافق والخدمات</h2>
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
+      <h2 className="text-base font-bold text-[#102A43] mb-3">المرافق والخدمات</h2>
       <div className="flex flex-wrap gap-2">
         {listing.amenities.map((amenity) => (
           <span
             key={amenity}
             className={cn(
               "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl",
-              "bg-[#F5F0EA] text-[#3D3330] text-xs font-medium border border-[#E8DDD0]"
+              "bg-[#F0F4F8] text-[#102A43] text-xs font-medium border border-[#E2E8F0]"
             )}
           >
             <AmenityIcon name={amenity} />

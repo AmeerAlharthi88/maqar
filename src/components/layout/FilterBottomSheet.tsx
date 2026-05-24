@@ -57,7 +57,7 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
       <div className="flex flex-col gap-6 p-5">
         {/* Purpose */}
         <section>
-          <p className="text-sm font-semibold text-[#1E1E1E] mb-3">الغرض</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">الغرض</p>
           <div className="flex gap-2">
             {(["all", "sale", "rent"] as const).map((p) => (
               <button
@@ -65,8 +65,8 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
                 onClick={() => setFilters((f) => ({ ...f, purpose: p }))}
                 className={`flex-1 h-10 rounded-xl text-sm font-medium transition-colors border ${
                   filters.purpose === p
-                    ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                    : "bg-white text-[#7A6B5E] border-[#E8DDD0]"
+                    ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                    : "bg-white text-[#627D98] border-[#E2E8F0]"
                 }`}
               >
                 {p === "all" ? "الكل" : p === "sale" ? "للبيع" : "للإيجار"}
@@ -77,7 +77,7 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
 
         {/* Property type */}
         <section>
-          <p className="text-sm font-semibold text-[#1E1E1E] mb-3">نوع العقار</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">نوع العقار</p>
           <div className="flex flex-col gap-2">
             {PROPERTY_TYPES.slice(0, 5).map((pt) => (
               <Checkbox
@@ -92,7 +92,7 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
 
         {/* Bedrooms */}
         <section>
-          <p className="text-sm font-semibold text-[#1E1E1E] mb-3">الحد الأدنى لغرف النوم</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">الحد الأدنى لغرف النوم</p>
           <div className="flex gap-2">
             {[0, 1, 2, 3, 4, 5].map((n) => (
               <button
@@ -100,8 +100,8 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
                 onClick={() => setFilters((f) => ({ ...f, minBeds: n }))}
                 className={`flex-1 h-10 rounded-xl text-sm font-medium transition-colors border ${
                   filters.minBeds === n
-                    ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                    : "bg-white text-[#7A6B5E] border-[#E8DDD0]"
+                    ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                    : "bg-white text-[#627D98] border-[#E2E8F0]"
                 }`}
               >
                 {n === 0 ? "الكل" : n === 5 ? "+٥" : n}
@@ -112,7 +112,7 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
 
         {/* Amenities */}
         <section>
-          <p className="text-sm font-semibold text-[#1E1E1E] mb-3">المميزات</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">المميزات</p>
           <div className="flex flex-wrap gap-2">
             {COMMON_AMENITIES.slice(0, 10).map((a) => (
               <button
@@ -120,8 +120,8 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
                 onClick={() => toggle("amenities", a)}
                 className={`px-3 h-8 rounded-full text-xs font-medium transition-colors border ${
                   filters.amenities.includes(a)
-                    ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                    : "bg-white text-[#7A6B5E] border-[#E8DDD0]"
+                    ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                    : "bg-white text-[#627D98] border-[#E2E8F0]"
                 }`}
               >
                 {a}
@@ -132,7 +132,7 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
       </div>
 
       {/* Footer actions */}
-      <div className="sticky bottom-0 p-5 bg-white border-t border-[#F0EBE3] flex gap-3">
+      <div className="sticky bottom-0 p-5 bg-white border-t border-[#E2E8F0] flex gap-3">
         <Button variant="outline" size="md" className="flex-1" onClick={reset}>
           إعادة تعيين
         </Button>

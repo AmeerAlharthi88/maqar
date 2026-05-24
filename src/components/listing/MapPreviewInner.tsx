@@ -22,7 +22,7 @@ function PriceMarker({ listing }: { listing: Listing }) {
     const priceLabel = formatOMR(listing.price, { compact: true });
     const html = `
       <div style="
-        background: #C65D3B;
+        background: #0A3C36;
         color: #fff;
         font-size: 11px;
         font-weight: 700;

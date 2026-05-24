@@ -16,8 +16,8 @@ interface SearchFilterSheetProps {
 
 function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="pb-5 border-b border-[#F5F0EA] last:border-0">
-      <p className="text-sm font-bold text-[#1E1E1E] mb-3">{title}</p>
+    <section className="pb-5 border-b border-[#F0F4F8] last:border-0">
+      <p className="text-sm font-bold text-[#102A43] mb-3">{title}</p>
       {children}
     </section>
   );
@@ -29,7 +29,7 @@ function PurposeBtn({ label, value, active, onClick }: { label: string; value: s
       onClick={onClick}
       className={cn(
         "flex-1 h-10 rounded-xl text-sm font-semibold transition-colors border",
-        active ? "bg-[#C65D3B] text-white border-[#C65D3B]" : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+        active ? "bg-[#0A3C36] text-white border-[#0A3C36]" : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36]"
       )}
       aria-pressed={active}
     >
@@ -44,15 +44,15 @@ function CounterBtn({ value, onDecrement, onIncrement, min = 0 }: { value: numbe
       <button
         onClick={onDecrement}
         disabled={value <= min}
-        className="w-9 h-9 rounded-full border border-[#E8DDD0] flex items-center justify-center text-[#7A6B5E] disabled:opacity-40 hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors"
+        className="w-9 h-9 rounded-full border border-[#E2E8F0] flex items-center justify-center text-[#627D98] disabled:opacity-40 hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
         aria-label="تقليل"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
-      <span className="w-6 text-center text-sm font-bold text-[#1E1E1E]">{value === 0 ? "أي" : `+${value}`}</span>
+      <span className="w-6 text-center text-sm font-bold text-[#102A43]">{value === 0 ? "أي" : `+${value}`}</span>
       <button
         onClick={onIncrement}
-        className="w-9 h-9 rounded-full border border-[#E8DDD0] flex items-center justify-center text-[#7A6B5E] hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors"
+        className="w-9 h-9 rounded-full border border-[#E2E8F0] flex items-center justify-center text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
         aria-label="زيادة"
       >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -68,7 +68,7 @@ function BoolChip({ label, active, onClick }: { label: string; active: boolean; 
       aria-pressed={active}
       className={cn(
         "px-3 h-8 rounded-full text-xs font-semibold border transition-colors",
-        active ? "bg-[#C65D3B] text-white border-[#C65D3B]" : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+        active ? "bg-[#0A3C36] text-white border-[#0A3C36]" : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36]"
       )}
     >
       {label}
@@ -156,8 +156,8 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
                 className={cn(
                   "px-3 h-9 rounded-full text-xs font-semibold border transition-colors",
                   draft.propertyTypes.includes(pt.value)
-                    ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                    : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+                    ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                    : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36]"
                 )}
               >
                 {pt.labelAr}
@@ -176,7 +176,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
                 update("wilayatId", "");
                 update("areaId", "");
               }}
-              className="w-full h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm text-[#1E1E1E] bg-white outline-none focus:border-[#C65D3B]"
+              className="w-full h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm text-[#102A43] bg-white outline-none focus:border-[#0A3C36]"
               aria-label="المحافظة"
             >
               <option value="">جميع المحافظات</option>
@@ -192,7 +192,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
                   update("wilayatId", e.target.value);
                   update("areaId", "");
                 }}
-                className="w-full h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm text-[#1E1E1E] bg-white outline-none focus:border-[#C65D3B]"
+                className="w-full h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm text-[#102A43] bg-white outline-none focus:border-[#0A3C36]"
                 aria-label="الولاية"
               >
                 <option value="">جميع الولايات</option>
@@ -206,7 +206,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
               <select
                 value={draft.areaId}
                 onChange={(e) => update("areaId", e.target.value)}
-                className="w-full h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm text-[#1E1E1E] bg-white outline-none focus:border-[#C65D3B]"
+                className="w-full h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm text-[#102A43] bg-white outline-none focus:border-[#0A3C36]"
                 aria-label="المنطقة"
               >
                 <option value="">جميع المناطق</option>
@@ -227,18 +227,18 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
               onChange={(e) => update("minPrice", e.target.value ? Number(e.target.value) : null)}
               placeholder="من"
               min={0}
-              className="flex-1 h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm text-[#1E1E1E] outline-none focus:border-[#C65D3B]"
+              className="flex-1 h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm text-[#102A43] outline-none focus:border-[#0A3C36]"
               aria-label="الحد الأدنى للسعر"
               dir="ltr"
             />
-            <span className="text-[#A89480] text-sm">—</span>
+            <span className="text-[#627D98] text-sm">—</span>
             <input
               type="number"
               value={draft.maxPrice ?? ""}
               onChange={(e) => update("maxPrice", e.target.value ? Number(e.target.value) : null)}
               placeholder="إلى"
               min={0}
-              className="flex-1 h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm text-[#1E1E1E] outline-none focus:border-[#C65D3B]"
+              className="flex-1 h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm text-[#102A43] outline-none focus:border-[#0A3C36]"
               aria-label="الحد الأقصى للسعر"
               dir="ltr"
             />
@@ -249,7 +249,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
         <FilterSection title="غرف النوم والحمامات">
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#7A6B5E]">غرف النوم</span>
+              <span className="text-sm text-[#627D98]">غرف النوم</span>
               <CounterBtn
                 value={draft.minBeds}
                 onDecrement={() => update("minBeds", Math.max(0, draft.minBeds - 1))}
@@ -257,7 +257,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
               />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#7A6B5E]">الحمامات</span>
+              <span className="text-sm text-[#627D98]">الحمامات</span>
               <CounterBtn
                 value={draft.minBaths}
                 onDecrement={() => update("minBaths", Math.max(0, draft.minBaths - 1))}
@@ -276,18 +276,18 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
               onChange={(e) => update("minArea", e.target.value ? Number(e.target.value) : null)}
               placeholder="من"
               min={0}
-              className="flex-1 h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm outline-none focus:border-[#C65D3B]"
+              className="flex-1 h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm outline-none focus:border-[#0A3C36]"
               aria-label="الحد الأدنى للمساحة"
               dir="ltr"
             />
-            <span className="text-[#A89480] text-sm">—</span>
+            <span className="text-[#627D98] text-sm">—</span>
             <input
               type="number"
               value={draft.maxArea ?? ""}
               onChange={(e) => update("maxArea", e.target.value ? Number(e.target.value) : null)}
               placeholder="إلى"
               min={0}
-              className="flex-1 h-11 px-4 rounded-xl border border-[#E8DDD0] text-sm outline-none focus:border-[#C65D3B]"
+              className="flex-1 h-11 px-4 rounded-xl border border-[#E2E8F0] text-sm outline-none focus:border-[#0A3C36]"
               aria-label="الحد الأقصى للمساحة"
               dir="ltr"
             />
@@ -305,8 +305,8 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
                 className={cn(
                   "px-3 h-9 rounded-full text-xs font-semibold border transition-colors",
                   draft.furnishing.includes(val)
-                    ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                    : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+                    ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                    : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36]"
                 )}
               >
                 {label}
@@ -333,7 +333,7 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
       </div>
 
       {/* Sticky footer */}
-      <div className="sticky bottom-0 bg-white border-t border-[#F0EBE3] p-4 flex items-center gap-3"
+      <div className="sticky bottom-0 bg-white border-t border-[#E2E8F0] p-4 flex items-center gap-3"
         style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
         <Button variant="outline" size="md" className="flex-1" onClick={handleReset}>
           إعادة تعيين

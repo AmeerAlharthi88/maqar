@@ -41,67 +41,70 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="flex flex-col min-h-svh">
       {/* ── Desktop-only top header (lg+) ── */}
-      <header className="hidden lg:flex sticky top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-[#F0EBE3] h-14 items-center px-6 gap-6">
-        <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
-          <MaqarLogo size="sm" />
-        </Link>
-        <nav className="flex items-center gap-1 flex-1" aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}>
-          {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
-            return (
-              <Link
-                key={item.key}
-                href={item.href}
-                className={cn(
-                  "px-3 h-9 rounded-xl text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-[#FBF0EB] text-[#C65D3B]"
-                    : "text-[#7A6B5E] hover:bg-[#FAF7F2] hover:text-[#1E1E1E]"
-                )}
-              >
-                {navLabel(item)}
-              </Link>
-            );
-          })}
-        </nav>
+      <header className="hidden lg:flex sticky top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] h-14 px-6">
+        {/* Inner content capped at max-w-7xl for wide screens */}
+        <div className="max-w-7xl mx-auto w-full flex items-center gap-6">
+          <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
+            <MaqarLogo size="sm" />
+          </Link>
+          <nav className="flex items-center gap-1 flex-1" aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}>
+            {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/" && pathname.startsWith(item.href));
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className={cn(
+                    "px-3 h-9 rounded-xl text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-[#E6F0EF] text-[#0A3C36]"
+                      : "text-[#627D98] hover:bg-[#F0F4F8] hover:text-[#102A43]"
+                  )}
+                >
+                  {navLabel(item)}
+                </Link>
+              );
+            })}
+          </nav>
 
-        {/* Language toggle */}
-        <button
-          onClick={() => setLocale(isAr ? "en" : "ar")}
-          aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
-          className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E8DDD0] text-xs font-semibold text-[#7A6B5E] hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors"
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-          </svg>
-          {isAr ? "EN" : "عر"}
-        </button>
+          {/* Language toggle */}
+          <button
+            onClick={() => setLocale(isAr ? "en" : "ar")}
+            aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
+            className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E2E8F0] text-xs font-semibold text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            {isAr ? "EN" : "عر"}
+          </button>
 
-        {/* Add listing CTA */}
-        <Link
-          href={ROUTES.addListing}
-          className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#C65D3B] text-white text-sm font-semibold hover:bg-[#B34F2F] transition-colors"
-          aria-label={isAr ? "إضافة عقار" : "Add Property"}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          {isAr ? "أضف عقار" : "Add Property"}
-        </Link>
+          {/* Add listing CTA */}
+          <Link
+            href={ROUTES.addListing}
+            className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
+            aria-label={isAr ? "إضافة عقار" : "Add Property"}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            {isAr ? "أضف عقار" : "Add Property"}
+          </Link>
+        </div>
       </header>
 
-      {/* Page content — bottom padding only on mobile for the tab bar */}
-      <main className="flex-1 pb-20 lg:pb-0">{children}</main>
+      {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections */}
+      <main className="flex-1 pb-20 lg:pb-0 overflow-x-clip">{children}</main>
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">
         <button
           onClick={() => setLocale(isAr ? "en" : "ar")}
           aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
-          className="flex items-center gap-1 px-2.5 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#E8DDD0] text-xs font-semibold text-[#7A6B5E] shadow-sm hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors"
+          className="flex items-center gap-1 px-2.5 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E8F0] text-xs font-semibold text-[#627D98] shadow-sm hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <circle cx="12" cy="12" r="10" />
@@ -113,7 +116,7 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* ── Mobile/tablet bottom tab bar (hidden on lg+) ── */}
       <nav
-        className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#F0EBE3] lg:hidden"
+        className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#E2E8F0] lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}
       >
@@ -135,7 +138,7 @@ export function AppShell({ children }: AppShellProps) {
                 >
                   {/* Raised circle */}
                   <span
-                    className="flex items-center justify-center w-14 h-14 rounded-full bg-[#C65D3B] shadow-[0_4px_20px_rgba(198,93,59,0.45)]"
+                    className="flex items-center justify-center w-14 h-14 rounded-full bg-[#0A3C36] shadow-[0_4px_20px_rgba(10,60,54,0.35)]"
                     style={{ marginTop: "-28px" }}
                     aria-hidden="true"
                   >
@@ -144,7 +147,7 @@ export function AppShell({ children }: AppShellProps) {
                       <line x1="5" y1="12" x2="19" y2="12" />
                     </svg>
                   </span>
-                  <span className="text-[10px] font-semibold leading-none mt-1 text-[#C65D3B]">
+                  <span className="text-[10px] font-semibold leading-none mt-1 text-[#0A3C36]">
                     {navLabel(item)}
                   </span>
                 </Link>
@@ -157,7 +160,7 @@ export function AppShell({ children }: AppShellProps) {
                 href={item.href}
                 className={cn(
                   "flex-1 flex flex-col items-center justify-center gap-1 min-w-0 transition-colors",
-                  isActive ? "text-[#C65D3B]" : "text-[#A89480]"
+                  isActive ? "text-[#0A3C36]" : "text-[#627D98]"
                 )}
                 aria-current={isActive ? "page" : undefined}
               >

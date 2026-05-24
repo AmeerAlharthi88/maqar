@@ -15,7 +15,7 @@ interface ToastProps {
 }
 
 const typeConfig: Record<ToastType, { bg: string; border: string; icon: string; iconColor: string }> = {
-  success: { bg: "#EDF4ED", border: "#5B8C5A", icon: "✓", iconColor: "#5B8C5A" },
+  success: { bg: "#E6F0EF", border: "#0A3C36", icon: "✓", iconColor: "#0A3C36" },
   error:   { bg: "#FEF0EE", border: "#C0392B", icon: "✕", iconColor: "#C0392B" },
   warning: { bg: "#FFF8E6", border: "#C8860A", icon: "!", iconColor: "#C8860A" },
   info:    { bg: "#EAF4FB", border: "#2471A3", icon: "i", iconColor: "#2471A3" },
@@ -49,13 +49,13 @@ export function Toast({ open, onClose, type = "info", title, description, durati
           {cfg.icon}
         </span>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1E1E1E]">{title}</p>
-          {description && <p className="text-xs text-[#7A6B5E] mt-0.5">{description}</p>}
+          <p className="text-sm font-semibold text-[#102A43]">{title}</p>
+          {description && <p className="text-xs text-[#627D98] mt-0.5">{description}</p>}
         </div>
         <button
           onClick={onClose}
           aria-label="إغلاق"
-          className="flex-shrink-0 text-[#7A6B5E] hover:text-[#1E1E1E] transition-colors"
+          className="flex-shrink-0 text-[#627D98] hover:text-[#102A43] transition-colors"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M18 6 6 18M6 6l12 12" />

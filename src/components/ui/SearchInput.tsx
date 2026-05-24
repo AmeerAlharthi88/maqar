@@ -47,7 +47,7 @@ export function SearchInput({
   return (
     <div className={cn("relative flex items-center w-full", className)}>
       {/* Search icon */}
-      <span className="absolute end-3.5 text-[#7A6B5E] pointer-events-none">
+      <span className="absolute end-3.5 text-[#627D98] pointer-events-none">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
@@ -61,9 +61,9 @@ export function SearchInput({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className={cn(
-          "w-full bg-white border border-[#E8DDD0] text-[#1E1E1E] placeholder:text-[#A89480]",
+          "w-full bg-white border border-[#E2E8F0] text-[#102A43] placeholder:text-[#627D98]",
           "outline-none transition-all duration-150",
-          "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
+          "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/10",
           sizeClasses[size],
           value ? "pe-9" : "pe-10",
           "[&::-webkit-search-cancel-button]:hidden"
@@ -76,7 +76,7 @@ export function SearchInput({
           type="button"
           onClick={handleClear}
           aria-label="مسح البحث"
-          className="absolute start-3 text-[#A89480] hover:text-[#1E1E1E] transition-colors"
+          className="absolute start-3 text-[#A0AEC0] hover:text-[#102A43] transition-colors"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M18 6 6 18M6 6l12 12" />

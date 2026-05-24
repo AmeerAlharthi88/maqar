@@ -32,9 +32,9 @@ function CustomTooltip({
   const value = payload[0].value;
   const suffix = purpose === "rent" ? "ر.ع/شهر" : "ر.ع";
   return (
-    <div className="bg-white border border-[#E8DDD0] rounded-xl px-3 py-2 shadow-md text-xs" dir="rtl">
-      <p className="text-[#7A6B5E] mb-0.5">{label}</p>
-      <p className="font-bold text-[#1E1E1E]">
+    <div className="bg-white border border-[#E2E8F0] rounded-xl px-3 py-2 shadow-md text-xs" dir="rtl">
+      <p className="text-[#627D98] mb-0.5">{label}</p>
+      <p className="font-bold text-[#102A43]">
         {toArabicNumerals(value.toLocaleString("en-US"))} {suffix}
       </p>
     </div>
@@ -49,7 +49,7 @@ export default function PriceHistoryChart({ history, purpose }: PriceHistoryChar
   const domainMin = Math.floor((minPrice - padding) / 1000) * 1000;
   const domainMax = Math.ceil((maxPrice + padding) / 1000) * 1000;
 
-  const lineColor = "#C65D3B";
+  const lineColor = "#0A3C36";
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -65,19 +65,19 @@ export default function PriceHistoryChart({ history, purpose }: PriceHistoryChar
         </defs>
         <CartesianGrid
           strokeDasharray="3 3"
-          stroke="#F0EBE3"
+          stroke="#E2E8F0"
           vertical={false}
         />
         <XAxis
           dataKey="month"
-          tick={{ fontSize: 10, fill: "#A89480", fontFamily: "inherit" }}
+          tick={{ fontSize: 10, fill: "#627D98", fontFamily: "inherit" }}
           tickLine={false}
           axisLine={false}
           interval={2}
         />
         <YAxis
           domain={[domainMin, domainMax]}
-          tick={{ fontSize: 10, fill: "#A89480", fontFamily: "inherit" }}
+          tick={{ fontSize: 10, fill: "#627D98", fontFamily: "inherit" }}
           tickLine={false}
           axisLine={false}
           width={52}
@@ -88,7 +88,7 @@ export default function PriceHistoryChart({ history, purpose }: PriceHistoryChar
         />
         <Tooltip
           content={<CustomTooltip purpose={purpose} />}
-          cursor={{ stroke: "#C65D3B", strokeWidth: 1, strokeDasharray: "4 2" }}
+          cursor={{ stroke: "#0A3C36", strokeWidth: 1, strokeDasharray: "4 2" }}
         />
         <Line
           type="monotone"

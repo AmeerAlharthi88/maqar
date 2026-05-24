@@ -63,12 +63,12 @@ export function Dialog({
         <div className="flex items-start justify-between p-5 pb-3">
           <div className="flex flex-col gap-1">
             {title && (
-              <h2 id="dialog-title" className="text-base font-semibold text-[#1E1E1E]">
+              <h2 id="dialog-title" className="text-base font-semibold text-[#102A43]">
                 {title}
               </h2>
             )}
             {description && (
-              <p className="text-sm text-[#7A6B5E]">{description}</p>
+              <p className="text-sm text-[#627D98]">{description}</p>
             )}
           </div>
           <IconButton label="إغلاق" size="sm" variant="ghost" onClick={onClose} className="flex-shrink-0 -mt-1 -me-1">
@@ -83,7 +83,7 @@ export function Dialog({
 
         {/* Actions */}
         {(onConfirm ?? confirmLabel) && (
-          <div className="flex gap-2.5 p-5 pt-3 border-t border-[#F0EBE3]">
+          <div className="flex gap-2.5 p-5 pt-3 border-t border-[#E2E8F0]">
             <Button variant="ghost" size="md" className="flex-1" onClick={onClose}>
               {cancelLabel}
             </Button>

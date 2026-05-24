@@ -29,8 +29,8 @@ export function SectionHeader({ titleAr, titleEn, subtitleAr, subtitleEn, action
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       <div className="flex flex-col gap-0.5">
-        <h2 className={cn(s.title, "text-[#1E1E1E]")}>{title}</h2>
-        {subtitle && <p className={cn(s.subtitle, "text-[#7A6B5E]")}>{subtitle}</p>}
+        <h2 className={cn(s.title, "text-[#102A43]")}>{title}</h2>
+        {subtitle && <p className={cn(s.subtitle, "text-[#627D98]")}>{subtitle}</p>}
       </div>
       {action && <div className="flex-shrink-0">{action}</div>}
     </div>

@@ -18,13 +18,13 @@ export function BillingHistoryTable({
     return (
       <div
         className={cn(
-          "bg-[#FAF7F4] rounded-2xl border border-[#F0EBE3] px-4 py-8 text-center",
+          "bg-[#F8F9FA] rounded-2xl border border-[#E2E8F0] px-4 py-8 text-center",
           className
         )}
         dir="rtl"
       >
-        <p className="text-sm text-[#A89480]">لا توجد فواتير بعد</p>
-        <p className="text-xs text-[#C4B5A5] mt-1">
+        <p className="text-sm text-[#627D98]">لا توجد فواتير بعد</p>
+        <p className="text-xs text-[#627D98] mt-1">
           ستظهر سجلات الدفع هنا بعد أول عملية اشتراك.
         </p>
       </div>
@@ -34,7 +34,7 @@ export function BillingHistoryTable({
   return (
     <div
       className={cn(
-        "bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden",
+        "bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden",
         className
       )}
       dir="rtl"
@@ -44,16 +44,16 @@ export function BillingHistoryTable({
           key={record.id}
           className={cn(
             "px-4 py-3 flex items-center justify-between gap-3",
-            i < records.length - 1 && "border-b border-[#F5F0EA]"
+            i < records.length - 1 && "border-b border-[#E2E8F0]"
           )}
         >
           {/* Description */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-[#1E1E1E] truncate">
+            <p className="text-sm font-semibold text-[#102A43] truncate">
               {record.description}
             </p>
             <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-xs text-[#A89480]">
+              <span className="text-xs text-[#627D98]">
                 {new Date(record.date).toLocaleDateString("ar-OM", {
                   day: "numeric",
                   month: "long",
@@ -61,7 +61,7 @@ export function BillingHistoryTable({
                 })}
               </span>
               {record.invoiceRef && (
-                <span className="text-[10px] text-[#C4B5A5]">
+                <span className="text-[10px] text-[#627D98]">
                   {record.invoiceRef}
                 </span>
               )}
@@ -70,7 +70,7 @@ export function BillingHistoryTable({
 
           {/* Amount + status */}
           <div className="flex-shrink-0 flex flex-col items-end gap-1">
-            <span className="text-sm font-bold text-[#1E1E1E]">
+            <span className="text-sm font-bold text-[#102A43]">
               {formatOMR(record.amount, { arabic: true })}
             </span>
             <PaymentStatusBadge status={record.status} />

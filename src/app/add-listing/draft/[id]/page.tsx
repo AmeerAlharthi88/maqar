@@ -18,17 +18,17 @@ export default async function EditDraftPage({ params }: Props) {
 
   return (
     <AppShell>
-      <div className="bg-white border-b border-[#F0EBE3] px-4 py-3 flex items-center gap-3" dir="rtl">
-        <div className="w-8 h-8 rounded-xl bg-[#F5F0EA] border border-[#E8DDD0] flex items-center justify-center flex-shrink-0">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A6B5E" strokeWidth="2">
+      <div className="bg-white border-b border-[#E2E8F0] px-4 py-3 flex items-center gap-3" dir="rtl">
+        <div className="w-8 h-8 rounded-xl bg-[#F0F4F8] border border-[#E2E8F0] flex items-center justify-center flex-shrink-0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
             <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
             <polyline points="17 21 17 13 7 13 7 21" />
             <polyline points="7 3 7 8 15 8" />
           </svg>
         </div>
         <div>
-          <h1 className="text-sm font-bold text-[#1E1E1E]">متابعة المسودة</h1>
-          <p className="text-xs text-[#A89480]">المسودة: {id}</p>
+          <h1 className="text-sm font-bold text-[#102A43]">متابعة المسودة</h1>
+          <p className="text-xs text-[#627D98]">المسودة: {id}</p>
         </div>
       </div>
       {/*

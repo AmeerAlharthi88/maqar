@@ -2,13 +2,13 @@ import { cn } from "@/lib/utils";
 
 function Shimmer({ className }: { className?: string }) {
   return (
-    <div className={cn("rounded-xl bg-[#F0EBE3] animate-pulse", className)} aria-hidden="true" />
+    <div className={cn("rounded-xl bg-[#E2E8F0] animate-pulse", className)} aria-hidden="true" />
   );
 }
 
 export function SearchResultSkeleton() {
   return (
-    <article className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
+    <article className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
       <Shimmer className="w-full h-48 rounded-none" />
       <div className="p-4 flex flex-col gap-3">
         <div className="flex justify-between">
@@ -22,7 +22,7 @@ export function SearchResultSkeleton() {
           <Shimmer className="h-3.5 w-12" />
           <Shimmer className="h-3.5 w-14" />
         </div>
-        <div className="flex justify-between items-end pt-1 border-t border-[#F5F0EA]">
+        <div className="flex justify-between items-end pt-1 border-t border-[#F0F4F8]">
           <Shimmer className="h-5 w-28" />
           <Shimmer className="h-7 w-16 rounded-full" />
         </div>
@@ -55,15 +55,15 @@ export function SearchResultsSkeletonGrid({ count = 6 }: { count?: number }) {
 export function SearchEmptyState({ query }: { query?: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-      <div className="w-16 h-16 rounded-2xl bg-[#F5F0EA] flex items-center justify-center mb-5">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A89480" strokeWidth="2">
+      <div className="w-16 h-16 rounded-2xl bg-[#E6F0EF] flex items-center justify-center mb-5">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
           <circle cx="11" cy="11" r="8"/>
           <path d="m21 21-4.35-4.35"/>
-          <path d="M8 11h6M11 8v6" stroke="#C65D3B" strokeWidth="2.5"/>
+          <path d="M8 11h6M11 8v6" stroke="#0A3C36" strokeWidth="2.5"/>
         </svg>
       </div>
-      <h2 className="text-lg font-bold text-[#1E1E1E] mb-2">لا توجد نتائج</h2>
-      <p className="text-sm text-[#7A6B5E] max-w-xs">
+      <h2 className="text-lg font-bold text-[#102A43] mb-2">لا توجد نتائج</h2>
+      <p className="text-sm text-[#627D98] max-w-xs">
         {query
           ? `لم نجد عقارات تطابق "${query}". جرّب تغيير كلمة البحث أو تعديل الفلاتر.`
           : "لم نجد عقارات تطابق الفلاتر المحددة. جرّب تعديل البحث أو إعادة التعيين."}

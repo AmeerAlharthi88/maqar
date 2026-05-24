@@ -22,8 +22,8 @@ const DISCLAIMER =
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">{title}</h2>
-      <div className="text-sm text-[#7A6B5E] leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">{title}</h2>
+      <div className="text-sm text-[#627D98] leading-relaxed space-y-2">{children}</div>
     </div>
   );
 }
@@ -76,8 +76,8 @@ export default function AgentVerificationPolicyPage() {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold text-[#1E1E1E] mb-1">سياسة توثيق الوسطاء</h1>
-          <p className="text-sm text-[#7A6B5E]">
+          <h1 className="text-xl font-bold text-[#102A43] mb-1">سياسة توثيق الوسطاء</h1>
+          <p className="text-sm text-[#627D98]">
             معايير وإجراءات التحقق من هوية وتراخيص الوسطاء العقاريين في مقر
           </p>
         </div>
@@ -93,19 +93,19 @@ export default function AgentVerificationPolicyPage() {
         <Section title="٢. متطلبات التوثيق للوسيط الفرد">
           <ul className="space-y-1 list-none">
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">١</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">١</span>
               <span>بطاقة الهوية الوطنية أو جواز السفر ساري المفعول</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٢</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٢</span>
               <span>ترخيص مزاولة النشاط العقاري من الجهة المختصة في عُمان</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٣</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٣</span>
               <span>رقم التسجيل في السجل التجاري (إن وُجد)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٤</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٤</span>
               <span>رقم هاتف عُماني فعّال للتواصل</span>
             </li>
           </ul>
@@ -114,19 +114,19 @@ export default function AgentVerificationPolicyPage() {
         <Section title="٣. متطلبات توثيق الوكالة">
           <ul className="space-y-1 list-none">
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">١</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">١</span>
               <span>سجل تجاري ساري المفعول</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٢</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٢</span>
               <span>ترخيص مزاولة النشاط العقاري للشركة</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٣</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٣</span>
               <span>هوية المفوض بالتوقيع أو المدير التنفيذي</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="w-5 h-5 rounded-full bg-[#C65D3B] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٤</span>
+              <span className="w-5 h-5 rounded-full bg-[#0A3C36] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">٤</span>
               <span>عنوان الوكالة وبيانات التواصل الرسمية</span>
             </li>
           </ul>
@@ -138,15 +138,15 @@ export default function AgentVerificationPolicyPage() {
           </p>
           <ol className="space-y-2 list-none">
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold">١.</span>
+              <span className="text-[#0A3C36] font-bold">١.</span>
               <span>مراجعة أولية آلية للتحقق من اكتمال المستندات</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold">٢.</span>
+              <span className="text-[#0A3C36] font-bold">٢.</span>
               <span>تحقق يدوي من صحة الترخيص والسجل التجاري</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-[#C65D3B] font-bold">٣.</span>
+              <span className="text-[#0A3C36] font-bold">٣.</span>
               <span>إخطار الوسيط بنتيجة المراجعة خلال ٣–٥ أيام عمل</span>
             </li>
           </ol>
@@ -160,29 +160,29 @@ export default function AgentVerificationPolicyPage() {
 
         <Section title="٦. خصوصية مستندات التوثيق">
           <p>
-            جميع مستندات الهوية والتراخيص المرفوعة تُخزَّن بشكل آمن وتُستخدم فقط لأغراض التحقق. لا تُشارك مع أطراف ثالثة إلا بموجب أمر قانوني. راجع <a href="/privacy" className="text-[#C65D3B] underline underline-offset-2">سياسة الخصوصية</a> للتفاصيل.
+            جميع مستندات الهوية والتراخيص المرفوعة تُخزَّن بشكل آمن وتُستخدم فقط لأغراض التحقق. لا تُشارك مع أطراف ثالثة إلا بموجب أمر قانوني. راجع <a href="/privacy" className="text-[#0A3C36] underline underline-offset-2">سياسة الخصوصية</a> للتفاصيل.
           </p>
         </Section>
 
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">أسئلة شائعة حول التوثيق</h2>
+          <h2 className="text-base font-bold text-[#102A43] mb-3">أسئلة شائعة حول التوثيق</h2>
           <FAQAccordion faqs={VERIFICATION_FAQS} />
         </div>
 
         {/* Apply CTA */}
-        <div className="bg-[#EDF4ED] rounded-2xl px-5 py-4 text-center">
-          <p className="text-sm font-bold text-[#1E1E1E] mb-1">هل أنت وسيط مرخص؟</p>
-          <p className="text-xs text-[#7A6B5E] mb-3">سجّل حسابك وقدّم طلب التوثيق من لوحة التحكم</p>
+        <div className="bg-[#E6F0EF] rounded-2xl px-5 py-4 text-center">
+          <p className="text-sm font-bold text-[#102A43] mb-1">هل أنت وسيط مرخص؟</p>
+          <p className="text-xs text-[#627D98] mb-3">سجّل حسابك وقدّم طلب التوثيق من لوحة التحكم</p>
           <a
             href="/auth/login"
-            className="inline-block px-6 py-2.5 rounded-xl bg-[#5B8C5A] text-white text-sm font-bold min-h-[44px] flex items-center"
+            className="inline-block px-6 py-2.5 rounded-xl bg-[#0A3C36] text-white text-sm font-bold min-h-[44px] flex items-center"
           >
             البدء في التوثيق
           </a>
         </div>
 
-        <div className="bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3">
-          <p className="text-[11px] text-[#A89480] leading-relaxed">{DISCLAIMER}</p>
+        <div className="bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3">
+          <p className="text-[11px] text-[#627D98] leading-relaxed">{DISCLAIMER}</p>
         </div>
       </main>
     </AppShell>

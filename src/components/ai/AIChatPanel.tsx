@@ -91,13 +91,13 @@ export function AIChatPanel() {
           <div className="space-y-4">
             {/* Welcome */}
             <div className="text-center pt-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#FBF0EB] border border-[#C65D3B]/20 flex items-center justify-center mx-auto mb-3">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.5" aria-hidden="true">
+              <div className="w-12 h-12 rounded-2xl bg-[#E6F0EF] border border-[#0A3C36]/20 flex items-center justify-center mx-auto mb-3">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.5" aria-hidden="true">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                 </svg>
               </div>
-              <p className="text-sm font-bold text-[#1E1E1E]">مساعد مقر العقاري</p>
-              <p className="text-xs text-[#7A6B5E] mt-1 leading-relaxed max-w-xs mx-auto">
+              <p className="text-sm font-bold text-[#102A43]">مساعد مقر العقاري</p>
+              <p className="text-xs text-[#627D98] mt-1 leading-relaxed max-w-xs mx-auto">
                 اسألني عن العقارات في سلطنة عُمان — شراء، إيجار، أسعار، أو مقارنة مناطق.
               </p>
             </div>
@@ -121,8 +121,8 @@ export function AIChatPanel() {
               className={[
                 "max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
                 msg.role === "user"
-                  ? "bg-[#F5F0EA] text-[#1E1E1E] rounded-tr-sm"
-                  : "bg-white border border-[#F0EBE3] text-[#1E1E1E] rounded-tl-sm",
+                  ? "bg-[#F0F4F8] text-[#102A43] rounded-tr-sm"
+                  : "bg-white border border-[#E2E8F0] text-[#102A43] rounded-tl-sm",
               ].join(" ")}
             >
               {msg.content}
@@ -135,7 +135,7 @@ export function AIChatPanel() {
 
         {loading && (
           <div className="flex justify-end">
-            <div className="bg-white border border-[#F0EBE3] rounded-2xl rounded-tl-sm px-4 py-3">
+            <div className="bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm px-4 py-3">
               <AILoadingState compact messageAr="يفكر المساعد..." />
             </div>
           </div>
@@ -154,7 +154,7 @@ export function AIChatPanel() {
       </div>
 
       {/* Input */}
-      <div className="px-4 pb-4 pt-2 border-t border-[#F0EBE3] bg-white">
+      <div className="px-4 pb-4 pt-2 border-t border-[#E2E8F0] bg-white">
         <div className="flex items-end gap-2">
           <textarea
             ref={inputRef}
@@ -165,7 +165,7 @@ export function AIChatPanel() {
             rows={1}
             maxLength={1200}
             disabled={loading}
-            className="flex-1 resize-none rounded-2xl border border-[#E8DDD0] bg-[#FAF7F4] px-3.5 py-2.5 text-sm text-[#1E1E1E] placeholder:text-[#A89480] focus:outline-none focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15 disabled:opacity-60 leading-relaxed"
+            className="flex-1 resize-none rounded-2xl border border-[#E2E8F0] bg-[#F8F9FA] px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] focus:outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15 disabled:opacity-60 leading-relaxed"
             style={{ minHeight: "44px", maxHeight: "120px" }}
             aria-label="اكتب رسالتك"
             dir="rtl"
@@ -175,7 +175,7 @@ export function AIChatPanel() {
             onClick={() => void submit()}
             disabled={!input.trim() || loading}
             aria-label="إرسال"
-            className="w-11 h-11 flex-shrink-0 rounded-xl bg-[#C65D3B] text-white flex items-center justify-center disabled:opacity-40 hover:bg-[#B24F30] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C65D3B]/50"
+            className="w-11 h-11 flex-shrink-0 rounded-xl bg-[#0A3C36] text-white flex items-center justify-center disabled:opacity-40 hover:bg-[#082E29] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A3C36]/40"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M22 2L11 13" /><path d="M22 2L15 22l-4-9-9-4 20-7z" />

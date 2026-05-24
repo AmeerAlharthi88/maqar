@@ -30,15 +30,15 @@ export function Tabs({ tabs, activeTab, onChange, variant = "underline", classNa
             className={cn(
               "flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-150",
               activeTab === tab.id
-                ? "bg-[#C65D3B] text-white"
-                : "bg-[#F5F0EA] text-[#7A6B5E] hover:bg-[#EBE3D8]"
+                ? "bg-[#0A3C36] text-white"
+                : "bg-[#F0F4F8] text-[#627D98] hover:bg-[#E6F0EF]"
             )}
           >
             {tab.labelAr}
             {tab.badge !== undefined && tab.badge > 0 && (
               <span className={cn(
                 "text-xs px-1.5 py-0.5 rounded-full leading-none font-semibold",
-                activeTab === tab.id ? "bg-white/25 text-white" : "bg-[#E8DDD0] text-[#7A6B5E]"
+                activeTab === tab.id ? "bg-white/25 text-white" : "bg-[#E2E8F0] text-[#627D98]"
               )}>
                 {tab.badge}
               </span>
@@ -53,7 +53,7 @@ export function Tabs({ tabs, activeTab, onChange, variant = "underline", classNa
     <div
       ref={scrollRef}
       className={cn(
-        "flex overflow-x-auto scrollbar-hide border-b border-[#E8DDD0]",
+        "flex overflow-x-auto scrollbar-hide border-b border-[#E2E8F0]",
         "[scrollbar-width:none] [-ms-overflow-style:none]",
         className
       )}
@@ -65,15 +65,15 @@ export function Tabs({ tabs, activeTab, onChange, variant = "underline", classNa
           className={cn(
             "flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-all duration-150 border-b-2 -mb-px",
             activeTab === tab.id
-              ? "border-[#C65D3B] text-[#C65D3B]"
-              : "border-transparent text-[#7A6B5E] hover:text-[#1E1E1E]"
+              ? "border-[#0A3C36] text-[#0A3C36]"
+              : "border-transparent text-[#627D98] hover:text-[#102A43]"
           )}
         >
           {tab.labelAr}
           {tab.badge !== undefined && tab.badge > 0 && (
             <span className={cn(
               "text-xs px-1.5 rounded-full leading-none font-semibold py-0.5",
-              activeTab === tab.id ? "bg-[#FBF0EB] text-[#C65D3B]" : "bg-[#F5F0EA] text-[#7A6B5E]"
+              activeTab === tab.id ? "bg-[#E6F0EF] text-[#0A3C36]" : "bg-[#F0F4F8] text-[#627D98]"
             )}>
               {tab.badge}
             </span>

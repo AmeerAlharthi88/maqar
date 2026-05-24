@@ -19,7 +19,7 @@ export function MapListView({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[55] bg-[#FAF7F2] overflow-y-auto overscroll-contain",
+        "fixed inset-0 z-[55] bg-[#F8F9FA] overflow-y-auto overscroll-contain",
         className
       )}
       style={{
@@ -31,13 +31,13 @@ export function MapListView({
       <div className="px-4 pt-3 pb-2">
         {/* Result count */}
         <p
-          className="text-xs text-[#7A6B5E] mb-3"
+          className="text-xs text-[#627D98] mb-3"
           aria-live="polite"
           aria-atomic="true"
         >
           {listings.length > 0 ? (
             <>
-              <span className="font-semibold text-[#1E1E1E]">
+              <span className="font-semibold text-[#102A43]">
                 {toArabicNumerals(listings.length)}
               </span>{" "}
               عقار{isFiltered ? " مطابق للفلاتر" : ""}
@@ -71,13 +71,13 @@ export function MapListView({
 function EmptyListState() {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
-      <div className="w-16 h-16 rounded-full bg-[#F5F0EA] flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-full bg-[#F0F4F8] flex items-center justify-center mb-4">
         <svg
           width="28"
           height="28"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#A89480"
+          stroke="#627D98"
           strokeWidth="1.5"
         >
           <circle cx="11" cy="11" r="8" />
@@ -85,10 +85,10 @@ function EmptyListState() {
           <line x1="8" y1="11" x2="14" y2="11" />
         </svg>
       </div>
-      <h3 className="text-sm font-semibold text-[#1E1E1E] mb-1">
+      <h3 className="text-sm font-semibold text-[#102A43] mb-1">
         لا توجد عقارات مطابقة
       </h3>
-      <p className="text-xs text-[#7A6B5E]">
+      <p className="text-xs text-[#627D98]">
         جرّب تغيير الفلاتر أو البحث في منطقة مختلفة
       </p>
     </div>

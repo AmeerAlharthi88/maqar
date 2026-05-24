@@ -14,14 +14,14 @@ export function StepperProgress({ currentStep, completedSteps }: StepperProgress
   const progressPct = ((currentStep - 1) / (ADD_LISTING_TOTAL_STEPS - 1)) * 100;
 
   return (
-    <div className="bg-white border-b border-[#F0EBE3] px-4 pt-3 pb-4">
+    <div className="bg-white border-b border-[#E2E8F0] px-4 pt-3 pb-4">
       {/* Step label row */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <p className="text-xs text-[#A89480]">
+          <p className="text-xs text-[#627D98]">
             الخطوة {toArabicNumerals(currentStep)} من {toArabicNumerals(ADD_LISTING_TOTAL_STEPS)}
           </p>
-          <h2 className="text-sm font-bold text-[#1E1E1E]">{step?.titleAr}</h2>
+          <h2 className="text-sm font-bold text-[#102A43]">{step?.titleAr}</h2>
         </div>
         {/* Dot indicators — show last 5 steps around current */}
         <div className="flex items-center gap-1.5">
@@ -34,10 +34,10 @@ export function StepperProgress({ currentStep, completedSteps }: StepperProgress
                 className={cn(
                   "rounded-full transition-all",
                   isCurrent
-                    ? "w-4 h-2 bg-[#C65D3B]"
+                    ? "w-4 h-2 bg-[#0A3C36]"
                     : isCompleted
-                    ? "w-2 h-2 bg-[#5B8C5A]"
-                    : "w-2 h-2 bg-[#E8DDD0]"
+                    ? "w-2 h-2 bg-[#0A3C36]"
+                    : "w-2 h-2 bg-[#E2E8F0]"
                 )}
               />
             );
@@ -46,9 +46,9 @@ export function StepperProgress({ currentStep, completedSteps }: StepperProgress
       </div>
 
       {/* Progress bar */}
-      <div className="h-1.5 bg-[#F0EBE3] rounded-full overflow-hidden">
+      <div className="h-1.5 bg-[#E2E8F0] rounded-full overflow-hidden">
         <div
-          className="h-full bg-[#C65D3B] rounded-full transition-all duration-500"
+          className="h-full bg-[#0A3C36] rounded-full transition-all duration-500"
           style={{ width: `${progressPct}%` }}
         />
       </div>

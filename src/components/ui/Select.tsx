@@ -33,7 +33,7 @@ export function Select({
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && (
-        <label htmlFor={selectId} className="text-sm font-medium text-[#1E1E1E]">
+        <label htmlFor={selectId} className="text-sm font-medium text-[#102A43]">
           {label}
         </label>
       )}
@@ -41,10 +41,10 @@ export function Select({
         <select
           id={selectId}
           className={cn(
-            "w-full h-11 bg-white border rounded-xl px-3.5 pe-9 text-[#1E1E1E] appearance-none",
+            "w-full h-11 bg-white border rounded-xl px-3.5 pe-9 text-[#102A43] appearance-none",
             "transition-all duration-150 outline-none cursor-pointer",
-            "focus:border-[#C65D3B] focus:ring-2 focus:ring-[#C65D3B]/15",
-            error ? "border-[#C0392B]" : "border-[#E8DDD0]",
+            "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+            error ? "border-[#C0392B]" : "border-[#E2E8F0]",
             className
           )}
           {...props}
@@ -59,14 +59,14 @@ export function Select({
           ))}
         </select>
         {/* Chevron */}
-        <span className="absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#7A6B5E]">
+        <span className="absolute start-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#627D98]">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </span>
       </div>
       {(error ?? helperText) && (
-        <p className={cn("text-xs", error ? "text-[#C0392B]" : "text-[#7A6B5E]")}>
+        <p className={cn("text-xs", error ? "text-[#C0392B]" : "text-[#627D98]")}>
           {error ?? helperText}
         </p>
       )}

@@ -26,15 +26,15 @@ const LABEL_AR: Record<StatusVariant, string> = {
 };
 
 const STYLE_MAP: Record<StatusVariant, string> = {
-  free:      "bg-[#F5F0EA] text-[#7A6B5E] border-[#E8DDD0]",
+  free:      "bg-[#F0F4F8] text-[#627D98] border-[#E2E8F0]",
   trial:     "bg-[#EAF4FB] text-[#2471A3] border-[#2471A3]/20",
-  active:    "bg-[#EDF4ED] text-[#5B8C5A] border-[#5B8C5A]/20",
+  active:    "bg-[#E6F0EF] text-[#0A3C36] border-[#0A3C36]/20",
   past_due:  "bg-[#FEF9EC] text-[#C8860A] border-[#C8860A]/20",
-  cancelled: "bg-[#F5F0EA] text-[#A89480] border-[#E8DDD0]",
-  expired:   "bg-[#F5F0EA] text-[#A89480] border-[#E8DDD0]",
+  cancelled: "bg-[#F0F4F8] text-[#627D98] border-[#E2E8F0]",
+  expired:   "bg-[#F0F4F8] text-[#627D98] border-[#E2E8F0]",
   pending:   "bg-[#FEF9EC] text-[#C8860A] border-[#C8860A]/20",
-  paid:      "bg-[#EDF4ED] text-[#5B8C5A] border-[#5B8C5A]/20",
-  failed:    "bg-[#FEF0F0] text-[#C0392B] border-[#C0392B]/20",
+  paid:      "bg-[#E6F0EF] text-[#0A3C36] border-[#0A3C36]/20",
+  failed:    "bg-[#FEF0EE] text-[#C0392B] border-[#C0392B]/20",
   refunded:  "bg-[#EAF4FB] text-[#2471A3] border-[#2471A3]/20",
 };
 

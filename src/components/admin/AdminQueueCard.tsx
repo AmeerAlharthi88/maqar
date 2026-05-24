@@ -26,16 +26,16 @@ export function AdminQueueCard({
   children,
 }: AdminQueueCardProps) {
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4" dir="rtl">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir="rtl">
       {/* Header row */}
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-[#1E1E1E] line-clamp-2">{titleAr}</p>
+          <p className="text-sm font-bold text-[#102A43] line-clamp-2">{titleAr}</p>
           {subtitleAr && (
-            <p className="text-xs text-[#7A6B5E] mt-0.5">{subtitleAr}</p>
+            <p className="text-xs text-[#627D98] mt-0.5">{subtitleAr}</p>
           )}
           {metaAr && (
-            <p className="text-[10px] text-[#A89480] mt-0.5">{metaAr}</p>
+            <p className="text-[10px] text-[#627D98] mt-0.5">{metaAr}</p>
           )}
         </div>
         <div className="flex flex-col items-end gap-1 flex-shrink-0">
@@ -49,7 +49,7 @@ export function AdminQueueCard({
       {/* Flag chips */}
       {flagLabel && (
         <div className="mb-2">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#FBF0EB] text-[#C65D3B] text-[10px] font-bold rounded-lg">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#FEF0EE] text-[#C0392B] text-[10px] font-bold rounded-lg">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
               <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7" />
             </svg>
@@ -62,7 +62,7 @@ export function AdminQueueCard({
       {adminNote && (
         <div className="bg-[#FFF8E7] rounded-xl px-3 py-2 mb-2">
           <p className="text-[10px] text-[#D4A017] font-semibold mb-0.5">ملاحظة الإدارة</p>
-          <p className="text-xs text-[#7A6B5E] leading-relaxed">{adminNote}</p>
+          <p className="text-xs text-[#627D98] leading-relaxed">{adminNote}</p>
         </div>
       )}
 

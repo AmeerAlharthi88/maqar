@@ -65,7 +65,7 @@ export default function AgentListingsPage() {
       <div className="px-4 py-4 space-y-4" dir="rtl">
         {/* Summary chips */}
         <div className="flex gap-2 flex-wrap">
-          <span className="px-3 py-1.5 bg-[#EDF4ED] text-[#5B8C5A] text-xs font-semibold rounded-xl">
+          <span className="px-3 py-1.5 bg-[#E6F0EF] text-[#0A3C36] text-xs font-semibold rounded-xl">
             {activeCount} نشط
           </span>
           {pendingCount > 0 && (
@@ -74,13 +74,13 @@ export default function AgentListingsPage() {
             </span>
           )}
           {draftCount > 0 && (
-            <span className="px-3 py-1.5 bg-[#F5F0EA] text-[#7A6B5E] text-xs font-semibold rounded-xl">
+            <span className="px-3 py-1.5 bg-[#F0F4F8] text-[#627D98] text-xs font-semibold rounded-xl">
               {draftCount} مسودة
             </span>
           )}
           <Link
             href={ROUTES.addListing}
-            className="mr-auto px-3 py-1.5 bg-[#C65D3B] text-white text-xs font-bold rounded-xl"
+            className="mr-auto px-3 py-1.5 bg-[#0A3C36] text-white text-xs font-bold rounded-xl"
           >
             + إضافة إعلان
           </Link>
@@ -90,7 +90,7 @@ export default function AgentListingsPage() {
         {isLoading && (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 rounded-2xl bg-[#F5F0EA] animate-pulse" />
+              <div key={i} className="h-24 rounded-2xl bg-[#F0F4F8] animate-pulse" />
             ))}
           </div>
         )}

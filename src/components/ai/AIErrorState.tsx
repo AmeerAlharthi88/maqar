@@ -25,12 +25,12 @@ export function AIErrorState({ errorCode, onRetry, compact = false }: AIErrorSta
   if (compact) {
     return (
       <div className="flex items-center gap-2" dir="rtl">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="2" aria-hidden="true">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C0392B" strokeWidth="2" aria-hidden="true">
           <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
         </svg>
-        <span className="text-xs text-[#C65D3B]">{message}</span>
+        <span className="text-xs text-[#C0392B]">{message}</span>
         {onRetry && (
-          <button onClick={onRetry} className="text-xs font-semibold text-[#C65D3B] underline underline-offset-2 ml-1">
+          <button onClick={onRetry} className="text-xs font-semibold text-[#C0392B] underline underline-offset-2 ml-1">
             إعادة المحاولة
           </button>
         )}
@@ -40,22 +40,22 @@ export function AIErrorState({ errorCode, onRetry, compact = false }: AIErrorSta
 
   return (
     <div
-      className="bg-[#FBF0EB] border border-[#C65D3B]/25 rounded-2xl px-4 py-4 flex items-start gap-3"
+      className="bg-[#FEF0EE] border border-[#C0392B]/25 rounded-2xl px-4 py-4 flex items-start gap-3"
       dir="rtl"
       role="alert"
     >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="2" className="flex-shrink-0 mt-0.5" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C0392B" strokeWidth="2" className="flex-shrink-0 mt-0.5" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
         <line x1="12" y1="8" x2="12" y2="12" />
         <line x1="12" y1="16" x2="12.01" y2="16" />
       </svg>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[#C65D3B] mb-0.5">تعذّر استخدام الذكاء الاصطناعي</p>
-        <p className="text-xs text-[#7A6B5E]">{message}</p>
+        <p className="text-sm font-semibold text-[#C0392B] mb-0.5">تعذّر استخدام الذكاء الاصطناعي</p>
+        <p className="text-xs text-[#627D98]">{message}</p>
         {onRetry && (
           <button
             onClick={onRetry}
-            className="mt-2 text-xs font-semibold text-[#C65D3B] underline underline-offset-2"
+            className="mt-2 text-xs font-semibold text-[#C0392B] underline underline-offset-2"
           >
             إعادة المحاولة
           </button>

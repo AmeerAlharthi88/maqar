@@ -11,9 +11,9 @@ interface PlanBadgeProps {
 }
 
 const styleMap: Record<PlanId, string> = {
-  free:      "bg-[#F5F0EA] text-[#7A6B5E] border-[#E8DDD0]",
+  free:      "bg-[#F0F4F8] text-[#627D98] border-[#E2E8F0]",
   agent_pro: "bg-[#EAF4FB] text-[#2471A3] border-[#2471A3]/20",
-  agency:    "bg-[#EDF4ED] text-[#5B8C5A] border-[#5B8C5A]/20",
+  agency:    "bg-[#E6F0EF] text-[#0A3C36] border-[#0A3C36]/20",
 };
 
 export function PlanBadge({ planId, className, size = "xs" }: PlanBadgeProps) {

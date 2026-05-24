@@ -12,7 +12,6 @@ import { buildMetadata } from "@/lib/seo/metadata";
 import {
   AREA_GUIDES,
   AREA_TAG_AR,
-  SUITABLE_FOR_AR,
   type AreaGuide,
 } from "@/mock/areas";
 import { serializeJsonLd, breadcrumbJsonLd } from "@/lib/seo/jsonld";
@@ -27,36 +26,35 @@ export const metadata: Metadata = buildMetadata({
 
 // ── Static filter data ────────────────────────────────────────────────────────
 const ALL_GOVERNORATES = [...new Set(AREA_GUIDES.map((a) => a.governorateAr))];
-const ALL_TAGS = [...new Set(AREA_GUIDES.flatMap((a) => a.tags))] as AreaGuide["tags"];
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 function AreaCard({ area }: { area: AreaGuide }) {
   const yieldColor =
     area.rentalYield >= 5.5
-      ? "text-[#5B8C5A]"
+      ? "text-[#0A3C36]"
       : area.rentalYield >= 4.5
       ? "text-[#C8860A]"
-      : "text-[#7A6B5E]";
+      : "text-[#627D98]";
 
   return (
     <Link
       href={`/areas/${area.slug}`}
-      className="block bg-white rounded-2xl border border-[#F0EBE3] p-4 hover:border-[#C65D3B]/40 transition-colors"
+      className="block bg-white rounded-2xl border border-[#E2E8F0] p-4 hover:border-[#0A3C36]/40 transition-colors"
       aria-label={`دليل عقارات ${area.nameAr}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-2 mb-3">
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] leading-tight">{area.nameAr}</h2>
-          <p className="text-[11px] text-[#A89480] mt-0.5">{area.governorateAr}</p>
+          <h2 className="text-sm font-bold text-[#102A43] leading-tight">{area.nameAr}</h2>
+          <p className="text-[11px] text-[#627D98] mt-0.5">{area.governorateAr}</p>
         </div>
         <span
           className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
             area.demandScore >= 85
-              ? "bg-[#EDF4ED] text-[#5B8C5A]"
+              ? "bg-[#E6F0EF] text-[#0A3C36]"
               : area.demandScore >= 70
               ? "bg-[#FEF9EC] text-[#C8860A]"
-              : "bg-[#F5F0EA] text-[#7A6B5E]"
+              : "bg-[#F0F4F8] text-[#627D98]"
           }`}
         >
           طلب {area.demandScore}٪
@@ -66,18 +64,18 @@ function AreaCard({ area }: { area: AreaGuide }) {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2 mb-3">
         <div className="text-center">
-          <p className="text-xs font-bold text-[#1E1E1E]">
+          <p className="text-xs font-bold text-[#102A43]">
             {(area.avgSalePrice / 1000).toFixed(0)}k
           </p>
-          <p className="text-[9px] text-[#A89480]">بيع (ر.ع.)</p>
+          <p className="text-[9px] text-[#627D98]">بيع (ر.ع.)</p>
         </div>
         <div className="text-center">
-          <p className="text-xs font-bold text-[#1E1E1E]">{area.avgRentPrice}</p>
-          <p className="text-[9px] text-[#A89480]">إيجار/شهر</p>
+          <p className="text-xs font-bold text-[#102A43]">{area.avgRentPrice}</p>
+          <p className="text-[9px] text-[#627D98]">إيجار/شهر</p>
         </div>
         <div className="text-center">
           <p className={`text-xs font-bold ${yieldColor}`}>{area.rentalYield}٪</p>
-          <p className="text-[9px] text-[#A89480]">عائد</p>
+          <p className="text-[9px] text-[#627D98]">عائد</p>
         </div>
       </div>
 
@@ -86,7 +84,7 @@ function AreaCard({ area }: { area: AreaGuide }) {
         {area.tags.slice(0, 3).map((tag) => (
           <span
             key={tag}
-            className="text-[9px] px-2 py-0.5 bg-[#F5F0EA] text-[#7A6B5E] rounded-full"
+            className="text-[9px] px-2 py-0.5 bg-[#F0F4F8] text-[#627D98] rounded-full"
           >
             {AREA_TAG_AR[tag]}
           </span>
@@ -104,9 +102,9 @@ function StatRow({
   value: string;
 }) {
   return (
-    <div className="flex justify-between items-center py-2 border-b border-[#F5F0EA] last:border-0">
-      <span className="text-xs text-[#7A6B5E]">{label}</span>
-      <span className="text-xs font-semibold text-[#1E1E1E]">{value}</span>
+    <div className="flex justify-between items-center py-2 border-b border-[#F0F4F8] last:border-0">
+      <span className="text-xs text-[#627D98]">{label}</span>
+      <span className="text-xs font-semibold text-[#102A43]">{value}</span>
     </div>
   );
 }
@@ -143,10 +141,10 @@ export default function AreasPage() {
 
         {/* Hero intro */}
         <div>
-          <h1 className="text-xl font-bold text-[#1E1E1E] mb-1">
+          <h1 className="text-xl font-bold text-[#102A43] mb-1">
             دليل الأحياء العقارية في عُمان
           </h1>
-          <p className="text-sm text-[#7A6B5E]">
+          <p className="text-sm text-[#627D98]">
             {AREA_GUIDES.length} منطقة مع بيانات السوق وإحصاءات الإيجار والبيع
           </p>
         </div>
@@ -159,8 +157,8 @@ export default function AreasPage() {
         </div>
 
         {/* Market overview summary */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">نظرة عامة</h2>
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">نظرة عامة</h2>
           <StatRow label="عدد المناطق" value={`${AREA_GUIDES.length} منطقة`} />
           <StatRow
             label="متوسط سعر البيع"
@@ -178,12 +176,12 @@ export default function AreasPage() {
 
         {/* Governorate quick links */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-2">حسب المحافظة</h2>
+          <h2 className="text-sm font-bold text-[#102A43] mb-2">حسب المحافظة</h2>
           <div className="flex flex-wrap gap-2">
             {ALL_GOVERNORATES.map((gov) => (
               <span
                 key={gov}
-                className="px-3 py-1.5 bg-[#F5F0EA] text-xs text-[#7A6B5E] rounded-full font-medium"
+                className="px-3 py-1.5 bg-[#F0F4F8] text-xs text-[#627D98] rounded-full font-medium"
               >
                 {gov} ({AREA_GUIDES.filter((a) => a.governorateAr === gov).length})
               </span>
@@ -193,7 +191,7 @@ export default function AreasPage() {
 
         {/* Most in-demand */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">الأكثر طلباً</h2>
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">الأكثر طلباً</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {popularAreas.map((area) => (
               <AreaCard key={area.slug} area={area} />
@@ -203,10 +201,10 @@ export default function AreasPage() {
 
         {/* Investment-friendly */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-1">
+          <h2 className="text-sm font-bold text-[#102A43] mb-1">
             مناطق استثمارية واعدة
           </h2>
-          <p className="text-xs text-[#A89480] mb-3">
+          <p className="text-xs text-[#627D98] mb-3">
             مناطق تتميز بعوائد إيجارية أعلى من المتوسط أو نمو في الطلب
           </p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -218,10 +216,10 @@ export default function AreasPage() {
 
         {/* Family-friendly */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-1">
+          <h2 className="text-sm font-bold text-[#102A43] mb-1">
             مناطق عائلية مناسبة
           </h2>
-          <p className="text-xs text-[#A89480] mb-3">
+          <p className="text-xs text-[#627D98] mb-3">
             أحياء تتوفر فيها مدارس ومرافق وبيئة عائلية هادئة
           </p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -233,7 +231,7 @@ export default function AreasPage() {
 
         {/* All areas */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">
             جميع المناطق ({AREA_GUIDES.length})
           </h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -244,9 +242,9 @@ export default function AreasPage() {
         </div>
 
         {/* Market disclaimer */}
-        <div className="bg-[#FAF7F4] border border-[#F0EBE3] rounded-xl px-4 py-3">
-          <p className="text-[11px] text-[#7A6B5E] leading-relaxed">
-            <strong className="text-[#1E1E1E]">إخلاء مسؤولية:</strong> جميع أسعار السوق في هذه الصفحة هي تقديرات إرشادية مستخلصة من إعلانات منصة مقر. لا تعبر عن أسعار رسمية أو حكومية معتمدة. ننصح بالتحقق مع وسيط مرخص قبل اتخاذ أي قرار استثماري.
+        <div className="bg-[#F8F9FA] border border-[#E2E8F0] rounded-xl px-4 py-3">
+          <p className="text-[11px] text-[#627D98] leading-relaxed">
+            <strong className="text-[#102A43]">إخلاء مسؤولية:</strong> جميع أسعار السوق في هذه الصفحة هي تقديرات إرشادية مستخلصة من إعلانات منصة مقر. لا تعبر عن أسعار رسمية أو حكومية معتمدة. ننصح بالتحقق مع وسيط مرخص قبل اتخاذ أي قرار استثماري.
           </p>
         </div>
       </main>

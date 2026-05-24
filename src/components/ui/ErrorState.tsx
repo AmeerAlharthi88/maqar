@@ -20,13 +20,13 @@ export function ErrorState({
         </svg>
       </div>
       <div className="flex flex-col gap-1.5">
-        <p className="text-base font-semibold text-[#1E1E1E]">{titleAr}</p>
-        <p className="text-sm text-[#7A6B5E] max-w-xs">{descriptionAr}</p>
+        <p className="text-base font-semibold text-[#102A43]">{titleAr}</p>
+        <p className="text-sm text-[#627D98] max-w-xs">{descriptionAr}</p>
       </div>
       {onRetry && (
         <button
           onClick={onRetry}
-          className="mt-2 h-10 px-5 rounded-xl text-sm font-semibold bg-[#C65D3B] text-white hover:bg-[#A84D2F] transition-colors"
+          className="mt-2 h-10 px-5 rounded-xl text-sm font-semibold bg-[#0A3C36] text-white hover:bg-[#082E29] transition-colors"
         >
           حاول مرة أخرى
         </button>

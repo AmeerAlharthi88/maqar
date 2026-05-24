@@ -8,11 +8,11 @@ interface TrustBadgeProps {
 }
 
 const config: Record<TrustType, { labelAr: string; bg: string; text: string; icon: string }> = {
-  verified:  { labelAr: "موثوق",  bg: "#EDF4ED", text: "#5B8C5A", icon: "✓" },
-  certified: { labelAr: "معتمد",  bg: "#EAF4FB", text: "#2471A3", icon: "★" },
-  new:       { labelAr: "جديد",   bg: "#FDF6EE", text: "#C49060", icon: "●" },
-  featured:  { labelAr: "مميز",   bg: "#FBF0EB", text: "#C65D3B", icon: "▲" },
-  premium:   { labelAr: "بريميوم", bg: "#1E1E1E", text: "#D4A373", icon: "◆" },
+  verified:  { labelAr: "موثوق",   bg: "#E6F0EF", text: "#0A3C36", icon: "✓" },
+  certified: { labelAr: "معتمد",   bg: "#EBF4FF", text: "#2B6CB0", icon: "★" },
+  new:       { labelAr: "جديد",    bg: "#F0F4F8", text: "#627D98", icon: "●" },
+  featured:  { labelAr: "مميز",    bg: "#FDF8EE", text: "#B7791F", icon: "▲" },
+  premium:   { labelAr: "بريميوم", bg: "#0A3C36", text: "#E5BA73", icon: "◆" },
 };
 
 export function TrustBadge({ type, className }: TrustBadgeProps) {

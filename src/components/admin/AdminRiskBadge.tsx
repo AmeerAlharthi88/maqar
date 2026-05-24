@@ -3,10 +3,10 @@ import type { RiskLevel } from "@/types/admin";
 import { RISK_LEVEL_AR } from "@/types/admin";
 
 const RISK_CLASSES: Record<RiskLevel, string> = {
-  low:      "bg-[#EDF4ED] text-[#5B8C5A]",
+  low:      "bg-[#E6F0EF] text-[#0A3C36]",
   medium:   "bg-[#FFF8E7] text-[#D4A017]",
-  high:     "bg-[#FBF0EB] text-[#C65D3B]",
-  critical: "bg-[#C65D3B] text-white",
+  high:     "bg-[#FEF0EE] text-[#C0392B]",
+  critical: "bg-[#C0392B] text-white",
 };
 
 interface AdminRiskBadgeProps {

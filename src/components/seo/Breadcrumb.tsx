@@ -20,7 +20,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
   return (
     <nav aria-label="مسار التنقل" className={`${className}`} dir="rtl">
       <ol
-        className="flex items-center flex-wrap gap-1 text-[11px] text-[#A89480]"
+        className="flex items-center flex-wrap gap-1 text-[11px] text-[#627D98]"
         role="list"
       >
         {items.map((item, idx) => {
@@ -34,7 +34,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
               )}
               {isLast || !item.href ? (
                 <span
-                  className={`${isLast ? "text-[#1E1E1E] font-semibold" : "text-[#A89480]"}`}
+                  className={`${isLast ? "text-[#102A43] font-semibold" : "text-[#627D98]"}`}
                   aria-current={isLast ? "page" : undefined}
                 >
                   {item.labelAr}
@@ -42,7 +42,7 @@ export function Breadcrumb({ items, className = "" }: BreadcrumbProps) {
               ) : (
                 <Link
                   href={item.href}
-                  className="text-[#A89480] hover:text-[#C65D3B] transition-colors underline-offset-2 hover:underline"
+                  className="text-[#627D98] hover:text-[#0A3C36] transition-colors underline-offset-2 hover:underline"
                 >
                   {item.labelAr}
                 </Link>

@@ -19,11 +19,11 @@ export function AgentProfileHeader({ agent }: AgentProfileHeaderProps) {
   const joinedYear = new Date(agent.joinedAt).getFullYear();
 
   return (
-    <div className="bg-white border-b border-[#F0EBE3]" dir="rtl">
+    <div className="bg-white border-b border-[#E2E8F0]" dir="rtl">
       <div className="px-4 py-5">
         {/* Avatar + Name block */}
         <div className="flex items-start gap-4 mb-4">
-          <div className="w-20 h-20 rounded-2xl bg-[#C65D3B]/10 flex items-center justify-center flex-shrink-0">
+          <div className="w-20 h-20 rounded-2xl bg-[#0A3C36]/10 flex items-center justify-center flex-shrink-0">
             {agent.avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -32,35 +32,35 @@ export function AgentProfileHeader({ agent }: AgentProfileHeaderProps) {
                 className="w-full h-full rounded-2xl object-cover"
               />
             ) : (
-              <span className="text-2xl font-bold text-[#C65D3B]">{initials}</span>
+              <span className="text-2xl font-bold text-[#0A3C36]">{initials}</span>
             )}
           </div>
 
           <div className="flex-1 min-w-0 pt-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-lg font-bold text-[#1E1E1E]">{agent.nameAr}</h1>
+              <h1 className="text-lg font-bold text-[#102A43]">{agent.nameAr}</h1>
               {agent.isVerified && (
-                <span className="flex items-center gap-1 bg-[#EDF4ED] px-2 py-0.5 rounded-full">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="#5B8C5A">
+                <span className="flex items-center gap-1 bg-[#E6F0EF] px-2 py-0.5 rounded-full">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="#0A3C36">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
                   </svg>
-                  <span className="text-[10px] font-semibold text-[#5B8C5A]">موثّق</span>
+                  <span className="text-[10px] font-semibold text-[#0A3C36]">موثّق</span>
                 </span>
               )}
             </div>
 
             {agent.agency && (
-              <p className="text-sm text-[#7A6B5E] mt-0.5">{agent.agency.nameAr}</p>
+              <p className="text-sm text-[#627D98] mt-0.5">{agent.agency.nameAr}</p>
             )}
 
             {/* Stars */}
             <div className="flex items-center gap-0.5 mt-2">
               {stars.map((filled, i) => (
-                <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill={filled ? "#C65D3B" : "#E8DDD0"}>
+                <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill={filled ? "#E5BA73" : "#E2E8F0"}>
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
               ))}
-              <span className="text-xs text-[#7A6B5E] mr-1.5">
+              <span className="text-xs text-[#627D98] mr-1.5">
                 {agent.stats.rating} · {agent.stats.reviewCount} تقييم
               </span>
             </div>
@@ -71,7 +71,7 @@ export function AgentProfileHeader({ agent }: AgentProfileHeaderProps) {
         {agent.specializationAr.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {agent.specializationAr.map((s) => (
-              <span key={s} className="px-2.5 py-1 bg-[#F5F0EA] text-[#7A6B5E] text-xs rounded-lg">
+              <span key={s} className="px-2.5 py-1 bg-[#F0F4F8] text-[#627D98] text-xs rounded-lg">
                 {s}
               </span>
             ))}
@@ -80,21 +80,21 @@ export function AgentProfileHeader({ agent }: AgentProfileHeaderProps) {
 
         {/* Stats */}
         <div className="grid grid-cols-4 gap-2 mb-4">
-          <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-            <p className="text-base font-bold text-[#1E1E1E]">{agent.stats.totalListings}</p>
-            <p className="text-[10px] text-[#A89480]">إعلان</p>
+          <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+            <p className="text-base font-bold text-[#102A43]">{agent.stats.totalListings}</p>
+            <p className="text-[10px] text-[#627D98]">إعلان</p>
           </div>
-          <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-            <p className="text-base font-bold text-[#1E1E1E]">{agent.stats.soldListings}</p>
-            <p className="text-[10px] text-[#A89480]">صفقة</p>
+          <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+            <p className="text-base font-bold text-[#102A43]">{agent.stats.soldListings}</p>
+            <p className="text-[10px] text-[#627D98]">صفقة</p>
           </div>
-          <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-            <p className="text-base font-bold text-[#1E1E1E]">{agent.stats.avgResponseTime}</p>
-            <p className="text-[10px] text-[#A89480]">وقت الرد</p>
+          <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+            <p className="text-base font-bold text-[#102A43]">{agent.stats.avgResponseTime}</p>
+            <p className="text-[10px] text-[#627D98]">وقت الرد</p>
           </div>
-          <div className="bg-[#FAF7F4] rounded-xl py-2 text-center">
-            <p className="text-base font-bold text-[#1E1E1E]">{joinedYear}</p>
-            <p className="text-[10px] text-[#A89480]">عضو منذ</p>
+          <div className="bg-[#F8F9FA] rounded-xl py-2 text-center">
+            <p className="text-base font-bold text-[#102A43]">{joinedYear}</p>
+            <p className="text-[10px] text-[#627D98]">عضو منذ</p>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ export function AgentProfileHeader({ agent }: AgentProfileHeaderProps) {
           </a>
           <a
             href={callHref}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#F5F0EA] text-[#1E1E1E] text-sm font-bold border border-[#E8DDD0]"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#F0F4F8] text-[#102A43] text-sm font-bold border border-[#E2E8F0]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -125,7 +125,7 @@ export function AgentProfileHeader({ agent }: AgentProfileHeaderProps) {
 
         {/* License number */}
         {agent.licenseNumber && (
-          <p className="text-[10px] text-[#A89480] text-center mt-3">
+          <p className="text-[10px] text-[#627D98] text-center mt-3">
             رقم الترخيص: {agent.licenseNumber}
           </p>
         )}

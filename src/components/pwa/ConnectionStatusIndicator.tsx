@@ -29,11 +29,11 @@ export function ConnectionStatusIndicator({
     >
       <span
         className={`w-2 h-2 rounded-full ${
-          isOnline ? "bg-[#4CAF50]" : "bg-[#C65D3B] animate-pulse"
+          isOnline ? "bg-[#4CAF50]" : "bg-[#E5BA73] animate-pulse"
         }`}
         aria-hidden="true"
       />
-      <span className={`text-[10px] font-semibold ${isOnline ? "text-[#4CAF50]" : "text-[#C65D3B]"}`}>
+      <span className={`text-[10px] font-semibold ${isOnline ? "text-[#4CAF50]" : "text-[#627D98]"}`}>
         {isOnline ? "متصل" : "غير متصل"}
       </span>
     </span>

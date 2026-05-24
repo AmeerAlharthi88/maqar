@@ -11,7 +11,7 @@ export function ROIChip({ roiPct, className }: ROIChipProps) {
     <span
       className={cn(
         "inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-md",
-        "bg-[#EDF4ED] text-[#5B8C5A]",
+        "bg-[#E6F0EF] text-[#0A3C36]",
         className
       )}
     >

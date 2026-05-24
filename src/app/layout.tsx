@@ -1,11 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Alexandria, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { AppProviders } from "@/providers/AppProviders";
 import { APP_CONFIG } from "@/config/app";
 import "./globals.css";
 
-const arabicFont = IBM_Plex_Sans_Arabic({
+// Primary Arabic/Latin typeface — Maqar brand identity
+// Alexandria: modern, premium, supports Arabic + Latin subsets
+const alexandriaFont = Alexandria({
   variable: "--font-arabic",
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Fallback Arabic typeface — used when Alexandria is unavailable
+const arabicFallbackFont = IBM_Plex_Sans_Arabic({
+  variable: "--font-arabic-fallback",
   subsets: ["arabic"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
@@ -48,7 +58,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${arabicFont.variable} h-full`}
+      className={`${alexandriaFont.variable} ${arabicFallbackFont.variable} h-full`}
       suppressHydrationWarning
     >
       <head>

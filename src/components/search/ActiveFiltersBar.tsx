@@ -47,8 +47,8 @@ export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
           onClick={() => removeFilter(label.key)}
           className={cn(
             "flex-shrink-0 flex items-center gap-1.5 px-3 h-8 rounded-full text-xs font-medium",
-            "bg-[#FDEEE9] text-[#C65D3B] border border-[#F5C4B0]",
-            "hover:bg-[#FAD9CC] transition-colors"
+            "bg-[#E6F0EF] text-[#0A3C36] border border-[#0A3C36]/20",
+            "hover:bg-[#D0E8E4] transition-colors"
           )}
           aria-label={`إزالة الفلتر: ${label.label}`}
         >
@@ -61,7 +61,7 @@ export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
 
       <button
         onClick={resetFilters}
-        className="flex-shrink-0 flex items-center gap-1 px-3 h-8 rounded-full text-xs font-medium text-[#7A6B5E] hover:text-[#C65D3B] transition-colors whitespace-nowrap"
+        className="flex-shrink-0 flex items-center gap-1 px-3 h-8 rounded-full text-xs font-medium text-[#627D98] hover:text-[#0A3C36] transition-colors whitespace-nowrap"
         aria-label="مسح جميع الفلاتر"
       >
         مسح الكل

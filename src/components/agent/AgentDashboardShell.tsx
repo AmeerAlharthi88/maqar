@@ -32,7 +32,7 @@ export function AgentDashboardShell({ children, titleAr = "لوحة الوسيط
     return (
       <AppShell>
         <div className="flex items-center justify-center min-h-[60vh]">
-          <span className="w-8 h-8 rounded-full border-2 border-[#E8DDD0] border-t-[#C65D3B] animate-spin" />
+          <span className="w-8 h-8 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
         </div>
       </AppShell>
     );
@@ -56,19 +56,19 @@ export function AgentDashboardShell({ children, titleAr = "لوحة الوسيط
       <AppShell>
         <AppHeader variant="back" titleAr="لوحة الوسيط" />
         <div className="px-4 py-12 text-center" dir="rtl">
-          <div className="w-16 h-16 rounded-full bg-[#C65D3B]/10 flex items-center justify-center mx-auto mb-4">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.8">
+          <div className="w-16 h-16 rounded-full bg-[#0A3C36]/10 flex items-center justify-center mx-auto mb-4">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.8">
               <path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
               <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
             </svg>
           </div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-2">هذه الصفحة للوسطاء فقط</h2>
-          <p className="text-sm text-[#7A6B5E] mb-6 leading-relaxed">
+          <h2 className="text-base font-bold text-[#102A43] mb-2">هذه الصفحة للوسطاء فقط</h2>
+          <p className="text-sm text-[#627D98] mb-6 leading-relaxed">
             سجّل كوسيط عقاري للوصول إلى لوحة التحكم وإدارة إعلاناتك وعملائك
           </p>
           <Link
             href={ROUTES.agentVerification}
-            className="inline-block px-6 py-3 rounded-xl bg-[#C65D3B] text-white text-sm font-bold"
+            className="inline-block px-6 py-3 rounded-xl bg-[#0A3C36] text-white text-sm font-bold"
           >
             التقديم كوسيط عقاري
           </Link>

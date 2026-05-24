@@ -101,7 +101,7 @@ export default function AdminListingsPage() {
                 onClick={() => setFilter(f)}
                 className={[
                   "px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                  filter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]",
+                  filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
                 ].join(" ")}
               >
                 {FILTER_LABELS_AR[f]} ({count})
@@ -112,7 +112,7 @@ export default function AdminListingsPage() {
 
         {/* Queue */}
         {loading ? (
-          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد إعلانات في هذه الفئة" />
         ) : (
@@ -133,7 +133,7 @@ export default function AdminListingsPage() {
                 }
                 adminNote={listing.adminNote}
               >
-                <p className="text-[10px] text-[#A89480] mb-2">
+                <p className="text-[10px] text-[#627D98] mb-2">
                   {new Date(listing.submittedAt).toLocaleDateString("ar-OM", { year: "numeric", month: "long", day: "numeric" })}
                 </p>
                 {(listing.reviewStatus === "pending" || listing.reviewStatus === "suspicious") && (

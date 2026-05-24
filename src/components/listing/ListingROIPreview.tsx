@@ -25,26 +25,26 @@ export function ListingROIPreview({ listing }: ListingROIPreviewProps) {
       : 0;
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">الحسابات المالية</h2>
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
+      <h2 className="text-base font-bold text-[#102A43] mb-3">الحسابات المالية</h2>
       <div className="grid grid-cols-2 gap-3">
         {/* ROI card */}
         {listing.purpose === "sale" && (
-          <div className="bg-[#EDF4ED] rounded-2xl p-4 border border-[#5B8C5A]/20">
+          <div className="bg-[#E6F0EF] rounded-2xl p-4 border border-[#0A3C36]/20">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-xl bg-[#5B8C5A]/15 flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2">
+              <div className="w-8 h-8 rounded-xl bg-[#0A3C36]/15 flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2">
                   <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
                   <polyline points="16 7 22 7 22 13" />
                 </svg>
               </div>
-              <span className="text-xs font-semibold text-[#5B8C5A]">العائد على الاستثمار</span>
+              <span className="text-xs font-semibold text-[#0A3C36]">العائد على الاستثمار</span>
             </div>
-            <p className="text-2xl font-bold text-[#5B8C5A] mb-0.5">
+            <p className="text-2xl font-bold text-[#0A3C36] mb-0.5">
               {toArabicNumerals(roiPct)}%
             </p>
-            <p className="text-xs text-[#5B8C5A]/70 mb-3">عائد سنوي تقديري</p>
-            <div className="space-y-1 text-xs text-[#5B8C5A]">
+            <p className="text-xs text-[#0A3C36]/70 mb-3">عائد سنوي تقديري</p>
+            <div className="space-y-1 text-xs text-[#0A3C36]">
               <div className="flex justify-between">
                 <span>شهري</span>
                 <span className="font-semibold">{formatOMR(monthlyReturn, { arabic: true, compact: true })}</span>
@@ -54,8 +54,8 @@ export function ListingROIPreview({ listing }: ListingROIPreviewProps) {
                 <span className="font-semibold">{formatOMR(annualReturn, { arabic: true, compact: true })}</span>
               </div>
             </div>
-            <p className="text-[10px] text-[#5B8C5A]/60 mt-2">* تقديري — يرجى استشارة خبير</p>
-            <Link href="/tools/roi-calculator" className="mt-2 block text-[10px] font-semibold text-[#5B8C5A] underline underline-offset-2">
+            <p className="text-[10px] text-[#0A3C36]/60 mt-2">* تقديري — يرجى استشارة خبير</p>
+            <Link href="/tools/roi-calculator" className="mt-2 block text-[10px] font-semibold text-[#0A3C36] underline underline-offset-2">
               حاسبة العائد التفصيلية
             </Link>
           </div>
@@ -96,28 +96,28 @@ export function ListingROIPreview({ listing }: ListingROIPreviewProps) {
 
         {/* Rent card — show if rent listing */}
         {listing.purpose === "rent" && (
-          <div className="col-span-2 bg-[#FBF0EB] rounded-2xl p-4 border border-[#C65D3B]/20">
+          <div className="col-span-2 bg-[#E6F0EF] rounded-2xl p-4 border border-[#0A3C36]/20">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 rounded-xl bg-[#C65D3B]/15 flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="2">
+              <div className="w-8 h-8 rounded-xl bg-[#0A3C36]/15 flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                   <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
               </div>
-              <span className="text-sm font-semibold text-[#C65D3B]">ملخص تكلفة الإيجار</span>
+              <span className="text-sm font-semibold text-[#0A3C36]">ملخص تكلفة الإيجار</span>
             </div>
             <div className="grid grid-cols-3 gap-3 text-xs">
               <div className="text-center">
-                <p className="text-[#C65D3B] font-bold text-base">{formatOMR(listing.price, { arabic: true, compact: true })}</p>
-                <p className="text-[#C65D3B]/70">/ شهر</p>
+                <p className="text-[#0A3C36] font-bold text-base">{formatOMR(listing.price, { arabic: true, compact: true })}</p>
+                <p className="text-[#0A3C36]/70">/ شهر</p>
               </div>
               <div className="text-center">
-                <p className="text-[#C65D3B] font-bold text-base">{formatOMR(listing.price * 3, { arabic: true, compact: true })}</p>
-                <p className="text-[#C65D3B]/70">ربع سنوي</p>
+                <p className="text-[#0A3C36] font-bold text-base">{formatOMR(listing.price * 3, { arabic: true, compact: true })}</p>
+                <p className="text-[#0A3C36]/70">ربع سنوي</p>
               </div>
               <div className="text-center">
-                <p className="text-[#C65D3B] font-bold text-base">{formatOMR(listing.price * 12, { arabic: true, compact: true })}</p>
-                <p className="text-[#C65D3B]/70">سنوي</p>
+                <p className="text-[#0A3C36] font-bold text-base">{formatOMR(listing.price * 12, { arabic: true, compact: true })}</p>
+                <p className="text-[#0A3C36]/70">سنوي</p>
               </div>
             </div>
           </div>

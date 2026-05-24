@@ -22,10 +22,10 @@ export function AIUsageNotice({ feature: _feature, planId = "free", usedCount, l
       className={[
         "rounded-xl px-3 py-2 text-xs border",
         isAtLimit
-          ? "bg-[#FBF0EB] border-[#C65D3B]/25 text-[#C65D3B]"
+          ? "bg-[#FEF0EE] border-[#C0392B]/25 text-[#C0392B]"
           : isNearLimit
           ? "bg-[#FDF6E3] border-[#C8860A]/25 text-[#C8860A]"
-          : "bg-[#F5F0EA] border-[#E8DDD0] text-[#7A6B5E]",
+          : "bg-[#F0F4F8] border-[#E2E8F0] text-[#627D98]",
       ].join(" ")}
       dir="rtl"
     >

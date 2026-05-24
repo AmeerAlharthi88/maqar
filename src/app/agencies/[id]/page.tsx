@@ -121,10 +121,10 @@ export default async function AgencyProfilePage({ params }: Props) {
         {/* Areas covered */}
         {agency.areasAr.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-2">المناطق التي تغطيها</h2>
+            <h2 className="text-sm font-bold text-[#102A43] mb-2">المناطق التي تغطيها</h2>
             <div className="flex flex-wrap gap-2">
               {agency.areasAr.map((area) => (
-                <span key={area} className="px-3 py-1.5 bg-[#F5F0EA] text-[#7A6B5E] text-xs rounded-xl">
+                <span key={area} className="px-3 py-1.5 bg-[#F0F4F8] text-[#627D98] text-xs rounded-xl">
                   {area}
                 </span>
               ))}
@@ -135,7 +135,7 @@ export default async function AgencyProfilePage({ params }: Props) {
         {/* Team members */}
         {agency.members && agency.members.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">
               فريق العمل ({agency.stats.totalAgents} وسيط)
             </h2>
             <div className="space-y-2">
@@ -149,7 +149,7 @@ export default async function AgencyProfilePage({ params }: Props) {
         {/* Reviews section */}
         {reviews.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">
               تقييمات العملاء ({agency.stats.reviewCount})
             </h2>
             <div className="space-y-3">
@@ -158,20 +158,20 @@ export default async function AgencyProfilePage({ params }: Props) {
                 return (
                   <div
                     key={review.id}
-                    className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4"
+                    className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-sm font-bold text-[#1E1E1E]">{review.authorNameAr}</p>
+                      <p className="text-sm font-bold text-[#102A43]">{review.authorNameAr}</p>
                       <div className="flex gap-0.5">
                         {stars.map((filled, i) => (
-                          <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={filled ? "#C65D3B" : "#E8DDD0"}>
+                          <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={filled ? "#E5BA73" : "#E2E8F0"}>
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                           </svg>
                         ))}
                       </div>
                     </div>
-                    <p className="text-sm text-[#7A6B5E] leading-relaxed">{review.bodyAr}</p>
-                    <p className="text-[10px] text-[#A89480] mt-2">
+                    <p className="text-sm text-[#627D98] leading-relaxed">{review.bodyAr}</p>
+                    <p className="text-[10px] text-[#627D98] mt-2">
                       {new Date(review.createdAt).toLocaleDateString("ar-OM", {
                         year: "numeric",
                         month: "long",
@@ -187,7 +187,7 @@ export default async function AgencyProfilePage({ params }: Props) {
 
         {reviews.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-sm text-[#A89480]">لا توجد تقييمات بعد</p>
+            <p className="text-sm text-[#627D98]">لا توجد تقييمات بعد</p>
           </div>
         )}
 

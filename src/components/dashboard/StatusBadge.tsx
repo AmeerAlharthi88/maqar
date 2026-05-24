@@ -9,11 +9,11 @@ type Variant =
   | "purple";
 
 const VARIANT_CLASSES: Record<Variant, string> = {
-  success: "bg-[#EDF4ED] text-[#5B8C5A]",
+  success: "bg-[#E6F0EF] text-[#0A3C36]",
   warning: "bg-[#FFF8E7] text-[#D4A017]",
-  danger:  "bg-[#FBF0EB] text-[#C65D3B]",
+  danger:  "bg-[#FEF0EE] text-[#C0392B]",
   info:    "bg-[#EAF4FB] text-[#2471A3]",
-  neutral: "bg-[#F5F0EA] text-[#7A6B5E]",
+  neutral: "bg-[#F0F4F8] text-[#627D98]",
   purple:  "bg-[#F3EEFA] text-[#7B5EA7]",
 };
 

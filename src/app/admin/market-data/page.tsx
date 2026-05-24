@@ -47,15 +47,15 @@ export default function AdminMarketDataPage() {
     <AdminDashboardShell titleAr="بيانات السوق">
       <div className="px-4 py-4 space-y-4" dir="rtl">
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <p className="text-xs text-[#A89480]">
+          <p className="text-xs text-[#627D98]">
             {loading ? "جارٍ التحميل…" : `${rows.length} منطقة · آخر تحديث: ${lastUpdated}`}
           </p>
           {/* Import/export placeholders */}
           <div className="flex gap-2">
-            <button className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#F5F0EA] text-[#7A6B5E] opacity-60 cursor-not-allowed" disabled>
+            <button className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#F0F4F8] text-[#627D98] opacity-60 cursor-not-allowed" disabled>
               استيراد CSV
             </button>
-            <button className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#F5F0EA] text-[#7A6B5E] opacity-60 cursor-not-allowed" disabled>
+            <button className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#F0F4F8] text-[#627D98] opacity-60 cursor-not-allowed" disabled>
               تصدير
             </button>
           </div>
@@ -64,14 +64,14 @@ export default function AdminMarketDataPage() {
         {/* Policy notice */}
         <div className="bg-[#FFF8E7] rounded-2xl border border-[#D4A017]/20 px-4 py-3">
           <p className="text-xs font-bold text-[#D4A017] mb-1">تنبيه — بيانات تقديرية</p>
-          <p className="text-[10px] text-[#7A6B5E] leading-relaxed">
+          <p className="text-[10px] text-[#627D98] leading-relaxed">
             الأرقام الواردة هي تقديرات إدارية للأغراض التطويرية وليست بيانات سوق رسمية أو حكومية.
             يجب عرض هذا التنبيه على جميع الصفحات التي تستخدم هذه البيانات.
           </p>
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : (
           <MarketDataTable rows={rows} />
         )}

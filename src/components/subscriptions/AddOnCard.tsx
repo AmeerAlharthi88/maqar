@@ -36,28 +36,28 @@ export function AddOnCard({
     <>
       <div
         className={cn(
-          "bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4",
+          "bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4",
           className
         )}
         dir="rtl"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-bold text-[#1E1E1E]">
+            <p className="text-sm font-bold text-[#102A43]">
               {ADDON_LABELS_AR[addOnType]}
             </p>
-            <p className="text-xs text-[#7A6B5E] mt-0.5 leading-relaxed">
+            <p className="text-xs text-[#627D98] mt-0.5 leading-relaxed">
               {descAr}
             </p>
             {disabled && disabledReason && (
-              <p className="text-[10px] text-[#C65D3B] mt-1">{disabledReason}</p>
+              <p className="text-[10px] text-[#627D98] mt-1">{disabledReason}</p>
             )}
           </div>
           <div className="flex-shrink-0 text-end">
-            <p className="text-sm font-bold text-[#C65D3B]">
+            <p className="text-sm font-bold text-[#0A3C36]">
               {toArabicNumerals(price)} ر.ع.
             </p>
-            <p className="text-[10px] text-[#A89480]">/ {unit}</p>
+            <p className="text-[10px] text-[#627D98]">/ {unit}</p>
           </div>
         </div>
 
@@ -67,8 +67,8 @@ export function AddOnCard({
           className={cn(
             "mt-3 w-full py-2.5 rounded-xl text-xs font-bold transition-colors",
             disabled
-              ? "bg-[#F5F0EA] text-[#A89480] cursor-not-allowed"
-              : "bg-[#C65D3B] text-white"
+              ? "bg-[#F0F4F8] text-[#627D98] cursor-not-allowed"
+              : "bg-[#0A3C36] text-white"
           )}
           aria-label={disabled ? disabledReason : `شراء ${ADDON_LABELS_AR[addOnType]}`}
         >

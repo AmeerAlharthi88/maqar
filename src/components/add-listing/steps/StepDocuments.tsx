@@ -68,24 +68,24 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
               key={docConfig.value}
               className={cn(
                 "bg-white rounded-2xl border p-4",
-                hasFile ? "border-[#5B8C5A]/40" : "border-[#F0EBE3]"
+                hasFile ? "border-[#0A3C36]/40" : "border-[#E2E8F0]"
               )}
             >
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-[#1E1E1E]">{docConfig.labelAr}</p>
+                    <p className="text-sm font-semibold text-[#102A43]">{docConfig.labelAr}</p>
                     {docConfig.required && (
-                      <span className="text-[9px] font-bold text-[#C65D3B] bg-[#FBF0EB] border border-[#C65D3B]/30 px-1.5 py-0.5 rounded-full">
+                      <span className="text-[9px] font-bold text-[#C0392B] bg-[#FEF0EE] border border-[#C0392B]/30 px-1.5 py-0.5 rounded-full">
                         مطلوب للتحقق
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#A89480] mt-0.5">{docConfig.descAr}</p>
+                  <p className="text-xs text-[#627D98] mt-0.5">{docConfig.descAr}</p>
                 </div>
                 {hasFile && (
-                  <div className="w-8 h-8 rounded-full bg-[#EDF4ED] flex items-center justify-center flex-shrink-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2.5">
+                  <div className="w-8 h-8 rounded-full bg-[#E6F0EF] flex items-center justify-center flex-shrink-0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5">
                       <path d="M20 6L9 17l-5-5" />
                     </svg>
                   </div>
@@ -93,13 +93,13 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
               </div>
 
               {hasFile ? (
-                <div className="flex items-center justify-between bg-[#F5F0EA] rounded-xl px-3 py-2">
+                <div className="flex items-center justify-between bg-[#F0F4F8] rounded-xl px-3 py-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A6B5E" strokeWidth="2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                       <polyline points="14 2 14 8 20 8" />
                     </svg>
-                    <span className="text-xs text-[#3D3330] truncate">{existing?.file?.name}</span>
+                    <span className="text-xs text-[#102A43] truncate">{existing?.file?.name}</span>
                   </div>
                   <button
                     onClick={() => removeDocument(docConfig.value)}
@@ -112,7 +112,7 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
               ) : (
                 <button
                   onClick={() => inputRefs.current[docConfig.value]?.click()}
-                  className="w-full py-2.5 border border-dashed border-[#E8DDD0] rounded-xl text-sm text-[#7A6B5E] flex items-center justify-center gap-2 active:bg-[#F5F0EA]"
+                  className="w-full py-2.5 border border-dashed border-[#E2E8F0] rounded-xl text-sm text-[#627D98] flex items-center justify-center gap-2 active:bg-[#F0F4F8]"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -139,18 +139,18 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
       {/* Verification request toggle */}
       <button
         onClick={() => onChange({ requestVerification: !draft.requestVerification })}
-        className="w-full flex items-center justify-between py-3 px-4 bg-white rounded-2xl border border-[#F0EBE3]"
+        className="w-full flex items-center justify-between py-3 px-4 bg-white rounded-2xl border border-[#E2E8F0]"
         role="switch"
         aria-checked={draft.requestVerification}
       >
         <div className="text-right">
-          <p className="text-sm font-medium text-[#1E1E1E]">طلب شارة التحقق</p>
-          <p className="text-xs text-[#A89480]">يُظهر علامة التحقق على إعلانك بعد المراجعة</p>
+          <p className="text-sm font-medium text-[#102A43]">طلب شارة التحقق</p>
+          <p className="text-xs text-[#627D98]">يُظهر علامة التحقق على إعلانك بعد المراجعة</p>
         </div>
         <div
           className={cn(
             "w-11 h-6 rounded-full transition-all flex-shrink-0 ms-3 relative",
-            draft.requestVerification ? "bg-[#C65D3B]" : "bg-[#E8DDD0]"
+            draft.requestVerification ? "bg-[#0A3C36]" : "bg-[#E2E8F0]"
           )}
         >
           <div
@@ -162,7 +162,7 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
         </div>
       </button>
 
-      <p className="text-[10px] text-[#A89480] text-center leading-relaxed">
+      <p className="text-[10px] text-[#627D98] text-center leading-relaxed">
         رفع الوثائق اختياري للمسودة ومطلوب للنشر النهائي. جميع الوثائق مشفرة وآمنة.
       </p>
     </div>

@@ -9,7 +9,7 @@ import { ROUTES } from "@/config/routes";
 import Link from "next/link";
 
 const CHART_LINES = [
-  { key: "views" as const, labelAr: "مشاهدة", color: "#C65D3B" },
+  { key: "views" as const, labelAr: "مشاهدة", color: "#0A3C36" },
   { key: "leads" as const, labelAr: "عميل",   color: "#4B90D9" },
 ];
 
@@ -22,7 +22,7 @@ export default function AgencyDashboardPage() {
     <AgencyDashboardShell titleAr="لوحة الوكالة">
       <div className="px-4 py-4 space-y-4" dir="rtl">
         {/* Agency banner */}
-        <div className="bg-[#C65D3B] rounded-2xl px-4 py-4">
+        <div className="bg-[#0A3C36] rounded-2xl px-4 py-4">
           <p className="text-white/80 text-xs mb-1">الوكالة</p>
           <p className="text-white text-base font-bold">{agency.nameAr}</p>
           <p className="text-white/70 text-xs mt-1">
@@ -62,8 +62,8 @@ export default function AgencyDashboardPage() {
         {analytics.topAgents.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-[#1E1E1E]">أفضل الوسطاء</h2>
-              <Link href={ROUTES.agencyTeam} className="text-xs text-[#C65D3B] font-semibold">
+              <h2 className="text-sm font-bold text-[#102A43]">أفضل الوسطاء</h2>
+              <Link href={ROUTES.agencyTeam} className="text-xs text-[#0A3C36] font-semibold">
                 الفريق كاملاً
               </Link>
             </div>
@@ -71,15 +71,15 @@ export default function AgencyDashboardPage() {
               {analytics.topAgents.map((agent, idx) => (
                 <div
                   key={agent.agentId}
-                  className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-3 flex items-center gap-3"
+                  className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3 flex items-center gap-3"
                 >
-                  <span className="w-7 h-7 rounded-full bg-[#C65D3B]/10 flex items-center justify-center text-xs font-bold text-[#C65D3B] flex-shrink-0">
+                  <span className="w-7 h-7 rounded-full bg-[#0A3C36]/10 flex items-center justify-center text-xs font-bold text-[#0A3C36] flex-shrink-0">
                     {idx + 1}
                   </span>
-                  <p className="flex-1 text-sm font-bold text-[#1E1E1E]">{agent.nameAr}</p>
+                  <p className="flex-1 text-sm font-bold text-[#102A43]">{agent.nameAr}</p>
                   <div className="text-left flex-shrink-0">
-                    <p className="text-xs font-bold text-[#1E1E1E]">{agent.leads} عميل</p>
-                    <p className="text-[10px] text-[#5B8C5A]">{agent.sales} صفقة</p>
+                    <p className="text-xs font-bold text-[#102A43]">{agent.leads} عميل</p>
+                    <p className="text-[10px] text-[#0A3C36]">{agent.sales} صفقة</p>
                   </div>
                 </div>
               ))}

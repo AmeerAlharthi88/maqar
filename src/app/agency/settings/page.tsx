@@ -17,8 +17,8 @@ export default function AgencySettingsPage() {
       <div className="px-4 py-4 space-y-5" dir="rtl">
         {/* Agency info */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">بيانات الوكالة</h2>
-          <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">بيانات الوكالة</h2>
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
             {[
               { label: "اسم الوكالة",  value: agency.nameAr },
               { label: "الهاتف",        value: agency.phone },
@@ -31,15 +31,15 @@ export default function AgencySettingsPage() {
                 key={row.label}
                 className={[
                   "flex items-center justify-between px-4 py-3",
-                  idx < arr.length - 1 ? "border-b border-[#F0EBE3]" : "",
+                  idx < arr.length - 1 ? "border-b border-[#E2E8F0]" : "",
                 ].join(" ")}
               >
-                <p className="text-xs text-[#A89480]">{row.label}</p>
-                <p className="text-sm font-semibold text-[#1E1E1E]">{row.value}</p>
+                <p className="text-xs text-[#627D98]">{row.label}</p>
+                <p className="text-sm font-semibold text-[#102A43]">{row.value}</p>
               </div>
             ))}
           </div>
-          <button className="w-full mt-3 py-2.5 rounded-xl border border-[#E8DDD0] bg-[#F5F0EA] text-xs font-semibold text-[#1E1E1E]">
+          <button className="w-full mt-3 py-2.5 rounded-xl border border-[#E2E8F0] bg-[#F0F4F8] text-xs font-semibold text-[#102A43]">
             تعديل بيانات الوكالة
           </button>
         </div>
@@ -47,7 +47,7 @@ export default function AgencySettingsPage() {
         {/* Current subscription */}
         {agencyPlan && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">خطة الاشتراك</h2>
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">خطة الاشتراك</h2>
             <SubscriptionPlanCard
               plan={agencyPlan}
               isCurrent={agencyPlan.id === currentPlanId}
@@ -58,27 +58,27 @@ export default function AgencySettingsPage() {
 
         {/* Add-ons */}
         <div>
-          <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">الإضافات المتاحة</h2>
+          <h2 className="text-sm font-bold text-[#102A43] mb-3">الإضافات المتاحة</h2>
           <div className="space-y-2">
             {SUBSCRIPTION_ADDONS.map((addon) => (
               <div
                 key={addon.id}
-                className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4 flex items-center justify-between gap-3"
+                className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4 flex items-center justify-between gap-3"
               >
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-[#1E1E1E]">{addon.nameAr}</p>
-                  <p className="text-xs text-[#7A6B5E] mt-0.5">{addon.descAr}</p>
+                  <p className="text-sm font-bold text-[#102A43]">{addon.nameAr}</p>
+                  <p className="text-xs text-[#627D98] mt-0.5">{addon.descAr}</p>
                 </div>
                 <div className="text-left flex-shrink-0">
-                  <p className="text-sm font-bold text-[#C65D3B]">{addon.price} ر.ع.</p>
-                  <p className="text-[10px] text-[#A89480]">/{addon.unit}</p>
+                  <p className="text-sm font-bold text-[#0A3C36]">{addon.price} ر.ع.</p>
+                  <p className="text-[10px] text-[#627D98]">/{addon.unit}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="text-center text-[10px] text-[#C4B5A5] pb-2">
+        <p className="text-center text-[10px] text-[#627D98] pb-2">
           تعديل الإعدادات مرتبط بقاعدة البيانات في Phase 11
         </p>
       </div>

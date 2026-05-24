@@ -11,8 +11,8 @@ export function AILoadingState({
 }: AILoadingStateProps) {
   if (compact) {
     return (
-      <div className="flex items-center gap-2 text-xs text-[#7A6B5E]" aria-live="polite" aria-busy="true" dir="rtl">
-        <span className="w-3.5 h-3.5 rounded-full border-2 border-[#C65D3B]/30 border-t-[#C65D3B] animate-spin flex-shrink-0" aria-hidden="true" />
+      <div className="flex items-center gap-2 text-xs text-[#627D98]" aria-live="polite" aria-busy="true" dir="rtl">
+        <span className="w-3.5 h-3.5 rounded-full border-2 border-[#0A3C36]/30 border-t-[#0A3C36] animate-spin flex-shrink-0" aria-hidden="true" />
         <span>{messageAr}</span>
       </div>
     );
@@ -20,7 +20,7 @@ export function AILoadingState({
 
   return (
     <div
-      className="bg-[#FBF0EB] border border-[#C65D3B]/20 rounded-2xl px-4 py-4 flex items-center gap-3"
+      className="bg-[#E6F0EF] border border-[#0A3C36]/20 rounded-2xl px-4 py-4 flex items-center gap-3"
       dir="rtl"
       aria-live="polite"
       aria-busy="true"
@@ -30,7 +30,7 @@ export function AILoadingState({
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className="w-2 h-2 rounded-full bg-[#C65D3B]"
+            className="w-2 h-2 rounded-full bg-[#0A3C36]"
             style={{
               animation: "bounce 1.2s infinite",
               animationDelay: `${i * 0.2}s`,
@@ -39,8 +39,8 @@ export function AILoadingState({
         ))}
       </div>
       <div className="min-w-0">
-        <p className="text-sm font-semibold text-[#C65D3B]">جاري التحليل</p>
-        <p className="text-xs text-[#A89480] mt-0.5">{messageAr}</p>
+        <p className="text-sm font-semibold text-[#0A3C36]">جاري التحليل</p>
+        <p className="text-xs text-[#627D98] mt-0.5">{messageAr}</p>
       </div>
 
       <style jsx>{`

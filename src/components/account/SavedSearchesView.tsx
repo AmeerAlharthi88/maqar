@@ -36,35 +36,35 @@ export function SavedSearchesView() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F4] pb-24" dir="rtl">
+    <div className="min-h-screen bg-[#F8F9FA] pb-24" dir="rtl">
       {/* Header */}
-      <div className="bg-white border-b border-[#F0EBE3] px-4 py-3 flex items-center gap-3">
+      <div className="bg-white border-b border-[#E2E8F0] px-4 py-3 flex items-center gap-3">
         <button onClick={() => router.back()} className="w-8 h-8 flex items-center justify-center">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E1E1E" strokeWidth="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#102A43" strokeWidth="2">
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
         <div className="flex-1">
-          <h1 className="text-sm font-bold text-[#1E1E1E]">البحث المحفوظ</h1>
-          <p className="text-xs text-[#A89480]">{items.length} بحث</p>
+          <h1 className="text-sm font-bold text-[#102A43]">البحث المحفوظ</h1>
+          <p className="text-xs text-[#627D98]">{items.length} بحث</p>
         </div>
       </div>
 
       {items.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#F5F0EA] flex items-center justify-center mb-4">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="1.5">
+          <div className="w-16 h-16 rounded-full bg-[#E6F0EF] flex items-center justify-center mb-4">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.5">
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-2">لا يوجد بحث محفوظ</h2>
-          <p className="text-sm text-[#7A6B5E] mb-6 leading-relaxed">
+          <h2 className="text-base font-bold text-[#102A43] mb-2">لا يوجد بحث محفوظ</h2>
+          <p className="text-sm text-[#627D98] mb-6 leading-relaxed">
             احفظ بحثك من صفحة البحث لتجده هنا
           </p>
           <Link
             href={ROUTES.search}
-            className="py-3 px-6 rounded-2xl bg-[#C65D3B] text-white font-bold text-sm"
+            className="py-3 px-6 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm hover:bg-[#082E29] transition-colors"
           >
             ابدأ البحث
           </Link>
@@ -89,11 +89,11 @@ export function SavedSearchesView() {
             return (
               <div
                 key={search.id}
-                className="bg-white rounded-2xl border border-[#F0EBE3] flex items-center gap-3 px-4 py-3.5"
+                className="bg-white rounded-2xl border border-[#E2E8F0] flex items-center gap-3 px-4 py-3.5"
               >
                 {/* Icon */}
-                <div className="w-9 h-9 rounded-xl bg-[#F5F0EA] flex items-center justify-center flex-shrink-0">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A6B5E" strokeWidth="2">
+                <div className="w-9 h-9 rounded-xl bg-[#F0F4F8] flex items-center justify-center flex-shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
                     <circle cx="11" cy="11" r="8" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   </svg>
@@ -101,16 +101,16 @@ export function SavedSearchesView() {
 
                 {/* Content */}
                 <Link href={href} className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#1E1E1E] truncate">
+                  <p className="text-sm font-semibold text-[#102A43] truncate">
                     {search.name || search.query || "بحث بدون كلمة مفتاحية"}
                   </p>
-                  <p className="text-xs text-[#A89480] mt-0.5">{formattedDate}</p>
+                  <p className="text-xs text-[#627D98] mt-0.5">{formattedDate}</p>
                 </Link>
 
                 {/* Delete */}
                 <button
                   onClick={() => handleDelete(search)}
-                  className="w-8 h-8 flex items-center justify-center text-[#C4B5A5] hover:text-[#C65D3B] transition-colors"
+                  className="w-8 h-8 flex items-center justify-center text-[#627D98] hover:text-[#C0392B] transition-colors"
                   aria-label="حذف البحث المحفوظ"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

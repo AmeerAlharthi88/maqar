@@ -15,7 +15,7 @@ export function MarketDisclaimer({
     return (
       <div
         className={cn(
-          "bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl p-4 text-xs text-[#7A6B5E] leading-relaxed",
+          "bg-[#FEF9EC] border border-[#C8860A]/20 rounded-2xl p-4 text-xs text-[#627D98] leading-relaxed",
           className
         )}
         role="note"
@@ -33,7 +33,7 @@ export function MarketDisclaimer({
   return (
     <p
       className={cn(
-        "text-[10px] text-[#A89480] text-center leading-relaxed",
+        "text-[10px] text-[#627D98] text-center leading-relaxed",
         className
       )}
       role="note"

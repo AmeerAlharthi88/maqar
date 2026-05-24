@@ -20,19 +20,19 @@ export function DashboardMetricCard({
       className={[
         "rounded-2xl px-4 py-4 flex flex-col gap-1 border",
         accent
-          ? "bg-[#C65D3B] border-transparent"
-          : "bg-white border-[#F0EBE3]",
+          ? "bg-[#0A3C36] border-transparent"
+          : "bg-white border-[#E2E8F0]",
       ].join(" ")}
     >
       {icon && (
-        <span className={accent ? "text-white/80" : "text-[#A89480]"}>
+        <span className={accent ? "text-white/80" : "text-[#627D98]"}>
           {icon}
         </span>
       )}
       <p
         className={[
           "text-2xl font-bold leading-none",
-          accent ? "text-white" : "text-[#1E1E1E]",
+          accent ? "text-white" : "text-[#102A43]",
         ].join(" ")}
       >
         {value}
@@ -40,13 +40,13 @@ export function DashboardMetricCard({
       <p
         className={[
           "text-xs font-medium",
-          accent ? "text-white/80" : "text-[#7A6B5E]",
+          accent ? "text-white/80" : "text-[#627D98]",
         ].join(" ")}
       >
         {labelAr}
       </p>
       {subLabelAr && (
-        <p className={["text-[10px]", accent ? "text-white/60" : "text-[#A89480]"].join(" ")}>
+        <p className={["text-[10px]", accent ? "text-white/60" : "text-[#627D98]"].join(" ")}>
           {subLabelAr}
         </p>
       )}
@@ -54,7 +54,7 @@ export function DashboardMetricCard({
         <p
           className={[
             "text-[10px] font-semibold",
-            trend.up ? "text-[#5B8C5A]" : "text-[#C65D3B]",
+            trend.up ? "text-[#0A3C36]" : "text-[#C0392B]",
             accent ? "opacity-90" : "",
           ].join(" ")}
         >

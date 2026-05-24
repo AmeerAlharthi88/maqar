@@ -109,7 +109,7 @@ export function SearchPageClient() {
   return (
     <div className="flex flex-col min-h-full">
       {/* Sticky search + filter bar */}
-      <div className="sticky top-14 z-[90] bg-white/95 backdrop-blur-md border-b border-[#F0EBE3] px-4 py-3 flex flex-col gap-3">
+      <div className="sticky top-14 z-[90] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-4 py-3 flex flex-col gap-3">
         <SmartSearch
           size="md"
           onSearch={() => {}}
@@ -125,8 +125,8 @@ export function SearchPageClient() {
               "flex items-center gap-2 px-3 h-9 rounded-xl text-xs font-semibold",
               "border transition-colors whitespace-nowrap",
               activeFilterCount > 0
-                ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                : "bg-white text-[#7A6B5E] border-[#E8DDD0] hover:border-[#C65D3B]"
+                ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36]"
             )}
             aria-label={isAr ? `فتح الفلاتر${activeFilterCount > 0 ? ` — ${activeFilterCount} نشط` : ""}` : `Open filters${activeFilterCount > 0 ? ` — ${activeFilterCount} active` : ""}`}
           >
@@ -135,7 +135,7 @@ export function SearchPageClient() {
             </svg>
             {isAr ? "الفلاتر" : "Filters"}
             {activeFilterCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-white text-[#C65D3B] text-[10px] font-bold flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-white text-[#0A3C36] text-[10px] font-bold flex items-center justify-center">
                 {activeFilterCount}
               </span>
             )}
@@ -148,14 +148,14 @@ export function SearchPageClient() {
           <SaveSearchButton />
 
           {/* Grid / list toggle */}
-          <div className="flex border border-[#E8DDD0] rounded-xl overflow-hidden">
+          <div className="flex border border-[#E2E8F0] rounded-xl overflow-hidden">
             <button
               onClick={() => setDisplayMode("grid")}
               aria-label="عرض شبكي"
               aria-pressed={displayMode === "grid"}
               className={cn(
                 "w-9 h-9 flex items-center justify-center transition-colors",
-                displayMode === "grid" ? "bg-[#C65D3B] text-white" : "bg-white text-[#A89480] hover:bg-[#FAF7F2]"
+                displayMode === "grid" ? "bg-[#0A3C36] text-white" : "bg-white text-[#627D98] hover:bg-[#F0F4F8]"
               )}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -169,7 +169,7 @@ export function SearchPageClient() {
               aria-pressed={displayMode === "list"}
               className={cn(
                 "w-9 h-9 flex items-center justify-center transition-colors",
-                displayMode === "list" ? "bg-[#C65D3B] text-white" : "bg-white text-[#A89480] hover:bg-[#FAF7F2]"
+                displayMode === "list" ? "bg-[#0A3C36] text-white" : "bg-white text-[#627D98] hover:bg-[#F0F4F8]"
               )}
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -193,8 +193,8 @@ export function SearchPageClient() {
         ) : (
           <>
             {/* Result count */}
-            <p className="text-sm text-[#7A6B5E] mb-4">
-              <span className="font-bold text-[#1E1E1E]">
+            <p className="text-sm text-[#627D98] mb-4">
+              <span className="font-bold text-[#102A43]">
                 {isAr ? toArabicNumerals(displayListings.length) : displayListings.length}
               </span>{" "}
               {isAr ? "عقار متاح" : "properties found"}

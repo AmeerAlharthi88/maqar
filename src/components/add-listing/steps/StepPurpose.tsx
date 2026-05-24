@@ -37,7 +37,7 @@ const PURPOSE_ICONS: Record<DraftPurpose, React.ReactNode> = {
 export function StepPurpose({ value, onChange, error }: StepPurposeProps) {
   return (
     <div className="px-4 py-6" dir="rtl">
-      <p className="text-sm text-[#7A6B5E] mb-6 leading-relaxed">
+      <p className="text-sm text-[#627D98] mb-6 leading-relaxed">
         حدد الغرض من إعلانك العقاري. يمكنك تغيير هذا الاختيار لاحقاً.
       </p>
 
@@ -51,27 +51,27 @@ export function StepPurpose({ value, onChange, error }: StepPurposeProps) {
               className={cn(
                 "w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-right transition-all",
                 selected
-                  ? "border-[#C65D3B] bg-[#FBF0EB]"
-                  : "border-[#E8DDD0] bg-white active:bg-[#F5F0EA]"
+                  ? "border-[#0A3C36] bg-[#E6F0EF]"
+                  : "border-[#E2E8F0] bg-white active:bg-[#F0F4F8]"
               )}
               aria-pressed={selected}
             >
               <div
                 className={cn(
                   "w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all",
-                  selected ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"
+                  selected ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"
                 )}
               >
                 {PURPOSE_ICONS[purpose.value]}
               </div>
               <div className="flex-1 min-w-0">
-                <p className={cn("text-base font-bold mb-0.5", selected ? "text-[#C65D3B]" : "text-[#1E1E1E]")}>
+                <p className={cn("text-base font-bold mb-0.5", selected ? "text-[#0A3C36]" : "text-[#102A43]")}>
                   {purpose.labelAr}
                 </p>
-                <p className="text-xs text-[#7A6B5E] leading-relaxed">{purpose.descAr}</p>
+                <p className="text-xs text-[#627D98] leading-relaxed">{purpose.descAr}</p>
               </div>
               {selected && (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C65D3B" strokeWidth="2.5" className="flex-shrink-0">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5" className="flex-shrink-0">
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
               )}

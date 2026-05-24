@@ -49,10 +49,10 @@ export default function PricingPage() {
       <div className="px-4 py-6 max-w-lg mx-auto" dir="rtl">
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-[#1E1E1E] mb-2">
+          <h1 className="text-2xl font-bold text-[#102A43] mb-2">
             الخطط والأسعار
           </h1>
-          <p className="text-sm text-[#7A6B5E]">
+          <p className="text-sm text-[#627D98]">
             ابدأ مجاناً وارقِّ عندما تحتاج. لا إلزام. ادفع شهرياً.
           </p>
         </div>
@@ -66,43 +66,43 @@ export default function PricingPage() {
 
         {/* Feature comparison */}
         <div className="mb-8">
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             مقارنة تفصيلية بين الخطط
           </h2>
-          <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
             <FeatureComparisonTable />
           </div>
         </div>
 
         {/* Add-ons */}
         <div className="mb-8">
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-1">
+          <h2 className="text-base font-bold text-[#102A43] mb-1">
             الإضافات المدفوعة
           </h2>
-          <p className="text-xs text-[#7A6B5E] mb-3">
+          <p className="text-xs text-[#627D98] mb-3">
             متاحة لمشتركي خطة الوسيط الاحترافي أو الوكالة.
           </p>
           <div className="space-y-3">
             {(["featured_listing", "lead_boost"] as const).map((type) => (
               <div
                 key={type}
-                className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4 flex items-center justify-between gap-3"
+                className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4 flex items-center justify-between gap-3"
               >
                 <div>
-                  <p className="text-sm font-bold text-[#1E1E1E]">
+                  <p className="text-sm font-bold text-[#102A43]">
                     {ADDON_LABELS_AR[type]}
                   </p>
-                  <p className="text-xs text-[#7A6B5E] mt-0.5">
+                  <p className="text-xs text-[#627D98] mt-0.5">
                     {type === "featured_listing"
                       ? "رفع إعلانك لأعلى نتائج البحث"
                       : "الحصول على عملاء محتملين إضافيين في منطقتك"}
                   </p>
                 </div>
                 <div className="text-end flex-shrink-0">
-                  <p className="text-sm font-bold text-[#C65D3B]">
+                  <p className="text-sm font-bold text-[#0A3C36]">
                     {ADDON_PRICES[type]} ر.ع.
                   </p>
-                  <p className="text-[10px] text-[#A89480]">
+                  <p className="text-[10px] text-[#627D98]">
                     / {type === "featured_listing" ? "أسبوع" : "مرة"}
                   </p>
                 </div>
@@ -113,14 +113,14 @@ export default function PricingPage() {
 
         {/* FAQ */}
         <div className="mb-6">
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             أسئلة شائعة
           </h2>
           <FAQAccordion faqs={FAQ} />
         </div>
 
         {/* Disclaimer */}
-        <p className="text-[11px] text-[#A89480] text-center leading-relaxed">
+        <p className="text-[11px] text-[#627D98] text-center leading-relaxed">
           الأسعار بالريال العُماني · التفعيل مشروط بنجاح عملية الدفع عبر مزود
           معتمد · لا تتم أي معالجة فعلية في بيئة المعاينة الحالية
         </p>

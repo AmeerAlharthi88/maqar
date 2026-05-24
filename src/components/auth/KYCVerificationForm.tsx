@@ -33,9 +33,9 @@ function StatusBanner({ status }: { status: KYCApplication["status"] }) {
     draft: null,
     submitted: { bg: "bg-[#EAF4FB]", border: "border-[#2471A3]/20", text: "text-[#2471A3]" },
     under_review: { bg: "bg-[#FFF8E7]", border: "border-[#D4A017]/20", text: "text-[#D4A017]" },
-    approved: { bg: "bg-[#EDF4ED]", border: "border-[#5B8C5A]/20", text: "text-[#5B8C5A]" },
-    rejected: { bg: "bg-[#FBF0EB]", border: "border-[#C65D3B]/30", text: "text-[#C65D3B]" },
-    needs_more_info: { bg: "bg-[#FBF0EB]", border: "border-[#C65D3B]/30", text: "text-[#C65D3B]" },
+    approved: { bg: "bg-[#E6F0EF]", border: "border-[#0A3C36]/20", text: "text-[#0A3C36]" },
+    rejected: { bg: "bg-[#FEF0EE]", border: "border-[#C0392B]/30", text: "text-[#C0392B]" },
+    needs_more_info: { bg: "bg-[#FEF0EE]", border: "border-[#C0392B]/30", text: "text-[#C0392B]" },
   };
   const cfg = configs[status];
   if (!cfg) return null;
@@ -62,22 +62,22 @@ function DocRow({
   const isLoading = doc?.uploadStatus === "uploading";
 
   return (
-    <label className="flex items-center gap-3 bg-white border border-[#F0EBE3] rounded-2xl px-4 py-3 cursor-pointer">
+    <label className="flex items-center gap-3 bg-white border border-[#E2E8F0] rounded-2xl px-4 py-3 cursor-pointer">
       {/* Status icon */}
       <div
         className={[
           "w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0",
-          isDone ? "bg-[#EDF4ED]" : "bg-[#F5F0EA]",
+          isDone ? "bg-[#E6F0EF]" : "bg-[#F0F4F8]",
         ].join(" ")}
       >
         {isLoading ? (
-          <span className="w-4 h-4 rounded-full border-2 border-[#E8DDD0] border-t-[#C65D3B] animate-spin" />
+          <span className="w-4 h-4 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
         ) : isDone ? (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         ) : (
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7A6B5E" strokeWidth="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="17 8 12 3 7 8" />
             <line x1="12" y1="3" x2="12" y2="15" />
@@ -87,12 +87,12 @@ function DocRow({
 
       {/* Label */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[#1E1E1E]">{KYC_DOC_LABELS_AR[type]}</p>
+        <p className="text-sm font-semibold text-[#102A43]">{KYC_DOC_LABELS_AR[type]}</p>
         {isDone && doc?.fileName && (
-          <p className="text-xs text-[#7A6B5E] truncate mt-0.5">{doc.fileName}</p>
+          <p className="text-xs text-[#627D98] truncate mt-0.5">{doc.fileName}</p>
         )}
         {!isDone && (
-          <p className="text-xs text-[#A89480] mt-0.5">اضغط لرفع الملف</p>
+          <p className="text-xs text-[#627D98] mt-0.5">اضغط لرفع الملف</p>
         )}
       </div>
 
@@ -207,14 +207,14 @@ export function KYCVerificationForm() {
   if (isSubmitted) {
     return (
       <div className="px-4 py-10 flex flex-col items-center text-center" dir="rtl">
-        <div className="w-20 h-20 rounded-full bg-[#EDF4ED] flex items-center justify-center mb-5">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2">
+        <div className="w-20 h-20 rounded-full bg-[#E6F0EF] flex items-center justify-center mb-5">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
         </div>
-        <h2 className="text-xl font-bold text-[#1E1E1E] mb-2">تم إرسال طلب التوثيق</h2>
-        <p className="text-sm text-[#7A6B5E] max-w-xs leading-relaxed">
+        <h2 className="text-xl font-bold text-[#102A43] mb-2">تم إرسال طلب التوثيق</h2>
+        <p className="text-sm text-[#627D98] max-w-xs leading-relaxed">
           سيراجع فريق مقر وثائقك خلال ٢–٥ أيام عمل وسيتم إخطارك بنتيجة المراجعة.
         </p>
       </div>
@@ -225,18 +225,18 @@ export function KYCVerificationForm() {
     <div className="px-4 py-6 space-y-5 max-w-xl mx-auto" dir="rtl">
       {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-[#1E1E1E] mb-1">التوثيق الرسمي</h1>
-        <p className="text-sm text-[#7A6B5E] leading-relaxed">
+        <h1 className="text-lg font-bold text-[#102A43] mb-1">التوثيق الرسمي</h1>
+        <p className="text-sm text-[#627D98] leading-relaxed">
           وثّق حسابك كوسيط عقاري موثوق واحصل على شارة التحقق في مقر.
         </p>
       </div>
 
       {/* Current role */}
       {user && (
-        <div className="bg-[#F5F0EA] rounded-2xl px-4 py-3">
-          <p className="text-xs text-[#7A6B5E]">
+        <div className="bg-[#F0F4F8] rounded-2xl px-4 py-3">
+          <p className="text-xs text-[#627D98]">
             نوع حسابك الحالي:{" "}
-            <span className="font-bold text-[#1E1E1E]">{ROLE_LABELS_AR[user.role]}</span>
+            <span className="font-bold text-[#102A43]">{ROLE_LABELS_AR[user.role]}</span>
           </p>
         </div>
       )}
@@ -244,7 +244,7 @@ export function KYCVerificationForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Agent type */}
         <div>
-          <p className="text-xs font-semibold text-[#7A6B5E] mb-2">نوع التوثيق</p>
+          <p className="text-xs font-semibold text-[#627D98] mb-2">نوع التوثيق</p>
           <div className="grid grid-cols-2 gap-2">
             {(["individual", "agency"] as const).map((t) => (
               <button
@@ -254,8 +254,8 @@ export function KYCVerificationForm() {
                 className={[
                   "py-3 rounded-2xl border-2 text-sm font-semibold transition-all",
                   agentType === t
-                    ? "border-[#C65D3B] bg-[#FBF0EB] text-[#C65D3B]"
-                    : "border-[#E8DDD0] bg-white text-[#7A6B5E]",
+                    ? "border-[#0A3C36] bg-[#E6F0EF] text-[#0A3C36]"
+                    : "border-[#E2E8F0] bg-white text-[#627D98]",
                 ].join(" ")}
               >
                 {t === "individual" ? "وسيط فردي" : "وكالة عقارية"}
@@ -268,7 +268,7 @@ export function KYCVerificationForm() {
         {agentType === "agency" && (
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold text-[#7A6B5E] mb-1.5">
+              <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
                 اسم الوكالة بالعربية
               </label>
               <input
@@ -276,11 +276,11 @@ export function KYCVerificationForm() {
                 value={agencyNameAr}
                 onChange={(e) => setAgencyNameAr(e.target.value)}
                 placeholder="مثال: وكالة النخبة للعقارات"
-                className="w-full px-4 py-3 rounded-2xl border border-[#E8DDD0] bg-white text-sm text-[#1E1E1E] placeholder-[#C4B5A5] outline-none focus:border-[#C65D3B]"
+                className="w-full px-4 py-3 rounded-2xl border border-[#E2E8F0] bg-white text-sm text-[#102A43] placeholder-[#627D98] outline-none focus:border-[#0A3C36]"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#7A6B5E] mb-1.5">
+              <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
                 رقم السجل التجاري
               </label>
               <input
@@ -288,12 +288,12 @@ export function KYCVerificationForm() {
                 value={crNumber}
                 onChange={(e) => setCrNumber(e.target.value)}
                 placeholder="1234567"
-                className="w-full px-4 py-3 rounded-2xl border border-[#E8DDD0] bg-white text-sm text-[#1E1E1E] placeholder-[#C4B5A5] outline-none focus:border-[#C65D3B]"
+                className="w-full px-4 py-3 rounded-2xl border border-[#E2E8F0] bg-white text-sm text-[#102A43] placeholder-[#627D98] outline-none focus:border-[#0A3C36]"
                 inputMode="numeric"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#7A6B5E] mb-1.5">
+              <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
                 رقم ترخيص الوكالة (اختياري)
               </label>
               <input
@@ -301,7 +301,7 @@ export function KYCVerificationForm() {
                 value={licenseNumber}
                 onChange={(e) => setLicenseNumber(e.target.value)}
                 placeholder="RE-2024-XXXX"
-                className="w-full px-4 py-3 rounded-2xl border border-[#E8DDD0] bg-white text-sm text-[#1E1E1E] placeholder-[#C4B5A5] outline-none focus:border-[#C65D3B]"
+                className="w-full px-4 py-3 rounded-2xl border border-[#E2E8F0] bg-white text-sm text-[#102A43] placeholder-[#627D98] outline-none focus:border-[#0A3C36]"
               />
             </div>
           </div>
@@ -309,9 +309,9 @@ export function KYCVerificationForm() {
 
         {/* Document uploads */}
         <div>
-          <p className="text-xs font-semibold text-[#7A6B5E] mb-2">
+          <p className="text-xs font-semibold text-[#627D98] mb-2">
             المستندات المطلوبة{" "}
-            <span className="text-[#A89480] font-normal">
+            <span className="text-[#627D98] font-normal">
               ({requiredTypes.filter((t) => getDoc(t)?.uploadStatus === "done").length}/{requiredTypes.length})
             </span>
           </p>
@@ -335,8 +335,8 @@ export function KYCVerificationForm() {
         </div>
 
         {error && (
-          <div className="bg-[#FBF0EB] border border-[#C65D3B]/30 rounded-xl px-4 py-3">
-            <p className="text-xs text-[#C65D3B]">{error}</p>
+          <div className="bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3">
+            <p className="text-xs text-[#C0392B]">{error}</p>
           </div>
         )}
 
@@ -344,7 +344,7 @@ export function KYCVerificationForm() {
         <button
           type="submit"
           disabled={!allUploaded || isSubmitting}
-          className="w-full py-4 rounded-2xl bg-[#C65D3B] text-white font-bold text-sm disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full py-4 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isSubmitting ? (
             <>

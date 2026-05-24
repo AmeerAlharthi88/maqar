@@ -28,9 +28,9 @@ export function PriceText({ amount, purpose = "sale", size = "md", className, co
 
   return (
     <div className={cn("flex items-baseline gap-1.5", className)}>
-      <span className={cn(s.price, "text-[#C65D3B]")}>{formatted}</span>
+      <span className={cn(s.price, "text-[#0A3C36]")}>{formatted}</span>
       {purpose === "rent" && (
-        <span className={cn(s.suffix, "text-[#7A6B5E]")}>{rentSuffix}</span>
+        <span className={cn(s.suffix, "text-[#627D98]")}>{rentSuffix}</span>
       )}
     </div>
   );
@@ -40,7 +40,7 @@ export function PricePerSqm({ pricePerSqm }: { pricePerSqm: number }) {
   const { locale } = useLanguageStore();
   const isAr = locale === "ar";
   return (
-    <span className="text-xs text-[#A89480]">
+    <span className="text-xs text-[#627D98]">
       {isAr
         ? `${toArabicNumerals(pricePerSqm.toLocaleString())} ر.ع. / م²`
         : `${pricePerSqm.toLocaleString()} OMR/sqm`}

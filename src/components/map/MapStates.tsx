@@ -8,7 +8,7 @@ export function MapLoadingState({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "w-full h-full bg-[#F5F0EA] flex flex-col items-center justify-center gap-4",
+        "w-full h-full bg-[#F0F4F8] flex flex-col items-center justify-center gap-4",
         className
       )}
       aria-busy="true"
@@ -16,7 +16,7 @@ export function MapLoadingState({ className }: { className?: string }) {
     >
       {/* Animated map grid */}
       <div className="relative w-20 h-20">
-        <div className="absolute inset-0 rounded-xl bg-[#E8DDD0] animate-pulse-brand" />
+        <div className="absolute inset-0 rounded-xl bg-[#E2E8F0] animate-pulse-brand" />
         <div
           className="absolute inset-0 flex items-center justify-center"
           aria-hidden="true"
@@ -26,7 +26,7 @@ export function MapLoadingState({ className }: { className?: string }) {
             height="36"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#A89480"
+            stroke="#627D98"
             strokeWidth="1.5"
           >
             <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
@@ -35,13 +35,13 @@ export function MapLoadingState({ className }: { className?: string }) {
           </svg>
         </div>
       </div>
-      <p className="text-sm text-[#7A6B5E] font-medium">جارٍ تحميل الخريطة...</p>
+      <p className="text-sm text-[#627D98] font-medium">جارٍ تحميل الخريطة...</p>
       {/* Shimmer tiles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
         {Array.from({ length: 12 }).map((_, i) => (
           <div
             key={i}
-            className="absolute bg-[#C8B8A8] rounded animate-pulse-brand"
+            className="absolute bg-[#E2E8F0] rounded animate-pulse-brand"
             style={{
               width: `${60 + (i % 3) * 20}px`,
               height: `${60 + (i % 4) * 15}px`,
@@ -64,14 +64,14 @@ export function MapEmptyState({ onReset }: { onReset?: () => void }) {
       className="fixed inset-x-0 z-[65] flex items-end justify-center pointer-events-none"
       style={{ bottom: "calc(64px + env(safe-area-inset-bottom, 0px))", top: "120px" }}
     >
-      <div className="pointer-events-auto mx-4 mb-4 bg-white rounded-2xl shadow-elevated border border-[#F0EBE3] p-6 text-center max-w-xs w-full">
-        <div className="w-14 h-14 rounded-full bg-[#F5F0EA] flex items-center justify-center mx-auto mb-4">
+      <div className="pointer-events-auto mx-4 mb-4 bg-white rounded-2xl shadow-elevated border border-[#E2E8F0] p-6 text-center max-w-xs w-full">
+        <div className="w-14 h-14 rounded-full bg-[#F0F4F8] flex items-center justify-center mx-auto mb-4">
           <svg
             width="26"
             height="26"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="#A89480"
+            stroke="#627D98"
             strokeWidth="1.5"
           >
             <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
@@ -80,16 +80,16 @@ export function MapEmptyState({ onReset }: { onReset?: () => void }) {
             <line x1="1" y1="1" x2="23" y2="23" />
           </svg>
         </div>
-        <h3 className="text-sm font-semibold text-[#1E1E1E] mb-1">
+        <h3 className="text-sm font-semibold text-[#102A43] mb-1">
           لا توجد عقارات في هذه المنطقة
         </h3>
-        <p className="text-xs text-[#7A6B5E] mb-4">
+        <p className="text-xs text-[#627D98] mb-4">
           جرّب تغيير الفلاتر أو توسيع نطاق البحث
         </p>
         {onReset && (
           <button
             onClick={onReset}
-            className="px-5 py-2.5 rounded-xl bg-[#C65D3B] text-white text-xs font-semibold hover:bg-[#B34F2F] transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-[#0A3C36] text-white text-xs font-semibold hover:bg-[#082E29] transition-colors"
           >
             مسح الفلاتر
           </button>
@@ -112,7 +112,7 @@ export function MapLocationDeniedToast({
       style={{ bottom: "calc(80px + env(safe-area-inset-bottom, 0px))" }}
       role="alert"
     >
-      <div className="bg-[#1E1E1E] text-white rounded-2xl px-4 py-3 flex items-center gap-3 shadow-elevated">
+      <div className="bg-[#102A43] text-white rounded-2xl px-4 py-3 flex items-center gap-3 shadow-elevated">
         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
           <svg
             width="16"
@@ -158,7 +158,7 @@ export function MapLocationDeniedToast({
 
 export function MapErrorState({ onRetry }: { onRetry?: () => void }) {
   return (
-    <div className="w-full h-full bg-[#FAF7F2] flex flex-col items-center justify-center gap-4 px-6 text-center">
+    <div className="w-full h-full bg-[#F8F9FA] flex flex-col items-center justify-center gap-4 px-6 text-center">
       <div className="w-16 h-16 rounded-full bg-[#FEF0EE] flex items-center justify-center">
         <svg
           width="28"
@@ -174,17 +174,17 @@ export function MapErrorState({ onRetry }: { onRetry?: () => void }) {
         </svg>
       </div>
       <div>
-        <h3 className="text-base font-semibold text-[#1E1E1E] mb-1">
+        <h3 className="text-base font-semibold text-[#102A43] mb-1">
           تعذّر تحميل الخريطة
         </h3>
-        <p className="text-sm text-[#7A6B5E]">
+        <p className="text-sm text-[#627D98]">
           تحقق من اتصالك بالإنترنت وحاول مرة أخرى
         </p>
       </div>
       {onRetry && (
         <button
           onClick={onRetry}
-          className="mt-2 px-6 py-3 rounded-xl bg-[#C65D3B] text-white text-sm font-semibold hover:bg-[#B34F2F] transition-colors"
+          className="mt-2 px-6 py-3 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
         >
           إعادة المحاولة
         </button>
@@ -201,7 +201,7 @@ export function MapNoSelectionHint() {
       className="fixed left-1/2 -translate-x-1/2 z-[62] pointer-events-none"
       style={{ bottom: "calc(76px + env(safe-area-inset-bottom, 0px))" }}
     >
-      <div className="bg-[#1E1E1E]/75 backdrop-blur-sm text-white text-xs font-medium px-4 py-2 rounded-full whitespace-nowrap">
+      <div className="bg-[#102A43]/75 backdrop-blur-sm text-white text-xs font-medium px-4 py-2 rounded-full whitespace-nowrap">
         اضغط على أي عقار لعرض تفاصيله
       </div>
     </div>

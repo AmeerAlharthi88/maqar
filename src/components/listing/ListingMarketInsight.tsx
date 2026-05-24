@@ -20,18 +20,18 @@ function InsightRow({
   highlight?: "good" | "warn" | "neutral";
 }) {
   const colorMap = {
-    good: "text-[#5B8C5A]",
-    warn: "text-[#C65D3B]",
-    neutral: "text-[#1E1E1E]",
+    good: "text-[#0A3C36]",
+    warn: "text-[#C0392B]",
+    neutral: "text-[#102A43]",
   };
   return (
-    <div className="flex items-center justify-between py-2.5 border-b border-[#F5F0EA] last:border-0">
-      <span className="text-sm text-[#7A6B5E]">{label}</span>
+    <div className="flex items-center justify-between py-2.5 border-b border-[#E2E8F0] last:border-0">
+      <span className="text-sm text-[#627D98]">{label}</span>
       <div className="text-end">
-        <span className={cn("text-sm font-semibold", highlight ? colorMap[highlight] : "text-[#1E1E1E]")}>
+        <span className={cn("text-sm font-semibold", highlight ? colorMap[highlight] : "text-[#102A43]")}>
           {value}
         </span>
-        {sub && <p className="text-xs text-[#A89480]">{sub}</p>}
+        {sub && <p className="text-xs text-[#627D98]">{sub}</p>}
       </div>
     </div>
   );
@@ -40,16 +40,16 @@ function InsightRow({
 function DemandBar({ score }: { score: number }) {
   const pct = Math.min(100, Math.max(0, score));
   const color =
-    pct >= 80 ? "#5B8C5A" : pct >= 60 ? "#C65D3B" : "#C8860A";
+    pct >= 80 ? "#0A3C36" : pct >= 60 ? "#E5BA73" : "#C8860A";
   const label = pct >= 80 ? "مرتفع" : pct >= 60 ? "متوسط" : "منخفض";
 
   return (
     <div className="mt-3">
       <div className="flex items-center justify-between text-xs mb-1.5">
-        <span className="text-[#7A6B5E]">مؤشر الطلب في المنطقة</span>
+        <span className="text-[#627D98]">مؤشر الطلب في المنطقة</span>
         <span className="font-semibold" style={{ color }}>{toArabicNumerals(score)}/١٠٠ — {label}</span>
       </div>
-      <div className="h-2 bg-[#F0EBE3] rounded-full overflow-hidden">
+      <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all"
           style={{ width: `${pct}%`, background: color }}
@@ -93,16 +93,16 @@ export function ListingMarketInsight({
       : "neutral";
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
       {/* Header with disclaimer */}
       <div className="flex items-start justify-between mb-3 gap-3">
-        <h2 className="text-base font-bold text-[#1E1E1E]">تحليل السوق التقديري</h2>
-        <span className="flex-shrink-0 text-[10px] text-[#A89480] bg-[#F5F0EA] border border-[#E8DDD0] px-2 py-0.5 rounded-full">
+        <h2 className="text-base font-bold text-[#102A43]">تحليل السوق التقديري</h2>
+        <span className="flex-shrink-0 text-[10px] text-[#627D98] bg-[#F0F4F8] border border-[#E2E8F0] px-2 py-0.5 rounded-full">
           بيانات تقديرية
         </span>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
         <div className="px-4">
           {avgPrice !== null && (
             <InsightRow
@@ -161,7 +161,7 @@ export function ListingMarketInsight({
       </div>
 
       {/* Disclaimer */}
-      <p className="mt-2 text-[10px] text-[#A89480] text-center">
+      <p className="mt-2 text-[10px] text-[#627D98] text-center">
         هذه البيانات تقديرية للتوجيه فقط ولا تمثّل قيمة تقييم رسمية
       </p>
     </div>

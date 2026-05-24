@@ -17,10 +17,10 @@ interface ReadinessItem {
 }
 
 const STATUS_CONFIG: Record<CheckStatus, { labelAr: string; color: string; bg: string; icon: string }> = {
-  done: { labelAr: "مكتمل", color: "text-[#5B8C5A]", bg: "bg-[#EDF4ED]", icon: "✓" },
+  done: { labelAr: "مكتمل", color: "text-[#0A3C36]", bg: "bg-[#E6F0EF]", icon: "✓" },
   partial: { labelAr: "جزئي", color: "text-[#C8860A]", bg: "bg-[#FEF9EC]", icon: "◑" },
-  todo: { labelAr: "مطلوب", color: "text-[#7A6B5E]", bg: "bg-[#F5F0EA]", icon: "○" },
-  blocked: { labelAr: "محظور", color: "text-[#C65D3B]", bg: "bg-[#FBF0EB]", icon: "✕" },
+  todo: { labelAr: "مطلوب", color: "text-[#627D98]", bg: "bg-[#F0F4F8]", icon: "○" },
+  blocked: { labelAr: "محظور", color: "text-[#C0392B]", bg: "bg-[#FEF0EE]", icon: "✕" },
 };
 
 const CHECKLIST: ReadinessItem[] = [
@@ -127,15 +127,15 @@ export default function AdminSystemReadinessPage() {
         </div>
 
         {/* Readiness score */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4">
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-bold text-[#1E1E1E]">مؤشر الجاهزية</p>
-            <p className="text-2xl font-bold text-[#C65D3B]">{readinessPct}٪</p>
+            <p className="text-sm font-bold text-[#102A43]">مؤشر الجاهزية</p>
+            <p className="text-2xl font-bold text-[#0A3C36]">{readinessPct}٪</p>
           </div>
           {/* Progress bar */}
-          <div className="h-2 bg-[#F0EBE3] rounded-full overflow-hidden">
+          <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#C65D3B] rounded-full transition-all"
+              className="h-full bg-[#0A3C36] rounded-full transition-all"
               style={{ width: `${readinessPct}%` }}
               role="progressbar"
               aria-valuenow={readinessPct}
@@ -147,20 +147,20 @@ export default function AdminSystemReadinessPage() {
           {/* Counts */}
           <div className="grid grid-cols-4 gap-2 mt-3 text-center">
             <div>
-              <p className="text-sm font-bold text-[#5B8C5A]">{doneCount}</p>
-              <p className="text-[9px] text-[#A89480]">مكتمل</p>
+              <p className="text-sm font-bold text-[#0A3C36]">{doneCount}</p>
+              <p className="text-[9px] text-[#627D98]">مكتمل</p>
             </div>
             <div>
               <p className="text-sm font-bold text-[#C8860A]">{partialCount}</p>
-              <p className="text-[9px] text-[#A89480]">جزئي</p>
+              <p className="text-[9px] text-[#627D98]">جزئي</p>
             </div>
             <div>
-              <p className="text-sm font-bold text-[#7A6B5E]">{todoCount}</p>
-              <p className="text-[9px] text-[#A89480]">مطلوب</p>
+              <p className="text-sm font-bold text-[#627D98]">{todoCount}</p>
+              <p className="text-[9px] text-[#627D98]">مطلوب</p>
             </div>
             <div>
-              <p className="text-sm font-bold text-[#C65D3B]">{blockedCount}</p>
-              <p className="text-[9px] text-[#A89480]">محظور</p>
+              <p className="text-sm font-bold text-[#C0392B]">{blockedCount}</p>
+              <p className="text-[9px] text-[#627D98]">محظور</p>
             </div>
           </div>
         </div>
@@ -168,28 +168,28 @@ export default function AdminSystemReadinessPage() {
         {/* Checklist by category */}
         {Array.from(grouped.entries()).map(([category, items]) => (
           <div key={category}>
-            <p className="text-xs font-bold text-[#1E1E1E] mb-2">{category}</p>
+            <p className="text-xs font-bold text-[#102A43] mb-2">{category}</p>
             <div className="space-y-2">
               {items.map((item, idx) => {
                 const cfg = STATUS_CONFIG[item.status];
                 return (
                   <div
                     key={idx}
-                    className="bg-white rounded-xl border border-[#F0EBE3] px-4 py-3"
+                    className="bg-white rounded-xl border border-[#E2E8F0] px-4 py-3"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-start gap-2 flex-1 min-w-0">
                         <span className={`text-sm font-bold ${cfg.color} flex-shrink-0 mt-0.5`} aria-hidden="true">
                           {cfg.icon}
                         </span>
-                        <p className="text-xs text-[#1E1E1E] leading-relaxed">{item.item}</p>
+                        <p className="text-xs text-[#102A43] leading-relaxed">{item.item}</p>
                       </div>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${cfg.bg} ${cfg.color}`}>
                         {cfg.labelAr}
                       </span>
                     </div>
                     {item.noteAr && (
-                      <p className="text-[10px] text-[#A89480] mt-1 mr-6">{item.noteAr}</p>
+                      <p className="text-[10px] text-[#627D98] mt-1 mr-6">{item.noteAr}</p>
                     )}
                   </div>
                 );
@@ -199,7 +199,7 @@ export default function AdminSystemReadinessPage() {
         ))}
 
         {/* Footer */}
-        <p className="text-[11px] text-[#A89480] text-center py-2">
+        <p className="text-[11px] text-[#627D98] text-center py-2">
           آخر تحديث: Phase 17 — Final Hardening & Launch Readiness · {new Date().toLocaleDateString("ar-OM", { year: "numeric", month: "long" })}
         </p>
       </div>

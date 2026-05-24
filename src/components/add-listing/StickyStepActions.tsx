@@ -31,7 +31,7 @@ export function StickyStepActions({
 
   return (
     <div
-      className="fixed start-0 end-0 bottom-0 z-[110] bg-white/95 backdrop-blur-md border-t border-[#F0EBE3]"
+      className="fixed start-0 end-0 bottom-0 z-[110] bg-white/95 backdrop-blur-md border-t border-[#E2E8F0]"
       style={{ paddingBottom: "calc(64px + env(safe-area-inset-bottom, 0px))" }}
     >
       <div className="flex items-center gap-2 px-4 pt-3 pb-1">
@@ -40,7 +40,7 @@ export function StickyStepActions({
           <button
             onClick={onPrev}
             disabled={isSubmitting}
-            className="flex items-center justify-center gap-1.5 bg-[#F5F0EA] text-[#1E1E1E] text-sm font-semibold py-3 px-4 rounded-2xl border border-[#E8DDD0] flex-shrink-0 disabled:opacity-50"
+            className="flex items-center justify-center gap-1.5 bg-[#F0F4F8] text-[#102A43] text-sm font-semibold py-3 px-4 rounded-2xl border border-[#E2E8F0] flex-shrink-0 disabled:opacity-50"
             aria-label="الخطوة السابقة"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -56,9 +56,7 @@ export function StickyStepActions({
           disabled={disableNext || isSubmitting}
           className={cn(
             "flex-1 flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-2xl transition-all",
-            isLast
-              ? "bg-[#5B8C5A] text-white disabled:opacity-60"
-              : "bg-[#C65D3B] text-white disabled:opacity-60"
+            "bg-[#0A3C36] text-white hover:bg-[#082E29] disabled:bg-[#A0AEC0] disabled:cursor-not-allowed"
           )}
         >
           {isSubmitting ? (
@@ -78,7 +76,7 @@ export function StickyStepActions({
           <button
             onClick={onSaveDraft}
             disabled={isSubmitting}
-            className="text-xs text-[#7A6B5E] flex items-center gap-1 underline underline-offset-2"
+            className="text-xs text-[#627D98] flex items-center gap-1 underline underline-offset-2"
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
@@ -88,9 +86,9 @@ export function StickyStepActions({
             حفظ كمسودة
           </button>
         ) : (
-          <span className="text-xs text-[#A89480]">تم حفظ المسودة تلقائياً</span>
+          <span className="text-xs text-[#627D98]">تم حفظ المسودة تلقائياً</span>
         )}
-        <span className="text-xs text-[#A89480]">
+        <span className="text-xs text-[#627D98]">
           {currentStep} / {ADD_LISTING_TOTAL_STEPS}
         </span>
       </div>

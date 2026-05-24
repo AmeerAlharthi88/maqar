@@ -9,7 +9,7 @@ export default function AgenciesPage() {
       <AppHeader variant="back" titleAr="شركات العقارات" />
       <div className="px-4 py-4 space-y-3" dir="rtl">
         {/* Summary bar */}
-        <p className="text-xs text-[#A89480]">
+        <p className="text-xs text-[#627D98]">
           {MOCK_AGENCIES.length} شركة مرخّصة في سلطنة عُمان
         </p>
 
@@ -19,7 +19,7 @@ export default function AgenciesPage() {
         ))}
 
         {/* Footer note */}
-        <p className="text-center text-[10px] text-[#C4B5A5] pb-2">
+        <p className="text-center text-[10px] text-[#627D98] pb-2">
           جميع البيانات تجريبية — سيتم ربطها بقاعدة البيانات في المرحلة القادمة
         </p>
       </div>

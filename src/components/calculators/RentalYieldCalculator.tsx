@@ -47,8 +47,8 @@ export function RentalYieldCalculator() {
   return (
     <div className="space-y-5">
       {/* Inputs */}
-      <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-4">
-        <h2 className="text-sm font-bold text-[#1E1E1E]">بيانات العقار</h2>
+      <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-4">
+        <h2 className="text-sm font-bold text-[#102A43]">بيانات العقار</h2>
 
         <CalculatorInput
           label="سعر الشراء"
@@ -78,13 +78,13 @@ export function RentalYieldCalculator() {
 
         {/* Area comparison selector */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-[#1E1E1E]">
+          <label className="block text-sm font-semibold text-[#102A43]">
             مقارنة بمتوسط منطقة (اختياري)
           </label>
           <select
             value={selectedAreaId}
             onChange={(e) => setSelectedAreaId(e.target.value)}
-            className="w-full h-11 bg-white border border-[#E8DDD0] rounded-xl px-3.5 text-sm text-[#1E1E1E] outline-none focus:border-[#C65D3B]"
+            className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 text-sm text-[#102A43] outline-none focus:border-[#0A3C36]"
             dir="rtl"
           >
             <option value="">— اختر منطقة للمقارنة —</option>
@@ -100,7 +100,7 @@ export function RentalYieldCalculator() {
       {/* Results */}
       <CalculatorSummary title="نتائج العائد الإيجاري">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-sm text-[#7A6B5E]">تصنيف عائدك:</span>
+          <span className="text-sm text-[#627D98]">تصنيف عائدك:</span>
           <YieldBadge pct={result.netYieldPct} />
         </div>
 
@@ -134,10 +134,10 @@ export function RentalYieldCalculator() {
 
         {/* Area comparison */}
         {selectedArea && areaDiff !== undefined && (
-          <div className="bg-[#F5F0EA] rounded-2xl p-4 border border-[#E8DDD0]">
-            <p className="text-xs text-[#7A6B5E] mb-1">مقارنة بمتوسط {selectedArea.label}</p>
+          <div className="bg-[#F0F4F8] rounded-2xl p-4 border border-[#E2E8F0]">
+            <p className="text-xs text-[#627D98] mb-1">مقارنة بمتوسط {selectedArea.label}</p>
             <p
-              className={`text-sm font-bold ${areaDiff >= 0 ? "text-[#5B8C5A]" : "text-[#C0392B]"}`}
+              className={`text-sm font-bold ${areaDiff >= 0 ? "text-[#0A3C36]" : "text-[#C0392B]"}`}
             >
               {areaDiff >= 0 ? "+" : ""}
               {toArabicNumerals(areaDiff)}% مقارنة بالمتوسط (

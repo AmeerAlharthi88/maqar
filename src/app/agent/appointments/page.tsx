@@ -124,7 +124,7 @@ export default function AgentAppointmentsPage() {
     return (
       <AgentDashboardShell titleAr="المواعيد">
         <div className="flex items-center justify-center py-20">
-          <div className="w-6 h-6 rounded-full border-2 border-[#C65D3B] border-t-transparent animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-[#0A3C36] border-t-transparent animate-spin" />
         </div>
       </AgentDashboardShell>
     );
@@ -136,21 +136,21 @@ export default function AgentAppointmentsPage() {
         {/* Upcoming */}
         {upcoming.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">
               القادمة ({upcoming.length})
             </h2>
             <div className="space-y-3">
               {upcoming.map((appt) => (
                 <div
                   key={appt.id}
-                  className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4"
+                  className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4"
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-[#1E1E1E]">
+                      <p className="text-sm font-bold text-[#102A43]">
                         {appt.customerNameAr}
                       </p>
-                      <p className="text-xs text-[#7A6B5E] mt-0.5 line-clamp-1">
+                      <p className="text-xs text-[#627D98] mt-0.5 line-clamp-1">
                         {appt.listingTitleAr}
                       </p>
                     </div>
@@ -161,7 +161,7 @@ export default function AgentAppointmentsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs text-[#7A6B5E]">
+                  <div className="flex items-center gap-2 text-xs text-[#627D98]">
                     <svg
                       width="13"
                       height="13"
@@ -181,7 +181,7 @@ export default function AgentAppointmentsPage() {
                   </div>
 
                   {appt.notes && (
-                    <p className="text-xs text-[#A89480] mt-2 leading-relaxed">
+                    <p className="text-xs text-[#627D98] mt-2 leading-relaxed">
                       {appt.notes}
                     </p>
                   )}
@@ -189,7 +189,7 @@ export default function AgentAppointmentsPage() {
                   <div className="flex gap-2 mt-3">
                     <a
                       href={`tel:${appt.customerPhone}`}
-                      className="flex-1 py-2 rounded-xl bg-[#F5F0EA] text-center text-xs font-semibold text-[#1E1E1E]"
+                      className="flex-1 py-2 rounded-xl bg-[#F0F4F8] text-center text-xs font-semibold text-[#102A43]"
                     >
                       اتصال
                     </a>
@@ -204,7 +204,7 @@ export default function AgentAppointmentsPage() {
                     {appt.status === "pending" && (
                       <button
                         onClick={() => void handleStatusUpdate(appt.id, "confirmed")}
-                        className="flex-1 py-2 rounded-xl bg-[#EDF4ED] text-[#5B8C5A] text-xs font-bold"
+                        className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold"
                       >
                         تأكيد
                       </button>
@@ -212,7 +212,7 @@ export default function AgentAppointmentsPage() {
                     {(appt.status === "pending" || appt.status === "confirmed") && (
                       <button
                         onClick={() => void handleStatusUpdate(appt.id, "cancelled")}
-                        className="flex-1 py-2 rounded-xl bg-[#FBF0EB] text-[#C65D3B] text-xs font-bold"
+                        className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold"
                       >
                         إلغاء
                       </button>
@@ -227,24 +227,24 @@ export default function AgentAppointmentsPage() {
         {/* Historical */}
         {historical.length > 0 && (
           <div>
-            <h2 className="text-sm font-bold text-[#1E1E1E] mb-3">
+            <h2 className="text-sm font-bold text-[#102A43] mb-3">
               السابقة ({historical.length})
             </h2>
             <div className="space-y-3">
               {historical.map((appt) => (
                 <div
                   key={appt.id}
-                  className="bg-[#FAF7F4] rounded-2xl border border-[#F0EBE3] px-4 py-3"
+                  className="bg-[#F8F9FA] rounded-2xl border border-[#E2E8F0] px-4 py-3"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-[#7A6B5E]">
+                      <p className="text-sm font-bold text-[#627D98]">
                         {appt.customerNameAr}
                       </p>
-                      <p className="text-xs text-[#A89480] mt-0.5 line-clamp-1">
+                      <p className="text-xs text-[#627D98] mt-0.5 line-clamp-1">
                         {appt.listingTitleAr}
                       </p>
-                      <p className="text-[10px] text-[#A89480] mt-1">
+                      <p className="text-[10px] text-[#627D98] mt-1">
                         {appt.dateLabel}
                       </p>
                     </div>
@@ -262,7 +262,7 @@ export default function AgentAppointmentsPage() {
 
         {appointments.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-sm text-[#A89480]">لا توجد مواعيد بعد</p>
+            <p className="text-sm text-[#627D98]">لا توجد مواعيد بعد</p>
           </div>
         )}
       </div>

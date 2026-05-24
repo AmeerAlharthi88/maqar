@@ -25,17 +25,17 @@ function SpecCard({ icon, label, value, highlight }: SpecCardProps) {
       className={cn(
         "flex flex-col items-center gap-1.5 p-3 rounded-2xl border text-center",
         highlight
-          ? "bg-[#FBF0EB] border-[#F5C4B0] text-[#C65D3B]"
-          : "bg-white border-[#F0EBE3] text-[#1E1E1E]"
+          ? "bg-[#E6F0EF] border-[#B8D8D5] text-[#0A3C36]"
+          : "bg-white border-[#E2E8F0] text-[#102A43]"
       )}
     >
       <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center",
-        highlight ? "bg-[#C65D3B]/10 text-[#C65D3B]" : "bg-[#F5F0EA] text-[#7A6B5E]"
+        highlight ? "bg-[#0A3C36]/10 text-[#0A3C36]" : "bg-[#F0F4F8] text-[#627D98]"
       )}>
         {icon}
       </div>
       <span className="text-sm font-bold">{value}</span>
-      <span className="text-xs text-[#7A6B5E]">{label}</span>
+      <span className="text-xs text-[#627D98]">{label}</span>
     </div>
   );
 }
@@ -50,8 +50,8 @@ function AmenityBool({ label, present }: AmenityBoolProps) {
     <div className={cn(
       "flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium",
       present
-        ? "bg-[#EDF4ED] border-[#5B8C5A]/30 text-[#5B8C5A]"
-        : "bg-[#F5F0EA] border-[#E8DDD0] text-[#A89480]"
+        ? "bg-[#E6F0EF] border-[#0A3C36]/30 text-[#0A3C36]"
+        : "bg-[#F0F4F8] border-[#E2E8F0] text-[#627D98]"
     )}>
       {present ? (
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -90,8 +90,8 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
   ];
 
   return (
-    <div className="px-4 py-4 border-t border-[#F0EBE3]">
-      <h2 className="text-base font-bold text-[#1E1E1E] mb-3">المواصفات</h2>
+    <div className="px-4 py-4 border-t border-[#E2E8F0]">
+      <h2 className="text-base font-bold text-[#102A43] mb-3">المواصفات</h2>
 
       {/* Main specs grid */}
       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -171,7 +171,7 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
       </div>
 
       {/* Oman-specific features */}
-      <h3 className="text-sm font-semibold text-[#7A6B5E] mb-2">المميزات</h3>
+      <h3 className="text-sm font-semibold text-[#627D98] mb-2">المميزات</h3>
       <div className="flex flex-wrap gap-2">
         {omanFeatures.map((f) => (
           <AmenityBool key={f.label} label={f.label} present={f.present} />

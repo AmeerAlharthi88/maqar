@@ -65,10 +65,10 @@ export default function BillingPage() {
       <div className="px-4 py-6 space-y-6 max-w-lg mx-auto" dir="rtl">
         {/* Header */}
         <div>
-          <h1 className="text-xl font-bold text-[#1E1E1E] mb-1">
+          <h1 className="text-xl font-bold text-[#102A43] mb-1">
             الاشتراك والفواتير
           </h1>
-          <p className="text-sm text-[#7A6B5E]">
+          <p className="text-sm text-[#627D98]">
             إدارة خطتك وعرض سجلات الدفع
           </p>
         </div>
@@ -79,7 +79,7 @@ export default function BillingPage() {
             <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
               وضع المعاينة
             </p>
-            <p className="text-xs text-[#7A6B5E]">
+            <p className="text-xs text-[#627D98]">
               معالجة المدفوعات غير مفعّلة بعد. البيانات المعروضة للتجربة فقط.
             </p>
           </div>
@@ -93,10 +93,10 @@ export default function BillingPage() {
 
         {/* Usage */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             الاستخدام الحالي
           </h2>
-          <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4 space-y-4">
+          <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4 space-y-4">
             {usageLimits.map((u) => (
               <UsageMeter key={u.feature} usage={u} />
             ))}
@@ -106,20 +106,20 @@ export default function BillingPage() {
         {/* Active add-ons */}
         {activeAddOns.length > 0 && (
           <div>
-            <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+            <h2 className="text-base font-bold text-[#102A43] mb-3">
               الإضافات النشطة
             </h2>
             <div className="space-y-2">
               {activeAddOns.map((addon) => (
                 <div
                   key={addon.id}
-                  className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-3 flex items-center justify-between gap-3"
+                  className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3 flex items-center justify-between gap-3"
                 >
                   <div>
-                    <p className="text-sm font-semibold text-[#1E1E1E]">
+                    <p className="text-sm font-semibold text-[#102A43]">
                       {ADDON_LABELS_AR[addon.addOnType]}
                     </p>
-                    <p className="text-xs text-[#A89480]">
+                    <p className="text-xs text-[#627D98]">
                       ينتهي:{" "}
                       {new Date(addon.expiresAt).toLocaleDateString("ar-OM", {
                         day: "numeric",
@@ -127,7 +127,7 @@ export default function BillingPage() {
                       })}
                     </p>
                   </div>
-                  <p className="text-sm font-bold text-[#C65D3B]">
+                  <p className="text-sm font-bold text-[#0A3C36]">
                     {formatOMR(addon.amount, { arabic: true })}
                   </p>
                 </div>
@@ -138,7 +138,7 @@ export default function BillingPage() {
 
         {/* Billing history */}
         <div>
-          <h2 className="text-base font-bold text-[#1E1E1E] mb-3">
+          <h2 className="text-base font-bold text-[#102A43] mb-3">
             سجل الفواتير
           </h2>
           <BillingHistoryTable records={billingHistory} />
@@ -149,7 +149,7 @@ export default function BillingPage() {
           <p className="text-sm font-bold text-[#C0392B] mb-1">
             إلغاء الاشتراك
           </p>
-          <p className="text-xs text-[#7A6B5E] leading-relaxed mb-3">
+          <p className="text-xs text-[#627D98] leading-relaxed mb-3">
             يمكنك إلغاء الاشتراك في أي وقت. سيستمر الوصول حتى نهاية الفترة المدفوعة.
           </p>
           <button
@@ -162,11 +162,11 @@ export default function BillingPage() {
         </div>
 
         {/* Payment method placeholder */}
-        <div className="bg-white rounded-2xl border border-[#F0EBE3] p-4">
-          <p className="text-sm font-bold text-[#1E1E1E] mb-1">
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-4">
+          <p className="text-sm font-bold text-[#102A43] mb-1">
             طريقة الدفع
           </p>
-          <p className="text-xs text-[#A89480]">
+          <p className="text-xs text-[#627D98]">
             إضافة وإدارة طرق الدفع ستكون متاحة عند تفعيل مزود الدفع.
           </p>
         </div>
@@ -175,13 +175,13 @@ export default function BillingPage() {
         <div className="text-center">
           <Link
             href="/pricing"
-            className="text-sm text-[#C65D3B] font-semibold underline underline-offset-2"
+            className="text-sm text-[#0A3C36] font-semibold underline underline-offset-2"
           >
             عرض جميع الخطط والأسعار
           </Link>
         </div>
 
-        <p className="text-[11px] text-[#A89480] text-center leading-relaxed">
+        <p className="text-[11px] text-[#627D98] text-center leading-relaxed">
           لأسئلة الفواتير تواصل مع support@maqar.om · جميع الأسعار بالريال العُماني
         </p>
       </div>

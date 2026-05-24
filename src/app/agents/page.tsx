@@ -17,7 +17,7 @@ export default async function AgentsPage() {
       <AppHeader variant="back" titleAr="الوسطاء العقاريون" />
       <div className="px-4 py-4 space-y-3" dir="rtl">
         {/* Summary bar */}
-        <p className="text-xs text-[#A89480]">
+        <p className="text-xs text-[#627D98]">
           {agents.length} وسيط معتمد في سلطنة عُمان
         </p>
 
@@ -27,7 +27,7 @@ export default async function AgentsPage() {
         ))}
 
         {agents.length === 0 && (
-          <p className="text-center text-sm text-[#A89480] py-8">
+          <p className="text-center text-sm text-[#627D98] py-8">
             لا يوجد وسطاء متاحون حالياً
           </p>
         )}

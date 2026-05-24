@@ -28,7 +28,7 @@ export function FeaturedListingsSection({ listings }: FeaturedListingsSectionPro
         action={
           <Link
             href={ROUTES.search}
-            className="text-xs font-semibold text-[#C65D3B] hover:underline"
+            className="text-xs font-semibold text-[#0A3C36] hover:underline"
           >
             {isAr ? "عرض الكل" : "View All"}
           </Link>

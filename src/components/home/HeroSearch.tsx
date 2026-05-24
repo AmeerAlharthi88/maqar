@@ -11,31 +11,31 @@ export function HeroSearch() {
   const isAr = locale === "ar";
 
   return (
-    <section className="bg-gradient-to-b from-[#FAF7F2] to-white px-4 pt-4 pb-5 lg:pt-6 lg:pb-6 lg:max-w-3xl lg:mx-auto">
+    <section className="bg-gradient-to-b from-[#E6F0EF] to-white px-4 pt-4 pb-5 lg:pt-6 lg:pb-6 lg:max-w-3xl lg:mx-auto">
       {/* Logo + tagline — hidden on desktop since header provides branding */}
       <div className="mb-4 lg:hidden">
         <MaqarLogo size="sm" />
-        <p className="mt-1.5 text-xs text-[#A89480] font-medium">
+        <p className="mt-1.5 text-xs text-[#627D98] font-medium">
           {isAr ? APP_CONFIG.taglineAr : "Oman's Premier Real Estate Platform"}
         </p>
       </div>
 
       {/* Greeting */}
       <div className="mb-3 lg:mb-4 lg:text-center">
-        <h1 className="text-2xl lg:text-3xl font-bold text-[#1E1E1E] leading-tight">
+        <h1 className="text-2xl lg:text-3xl font-bold text-[#102A43] leading-tight">
           {isAr ? (
             <>
               ابحث عن مقرك
-              <span className="text-[#C65D3B]"> في عُمان</span>
+              <span className="text-[#0A3C36]"> في عُمان</span>
             </>
           ) : (
             <>
               Find your place
-              <span className="text-[#C65D3B]"> in Oman</span>
+              <span className="text-[#0A3C36]"> in Oman</span>
             </>
           )}
         </h1>
-        <p className="text-sm text-[#7A6B5E] mt-1">
+        <p className="text-sm text-[#627D98] mt-1">
           {isAr
             ? "آلاف العقارات في مسقط وصلالة وصحار وسائر المحافظات"
             : "Thousands of properties across Muscat, Salalah, Sohar and all governorates"}

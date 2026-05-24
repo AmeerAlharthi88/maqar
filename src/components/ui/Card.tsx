@@ -19,9 +19,9 @@ const paddingClasses = {
 
 const shadowClasses = {
   none:     "",
-  sm:       "shadow-[0_1px_4px_0_rgb(30_30_30/0.08)]",
-  card:     "shadow-[0_2px_8px_0_rgb(30_30_30/0.06),0_1px_2px_0_rgb(30_30_30/0.04)]",
-  elevated: "shadow-[0_8px_24px_0_rgb(30_30_30/0.10)]",
+  sm:       "shadow-[0_1px_4px_0_rgb(10_60_54/0.06)]",
+  card:     "shadow-[0_4px_20px_0_rgb(10_60_54/0.04)]",
+  elevated: "shadow-[0_8px_24px_0_rgb(10_60_54/0.10)]",
 };
 
 const radiusClasses = {
@@ -47,7 +47,7 @@ export function Card({
         paddingClasses[padding],
         shadowClasses[shadow],
         radiusClasses[radius],
-        border && "border border-[#F0EBE3]",
+        border && "border border-[#E2E8F0]",
         className
       )}
     >

@@ -20,14 +20,14 @@ export function NewVersionAvailableBanner({ onUpdate }: NewVersionAvailableBanne
     <div
       role="alert"
       aria-live="polite"
-      className="fixed top-0 left-0 right-0 z-[210] bg-[#C65D3B] text-white px-4 py-2.5 flex items-center justify-between gap-3 text-xs"
+      className="fixed top-0 left-0 right-0 z-[210] bg-[#0A3C36] text-white px-4 py-2.5 flex items-center justify-between gap-3 text-xs"
       style={{ paddingTop: "max(10px, env(safe-area-inset-top))" }}
     >
       <span className="font-medium">🚀 إصدار جديد متاح من مقر</span>
       <div className="flex items-center gap-2 flex-shrink-0">
         <button
           onClick={onUpdate}
-          className="bg-white text-[#C65D3B] font-bold px-3 py-1 rounded-lg text-[11px] min-h-[32px]"
+          className="bg-white text-[#0A3C36] font-bold px-3 py-1 rounded-lg text-[11px] min-h-[32px]"
           aria-label="تحديث التطبيق الآن"
         >
           تحديث

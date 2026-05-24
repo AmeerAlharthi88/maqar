@@ -11,10 +11,10 @@ interface CalculatorResultCardProps {
 }
 
 const accentMap = {
-  green:   { bg: "bg-[#EDF4ED]", border: "border-[#5B8C5A]/20", text: "text-[#5B8C5A]", sub: "text-[#5B8C5A]/70" },
+  green:   { bg: "bg-[#E6F0EF]", border: "border-[#0A3C36]/20", text: "text-[#0A3C36]", sub: "text-[#0A3C36]/70" },
   blue:    { bg: "bg-[#EAF4FB]", border: "border-[#2471A3]/20", text: "text-[#2471A3]", sub: "text-[#2471A3]/70" },
-  orange:  { bg: "bg-[#FBF0EB]", border: "border-[#C65D3B]/20", text: "text-[#C65D3B]", sub: "text-[#C65D3B]/70" },
-  default: { bg: "bg-[#F5F0EA]", border: "border-[#E8DDD0]",    text: "text-[#1E1E1E]", sub: "text-[#7A6B5E]" },
+  orange:  { bg: "bg-[#FEF0EE]", border: "border-[#C0392B]/20", text: "text-[#C0392B]", sub: "text-[#C0392B]/70" },
+  default: { bg: "bg-[#F0F4F8]", border: "border-[#E2E8F0]",    text: "text-[#102A43]", sub: "text-[#627D98]" },
 };
 
 export function CalculatorResultCard({
@@ -28,7 +28,7 @@ export function CalculatorResultCard({
 
   return (
     <div className={cn("rounded-2xl p-4 border", colors.bg, colors.border)}>
-      <p className="text-xs text-[#7A6B5E] mb-1">{label}</p>
+      <p className="text-xs text-[#627D98] mb-1">{label}</p>
       <p className={cn("font-bold", large ? "text-2xl" : "text-xl", colors.text)}>
         {value}
       </p>

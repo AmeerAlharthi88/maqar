@@ -26,9 +26,9 @@ export function PropertySpecs({ specs, propertyType, size = "md", className }: P
   return (
     <div className={cn("flex items-center gap-3 flex-wrap", className)}>
       {items.map((item, i) => (
-        <div key={i} className="flex items-center gap-1 text-[#7A6B5E]">
+        <div key={i} className="flex items-center gap-1 text-[#627D98]">
           <span className="flex-shrink-0">{item.icon}</span>
-          <span className={cn(textSize, "font-medium text-[#1E1E1E]")}>{item.value}</span>
+          <span className={cn(textSize, "font-medium text-[#102A43]")}>{item.value}</span>
         </div>
       ))}
     </div>

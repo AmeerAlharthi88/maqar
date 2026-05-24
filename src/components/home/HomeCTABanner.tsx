@@ -19,8 +19,8 @@ function CTACard({
     <Link
       href={href}
       className={cn(
-        "flex-1 flex flex-col gap-3 p-4 rounded-2xl border border-[#F0EBE3] bg-white",
-        "shadow-[0_2px_8px_0_rgb(30_30_30/0.06)] hover:shadow-[0_6px_20px_0_rgb(30_30_30/0.10)]",
+        "flex-1 flex flex-col gap-3 p-4 rounded-2xl border border-[#E2E8F0] bg-white",
+        "shadow-[0_2px_8px_0_rgb(10_60_54/0.06)] hover:shadow-[0_6px_20px_0_rgb(10_60_54/0.10)]",
         "transition-shadow duration-200"
       )}
     >
@@ -31,8 +31,8 @@ function CTACard({
         {icon}
       </div>
       <div>
-        <p className="text-sm font-bold text-[#1E1E1E]">{titleAr}</p>
-        <p className="text-xs text-[#7A6B5E] mt-0.5 leading-relaxed">{descriptionAr}</p>
+        <p className="text-sm font-bold text-[#102A43]">{titleAr}</p>
+        <p className="text-xs text-[#627D98] mt-0.5 leading-relaxed">{descriptionAr}</p>
       </div>
       <span className="text-xs font-semibold" style={{ color: accentColor }}>
         ابدأ الآن ←
@@ -49,7 +49,7 @@ export function HomeCTABanner() {
           href={ROUTES.addListing}
           titleAr="أضف عقارك"
           descriptionAr="انشر إعلانك وتواصل مع المشترين مباشرة"
-          accentColor="#C65D3B"
+          accentColor="#0A3C36"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -60,7 +60,7 @@ export function HomeCTABanner() {
           href={ROUTES.map}
           titleAr="تصفح الخريطة"
           descriptionAr="استكشف العقارات على خريطة تفاعلية"
-          accentColor="#5B8C5A"
+          accentColor="#1A5C54"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>

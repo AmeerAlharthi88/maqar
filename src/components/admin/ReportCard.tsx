@@ -30,20 +30,20 @@ export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate 
   const isActionable = report.status === "new" || report.status === "reviewing";
 
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-4" dir="rtl">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir="rtl">
       {/* Header */}
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-            <span className="text-[10px] px-2 py-0.5 bg-[#F5F0EA] text-[#7A6B5E] rounded-lg font-semibold">
+            <span className="text-[10px] px-2 py-0.5 bg-[#F0F4F8] text-[#627D98] rounded-lg font-semibold">
               {TARGET_TYPE_AR[report.targetType]}
             </span>
-            <p className="text-sm font-bold text-[#1E1E1E] line-clamp-1">{report.targetNameAr}</p>
+            <p className="text-sm font-bold text-[#102A43] line-clamp-1">{report.targetNameAr}</p>
           </div>
-          <p className="text-xs text-[#7A6B5E]">
+          <p className="text-xs text-[#627D98]">
             بلاغ من: {report.reporterNameAr}
           </p>
-          <p className="text-[10px] text-[#A89480] mt-0.5">
+          <p className="text-[10px] text-[#627D98] mt-0.5">
             {new Date(report.createdAt).toLocaleDateString("ar-OM", { year: "numeric", month: "long", day: "numeric" })}
           </p>
         </div>
@@ -55,14 +55,14 @@ export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate 
 
       {/* Reason chip */}
       <div className="mb-2">
-        <span className="inline-flex px-2.5 py-1 bg-[#F5F0EA] text-[#7A6B5E] text-xs font-semibold rounded-xl">
+        <span className="inline-flex px-2.5 py-1 bg-[#F0F4F8] text-[#627D98] text-xs font-semibold rounded-xl">
           {REPORT_REASON_AR[report.reason]}
         </span>
       </div>
 
       {/* Details */}
       {report.detailsAr && (
-        <p className="text-xs text-[#7A6B5E] leading-relaxed mb-3 border-r-2 border-[#F0EBE3] pr-3">
+        <p className="text-xs text-[#627D98] leading-relaxed mb-3 border-r-2 border-[#E2E8F0] pr-3">
           {report.detailsAr}
         </p>
       )}
@@ -71,7 +71,7 @@ export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate 
       {report.adminNote && (
         <div className="bg-[#FFF8E7] rounded-xl px-3 py-2 mb-3">
           <p className="text-[10px] text-[#D4A017] font-semibold mb-0.5">ملاحظة الإدارة</p>
-          <p className="text-xs text-[#7A6B5E]">{report.adminNote}</p>
+          <p className="text-xs text-[#627D98]">{report.adminNote}</p>
         </div>
       )}
 
@@ -80,13 +80,13 @@ export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate 
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => onResolve?.(report.id)}
-            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#EDF4ED] text-[#5B8C5A] text-xs font-bold"
+            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold"
           >
             حل البلاغ
           </button>
           <button
             onClick={() => onDismiss?.(report.id)}
-            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#F5F0EA] text-[#7A6B5E] text-xs font-bold"
+            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold"
           >
             رفض البلاغ
           </button>

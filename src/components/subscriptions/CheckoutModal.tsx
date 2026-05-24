@@ -84,7 +84,7 @@ export function CheckoutModal({
       >
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 bg-[#E8DDD0] rounded-full" />
+          <div className="w-10 h-1 bg-[#E2E8F0] rounded-full" />
         </div>
 
         <div className="px-5 pb-8 pt-2">
@@ -98,20 +98,20 @@ export function CheckoutModal({
           {state === "success" ? (
             /* Success state */
             <div className="text-center py-6">
-              <div className="w-14 h-14 rounded-full bg-[#EDF4ED] flex items-center justify-center mx-auto mb-4">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2.5" strokeLinecap="round">
+              <div className="w-14 h-14 rounded-full bg-[#E6F0EF] flex items-center justify-center mx-auto mb-4">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5" strokeLinecap="round">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-              <p className="text-base font-bold text-[#1E1E1E] mb-2">
+              <p className="text-base font-bold text-[#102A43] mb-2">
                 تم بنجاح (وهمي)
               </p>
-              <p className="text-sm text-[#7A6B5E] mb-6">
+              <p className="text-sm text-[#627D98] mb-6">
                 في الإنتاج، يتم التفعيل بعد تأكيد مزود الدفع عبر Webhook.
               </p>
               <button
                 onClick={onClose}
-                className="w-full py-3 rounded-2xl bg-[#5B8C5A] text-white text-sm font-bold"
+                className="w-full py-3 rounded-2xl bg-[#0A3C36] text-white text-sm font-bold"
               >
                 إغلاق
               </button>
@@ -122,19 +122,19 @@ export function CheckoutModal({
               <p className="text-base font-bold text-[#C0392B] mb-2">
                 فشل الإجراء
               </p>
-              <p className="text-sm text-[#7A6B5E] mb-6">
+              <p className="text-sm text-[#627D98] mb-6">
                 حدث خطأ غير متوقع. يُرجى المحاولة مجدداً.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setState("idle")}
-                  className="flex-1 py-3 rounded-2xl bg-[#C65D3B] text-white text-sm font-bold"
+                  className="flex-1 py-3 rounded-2xl bg-[#0A3C36] text-white text-sm font-bold"
                 >
                   إعادة المحاولة
                 </button>
                 <button
                   onClick={onClose}
-                  className="flex-1 py-3 rounded-2xl bg-[#F5F0EA] text-[#7A6B5E] text-sm font-semibold"
+                  className="flex-1 py-3 rounded-2xl bg-[#F0F4F8] text-[#627D98] text-sm font-semibold"
                 >
                   إغلاق
                 </button>
@@ -143,12 +143,12 @@ export function CheckoutModal({
           ) : (
             /* Idle / processing state */
             <>
-              <h2 className="text-base font-bold text-[#1E1E1E] mb-1">{title}</h2>
+              <h2 className="text-base font-bold text-[#102A43] mb-1">{title}</h2>
 
               {/* Duration selector for add-ons */}
               {addOnType === "featured_listing" && (
                 <div className="mb-4">
-                  <p className="text-xs font-semibold text-[#1E1E1E] mb-2">
+                  <p className="text-xs font-semibold text-[#102A43] mb-2">
                     مدة الإعلان المميز
                   </p>
                   <div className="flex gap-2">
@@ -159,8 +159,8 @@ export function CheckoutModal({
                         className={cn(
                           "flex-1 py-2.5 rounded-xl text-xs font-bold border transition-colors",
                           selectedWeeks === w
-                            ? "bg-[#C65D3B] text-white border-[#C65D3B]"
-                            : "bg-white text-[#1E1E1E] border-[#E8DDD0]"
+                            ? "bg-[#0A3C36] text-white border-[#0A3C36]"
+                            : "bg-white text-[#102A43] border-[#E2E8F0]"
                         )}
                         aria-pressed={selectedWeeks === w}
                       >
@@ -175,18 +175,18 @@ export function CheckoutModal({
               )}
 
               {/* Price summary */}
-              <div className="bg-[#FAF7F4] rounded-2xl p-4 mb-5">
+              <div className="bg-[#F8F9FA] rounded-2xl p-4 mb-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#7A6B5E]">المبلغ المستحق</span>
-                  <span className="text-lg font-bold text-[#1E1E1E]">
+                  <span className="text-sm text-[#627D98]">المبلغ المستحق</span>
+                  <span className="text-lg font-bold text-[#102A43]">
                     {amount === 0 ? "مجاني" : formatOMR(amount, { arabic: true })}
                     {planId && amount > 0 && (
-                      <span className="text-xs font-normal text-[#A89480]"> / شهر</span>
+                      <span className="text-xs font-normal text-[#627D98]"> / شهر</span>
                     )}
                   </span>
                 </div>
                 {addOnType && (
-                  <p className="text-[10px] text-[#A89480] mt-1">
+                  <p className="text-[10px] text-[#627D98] mt-1">
                     {selectedWeeks} {selectedWeeks === 1 ? "أسبوع" : "أسابيع"} ×{" "}
                     {formatOMR(ADDON_PRICES[addOnType], { arabic: true })}
                   </p>
@@ -194,7 +194,7 @@ export function CheckoutModal({
               </div>
 
               {/* Disclaimer */}
-              <p className="text-[10px] text-[#A89480] mb-4 leading-relaxed">
+              <p className="text-[10px] text-[#627D98] mb-4 leading-relaxed">
                 التحقق الفعلي يتم عبر مزود الدفع من جهة الخادم فقط. لا يُعتمد على حالة الدفع من جهة العميل.
               </p>
 
@@ -205,8 +205,8 @@ export function CheckoutModal({
                 className={cn(
                   "w-full py-3.5 rounded-2xl text-sm font-bold transition-colors",
                   state === "processing"
-                    ? "bg-[#C65D3B]/60 text-white cursor-not-allowed"
-                    : "bg-[#C65D3B] text-white"
+                    ? "bg-[#0A3C36]/60 text-white cursor-not-allowed"
+                    : "bg-[#0A3C36] text-white"
                 )}
                 aria-busy={state === "processing"}
               >
@@ -215,7 +215,7 @@ export function CheckoutModal({
 
               <button
                 onClick={onClose}
-                className="w-full py-2.5 mt-2 text-sm text-[#7A6B5E] font-semibold"
+                className="w-full py-2.5 mt-2 text-sm text-[#627D98] font-semibold"
                 aria-label="إلغاء"
               >
                 إلغاء

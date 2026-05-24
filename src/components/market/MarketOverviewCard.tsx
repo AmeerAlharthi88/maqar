@@ -23,19 +23,19 @@ export function MarketOverviewCard({
   return (
     <div
       className={cn(
-        "bg-white rounded-2xl border border-[#F0EBE3] p-4",
+        "bg-white rounded-2xl border border-[#E2E8F0] p-4",
         className
       )}
     >
-      <p className="text-xs text-[#7A6B5E] mb-1">{label}</p>
-      <p className="text-xl font-bold text-[#1E1E1E]">{value}</p>
+      <p className="text-xs text-[#627D98] mb-1">{label}</p>
+      <p className="text-xl font-bold text-[#102A43]">{value}</p>
       <div className="flex items-center gap-2 mt-1">
-        {sub && <p className="text-xs text-[#A89480]">{sub}</p>}
+        {sub && <p className="text-xs text-[#627D98]">{sub}</p>}
         {hasTrend && (
           <span
             className={cn(
               "text-xs font-semibold",
-              isUp ? "text-[#5B8C5A]" : "text-[#C0392B]"
+              isUp ? "text-[#0A3C36]" : "text-[#C0392B]"
             )}
           >
             {isUp ? "+" : ""}

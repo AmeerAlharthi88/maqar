@@ -36,13 +36,13 @@ const STATUS_CONFIG: Record<
   },
   synced: {
     labelAr: "تمت المزامنة",
-    colorClass: "text-[#5B8C5A]",
-    bgClass: "bg-[#EDF4ED]",
+    colorClass: "text-[#0A3C36]",
+    bgClass: "bg-[#E6F0EF]",
   },
   failed: {
     labelAr: "فشل",
-    colorClass: "text-[#C65D3B]",
-    bgClass: "bg-[#FBF0EB]",
+    colorClass: "text-[#C0392B]",
+    bgClass: "bg-[#FEF0EE]",
   },
 };
 
@@ -52,15 +52,15 @@ function QueuedActionCard({ action }: { action: QueuedAction }) {
   const labelAr = action.labelAr ?? ACTION_LABEL_AR[action.type] ?? action.type;
 
   return (
-    <div className="bg-white rounded-2xl border border-[#F0EBE3] px-4 py-3">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3">
       <div className="flex items-center justify-between gap-2 mb-1">
-        <p className="text-sm font-semibold text-[#1E1E1E]">{labelAr}</p>
+        <p className="text-sm font-semibold text-[#102A43]">{labelAr}</p>
         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${cfg.bgClass} ${cfg.colorClass}`}>
           {cfg.labelAr}
         </span>
       </div>
 
-      <p className="text-[10px] text-[#A89480] mb-2">
+      <p className="text-[10px] text-[#627D98] mb-2">
         {new Date(action.createdAt).toLocaleString("ar-OM", {
           day: "numeric",
           month: "short",
@@ -73,7 +73,7 @@ function QueuedActionCard({ action }: { action: QueuedAction }) {
       {(action.status === "synced" || action.status === "failed") && (
         <button
           onClick={() => dequeue(action.id)}
-          className="text-[11px] text-[#7A6B5E] underline underline-offset-2"
+          className="text-[11px] text-[#627D98] underline underline-offset-2"
           aria-label="حذف هذا الإجراء من القائمة"
         >
           حذف
@@ -99,8 +99,8 @@ export default function SyncCenterPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-[#1E1E1E]">مركز المزامنة</h1>
-            <p className="text-sm text-[#7A6B5E]">
+            <h1 className="text-xl font-bold text-[#102A43]">مركز المزامنة</h1>
+            <p className="text-sm text-[#627D98]">
               الإجراءات المحفوظة أثناء عدم الاتصال
             </p>
           </div>
@@ -113,11 +113,11 @@ export default function SyncCenterPage() {
             <p className="text-xl font-bold text-[#C8860A]">{totalActive}</p>
             <p className="text-[10px] text-[#C8860A]">في الانتظار</p>
           </div>
-          <div className={`${failed.length > 0 ? "bg-[#FBF0EB]" : "bg-[#EDF4ED]"} rounded-2xl px-3 py-3 text-center`}>
-            <p className={`text-xl font-bold ${failed.length > 0 ? "text-[#C65D3B]" : "text-[#5B8C5A]"}`}>
+          <div className={`${failed.length > 0 ? "bg-[#FEF0EE]" : "bg-[#E6F0EF]"} rounded-2xl px-3 py-3 text-center`}>
+            <p className={`text-xl font-bold ${failed.length > 0 ? "text-[#C0392B]" : "text-[#0A3C36]"}`}>
               {failed.length > 0 ? failed.length : synced.length}
             </p>
-            <p className={`text-[10px] ${failed.length > 0 ? "text-[#C65D3B]" : "text-[#5B8C5A]"}`}>
+            <p className={`text-[10px] ${failed.length > 0 ? "text-[#C0392B]" : "text-[#0A3C36]"}`}>
               {failed.length > 0 ? "فشل" : "تمت المزامنة"}
             </p>
           </div>
@@ -143,13 +143,13 @@ export default function SyncCenterPage() {
         {/* Empty state */}
         {queue.length === 0 && (
           <div className="text-center py-16">
-            <div className="w-14 h-14 rounded-full bg-[#EDF4ED] flex items-center justify-center mx-auto mb-4">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B8C5A" strokeWidth="2" aria-hidden="true">
+            <div className="w-14 h-14 rounded-full bg-[#E6F0EF] flex items-center justify-center mx-auto mb-4">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2" aria-hidden="true">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </div>
-            <p className="text-sm font-semibold text-[#1E1E1E]">لا توجد إجراءات معلّقة</p>
-            <p className="text-xs text-[#A89480] mt-1">
+            <p className="text-sm font-semibold text-[#102A43]">لا توجد إجراءات معلّقة</p>
+            <p className="text-xs text-[#627D98] mt-1">
               كل إجراءاتك تمت مزامنتها مع الخادم
             </p>
           </div>
@@ -158,7 +158,7 @@ export default function SyncCenterPage() {
         {/* Failed */}
         {failed.length > 0 && (
           <div>
-            <p className="text-xs font-bold text-[#C65D3B] mb-2">
+            <p className="text-xs font-bold text-[#C0392B] mb-2">
               فشل الإرسال ({failed.length})
             </p>
             <div className="space-y-2">
@@ -170,7 +170,7 @@ export default function SyncCenterPage() {
         {/* Pending & Syncing */}
         {(pending.length > 0 || syncing.length > 0) && (
           <div>
-            <p className="text-xs font-bold text-[#1E1E1E] mb-2">
+            <p className="text-xs font-bold text-[#102A43] mb-2">
               في الانتظار ({totalActive})
             </p>
             <div className="space-y-2">
@@ -185,12 +185,12 @@ export default function SyncCenterPage() {
         {synced.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-bold text-[#5B8C5A]">
+              <p className="text-xs font-bold text-[#0A3C36]">
                 تمت المزامنة ({synced.length})
               </p>
               <button
                 onClick={clearSynced}
-                className="text-[11px] text-[#7A6B5E] underline underline-offset-2"
+                className="text-[11px] text-[#627D98] underline underline-offset-2"
                 aria-label="مسح الإجراءات المزامنة"
               >
                 مسح الكل
@@ -207,7 +207,7 @@ export default function SyncCenterPage() {
           <div className="pt-2">
             <button
               onClick={clearQueue}
-              className="w-full py-3 rounded-xl border border-[#C65D3B]/30 text-[#C65D3B] text-xs font-bold min-h-[44px]"
+              className="w-full py-3 rounded-xl border border-[#C0392B]/30 text-[#C0392B] text-xs font-bold min-h-[44px]"
               aria-label="مسح جميع الإجراءات المعلّقة"
             >
               مسح جميع الإجراءات
@@ -216,7 +216,7 @@ export default function SyncCenterPage() {
         )}
 
         {/* Info note */}
-        <p className="text-[11px] text-[#A89480] text-center leading-relaxed">
+        <p className="text-[11px] text-[#627D98] text-center leading-relaxed">
           البيانات محفوظة محلياً على جهازك فقط · لا يتم مشاركة بيانات الجلسة مع الخادم أثناء عدم الاتصال
         </p>
       </div>

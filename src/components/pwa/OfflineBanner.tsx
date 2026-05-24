@@ -26,7 +26,7 @@ export function OfflineBanner({ position = "top" }: OfflineBannerProps) {
     <div
       role="status"
       aria-live="assertive"
-      className={`fixed ${posClass} z-[200] bg-[#1E1E1E] text-white px-4 py-2 flex items-center justify-center gap-2 text-xs font-semibold`}
+      className={`fixed ${posClass} z-[200] bg-[#102A43] text-white px-4 py-2 flex items-center justify-center gap-2 text-xs font-semibold`}
       style={{ paddingTop: position === "top" ? "max(8px, env(safe-area-inset-top))" : "8px" }}
     >
       {/* WiFi-off icon */}

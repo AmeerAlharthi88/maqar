@@ -79,18 +79,18 @@ export default function AdminAuditLogsPage() {
   return (
     <AdminDashboardShell titleAr="سجل التدقيق">
       <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#A89480]">{criticalCount} حرج · {logs.length} إجمالي</p>
+        <p className="text-xs text-[#627D98]">{criticalCount} حرج · {logs.length} إجمالي</p>
 
         {/* Category filters */}
         <div>
-          <p className="text-[10px] font-bold text-[#A89480] mb-1.5">الفئة</p>
+          <p className="text-[10px] font-bold text-[#627D98] mb-1.5">الفئة</p>
           <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
             {CATEGORY_FILTERS.map((f) => {
               const count = f === "all" ? logs.length : logs.filter((l) => l.category === f).length;
               return (
                 <button key={f} onClick={() => setCategoryFilter(f)}
                   className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                    categoryFilter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                    categoryFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
                 >
                   {CATEGORY_AR[f]} ({count})
                 </button>
@@ -101,14 +101,14 @@ export default function AdminAuditLogsPage() {
 
         {/* Severity filters */}
         <div>
-          <p className="text-[10px] font-bold text-[#A89480] mb-1.5">الخطورة</p>
+          <p className="text-[10px] font-bold text-[#627D98] mb-1.5">الخطورة</p>
           <div className="flex gap-2">
             {SEVERITY_FILTERS.map((f) => {
               const count = f === "all" ? logs.length : logs.filter((l) => l.severity === f).length;
               return (
                 <button key={f} onClick={() => setSeverityFilter(f)}
                   className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
-                    severityFilter === f ? "bg-[#C65D3B] text-white" : "bg-[#F5F0EA] text-[#7A6B5E]"].join(" ")}
+                    severityFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
                 >
                   {SEVERITY_AR[f]} ({count})
                 </button>
@@ -120,13 +120,13 @@ export default function AdminAuditLogsPage() {
         {/* Privacy notice */}
         <div className="bg-[#EAF4FB] rounded-2xl border border-[#2471A3]/15 px-4 py-3">
           <p className="text-xs font-bold text-[#2471A3] mb-0.5">سجل التدقيق — للاستخدام الداخلي فقط</p>
-          <p className="text-[10px] text-[#7A6B5E] leading-relaxed">
+          <p className="text-[10px] text-[#627D98] leading-relaxed">
             جميع الإجراءات الإدارية مسجّلة وخاضعة للمراجعة. عناوين IP مُخفاة جزئياً لأغراض الخصوصية.
           </p>
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#A89480] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : filtered.length === 0 ? (
           <AdminEmptyState titleAr="لا توجد سجلات" descriptionAr="لا توجد سجلات مطابقة للفلتر المحدد." />
         ) : (

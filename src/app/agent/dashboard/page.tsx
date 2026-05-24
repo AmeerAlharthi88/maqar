@@ -11,7 +11,7 @@ import { ROUTES } from "@/config/routes";
 import Link from "next/link";
 
 const CHART_LINES = [
-  { key: "views"          as const, labelAr: "مشاهدة", color: "#C65D3B" },
+  { key: "views"          as const, labelAr: "مشاهدة", color: "#0A3C36" },
   { key: "whatsappClicks" as const, labelAr: "واتساب", color: "#25D366" },
 ];
 
@@ -61,8 +61,8 @@ export default function AgentDashboardPage() {
         {recentLeads.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-bold text-[#1E1E1E]">أحدث العملاء</h2>
-              <Link href={ROUTES.agentLeads} className="text-xs text-[#C65D3B] font-semibold">
+              <h2 className="text-sm font-bold text-[#102A43]">أحدث العملاء</h2>
+              <Link href={ROUTES.agentLeads} className="text-xs text-[#0A3C36] font-semibold">
                 عرض الكل
               </Link>
             </div>
