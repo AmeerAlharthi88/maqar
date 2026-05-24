@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchStore } from "@/store/search.store";
 import { useMapStore } from "@/store/map.store";
 import { MOCK_LISTINGS } from "@/mock/listings";
@@ -11,6 +11,17 @@ import {
 import {
   getListingsWithCoordinates,
 } from "@/lib/helpers/map-utils";
+import { searchListingsClient } from "@/lib/supabase/listings";
+import type { Listing } from "@/types/listing";
+
+// Mirror the same env-guard and mock-fallback flags used by SearchPageClient.
+const SUPABASE_LIVE: boolean = (() => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  return url.startsWith("https://") && url.includes(".supabase.co");
+})();
+
+const ALLOW_MOCK_FALLBACK: boolean =
+  process.env.NEXT_PUBLIC_ALLOW_MOCK_FALLBACK === "true";
 import { SearchFilterSheet } from "@/components/search/SearchFilterSheet";
 import { MapToolbar } from "./MapToolbar";
 import { MapFilterChips } from "./MapFilterChips";
@@ -52,12 +63,38 @@ export function MapPageClient() {
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
 
+  // null = not yet fetched or Supabase not configured → use mock
+  const [dbListings, setDbListings] = useState<Listing[] | null>(null);
+
+  // Fetch from Supabase whenever filters change (same pattern as SearchPageClient)
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (!SUPABASE_LIVE) return;
+
+    let cancelled = false;
+    searchListingsClient(filters, 200).then(({ listings }) => {
+      if (cancelled) return;
+      setDbListings(listings);
+    });
+
+    return () => { cancelled = true; };
+  }, [filters]); // eslint-disable-line react-hooks/exhaustive-deps
+  /* eslint-enable react-hooks/set-state-in-effect */
+
   // ── Derived data ─────────────────────────────────────────────────────────────
 
-  const filteredListings = useMemo(
+  // Mock fallback: used when Supabase not configured or not yet fetched
+  const mockFiltered = useMemo(
     () => filterListings(MOCK_LISTINGS, filters),
     [filters]
   );
+
+  // Same decision tree as SearchPageClient
+  const filteredListings: Listing[] = (() => {
+    if (!SUPABASE_LIVE || dbListings === null) return mockFiltered;
+    if (dbListings.length > 0)               return dbListings;
+    return ALLOW_MOCK_FALLBACK ? mockFiltered : dbListings;
+  })();
 
   // Only show listings that have valid coordinates on the map
   const mapListings = useMemo(
