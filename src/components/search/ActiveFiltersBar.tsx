@@ -35,7 +35,6 @@ export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
       case "isFreehold":       setFilter("isFreehold", null); break;
       case "expatAllowed":     setFilter("expatAllowed", null); break;
       case "familyOnly":       setFilter("familyOnly", null); break;
-      case "directOwner":      setFilter("directOwner", null); break;
       case "area":             setFilters({ minArea: null, maxArea: null }); break;
       case "hasDriverRoom":    setFilter("hasDriverRoom", null); break;
       default: break;

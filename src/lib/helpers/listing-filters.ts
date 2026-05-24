@@ -87,7 +87,6 @@ export function filterListings(
     if (filters.isFreehold === true && l.isFreehold !== true) return false;
     if (filters.expatAllowed === true && l.isExpatAllowed !== true) return false;
     if (filters.familyOnly === true && l.isFamilyOnly !== true) return false;
-    // directOwner: requires backend field on Listing — deferred; store tracks the intent
     return true;
   });
 }
@@ -216,9 +215,6 @@ export function getActiveFilterLabels(
   }
   if (filters.familyOnly) {
     labels.push({ key: "familyOnly", label: "للعائلات" });
-  }
-  if (filters.directOwner) {
-    labels.push({ key: "directOwner", label: "مالك مباشر" });
   }
   return labels;
 }
