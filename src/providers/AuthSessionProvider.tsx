@@ -96,15 +96,20 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
     // ── Listen for future changes ────────────────────────────────────────────
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      // IMPORTANT: this callback is synchronous (no async/await).
+      // @supabase/auth-js awaits ALL onAuthStateChange callbacks via Promise.all
+      // before returning from verifyOtp / signInWithOtp. Any awaited async work
+      // here directly adds to the time the caller (e.g. OtpVerificationForm)
+      // waits for verifyOtp to resolve — causing timeouts on slow networks.
+      // All async work below is deliberately fire-and-forget (void).
       if (session?.user) {
         setUser(userFromSupabase(session.user));
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-          const profile = await getCurrentProfile();
-          setProfile(profile);
-          // Hydrate user-specific stores on sign-in
+          // Fire-and-forget: do not block the auth state change notification
+          void getCurrentProfile().then((profile) => setProfile(profile));
           if (event === "SIGNED_IN") {
-            hydrateUserStores(session.user.id).catch((err) =>
+            void hydrateUserStores(session.user.id).catch((err) =>
               console.error("[Auth] hydrateUserStores error:", err)
             );
           }
