@@ -54,17 +54,37 @@ export function PhoneOtpForm() {
       if (authError.message === "timeout") {
         setError("انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وأعد المحاولة.");
       } else {
+        // Supabase 429: "For security purposes, you can only request this after X seconds."
+        const isRateLimitError =
+          authError.message?.toLowerCase().includes("security purposes") ||
+          authError.message?.toLowerCase().includes("rate limit") ||
+          authError.message?.toLowerCase().includes("only request this after");
+
+        // Supabase 422: SMS provider / Twilio / OTP config errors
         const isSmsProviderError =
           authError.message?.toLowerCase().includes("sms") ||
           authError.message?.toLowerCase().includes("provider") ||
           authError.message?.toLowerCase().includes("phone") ||
           authError.message?.toLowerCase().includes("otp") ||
           authError.message?.toLowerCase().includes("send");
-        setError(
-          isSmsProviderError
-            ? "تعذّر إرسال رمز التحقق. تأكد من إعداد مزود الرسائل أو استخدم رقم اختبار مفعّل."
-            : "تعذّر إرسال رمز التحقق. تحقق من رقم الجوال وأعد المحاولة."
-        );
+
+        // Extract wait duration from rate-limit message, e.g. "after 58 seconds"
+        const waitMatch = authError.message?.match(/after\s+(\d+)\s+second/i);
+        const waitSeconds = waitMatch ? parseInt(waitMatch[1], 10) : null;
+
+        if (isRateLimitError) {
+          setError(
+            waitSeconds && waitSeconds > 5
+              ? `يرجى الانتظار ${waitSeconds} ثانية ثم أعد المحاولة.`
+              : "يرجى الانتظار لحظة ثم أعد المحاولة."
+          );
+        } else {
+          setError(
+            isSmsProviderError
+              ? "تعذّر إرسال رمز التحقق. تأكد من إعداد مزود الرسائل أو استخدم رقم اختبار مفعّل."
+              : "تعذّر إرسال رمز التحقق. تحقق من رقم الجوال وأعد المحاولة."
+          );
+        }
         if (process.env.NODE_ENV !== "production") {
           setTechDetail(authError.message);
         }
