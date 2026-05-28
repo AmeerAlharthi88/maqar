@@ -1,4 +1,7 @@
-import { toArabicNumerals, formatOMR } from "@/lib/formatters";
+"use client";
+
+import { formatNumber, formatCurrency } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import { cn } from "@/lib/utils";
 import type { ListingMarketData } from "@/lib/helpers/listing-detail";
 import type { Listing } from "@/types/listing";
@@ -37,17 +40,23 @@ function InsightRow({
   );
 }
 
-function DemandBar({ score }: { score: number }) {
+function DemandBar({ score, locale }: { score: number; locale: string }) {
+  const isAr = locale === "ar";
   const pct = Math.min(100, Math.max(0, score));
-  const color =
-    pct >= 80 ? "#0A3C36" : pct >= 60 ? "#E5BA73" : "#C8860A";
-  const label = pct >= 80 ? "مرتفع" : pct >= 60 ? "متوسط" : "منخفض";
+  const color = pct >= 80 ? "#0A3C36" : pct >= 60 ? "#E5BA73" : "#C8860A";
+  const label = isAr
+    ? (pct >= 80 ? "مرتفع" : pct >= 60 ? "متوسط" : "منخفض")
+    : (pct >= 80 ? "High" : pct >= 60 ? "Medium" : "Low");
 
   return (
     <div className="mt-3">
       <div className="flex items-center justify-between text-xs mb-1.5">
-        <span className="text-[#627D98]">مؤشر الطلب في المنطقة</span>
-        <span className="font-semibold" style={{ color }}>{toArabicNumerals(score)}/١٠٠ — {label}</span>
+        <span className="text-[#627D98]">
+          {isAr ? "مؤشر الطلب في المنطقة" : "Area demand index"}
+        </span>
+        <span className="font-semibold" style={{ color }}>
+          {formatNumber(score, locale as "ar" | "en")}/100 — {label}
+        </span>
       </div>
       <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
         <div
@@ -63,6 +72,9 @@ export function ListingMarketInsight({
   listing,
   marketData,
 }: ListingMarketInsightProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
+
   const {
     avgPrice,
     priceDiffPct,
@@ -77,28 +89,30 @@ export function ListingMarketInsight({
   const diffLabel =
     priceDiffPct !== null
       ? priceDiffPct < 0
-        ? `أقل من المتوسط بـ ${toArabicNumerals(Math.abs(Math.round(priceDiffPct)))}%`
+        ? isAr
+          ? `أقل من المتوسط بـ ${formatNumber(Math.abs(Math.round(priceDiffPct)), locale)}%`
+          : `${formatNumber(Math.abs(Math.round(priceDiffPct)), locale)}% below average`
         : priceDiffPct > 0
-        ? `أعلى من المتوسط بـ ${toArabicNumerals(Math.round(priceDiffPct))}%`
-        : "يساوي المتوسط"
-      : "غير متاح";
+        ? isAr
+          ? `أعلى من المتوسط بـ ${formatNumber(Math.round(priceDiffPct), locale)}%`
+          : `${formatNumber(Math.round(priceDiffPct), locale)}% above average`
+        : isAr ? "يساوي المتوسط" : "At market average"
+      : isAr ? "غير متاح" : "N/A";
 
   const diffHighlight: "good" | "warn" | "neutral" =
     priceDiffPct !== null
-      ? priceDiffPct < -5
-        ? "good"
-        : priceDiffPct > 10
-        ? "warn"
-        : "neutral"
+      ? priceDiffPct < -5 ? "good" : priceDiffPct > 10 ? "warn" : "neutral"
       : "neutral";
 
   return (
     <div className="px-4 py-4 border-t border-[#E2E8F0]">
       {/* Header with disclaimer */}
       <div className="flex items-start justify-between mb-3 gap-3">
-        <h2 className="text-base font-bold text-[#102A43]">تحليل السوق التقديري</h2>
+        <h2 className="text-base font-bold text-[#102A43]">
+          {isAr ? "تحليل السوق التقديري" : "Estimated Market Analysis"}
+        </h2>
         <span className="flex-shrink-0 text-[10px] text-[#627D98] bg-[#F0F4F8] border border-[#E2E8F0] px-2 py-0.5 rounded-full">
-          بيانات تقديرية
+          {isAr ? "بيانات تقديرية" : "Estimated data"}
         </span>
       </div>
 
@@ -106,48 +120,54 @@ export function ListingMarketInsight({
         <div className="px-4">
           {avgPrice !== null && (
             <InsightRow
-              label="متوسط السعر في المنطقة"
-              value={formatOMR(avgPrice, { arabic: true })}
-              sub={listing.purpose === "rent" ? "ر.ع / شهر" : "للبيع"}
+              label={isAr ? "متوسط السعر في المنطقة" : "Average area price"}
+              value={formatCurrency(avgPrice, locale)}
+              sub={listing.purpose === "rent"
+                ? (isAr ? "ر.ع / شهر" : "OMR / month")
+                : (isAr ? "للبيع" : "for sale")}
             />
           )}
           {priceDiffPct !== null && (
             <InsightRow
-              label="مقارنة بالسوق"
+              label={isAr ? "مقارنة بالسوق" : "vs. market"}
               value={diffLabel}
               highlight={diffHighlight}
             />
           )}
           {pricePerSqm !== null && (
             <InsightRow
-              label="السعر لكل متر مربع"
-              value={`${toArabicNumerals(pricePerSqm)} ر.ع/م²`}
+              label={isAr ? "السعر لكل متر مربع" : "Price per sqm"}
+              value={isAr
+                ? `${formatNumber(pricePerSqm, locale)} ر.ع/م²`
+                : `${formatNumber(pricePerSqm, locale)} OMR/sqm`}
             />
           )}
           {priceChangePct !== null && (
             <InsightRow
-              label="تغيّر الأسعار (سنوي)"
-              value={`${priceChangePct > 0 ? "+" : ""}${toArabicNumerals(priceChangePct)}%`}
+              label={isAr ? "تغيّر الأسعار (سنوي)" : "Price change (annual)"}
+              value={`${priceChangePct > 0 ? "+" : ""}${formatNumber(priceChangePct, locale)}%`}
               highlight={priceChangePct > 0 ? "good" : "warn"}
             />
           )}
           {avgDaysOnMarket !== null && (
             <InsightRow
-              label="متوسط أيام البيع"
-              value={`${toArabicNumerals(avgDaysOnMarket)} يوم`}
+              label={isAr ? "متوسط أيام البيع" : "Avg. days on market"}
+              value={isAr
+                ? `${formatNumber(avgDaysOnMarket, locale)} يوم`
+                : `${formatNumber(avgDaysOnMarket, locale)} days`}
             />
           )}
           {rentalYield !== null && listing.purpose === "sale" && (
             <InsightRow
-              label="العائد الإيجاري المتوقع"
-              value={`${toArabicNumerals(rentalYield)}%`}
+              label={isAr ? "العائد الإيجاري المتوقع" : "Expected rental yield"}
+              value={`${formatNumber(rentalYield, locale)}%`}
               highlight="good"
             />
           )}
           {investmentScore !== null && (
             <InsightRow
-              label="درجة الجاذبية الاستثمارية"
-              value={`${toArabicNumerals(investmentScore)}/١٠٠`}
+              label={isAr ? "درجة الجاذبية الاستثمارية" : "Investment score"}
+              value={`${formatNumber(investmentScore, locale)}/100`}
               highlight={investmentScore >= 70 ? "good" : "neutral"}
             />
           )}
@@ -155,14 +175,16 @@ export function ListingMarketInsight({
 
         {demandScore !== null && (
           <div className="px-4 pb-4">
-            <DemandBar score={demandScore} />
+            <DemandBar score={demandScore} locale={locale} />
           </div>
         )}
       </div>
 
       {/* Disclaimer */}
       <p className="mt-2 text-[10px] text-[#627D98] text-center">
-        هذه البيانات تقديرية للتوجيه فقط ولا تمثّل قيمة تقييم رسمية
+        {isAr
+          ? "هذه البيانات تقديرية للتوجيه فقط ولا تمثّل قيمة تقييم رسمية"
+          : "This data is for guidance only and does not represent an official valuation."}
       </p>
     </div>
   );

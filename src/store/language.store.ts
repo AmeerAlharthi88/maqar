@@ -1,21 +1,8 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { LocaleKey } from "@/config/locale";
+// ── Backward-compatibility re-export ─────────────────────────────────────────
+// Existing code that imports useLanguageStore continues to work unchanged.
+// New code should import useLocaleStore from "@/store/locale.store" instead.
 
-interface LanguageState {
-  locale: LocaleKey;
-  dir: "rtl" | "ltr";
-  setLocale: (locale: LocaleKey) => void;
-}
+export { useLocaleStore as useLanguageStore } from "./locale.store";
 
-export const useLanguageStore = create<LanguageState>()(
-  persist(
-    (set) => ({
-      locale: "ar",
-      dir: "rtl",
-      setLocale: (locale) =>
-        set({ locale, dir: locale === "ar" ? "rtl" : "ltr" }),
-    }),
-    { name: "maqar-locale" }
-  )
-);
+// Re-export LocaleKey so existing `import type { LocaleKey }` calls still resolve
+export type { LocaleKey } from "@/config/locale";

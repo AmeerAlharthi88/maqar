@@ -7,15 +7,16 @@ import { cn } from "@/lib/utils";
 import { BOTTOM_NAV_ITEMS } from "@/config/navigation";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { ROUTES } from "@/config/routes";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
+import type { TranslationKey } from "@/i18n/types";
 
-// English equivalents of Arabic nav labels
-const NAV_LABEL_EN: Record<string, string> = {
-  home:      "Home",
-  map:       "Map",
-  add:       "Add",
-  favorites: "Favorites",
-  account:   "Account",
+// Map each nav item key to its translation key
+const NAV_KEY_MAP: Record<string, TranslationKey> = {
+  home:      "nav.home",
+  map:       "nav.map",
+  add:       "nav.add",
+  favorites: "nav.favorites",
+  account:   "nav.account",
 };
 
 interface AppShellProps {
@@ -24,18 +25,19 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
-  const { locale, setLocale } = useLanguageStore();
+  const { locale, dir, toggleLocale, t } = useTranslation();
   const isAr = locale === "ar";
 
   // Keep <html lang> and <html dir> in sync with locale preference.
   // suppressHydrationWarning on <html> in layout.tsx prevents SSR mismatch flash.
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.documentElement.dir = isAr ? "rtl" : "ltr";
-  }, [locale, isAr]);
+    document.documentElement.dir = dir;
+  }, [locale, dir]);
 
   function navLabel(item: { key: string; labelAr: string }): string {
-    return isAr ? item.labelAr : (NAV_LABEL_EN[item.key] ?? item.labelAr);
+    const key = NAV_KEY_MAP[item.key];
+    return key ? t(key) : item.labelAr;
   }
 
   return (
@@ -44,10 +46,10 @@ export function AppShell({ children }: AppShellProps) {
       <header className="hidden lg:flex sticky top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] h-14 px-6">
         {/* Inner content capped at max-w-7xl for wide screens */}
         <div className="max-w-7xl mx-auto w-full flex items-center gap-6">
-          <Link href={ROUTES.home} aria-label="مقر — الرئيسية" className="flex-shrink-0">
+          <Link href={ROUTES.home} aria-label={isAr ? "مقر — الرئيسية" : "Maqar — Home"} className="flex-shrink-0">
             <MaqarLogo size="sm" />
           </Link>
-          <nav className="flex items-center gap-1 flex-1" aria-label={isAr ? "التنقل الرئيسي" : "Main navigation"}>
+          <nav className="flex items-center gap-1 flex-1" aria-label={t("nav.home")}>
             {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
               const isActive =
                 pathname === item.href ||
@@ -71,7 +73,7 @@ export function AppShell({ children }: AppShellProps) {
 
           {/* Language toggle */}
           <button
-            onClick={() => setLocale(isAr ? "en" : "ar")}
+            onClick={toggleLocale}
             aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
             className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E2E8F0] text-xs font-semibold text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
           >
@@ -86,12 +88,12 @@ export function AppShell({ children }: AppShellProps) {
           <Link
             href={ROUTES.addListing}
             className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
-            aria-label={isAr ? "إضافة عقار" : "Add Property"}
+            aria-label={t("nav.add")}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            {isAr ? "أضف عقار" : "Add Property"}
+            {t("home.addProperty")}
           </Link>
         </div>
       </header>
@@ -102,7 +104,7 @@ export function AppShell({ children }: AppShellProps) {
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">
         <button
-          onClick={() => setLocale(isAr ? "en" : "ar")}
+          onClick={toggleLocale}
           aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
           className="flex items-center gap-1 px-2.5 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E8F0] text-xs font-semibold text-[#627D98] shadow-sm hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
         >

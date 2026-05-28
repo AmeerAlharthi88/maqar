@@ -23,33 +23,113 @@ function makeInitialDraft(): ListingDraft {
     id: generateDraftId(),
     purpose: null,
     propertyType: null,
+
+    // Core specs
     bedrooms: null,
     bathrooms: null,
     area: null,
     landArea: null,
-    floors: null,
     parkingSpots: null,
     furnishing: null,
     propertyAge: null,
     availabilityDate: null,
+
+    // Floor fields
+    floorNumber: null,
+    totalFloorsInBuilding: null,
+    floors: null,
+
+    // Villa / residential features
     hasMajlis: false,
+    majlisCount: null,
     hasMaidRoom: false,
     hasDriverRoom: false,
-    hasOutdoorKitchen: false,
-    hasIndoorKitchen: false,
+    hasPrivatePool: false,
     hasYard: false,
+    balconyCount: null,
+    hasCentralAc: false,
+    kitchenType: null,
+    hasStoreRoom: false,
+
+    // Apartment features
+    hasElevator: false,
+    hasSecurity: false,
+    hasSharedPool: false,
+    hasSharedGym: false,
+    hasBalcony: false,
+
+    // Views
     hasSeaView: false,
     hasMountainView: false,
+
+    // Legacy booleans
+    hasOutdoorKitchen: false,
+    hasIndoorKitchen: false,
     isFreehold: false,
     isExpatAllowed: false,
     isFamilyOnly: false,
     isBachelorAllowed: false,
+
+    // Land
+    landUse: null,
+    roadAccess: null,
+    isCornerPlot: false,
+    hasElectricity: false,
+    hasWater: false,
+    hasSewage: false,
+    hasBoundaryWall: false,
+    plotNumber: "",
+    hasNearbyMosque: false,
+    hasNearbySchool: false,
+
+    // Farm
+    waterSource: null,
+    farmHouseExists: false,
+    numberOfWells: null,
+    palmTreesCount: null,
+    otherTrees: "",
+    hasPavedRoad: false,
+    hasAgriculturalLicense: false,
+
+    // Commercial shop
+    shopFrontageMeters: null,
+    hasCommercialLicense: false,
+    hasDisplayWindow: false,
+    isMainRoadFacing: false,
+
+    // Office
+    meetingRoomsCount: null,
+    hasReceptionArea: false,
+    isInternetReady: false,
+
+    // Warehouse
+    ceilingHeightMeters: null,
+    hasLoadingDock: false,
+    hasTruckAccess: false,
+    powerCapacityKw: null,
+    hasFireSafety: false,
+    isFenced: false,
+    hasCrane: false,
+    hasOfficeSpace: false,
+
+    // Building
+    totalUnits: null,
+    hasCommercialGroundFloor: false,
+    currentRentalIncome: null,
+
+    // Chalet
+    hasBarbecue: false,
+    hasSharedBeachAccess: false,
+
+    // Step 4 — Price
     price: null,
     rentPeriod: null,
     isNegotiable: false,
     depositAmount: null,
     serviceCharges: null,
     isPriceHidden: false,
+
+    // Step 5 — Location
     governorateId: null,
     governorateAr: "",
     wilayatId: null,
@@ -62,15 +142,23 @@ function makeInitialDraft(): ListingDraft {
     hideExactLocation: false,
     mapLat: null,
     mapLng: null,
+
+    // Step 6 — Media
     images: [],
     videoLink: "",
     tourLink: "",
+
+    // Step 7 — Documents
     documents: [],
     requestVerification: true,
+
+    // Step 8 — Description
     titleAr: "",
     descriptionAr: "",
     highlights: [],
     amenities: [],
+
+    // Meta
     status: "draft",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -302,7 +390,9 @@ export const useAddListingStore = create<AddListingState>()(
       },
     }),
     {
-      name: "maqar-add-listing-v1",
+      // v2: extended draft schema with per-type fields (2026-05-26)
+      // Bump version to clear cached v1 drafts — incompatible shape.
+      name: "maqar-add-listing-v2",
       // Persist only serializable fields — strip blob URLs and File objects
       partialize: (s) => ({
         currentStep: s.currentStep,

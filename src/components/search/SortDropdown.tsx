@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useSearchStore, SORT_LABELS } from "@/store/search.store";
+import { useSearchStore } from "@/store/search.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { SortOption } from "@/store/search.store";
 
 interface SortDropdownProps {
@@ -11,6 +12,8 @@ interface SortDropdownProps {
 
 export function SortDropdown({ className }: SortDropdownProps) {
   const { filters, setFilter } = useSearchStore();
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -22,7 +25,18 @@ export function SortDropdown({ className }: SortDropdownProps) {
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
-  const options = Object.entries(SORT_LABELS) as [SortOption, string][];
+  // Bilingual sort labels
+  const SORT_OPTIONS: { value: SortOption; labelAr: string; labelEn: string }[] = [
+    { value: "newest",       labelAr: "الأحدث",                labelEn: "Newest" },
+    { value: "price_asc",   labelAr: "السعر: من الأقل",       labelEn: "Price: Low to High" },
+    { value: "price_desc",  labelAr: "السعر: من الأعلى",      labelEn: "Price: High to Low" },
+    { value: "most_viewed", labelAr: "الأكثر مشاهدة",         labelEn: "Most Viewed" },
+    { value: "highest_roi", labelAr: "الأعلى عائداً",          labelEn: "Highest ROI" },
+    { value: "below_market",labelAr: "أقل من سعر السوق",      labelEn: "Below Market" },
+  ];
+
+  const currentLabel = SORT_OPTIONS.find((o) => o.value === filters.sortBy);
+  const displayLabel = isAr ? (currentLabel?.labelAr ?? "الأحدث") : (currentLabel?.labelEn ?? "Newest");
 
   return (
     <div ref={ref} className={cn("relative", className)}>
@@ -42,7 +56,7 @@ export function SortDropdown({ className }: SortDropdownProps) {
           <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/>
           <line x1="3" y1="18" x2="3.01" y2="18"/>
         </svg>
-        {SORT_LABELS[filters.sortBy]}
+        {displayLabel}
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
           className={cn("transition-transform", open && "rotate-180")}>
           <path d="M6 9l6 6 6-6"/>
@@ -52,27 +66,27 @@ export function SortDropdown({ className }: SortDropdownProps) {
       {open && (
         <div
           role="listbox"
-          aria-label="ترتيب النتائج"
+          aria-label={t("search.sort.label")}
           className="absolute top-full end-0 mt-1 bg-white border border-[#E2E8F0] rounded-2xl shadow-[0_8px_24px_0_rgb(10_60_54/0.10)] z-50 min-w-[180px] overflow-hidden"
         >
-          {options.map(([value, label]) => (
+          {SORT_OPTIONS.map((opt) => (
             <button
-              key={value}
+              key={opt.value}
               role="option"
-              aria-selected={filters.sortBy === value}
+              aria-selected={filters.sortBy === opt.value}
               onClick={() => {
-                setFilter("sortBy", value);
+                setFilter("sortBy", opt.value);
                 setOpen(false);
               }}
               className={cn(
                 "w-full flex items-center justify-between gap-3 px-4 py-3 text-sm transition-colors text-start",
-                filters.sortBy === value
+                filters.sortBy === opt.value
                   ? "bg-[#E6F0EF] text-[#0A3C36] font-semibold"
                   : "text-[#102A43] hover:bg-[#F0F4F8]"
               )}
             >
-              {label}
-              {filters.sortBy === value && (
+              {isAr ? opt.labelAr : opt.labelEn}
+              {filters.sortBy === opt.value && (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                   <path d="M20 6 9 17l-5-5"/>
                 </svg>

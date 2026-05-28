@@ -2,7 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { RENT_PERIODS } from "@/lib/constants/add-listing";
-import { toArabicNumerals } from "@/lib/formatters";
+import { formatNumber, formatCurrency } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ListingDraft, RentPeriod } from "@/types/listing-draft";
 
 interface StepPriceProps {
@@ -32,7 +33,7 @@ function ToggleRow({
       role="switch"
       aria-checked={value}
     >
-      <div className="text-right">
+      <div className="text-start">
         <p className="text-sm font-medium text-[#102A43]">{label}</p>
         {desc && <p className="text-xs text-[#627D98]">{desc}</p>}
       </div>
@@ -60,6 +61,8 @@ export function StepPrice({
   suspiciousPrice,
   suspiciousMessage,
 }: StepPriceProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
   const isRent = draft.purpose === "rent" || draft.purpose === "investment";
   const priceNum = draft.price ?? 0;
   const priceFormatted = priceNum > 0 ? priceNum.toLocaleString("en-US") : "";
@@ -71,12 +74,14 @@ export function StepPrice({
   }
 
   return (
-    <div className="px-4 py-6 space-y-6" dir="rtl">
+    <div className="px-4 py-6 space-y-6">
 
       {/* Main price input */}
       <section>
         <h3 className="text-sm font-bold text-[#102A43] mb-1.5">
-          {isRent ? "سعر الإيجار" : "سعر البيع"}
+          {isRent
+            ? (isAr ? "سعر الإيجار" : "Rental price")
+            : (isAr ? "سعر البيع" : "Sale price")}
           <span className="text-[#C0392B] ms-1">*</span>
         </h3>
         <div className="relative">
@@ -92,10 +97,10 @@ export function StepPrice({
               errors.price ? "border-[#C0392B]" : "border-[#E2E8F0]"
             )}
             dir="ltr"
-            aria-label="السعر بالريال العماني"
+            aria-label={isAr ? "السعر بالريال العماني" : "Price in Omani Rials"}
           />
           <span className="absolute end-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#627D98] pointer-events-none">
-            ر.ع
+            {t("common.omr")}
           </span>
         </div>
         {errors.price && (
@@ -103,9 +108,9 @@ export function StepPrice({
         )}
         {priceNum > 0 && (
           <p className="mt-1.5 text-xs text-[#627D98]">
-            {toArabicNumerals(priceFormatted)} ريال عُماني
+            {formatCurrency(priceNum, locale)}
             {isRent && draft.rentPeriod === "yearly"
-              ? ` — ${toArabicNumerals(Math.round(priceNum / 12).toLocaleString("en-US"))} شهرياً`
+              ? ` — ${formatCurrency(Math.round(priceNum / 12), locale)} ${isAr ? "شهرياً" : "/ month"}`
               : ""}
           </p>
         )}
@@ -120,7 +125,9 @@ export function StepPrice({
             <line x1="12" y1="17" x2="12.01" y2="17" />
           </svg>
           <div>
-            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">ملاحظة حول السعر</p>
+            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
+              {isAr ? "ملاحظة حول السعر" : "Price note"}
+            </p>
             <p className="text-xs text-[#627D98] leading-relaxed">{suspiciousMessage}</p>
           </div>
         </div>
@@ -130,7 +137,8 @@ export function StepPrice({
       {isRent && (
         <section>
           <h3 className="text-sm font-bold text-[#102A43] mb-3">
-            فترة الإيجار <span className="text-[#C0392B]">*</span>
+            {isAr ? "فترة الإيجار" : "Rental period"}{" "}
+            <span className="text-[#C0392B]">*</span>
           </h3>
           <div className="grid grid-cols-2 gap-2">
             {RENT_PERIODS.map((period) => (
@@ -145,7 +153,7 @@ export function StepPrice({
                 )}
                 aria-pressed={draft.rentPeriod === period.value}
               >
-                {period.labelAr}
+                {isAr ? period.labelAr : (period.labelEn ?? period.labelAr)}
               </button>
             ))}
           </div>
@@ -156,14 +164,14 @@ export function StepPrice({
       {/* Toggles */}
       <section className="bg-white rounded-2xl border border-[#E2E8F0] px-4">
         <ToggleRow
-          label="السعر قابل للتفاوض"
-          desc="يرى المشترون أن السعر مرن"
+          label={t("addListing.price.isNegotiable")}
+          desc={isAr ? "يرى المشترون أن السعر مرن" : "Buyers see the price as flexible"}
           value={draft.isNegotiable}
           onChange={(v) => onChange({ isNegotiable: v })}
         />
         <ToggleRow
-          label="إخفاء السعر"
-          desc="يظهر 'تواصل للسعر' بدلاً من الرقم"
+          label={t("addListing.price.hidePrice")}
+          desc={isAr ? "يظهر 'تواصل للسعر' بدلاً من الرقم" : "Shows 'Contact for price' instead of the number"}
           value={draft.isPriceHidden}
           onChange={(v) => onChange({ isPriceHidden: v })}
         />
@@ -172,7 +180,9 @@ export function StepPrice({
       {/* Deposit (rent only) */}
       {isRent && (
         <section>
-          <h3 className="text-sm font-bold text-[#102A43] mb-1.5">مبلغ التأمين (اختياري)</h3>
+          <h3 className="text-sm font-bold text-[#102A43] mb-1.5">
+            {t("addListing.price.deposit")}
+          </h3>
           <div className="relative">
             <input
               type="number"
@@ -183,14 +193,18 @@ export function StepPrice({
               className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 pe-14 text-[#102A43] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
               dir="ltr"
             />
-            <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#627D98] pointer-events-none">ر.ع</span>
+            <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#627D98] pointer-events-none">
+              {t("common.omr")}
+            </span>
           </div>
         </section>
       )}
 
       {/* Service charges */}
       <section>
-        <h3 className="text-sm font-bold text-[#102A43] mb-1.5">رسوم الخدمات السنوية (اختياري)</h3>
+        <h3 className="text-sm font-bold text-[#102A43] mb-1.5">
+          {t("addListing.price.serviceCharges")}
+        </h3>
         <div className="relative">
           <input
             type="number"
@@ -201,7 +215,9 @@ export function StepPrice({
             className="w-full h-11 bg-white border border-[#E2E8F0] rounded-xl px-3.5 pe-14 text-[#102A43] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15"
             dir="ltr"
           />
-          <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#627D98] pointer-events-none">ر.ع/سنة</span>
+          <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#627D98] pointer-events-none">
+            {isAr ? "ر.ع/سنة" : "OMR/yr"}
+          </span>
         </div>
       </section>
     </div>

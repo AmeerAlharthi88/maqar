@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { useAuthStore } from "@/store/auth.store";
 import { useAddListingStore } from "@/store/add-listing.store";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import { useTranslation } from "@/i18n/useTranslation";
 
 import { LoginRequired } from "./LoginRequired";
 import { StepperProgress } from "./StepperProgress";
@@ -29,6 +30,8 @@ import type { PropertyType } from "@/types/listing";
 export function AddListingShell() {
   const { isAuthenticated, isLoading } = useAuthStore();
   const isOnline = useOnlineStatus();
+  const { t, dir } = useTranslation();
+  const isAr = dir === "rtl";
 
   const {
     currentStep,
@@ -202,7 +205,7 @@ export function AddListingShell() {
   return (
     <div
       className="min-h-screen bg-[#F8F9FA]"
-      dir="rtl"
+      dir={dir}
       style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom, 0px))" }}
     >
       {/* Step progress header */}
@@ -211,7 +214,9 @@ export function AddListingShell() {
       {/* Validation error summary (if any) */}
       {Object.keys(validationErrors).length > 0 && currentStep !== 10 && (
         <div className="mx-4 mt-3 bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3">
-          <p className="text-xs font-semibold text-[#C0392B] mb-1">يرجى تصحيح الأخطاء التالية:</p>
+          <p className="text-xs font-semibold text-[#C0392B] mb-1">
+            {isAr ? "يرجى تصحيح الأخطاء التالية:" : "Please fix the following errors:"}
+          </p>
           <ul className="space-y-0.5">
             {Object.values(validationErrors).map((err, i) => (
               <li key={i} className="text-xs text-[#C0392B]">• {err}</li>
@@ -224,9 +229,9 @@ export function AddListingShell() {
       {mockLimitReached && (
         <div className="px-4 py-4">
           <UpgradePrompt
-            titleAr="وصلت إلى الحد الأقصى للإعلانات"
-            messageAr="يمكنك نشر حتى ٣ إعلانات نشطة في الخطة المجانية. قم بالترقية لنشر المزيد."
-            ctaAr="ترقية الخطة"
+            titleAr={t("addListing.limitReached.title")}
+            messageAr={t("addListing.limitReached.message")}
+            ctaAr={t("addListing.limitReached.cta")}
             variant="banner"
           />
         </div>
@@ -239,10 +244,10 @@ export function AddListingShell() {
       {!isOnline && (currentStep === 9 || currentStep === 10) && (
         <div className="mx-4 mt-3 bg-[#FEF9EC] border border-[#C8860A]/30 rounded-xl px-4 py-3">
           <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
-            لا يوجد اتصال بالإنترنت
+            {t("addListing.offline.title")}
           </p>
           <p className="text-[11px] text-[#627D98]">
-            يمكنك حفظ المسودة وإرسال الإعلان عند استعادة الاتصال.
+            {t("addListing.offline.message")}
           </p>
         </div>
       )}
@@ -258,9 +263,9 @@ export function AddListingShell() {
           onSaveDraft={saveDraft}
           nextLabel={
             currentStep === 9
-              ? "التالي — الإرسال"
+              ? (isAr ? "التالي — الإرسال" : "Next — Submit")
               : currentStep === 10
-              ? "إرسال الإعلان"
+              ? t("addListing.common.submit")
               : undefined
           }
           disableNext={

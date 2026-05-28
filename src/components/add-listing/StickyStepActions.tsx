@@ -2,6 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { ADD_LISTING_TOTAL_STEPS } from "@/lib/constants/add-listing";
+import { useTranslation } from "@/i18n/useTranslation";
+import { formatNumber } from "@/lib/formatters";
 
 interface StickyStepActionsProps {
   currentStep: number;
@@ -24,10 +26,11 @@ export function StickyStepActions({
   nextLabel,
   disableNext = false,
 }: StickyStepActionsProps) {
+  const { t, locale } = useTranslation();
   const isFirst = currentStep === 1;
   const isLast = currentStep === ADD_LISTING_TOTAL_STEPS;
 
-  const nextButtonLabel = nextLabel ?? (isLast ? "إرسال الإعلان" : "التالي");
+  const nextButtonLabel = nextLabel ?? (isLast ? t("addListing.common.submit") : t("addListing.common.next"));
 
   return (
     <div
@@ -41,12 +44,12 @@ export function StickyStepActions({
             onClick={onPrev}
             disabled={isSubmitting}
             className="flex items-center justify-center gap-1.5 bg-[#F0F4F8] text-[#102A43] text-sm font-semibold py-3 px-4 rounded-2xl border border-[#E2E8F0] flex-shrink-0 disabled:opacity-50"
-            aria-label="الخطوة السابقة"
+            aria-label={t("addListing.common.back")}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M9 18l6-6-6-6" />
             </svg>
-            رجوع
+            {t("addListing.common.back")}
           </button>
         )}
 
@@ -62,7 +65,7 @@ export function StickyStepActions({
           {isSubmitting ? (
             <>
               <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-              جاري الإرسال...
+              {t("addListing.common.submitting")}
             </>
           ) : (
             nextButtonLabel
@@ -83,13 +86,13 @@ export function StickyStepActions({
               <polyline points="17 21 17 13 7 13 7 21" />
               <polyline points="7 3 7 8 15 8" />
             </svg>
-            حفظ كمسودة
+            {t("addListing.common.saveDraft")}
           </button>
         ) : (
-          <span className="text-xs text-[#627D98]">تم حفظ المسودة تلقائياً</span>
+          <span className="text-xs text-[#627D98]">{t("addListing.common.savedDraft")}</span>
         )}
         <span className="text-xs text-[#627D98]">
-          {currentStep} / {ADD_LISTING_TOTAL_STEPS}
+          {formatNumber(currentStep, locale)} / {formatNumber(ADD_LISTING_TOTAL_STEPS, locale)}
         </span>
       </div>
     </div>

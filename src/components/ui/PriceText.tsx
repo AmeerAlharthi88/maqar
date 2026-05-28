@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { formatOMR, toArabicNumerals } from "@/lib/formatters";
-import { useLanguageStore } from "@/store/language.store";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface PriceTextProps {
   amount: number;
@@ -20,11 +20,10 @@ const sizeClasses = {
 };
 
 export function PriceText({ amount, purpose = "sale", size = "md", className, compact = false }: PriceTextProps) {
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { locale, t } = useTranslation();
   const s = sizeClasses[size];
-  const formatted = formatOMR(amount, { compact, arabic: isAr });
-  const rentSuffix = isAr ? "/ شهرياً" : "/ month";
+  const formatted = formatCurrency(amount, locale, { compact });
+  const rentSuffix = t("common.perMonth");
 
   return (
     <div className={cn("flex items-baseline gap-1.5", className)}>
@@ -37,13 +36,13 @@ export function PriceText({ amount, purpose = "sale", size = "md", className, co
 }
 
 export function PricePerSqm({ pricePerSqm }: { pricePerSqm: number }) {
-  const { locale } = useLanguageStore();
+  const { locale } = useTranslation();
   const isAr = locale === "ar";
+  const omr = isAr ? "ر.ع." : "OMR";
+  const sqm = isAr ? "م²" : "sqm";
   return (
     <span className="text-xs text-[#627D98]">
-      {isAr
-        ? `${toArabicNumerals(pricePerSqm.toLocaleString())} ر.ع. / م²`
-        : `${pricePerSqm.toLocaleString()} OMR/sqm`}
+      {`${formatNumber(pricePerSqm, locale)} ${omr}/${sqm}`}
     </span>
   );
 }

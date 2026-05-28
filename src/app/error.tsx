@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -8,6 +9,8 @@ interface ErrorProps {
 }
 
 export default function Error({ error, reset }: ErrorProps) {
+  const { t } = useTranslation();
+
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -21,15 +24,15 @@ export default function Error({ error, reset }: ErrorProps) {
           <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="3" strokeLinecap="round" />
         </svg>
       </div>
-      <h1 className="text-xl font-bold text-[#102A43] mb-2">حدث خطأ ما</h1>
+      <h1 className="text-xl font-bold text-[#102A43] mb-2">{t("errors.unexpected")}</h1>
       <p className="text-sm text-[#627D98] mb-8 max-w-xs">
-        نأسف على الإزعاج. يرجى المحاولة مرة أخرى.
+        {t("common.tryAgain")}
       </p>
       <button
         onClick={reset}
         className="px-6 py-3 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold"
       >
-        إعادة المحاولة
+        {t("common.retry")}
       </button>
     </div>
   );

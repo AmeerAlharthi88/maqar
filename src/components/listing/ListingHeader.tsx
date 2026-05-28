@@ -1,9 +1,9 @@
 "use client";
 
-import { formatOMR, formatRelativeDate, toArabicNumerals } from "@/lib/formatters";
+import { formatCurrency, formatNumber, formatRelativeDateLocale } from "@/lib/formatters";
 import { isBelowMarket } from "@/lib/helpers/listing-filters";
 import { PROPERTY_TYPE_MAP } from "@/lib/constants/property-types";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 
 interface ListingHeaderProps {
@@ -17,7 +17,7 @@ const FURNISHING_LABELS: Record<string, { ar: string; en: string }> = {
 };
 
 export function ListingHeader({ listing }: ListingHeaderProps) {
-  const { locale } = useLanguageStore();
+  const { t, locale } = useTranslation();
   const isAr = locale === "ar";
 
   const belowMkt = isBelowMarket(listing);
@@ -34,15 +34,19 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
   const area        = isAr ? listing.location.areaAr        : (listing.location.areaEn        ?? listing.location.areaAr);
   const address     = isAr ? listing.location.addressAr     : (listing.location.addressEn     ?? listing.location.addressAr);
 
-  const priceFormatted = formatOMR(listing.price, { arabic: isAr, compact: false });
+  const priceFormatted = formatCurrency(listing.price, locale);
   const pricePerSqm = listing.pricePerSqm;
   const pricePerSqmStr = pricePerSqm
     ? isAr
-      ? `(${toArabicNumerals(pricePerSqm)} ر.ع/م²)`
-      : `(${pricePerSqm} OMR/sqm)`
+      ? `(${formatNumber(pricePerSqm, locale)} ر.ع/م²)`
+      : `(${formatNumber(pricePerSqm, locale)} OMR/sqm)`
     : null;
-  const viewsLabel  = isAr ? `${toArabicNumerals(listing.viewCount)} مشاهدة`  : `${listing.viewCount} views`;
-  const rentSuffix  = listing.purpose === "rent" ? (isAr ? "/ شهر" : "/ month") : null;
+  const viewsLabel = isAr
+    ? `${formatNumber(listing.viewCount, locale)} مشاهدة`
+    : `${formatNumber(listing.viewCount, locale)} views`;
+  const rentSuffix = listing.purpose === "rent"
+    ? (isAr ? "/ شهر" : "/ month")
+    : null;
 
   return (
     <div className="px-4 pt-4 pb-2">
@@ -56,8 +60,8 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
           }`}
         >
           {listing.purpose === "sale"
-            ? (isAr ? "للبيع" : "For Sale")
-            : (isAr ? "للإيجار" : "For Rent")}
+            ? t("listing.status.forSale")
+            : t("listing.status.forRent")}
         </span>
 
         <span className="text-xs text-[#627D98] bg-[#F0F4F8] px-2.5 py-0.5 rounded-full">
@@ -75,7 +79,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            {isAr ? "موثق" : "Verified"}
+            {t("common.verified")}
           </span>
         )}
         {belowMkt && (
@@ -88,12 +92,12 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
         )}
         {listing.isFeatured && (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFF8E7] text-[#D4A017] text-xs font-semibold">
-            {isAr ? "مميز" : "Featured"}
+            {t("common.featured")}
           </span>
         )}
         {listing.isNew && (
           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#EAF4FB] text-[#2471A3] text-xs font-semibold">
-            {isAr ? "جديد" : "New"}
+            {t("common.new")}
           </span>
         )}
       </div>
@@ -139,7 +143,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
           </svg>
-          {formatRelativeDate(listing.createdAt)}
+          {formatRelativeDateLocale(listing.createdAt, locale)}
         </span>
         <span className="flex items-center gap-1">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -152,7 +156,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
           </svg>
-          {toArabicNumerals(listing.favoriteCount)}
+          {formatNumber(listing.favoriteCount, locale)}
         </span>
       </div>
     </div>

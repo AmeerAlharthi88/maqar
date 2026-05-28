@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ListingCardInteractive } from "@/components/real-estate/ListingCardInteractive";
 import { ROUTES } from "@/config/routes";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 
 interface RecommendedListingsSectionProps {
@@ -26,8 +26,7 @@ export function RecommendedListingsSection({
   subtitleAr = "بناءً على السوق الحالي في مسقط",
   subtitleEn = "Based on the current Muscat market",
 }: RecommendedListingsSectionProps) {
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { t } = useTranslation();
 
   if (listings.length === 0) return null;
 
@@ -41,7 +40,7 @@ export function RecommendedListingsSection({
         size="md"
         action={
           <Link href={ROUTES.search} className="text-xs font-semibold text-[#0A3C36] hover:underline">
-            {isAr ? "المزيد" : "More"}
+            {t("common.more")}
           </Link>
         }
         className="mb-4"

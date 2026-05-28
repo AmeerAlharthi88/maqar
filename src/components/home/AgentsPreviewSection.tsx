@@ -1,15 +1,20 @@
+"use client";
+
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Avatar } from "@/components/ui/Avatar";
 import { ROUTES } from "@/config/routes";
-import { toArabicNumerals } from "@/lib/formatters";
+import { formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Agent } from "@/types/agent";
 
 interface AgentPreviewCardProps {
   agent: Agent;
+  locale: string;
+  verifiedLabel: string;
 }
 
-function AgentPreviewCard({ agent }: AgentPreviewCardProps) {
+function AgentPreviewCard({ agent, locale, verifiedLabel }: AgentPreviewCardProps) {
   return (
     <Link
       href={ROUTES.agent(agent.id)}
@@ -27,7 +32,7 @@ function AgentPreviewCard({ agent }: AgentPreviewCardProps) {
           <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
             <path d="M20 6 9 17l-5-5"/>
           </svg>
-          موثوق
+          {verifiedLabel}
         </span>
       )}
       <div className="flex items-center gap-1">
@@ -35,7 +40,7 @@ function AgentPreviewCard({ agent }: AgentPreviewCardProps) {
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
         </svg>
         <span className="text-xs font-semibold text-[#102A43]">{agent.stats.rating.toFixed(1)}</span>
-        <span className="text-[10px] text-[#627D98]">({toArabicNumerals(agent.stats.reviewCount)})</span>
+        <span className="text-[10px] text-[#627D98]">({formatNumber(agent.stats.reviewCount, locale as "ar" | "en")})</span>
       </div>
     </Link>
   );
@@ -46,17 +51,20 @@ interface AgentsPreviewSectionProps {
 }
 
 export function AgentsPreviewSection({ agents }: AgentsPreviewSectionProps) {
+  const { t, locale } = useTranslation();
   const verified = agents.filter((a) => a.isVerified);
 
   return (
     <section className="px-4 py-5 bg-[#F0F4F8] overflow-x-hidden">
       <SectionHeader
         titleAr="وسطاء موثوقون"
+        titleEn="Verified Agents"
         subtitleAr="احترافيون معتمدون في السوق العُماني"
+        subtitleEn="Licensed professionals in the Omani market"
         size="md"
         action={
           <Link href={ROUTES.agents} className="text-xs font-semibold text-[#0A3C36] hover:underline">
-            جميع الوسطاء
+            {t("common.viewAll")}
           </Link>
         }
         className="mb-4"
@@ -64,7 +72,12 @@ export function AgentsPreviewSection({ agents }: AgentsPreviewSectionProps) {
 
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4">
         {verified.map((agent) => (
-          <AgentPreviewCard key={agent.id} agent={agent} />
+          <AgentPreviewCard
+            key={agent.id}
+            agent={agent}
+            locale={locale}
+            verifiedLabel={t("common.verified")}
+          />
         ))}
       </div>
     </section>

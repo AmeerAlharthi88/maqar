@@ -15,26 +15,14 @@ import { ActiveFiltersBar } from "./ActiveFiltersBar";
 import { SaveSearchButton } from "./SaveSearchButton";
 import { SearchFilterSheet } from "./SearchFilterSheet";
 import { SearchEmptyState, SearchResultsSkeletonGrid } from "./SearchSkeletons";
-import { toArabicNumerals } from "@/lib/formatters";
-import { useLanguageStore } from "@/store/language.store";
+import { formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 
-// Env vars are fixed at module load time — no need for useRef.
-// When false, fall back to local MOCK_LISTINGS filtering.
 const SUPABASE_LIVE: boolean = (() => {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   return url.startsWith("https://") && url.includes(".supabase.co");
 })();
 
-// Controls whether an empty Supabase result falls back to filtered mock listings.
-//
-// Set NEXT_PUBLIC_ALLOW_MOCK_FALLBACK=true in staging / dev environments where
-// the Supabase DB has no approved listings yet. This keeps chip-filter navigation
-// and QA testing functional without seeding real data.
-//
-// Must be false (or omitted) in production: a genuine empty Supabase result must
-// show the real empty state — never silently serve mock data to real users.
-//
-// Default: false (safe for production if the var is missing).
 const ALLOW_MOCK_FALLBACK: boolean =
   process.env.NEXT_PUBLIC_ALLOW_MOCK_FALLBACK === "true";
 
@@ -42,14 +30,13 @@ type DisplayMode = "grid" | "list";
 
 export function SearchPageClient() {
   const { filters, activeFilterCount, setFilters } = useSearchStore();
-  const { locale } = useLanguageStore();
+  const { t, locale } = useTranslation();
   const isAr = locale === "ar";
   const searchParams = useSearchParams();
   const router = useRouter();
   const [filterSheetOpen, setFilterSheetOpen] = useState(false);
 
   // ── Phase 1: Restore filters from URL on mount ───────────────────────────────
-  // Handles: direct links, page refresh, chip-driven navigation from home.
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     const patch: Parameters<typeof setFilters>[0] = {};
@@ -82,10 +69,9 @@ export function SearchPageClient() {
     if (baths) patch.minBaths = Number(baths);
 
     if (Object.keys(patch).length > 0) setFilters(patch);
-  }, []); // run once on mount only
+  }, []);
   /* eslint-enable react-hooks/exhaustive-deps */
 
-  // ── Phase 2: Write filters → URL whenever they change (skip first render) ────
   const isFirstRender = useRef(true);
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -108,31 +94,25 @@ export function SearchPageClient() {
     router.replace(qs ? `/search?${qs}` : "/search", { scroll: false });
   }, [filters]);
   /* eslint-enable react-hooks/exhaustive-deps */
+
   const [displayMode, setDisplayMode] = useState<DisplayMode>("grid");
   const [isLoading, setIsLoading] = useState(false);
-  // null = not yet fetched or Supabase not configured → use mock
   const [dbListings, setDbListings] = useState<Listing[] | null>(null);
 
-
-  // Fetch from Supabase whenever filters change
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    if (!SUPABASE_LIVE) return; // skip if not configured
-
+    if (!SUPABASE_LIVE) return;
     let cancelled = false;
     setIsLoading(true);
-
     searchListingsClient(filters, 50).then(({ listings }) => {
       if (cancelled) return;
       setDbListings(listings);
       setIsLoading(false);
     });
-
     return () => { cancelled = true; };
   }, [filters]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  // Mock fallback: local filter + sort (used when Supabase is not configured)
   const filteredListings = useMemo(
     () => filterListings(MOCK_LISTINGS, filters),
     [filters]
@@ -142,18 +122,9 @@ export function SearchPageClient() {
     [filteredListings, filters.sortBy]
   );
 
-  // Decide which list to display.
-  //
-  // Decision tree:
-  //   1. Supabase not configured, or fetch not yet complete → use mock (filtered).
-  //   2. Supabase returned ≥1 result → always use DB results.
-  //   3. Supabase returned 0 results:
-  //        staging (ALLOW_MOCK_FALLBACK=true)  → fall back to filtered mock so QA works.
-  //        production (ALLOW_MOCK_FALLBACK=false) → show true empty state.
   const displayListings: Listing[] = (() => {
     if (!SUPABASE_LIVE || dbListings === null) return sortedListings;
     if (dbListings.length > 0)               return dbListings;
-    // dbListings is empty — choose based on environment flag
     return ALLOW_MOCK_FALLBACK ? sortedListings : dbListings;
   })();
 
@@ -161,11 +132,7 @@ export function SearchPageClient() {
     <div className="flex flex-col min-h-full">
       {/* Sticky search + filter bar */}
       <div className="sticky top-14 z-[90] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-4 py-3 flex flex-col gap-3">
-        <SmartSearch
-          size="md"
-          onSearch={() => {}}
-          placeholder={isAr ? "ابحث بالنوع أو المنطقة أو العنوان..." : "Search by type, area or title..."}
-        />
+        <SmartSearch size="md" onSearch={() => {}} />
 
         {/* Toolbar */}
         <div className="flex items-center gap-2">
@@ -179,12 +146,12 @@ export function SearchPageClient() {
                 ? "bg-[#0A3C36] text-white border-[#0A3C36]"
                 : "bg-white text-[#627D98] border-[#E2E8F0] hover:border-[#0A3C36]"
             )}
-            aria-label={isAr ? `فتح الفلاتر${activeFilterCount > 0 ? ` — ${activeFilterCount} نشط` : ""}` : `Open filters${activeFilterCount > 0 ? ` — ${activeFilterCount} active` : ""}`}
+            aria-label={`${t("common.filter")}${activeFilterCount > 0 ? ` — ${activeFilterCount}` : ""}`}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
-            {isAr ? "الفلاتر" : "Filters"}
+            {t("common.filter")}
             {activeFilterCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-white text-[#0A3C36] text-[10px] font-bold flex items-center justify-center">
                 {activeFilterCount}
@@ -202,7 +169,7 @@ export function SearchPageClient() {
           <div className="flex border border-[#E2E8F0] rounded-xl overflow-hidden">
             <button
               onClick={() => setDisplayMode("grid")}
-              aria-label="عرض شبكي"
+              aria-label={isAr ? "عرض شبكي" : "Grid view"}
               aria-pressed={displayMode === "grid"}
               className={cn(
                 "w-9 h-9 flex items-center justify-center transition-colors",
@@ -216,7 +183,7 @@ export function SearchPageClient() {
             </button>
             <button
               onClick={() => setDisplayMode("list")}
-              aria-label="عرض قائمة"
+              aria-label={isAr ? "عرض قائمة" : "List view"}
               aria-pressed={displayMode === "list"}
               className={cn(
                 "w-9 h-9 flex items-center justify-center transition-colors",
@@ -246,7 +213,7 @@ export function SearchPageClient() {
             {/* Result count */}
             <p className="text-sm text-[#627D98] mb-4">
               <span className="font-bold text-[#102A43]">
-                {isAr ? toArabicNumerals(displayListings.length) : displayListings.length}
+                {formatNumber(displayListings.length, locale)}
               </span>{" "}
               {isAr ? "عقار متاح" : "properties found"}
             </p>

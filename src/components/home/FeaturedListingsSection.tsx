@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ListingCardInteractive } from "@/components/real-estate/ListingCardInteractive";
 import { ROUTES } from "@/config/routes";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 
 interface FeaturedListingsSectionProps {
@@ -12,8 +12,7 @@ interface FeaturedListingsSectionProps {
 }
 
 export function FeaturedListingsSection({ listings }: FeaturedListingsSectionProps) {
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { t } = useTranslation();
 
   if (listings.length === 0) return null;
 
@@ -30,7 +29,7 @@ export function FeaturedListingsSection({ listings }: FeaturedListingsSectionPro
             href={ROUTES.search}
             className="text-xs font-semibold text-[#0A3C36] hover:underline"
           >
-            {isAr ? "عرض الكل" : "View All"}
+            {t("common.viewAll")}
           </Link>
         }
         className="mb-4"

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface SectionHeaderProps {
   titleAr: string;
@@ -20,7 +20,7 @@ const sizeClasses = {
 };
 
 export function SectionHeader({ titleAr, titleEn, subtitleAr, subtitleEn, action, className, size = "md" }: SectionHeaderProps) {
-  const { locale } = useLanguageStore();
+  const { locale } = useTranslation();
   const isAr = locale === "ar";
   const s = sizeClasses[size];
   const title    = isAr ? titleAr    : (titleEn    ?? titleAr);

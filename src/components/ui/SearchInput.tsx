@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface SearchInputProps {
   placeholder?: string;
@@ -19,15 +20,18 @@ const sizeClasses = {
 };
 
 export function SearchInput({
-  placeholder = "ابحث عن عقارات، مناطق...",
+  placeholder,
   value: controlledValue,
   onChange,
   onSearch,
   className,
   size = "md",
 }: SearchInputProps) {
+  const { t } = useTranslation();
   const [internalValue, setInternalValue] = useState("");
   const value = controlledValue ?? internalValue;
+
+  const resolvedPlaceholder = placeholder ?? t("search.placeholder");
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const v = e.target.value;
@@ -59,7 +63,7 @@ export function SearchInput({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         className={cn(
           "w-full bg-white border border-[#E2E8F0] text-[#102A43] placeholder:text-[#627D98]",
           "outline-none transition-all duration-150",
@@ -75,7 +79,7 @@ export function SearchInput({
         <button
           type="button"
           onClick={handleClear}
-          aria-label="مسح البحث"
+          aria-label={t("search.smartSearch.clear")}
           className="absolute start-3 text-[#A0AEC0] hover:text-[#102A43] transition-colors"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

@@ -1,4 +1,7 @@
-import { toArabicNumerals, formatArea } from "@/lib/formatters";
+"use client";
+
+import { formatNumber, formatAreaLocale } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import { cn } from "@/lib/utils";
 import type { Listing } from "@/types/listing";
 
@@ -6,10 +9,10 @@ interface ListingSpecsProps {
   listing: Listing;
 }
 
-const FURNISHING_AR: Record<string, string> = {
-  furnished:      "مفروشة بالكامل",
-  semi_furnished: "شبه مفروشة",
-  unfurnished:    "غير مفروشة",
+const FURNISHING_LABELS: Record<string, { ar: string; en: string }> = {
+  furnished:      { ar: "مفروشة بالكامل", en: "Fully Furnished" },
+  semi_furnished: { ar: "شبه مفروشة",     en: "Semi-Furnished" },
+  unfurnished:    { ar: "غير مفروشة",     en: "Unfurnished" },
 };
 
 interface SpecCardProps {
@@ -68,30 +71,47 @@ function AmenityBool({ label, present }: AmenityBoolProps) {
 }
 
 export function ListingSpecs({ listing }: ListingSpecsProps) {
+  const { locale } = useTranslation();
+  const isAr = locale === "ar";
   const { specs } = listing;
   const amenities = listing.amenities;
 
-  const hasMajlis      = amenities.includes("مجلس");
-  const hasMaidRoom    = amenities.includes("غرفة خادمة");
-  const hasDriverRoom  = amenities.includes("غرفة سائق");
-  const hasSeaView     = amenities.includes("إطلالة بحرية");
-  const hasMtnView     = amenities.includes("إطلالة جبلية");
-  const hasGarden      = amenities.includes("حديقة");
-  const hasPool        = amenities.includes("مسبح");
+  // Oman-specific feature detection (amenities stored as Arabic strings)
+  const hasMajlis     = amenities.includes("مجلس");
+  const hasMaidRoom   = amenities.includes("غرفة خادمة");
+  const hasDriverRoom = amenities.includes("غرفة سائق");
+  const hasSeaView    = amenities.includes("إطلالة بحرية");
+  const hasMtnView    = amenities.includes("إطلالة جبلية");
+  const hasGarden     = amenities.includes("حديقة");
+  const hasPool       = amenities.includes("مسبح");
 
-  const omanFeatures = [
-    { label: "مجلس", present: hasMajlis },
-    { label: "غرفة خادمة", present: hasMaidRoom },
-    { label: "غرفة سائق", present: hasDriverRoom },
-    { label: "إطلالة بحرية", present: hasSeaView },
-    { label: "إطلالة جبلية", present: hasMtnView },
-    { label: "حديقة", present: hasGarden },
-    { label: "مسبح", present: hasPool },
-  ];
+  const omanFeatures = isAr
+    ? [
+        { label: "مجلس",          present: hasMajlis },
+        { label: "غرفة خادمة",    present: hasMaidRoom },
+        { label: "غرفة سائق",     present: hasDriverRoom },
+        { label: "إطلالة بحرية",  present: hasSeaView },
+        { label: "إطلالة جبلية",  present: hasMtnView },
+        { label: "حديقة",         present: hasGarden },
+        { label: "مسبح",          present: hasPool },
+      ]
+    : [
+        { label: "Majlis",        present: hasMajlis },
+        { label: "Maid's Room",   present: hasMaidRoom },
+        { label: "Driver's Room", present: hasDriverRoom },
+        { label: "Sea View",      present: hasSeaView },
+        { label: "Mountain View", present: hasMtnView },
+        { label: "Garden",        present: hasGarden },
+        { label: "Pool",          present: hasPool },
+      ];
+
+  const furnishingLabel = FURNISHING_LABELS[listing.furnishing];
 
   return (
     <div className="px-4 py-4 border-t border-[#E2E8F0]">
-      <h2 className="text-base font-bold text-[#102A43] mb-3">المواصفات</h2>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">
+        {isAr ? "المواصفات" : "Specifications"}
+      </h2>
 
       {/* Main specs grid */}
       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -104,8 +124,8 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
                 <path d="M7 9v11M17 9v11" />
               </svg>
             }
-            label="غرف النوم"
-            value={toArabicNumerals(specs.bedrooms)}
+            label={isAr ? "غرف النوم" : "Bedrooms"}
+            value={formatNumber(specs.bedrooms, locale)}
           />
         )}
         {specs.bathrooms > 0 && (
@@ -117,8 +137,8 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
                 <line x1="2" x2="22" y1="12" y2="12" />
               </svg>
             }
-            label="دورات المياه"
-            value={toArabicNumerals(specs.bathrooms)}
+            label={isAr ? "دورات المياه" : "Bathrooms"}
+            value={formatNumber(specs.bathrooms, locale)}
           />
         )}
         {specs.area > 0 && (
@@ -129,8 +149,8 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
                 <path d="M9 3v18M15 3v18M3 9h18M3 15h18" />
               </svg>
             }
-            label="المساحة"
-            value={formatArea(specs.area, true)}
+            label={isAr ? "المساحة" : "Area"}
+            value={formatAreaLocale(specs.area, locale)}
           />
         )}
         {specs.floors && specs.floors > 1 && (
@@ -142,8 +162,8 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
                 <polyline points="3 19 12 13 21 19" />
               </svg>
             }
-            label="الطوابق"
-            value={toArabicNumerals(specs.floors)}
+            label={isAr ? "الطوابق" : "Floors"}
+            value={formatNumber(specs.floors, locale)}
           />
         )}
         {specs.parkingSpots && specs.parkingSpots > 0 && (
@@ -154,24 +174,28 @@ export function ListingSpecs({ listing }: ListingSpecsProps) {
                 <path d="M9 17V7h4a3 3 0 0 1 0 6H9" />
               </svg>
             }
-            label="مواقف السيارات"
-            value={toArabicNumerals(specs.parkingSpots)}
+            label={isAr ? "مواقف السيارات" : "Parking"}
+            value={formatNumber(specs.parkingSpots, locale)}
           />
         )}
-        <SpecCard
-          icon={
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-          }
-          label="نوع التأثيث"
-          value={FURNISHING_AR[listing.furnishing]}
-        />
+        {furnishingLabel && (
+          <SpecCard
+            icon={
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            }
+            label={isAr ? "نوع التأثيث" : "Furnishing"}
+            value={isAr ? furnishingLabel.ar : furnishingLabel.en}
+          />
+        )}
       </div>
 
       {/* Oman-specific features */}
-      <h3 className="text-sm font-semibold text-[#627D98] mb-2">المميزات</h3>
+      <h3 className="text-sm font-semibold text-[#627D98] mb-2">
+        {isAr ? "المميزات" : "Features"}
+      </h3>
       <div className="flex flex-wrap gap-2">
         {omanFeatures.map((f) => (
           <AmenityBool key={f.label} label={f.label} present={f.present} />

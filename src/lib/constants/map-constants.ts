@@ -1,4 +1,5 @@
 import type { MapCenter } from "@/store/map.store";
+import type { Locale } from "@/i18n/types";
 
 // ── Default centers ────────────────────────────────────────────────────────────
 
@@ -28,17 +29,29 @@ export const TILE_URL =
 export const TILE_ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>';
 
-// ── Layer labels (Arabic) ──────────────────────────────────────────────────────
+// ── Layer labels ──────────────────────────────────────────────────────────────
 
-export const LAYER_LABELS: Record<string, string> = {
-  schools:      "المدارس",
-  mosques:      "المساجد",
-  hospitals:    "المستشفيات",
-  beaches:      "الشواطئ",
-  malls:        "المجمعات التجارية",
-  fuelStations: "محطات الوقود",
-  wadiRisk:     "مناطق الأودية",
+export interface LayerLabelI18n { ar: string; en: string; }
+
+export const LAYER_LABELS_I18N: Record<string, LayerLabelI18n> = {
+  schools:      { ar: "المدارس",              en: "Schools"          },
+  mosques:      { ar: "المساجد",              en: "Mosques"          },
+  hospitals:    { ar: "المستشفيات",           en: "Hospitals"        },
+  beaches:      { ar: "الشواطئ",              en: "Beaches"          },
+  malls:        { ar: "المجمعات التجارية",   en: "Shopping malls"   },
+  fuelStations: { ar: "محطات الوقود",        en: "Fuel stations"    },
+  wadiRisk:     { ar: "مناطق الأودية",       en: "Wadi risk zones"  },
 };
+
+/** Return the localised label for a map layer */
+export function getLayerLabel(key: string, locale: Locale): string {
+  return LAYER_LABELS_I18N[key]?.[locale] ?? key;
+}
+
+/** @deprecated Use LAYER_LABELS_I18N + getLayerLabel() */
+export const LAYER_LABELS: Record<string, string> = Object.fromEntries(
+  Object.entries(LAYER_LABELS_I18N).map(([k, v]) => [k, v.ar])
+);
 
 export const LAYER_ICONS: Record<string, string> = {
   schools:      "M12 3L2 12h3v9h14v-9h3L12 3z",
