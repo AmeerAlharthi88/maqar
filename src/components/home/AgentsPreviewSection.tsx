@@ -20,11 +20,15 @@ function AgentPreviewCard({ agent, locale, verifiedLabel }: AgentPreviewCardProp
       href={ROUTES.agent(agent.id)}
       className="flex-shrink-0 w-40 bg-white rounded-2xl border border-[#E2E8F0] px-3 py-4 flex flex-col items-center gap-2.5 text-center shadow-[0_2px_8px_0_rgb(10_60_54/0.06)] hover:shadow-[0_6px_20px_0_rgb(10_60_54/0.10)] transition-shadow"
     >
-      <Avatar name={agent.nameAr} size="lg" />
+      <Avatar name={locale === "ar" ? agent.nameAr : (agent.nameEn ?? agent.nameAr)} size="lg" />
       <div className="w-full min-w-0 space-y-0.5">
-        <p className="text-xs font-bold text-[#102A43] leading-snug line-clamp-1">{agent.nameAr}</p>
+        <p className="text-xs font-bold text-[#102A43] leading-snug line-clamp-1">
+          {locale === "ar" ? agent.nameAr : (agent.nameEn ?? agent.nameAr)}
+        </p>
         {agent.agency && (
-          <p className="text-[10px] text-[#627D98] leading-snug line-clamp-1">{agent.agency.nameAr}</p>
+          <p className="text-[10px] text-[#627D98] leading-snug line-clamp-1">
+            {locale === "ar" ? agent.agency.nameAr : (agent.agency.nameEn ?? agent.agency.nameAr)}
+          </p>
         )}
       </div>
       {agent.isVerified && (

@@ -42,7 +42,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
       <div className="relative">
         <PropertyImage
           src={listing.coverImage}
-          alt={listing.titleAr}
+          alt={locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)}
           imageCount={listing.images.length}
           aspectRatio="listing"
         />
@@ -85,7 +85,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
 
         {/* Title */}
         <h3 className="text-sm font-semibold text-[#102A43] leading-snug line-clamp-2 min-h-[2.5rem]">
-          {listing.titleAr}
+          {locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)}
         </h3>
 
         {/* Location */}
@@ -142,7 +142,7 @@ function ListingRow({ listing, className, favoriteButton, locale, t }: {
       )}
     >
       <div className="w-28 flex-shrink-0">
-        <PropertyImage src={listing.coverImage} alt={listing.titleAr} aspectRatio="square" className="h-full rounded-none" />
+        <PropertyImage src={listing.coverImage} alt={locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)} aspectRatio="square" className="h-full rounded-none" />
       </div>
       <div className="flex-1 p-3 flex flex-col gap-1.5 min-w-0">
         <div className="flex items-center justify-between gap-1.5">
@@ -151,7 +151,7 @@ function ListingRow({ listing, className, favoriteButton, locale, t }: {
           </div>
           {favoriteButton && <div className="flex-shrink-0">{favoriteButton}</div>}
         </div>
-        <h3 className="text-sm font-semibold text-[#102A43] line-clamp-1">{listing.titleAr}</h3>
+        <h3 className="text-sm font-semibold text-[#102A43] line-clamp-1">{locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)}</h3>
         <LocationBreadcrumb
           governorateAr={listing.location.governorateAr}
           wilayatAr={listing.location.wilayatAr}
