@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useAuthStore } from "@/store/auth.store";
+import { submitReport } from "@/lib/supabase/reports";
 import type { Listing } from "@/types/listing";
 
 interface ReportListingModalProps {
@@ -27,6 +29,7 @@ type Step = "form" | "success";
 export function ReportListingModal({ open, onClose, listing }: ReportListingModalProps) {
   const { t, locale, dir } = useTranslation();
   const isAr = locale === "ar";
+  const { user } = useAuthStore();
 
   const [step, setStep] = useState<Step>("form");
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
@@ -41,10 +44,32 @@ export function ReportListingModal({ open, onClose, listing }: ReportListingModa
       setError(isAr ? "يرجى اختيار سبب الإبلاغ" : "Please select a reason for the report");
       return;
     }
+    if (!user?.id) {
+      // Defensive check — modal should only open for authenticated users.
+      setError(isAr ? "يجب تسجيل الدخول للإبلاغ." : "You must be signed in to report.");
+      return;
+    }
     setError("");
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
+
+    const result = await submitReport({
+      listingId:  listing.id,
+      reporterId: user.id,
+      reasonAr:   selectedReason,
+      notes:      notes || undefined,
+    });
+
     setSubmitting(false);
+
+    if (!result.ok) {
+      setError(
+        isAr
+          ? "تعذّر إرسال البلاغ، يرجى المحاولة مرة أخرى."
+          : "Failed to submit report. Please try again."
+      );
+      return;
+    }
+
     setStep("success");
   }
 
