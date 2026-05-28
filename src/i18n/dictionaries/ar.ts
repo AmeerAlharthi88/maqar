@@ -47,6 +47,9 @@ export const ar = {
     verified:    "موثق",
     featured:    "مميز",
     new:         "جديد",
+    noImage:     "لا توجد صورة",
+    belowMarket: "أقل من السوق",
+    saveFavorite: "حفظ في المفضلة",
   },
 
   // ── Authentication ──────────────────────────────────────────────────────────

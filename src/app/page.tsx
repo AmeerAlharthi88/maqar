@@ -15,6 +15,7 @@ import { MOCK_LISTINGS } from "@/mock/listings";
 import { MOCK_AGENTS } from "@/mock/agents";
 import { POPULAR_AREAS } from "@/mock/popular-areas";
 import { MOCK_MARKET_OVERVIEW } from "@/mock/market-stats";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = buildMetadata({
   titleAr: "مقر — منصة العقارات العُمانية",
@@ -33,9 +34,31 @@ const nearYouListings = MOCK_LISTINGS.filter(
   (l) => l.location.governorateId === "muscat" && !l.isFeatured
 ).slice(0, 4);
 
-export default function HomePage() {
+/** Fetch real counts from Supabase for the market stats section. */
+async function fetchRealCounts(): Promise<{ totalListings: number }> {
+  try {
+    const supabase = await createClient();
+    const { count, error } = await supabase
+      .from("listings")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "active")
+      .eq("review_status", "approved");
+
+    if (error || count === null) return { totalListings: MOCK_MARKET_OVERVIEW.totalListings };
+    return { totalListings: count };
+  } catch {
+    // Supabase not available at build time — fall back to mock
+    return { totalListings: MOCK_MARKET_OVERVIEW.totalListings };
+  }
+}
+
+export default async function HomePage() {
   const orgSchema = organizationJsonLd();
   const siteSchema = websiteJsonLd();
+
+  // Fetch real listing count; keep all other mock market data
+  const { totalListings } = await fetchRealCounts();
+  const marketOverview = { ...MOCK_MARKET_OVERVIEW, totalListings };
 
   return (
     <AppShell>
@@ -58,8 +81,8 @@ export default function HomePage() {
         {/* Popular areas */}
         <PopularAreasSection areas={POPULAR_AREAS.slice(0, 7)} />
 
-        {/* Market stats */}
-        <MarketStatsSection overview={MOCK_MARKET_OVERVIEW} />
+        {/* Market stats — totalListings is real; price/ROI data is illustrative */}
+        <MarketStatsSection overview={marketOverview} />
 
         {/* Recommended listings */}
         <RecommendedListingsSection

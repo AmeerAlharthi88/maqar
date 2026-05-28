@@ -734,3 +734,25 @@ export function getWilayat(governorateId: string, wilayatId: string) {
 export function getArea(governorateId: string, wilayatId: string, areaId: string) {
   return getWilayat(governorateId, wilayatId)?.areas.find((a) => a.id === areaId) ?? null;
 }
+
+// ── Locale-aware name helpers ─────────────────────────────────────────────────
+// Returns the English name when locale=en (falling back to Arabic if missing).
+// Returns the Arabic name when locale=ar.
+
+export function getLocalizedGovernorate(id: string, locale: "ar" | "en", arFallback?: string): string {
+  const g = GOVERNORATE_MAP[id];
+  if (!g) return arFallback ?? id;
+  return locale === "ar" ? g.nameAr : (g.nameEn ?? g.nameAr);
+}
+
+export function getLocalizedWilayat(governorateId: string, wilayatId: string, locale: "ar" | "en", arFallback?: string): string {
+  const w = getWilayat(governorateId, wilayatId);
+  if (!w) return arFallback ?? wilayatId;
+  return locale === "ar" ? w.nameAr : (w.nameEn ?? w.nameAr);
+}
+
+export function getLocalizedArea(governorateId: string, wilayatId: string, areaId: string, locale: "ar" | "en", arFallback?: string): string {
+  const a = getArea(governorateId, wilayatId, areaId);
+  if (!a) return arFallback ?? areaId;
+  return locale === "ar" ? a.nameAr : (a.nameEn ?? a.nameAr);
+}

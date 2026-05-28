@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { PropertyImage } from "./PropertyImage";
 import { PropertyBadges } from "./PropertyBadges";
@@ -5,8 +7,10 @@ import { PropertySpecs } from "./PropertySpecs";
 import { PropertyPrice } from "./PropertyPrice";
 import { LocationBreadcrumb } from "./LocationBreadcrumb";
 import { ROIChip } from "./ROIChip";
-import { formatRelativeDate } from "@/lib/formatters";
-import { PROPERTY_TYPE_MAP } from "@/lib/constants/property-types";
+import { formatRelativeDateLocale } from "@/lib/formatters";
+import { getPropertyTypeName } from "@/lib/constants/property-types";
+import { useTranslation } from "@/i18n/useTranslation";
+import type { TranslationKey } from "@/i18n/types";
 import type { Listing } from "@/types/listing";
 
 interface ListingCardProps {
@@ -19,8 +23,10 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing, variant = "card", className, favoriteButton, belowMarket }: ListingCardProps) {
+  const { locale, t } = useTranslation();
+
   if (variant === "row") {
-    return <ListingRow listing={listing} className={className} favoriteButton={favoriteButton} />;
+    return <ListingRow listing={listing} className={className} favoriteButton={favoriteButton} locale={locale} t={t} />;
   }
 
   return (
@@ -46,7 +52,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           {belowMarket && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#0A3C36] text-white text-[10px] font-semibold">
               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-              أقل من السوق
+              {t("common.belowMarket")}
             </span>
           )}
         </div>
@@ -54,7 +60,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         <div className="absolute top-3 start-3">
           {favoriteButton ?? (
             <button
-              aria-label="حفظ في المفضلة"
+              aria-label={t("common.saveFavorite")}
               className="w-8 h-8 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#627D98] shadow-sm"
             >
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -70,12 +76,14 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         {/* Property type + date */}
         <div className="flex items-center justify-between">
           <span className="text-xs text-[#627D98]">
-            {PROPERTY_TYPE_MAP[listing.propertyType]?.labelAr ?? listing.propertyType}
+            {getPropertyTypeName(listing.propertyType, locale)}
           </span>
-          <span className="text-xs text-[#627D98]">{formatRelativeDate(listing.createdAt)}</span>
+          <span className="text-xs text-[#627D98]">
+            {formatRelativeDateLocale(listing.createdAt, locale)}
+          </span>
         </div>
 
-        {/* Title — min-h prevents collapse during font-load or hydration */}
+        {/* Title */}
         <h3 className="text-sm font-semibold text-[#102A43] leading-snug line-clamp-2 min-h-[2.5rem]">
           {listing.titleAr}
         </h3>
@@ -85,10 +93,19 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           governorateAr={listing.location.governorateAr}
           wilayatAr={listing.location.wilayatAr}
           areaAr={listing.location.areaAr}
+          governorateId={listing.location.governorateId}
+          wilayatId={listing.location.wilayatId}
+          areaId={listing.location.areaId}
+          locale={locale}
         />
 
         {/* Specs */}
-        <PropertySpecs specs={listing.specs} propertyType={listing.propertyType} size="sm" />
+        <PropertySpecs
+          specs={listing.specs}
+          propertyType={listing.propertyType}
+          size="sm"
+          locale={locale}
+        />
 
         {/* Price row */}
         <div className="flex items-end justify-between pt-1 border-t border-[#F0F4F8]">
@@ -99,14 +116,22 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
             size="sm"
             compact
           />
-          {listing.roiEstimate && <ROIChip roiPct={listing.roiEstimate} />}
+          {listing.roiEstimate && (
+            <ROIChip roiPct={listing.roiEstimate} locale={locale} />
+          )}
         </div>
       </div>
     </article>
   );
 }
 
-function ListingRow({ listing, className, favoriteButton }: { listing: Listing; className?: string; favoriteButton?: React.ReactNode }) {
+function ListingRow({ listing, className, favoriteButton, locale, t }: {
+  listing: Listing;
+  className?: string;
+  favoriteButton?: React.ReactNode;
+  locale: "ar" | "en";
+  t: (key: TranslationKey) => string;
+}) {
   return (
     <article
       className={cn(
@@ -131,8 +156,17 @@ function ListingRow({ listing, className, favoriteButton }: { listing: Listing; 
           governorateAr={listing.location.governorateAr}
           wilayatAr={listing.location.wilayatAr}
           areaAr={listing.location.areaAr}
+          governorateId={listing.location.governorateId}
+          wilayatId={listing.location.wilayatId}
+          areaId={listing.location.areaId}
+          locale={locale}
         />
-        <PropertySpecs specs={listing.specs} propertyType={listing.propertyType} size="sm" />
+        <PropertySpecs
+          specs={listing.specs}
+          propertyType={listing.propertyType}
+          size="sm"
+          locale={locale}
+        />
         <PropertyPrice amount={listing.price} purpose={listing.purpose} size="sm" compact />
       </div>
     </article>

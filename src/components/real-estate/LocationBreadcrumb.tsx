@@ -1,28 +1,58 @@
 import { cn } from "@/lib/utils";
-import type { LocationBreadcrumb as LocationBreadcrumbType } from "@/types/location";
+import {
+  getLocalizedGovernorate,
+  getLocalizedWilayat,
+  getLocalizedArea,
+} from "@/lib/constants/oman-locations";
+import type { Locale } from "@/i18n/types";
 
-interface LocationBreadcrumbProps extends LocationBreadcrumbType {
+interface LocationBreadcrumbProps {
+  governorateAr?: string;
+  wilayatAr?: string;
+  areaAr?: string;
+  /** Stable IDs used to look up English names. */
+  governorateId?: string;
+  wilayatId?: string;
+  areaId?: string;
+  locale?: Locale;
   size?: "sm" | "md";
   className?: string;
 }
 
 export function LocationBreadcrumb({
-  governorateAr,
-  wilayatAr,
-  areaAr,
+  governorateAr = "",
+  wilayatAr = "",
+  areaAr = "",
+  governorateId = "",
+  wilayatId = "",
+  areaId = "",
+  locale = "ar",
   size = "sm",
   className,
 }: LocationBreadcrumbProps) {
   const textSize = size === "sm" ? "text-xs" : "text-sm";
 
+  // Resolve display names: use English lookup when locale=en and IDs are available.
+  const govLabel = governorateId
+    ? getLocalizedGovernorate(governorateId, locale, governorateAr)
+    : governorateAr;
+
+  const wilLabel = (governorateId && wilayatId)
+    ? getLocalizedWilayat(governorateId, wilayatId, locale, wilayatAr)
+    : wilayatAr;
+
+  const areaLabel = (governorateId && wilayatId && areaId)
+    ? getLocalizedArea(governorateId, wilayatId, areaId, locale, areaAr)
+    : areaAr;
+
   return (
     <div className={cn("flex items-center gap-1 flex-wrap", textSize, "text-[#627D98]", className)}>
       <PinIcon />
-      <span>{governorateAr}</span>
-      <Separator />
-      <span>{wilayatAr}</span>
-      <Separator />
-      <span className="font-medium text-[#102A43]">{areaAr}</span>
+      {govLabel && <span>{govLabel}</span>}
+      {govLabel && wilLabel && <Separator />}
+      {wilLabel && <span>{wilLabel}</span>}
+      {wilLabel && areaLabel && <Separator />}
+      {areaLabel && <span className="font-medium text-[#102A43]">{areaLabel}</span>}
     </div>
   );
 }

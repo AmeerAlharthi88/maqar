@@ -3,22 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRecentlyViewedStore } from "@/store/recently-viewed.store";
+import { useTranslation } from "@/i18n/useTranslation";
+import { formatRelativeDateLocale } from "@/lib/formatters";
 import { ROUTES } from "@/config/routes";
-
-function timeAgo(isoString: string): string {
-  const diff = Date.now() - new Date(isoString).getTime();
-  const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "الآن";
-  if (mins < 60) return `منذ ${mins} دقيقة`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `منذ ${hours} ساعة`;
-  const days = Math.floor(hours / 24);
-  return `منذ ${days} يوم`;
-}
 
 export function RecentlyViewedView() {
   const router = useRouter();
   const { items, remove, clear } = useRecentlyViewedStore();
+  const { locale } = useTranslation();
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] pb-24" dir="rtl">
@@ -86,7 +78,7 @@ export function RecentlyViewedView() {
                   <p className="text-sm font-bold text-[#0A3C36] mt-1">
                     {item.price.toLocaleString("ar-OM")} ر.ع.
                   </p>
-                  <p className="text-[10px] text-[#627D98] mt-1">{timeAgo(item.viewedAt)}</p>
+                  <p className="text-[10px] text-[#627D98] mt-1">{formatRelativeDateLocale(item.viewedAt, locale)}</p>
                 </Link>
               </div>
 
