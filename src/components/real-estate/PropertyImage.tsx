@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { toArabicNumerals } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface PropertyImageProps {
   src?: string | null;
@@ -21,6 +22,7 @@ export function PropertyImage({
   className,
 }: PropertyImageProps) {
   const [failed, setFailed] = useState(false);
+  const { t, locale } = useTranslation();
 
   const aspectClasses = {
     video:   "aspect-video",
@@ -28,7 +30,7 @@ export function PropertyImage({
     listing: "aspect-[4/3]",
   };
 
-  const hasSrc = src && src.trim() !== "";
+  const hasSrc = !!src && src.trim() !== "";
   const showImage = hasSrc && !failed;
 
   return (
@@ -42,7 +44,7 @@ export function PropertyImage({
       {showImage ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
-          src={src}
+          src={src!}
           alt={alt}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
@@ -80,7 +82,7 @@ export function PropertyImage({
             </svg>
           </div>
           <span className="text-[11px] font-medium text-[#627D98] leading-none text-center px-4">
-            لا توجد صورة
+            {t("common.noImage")}
           </span>
         </div>
       )}
@@ -93,7 +95,7 @@ export function PropertyImage({
             <circle cx="8.5" cy="8.5" r="1.5" />
             <path d="m21 15-5-5L5 21" />
           </svg>
-          {toArabicNumerals(imageCount)}
+          {locale === "ar" ? toArabicNumerals(imageCount) : String(imageCount)}
         </div>
       )}
     </div>

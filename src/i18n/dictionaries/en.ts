@@ -46,6 +46,9 @@ export const en = {
     verified:    "Verified",
     featured:    "Featured",
     new:         "New",
+    noImage:     "No image",
+    belowMarket: "Below market",
+    saveFavorite: "Save to favourites",
   },
 
   // ── Authentication ──────────────────────────────────────────────────────────

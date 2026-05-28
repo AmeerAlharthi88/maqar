@@ -1,12 +1,20 @@
 import { cn } from "@/lib/utils";
 import { toArabicNumerals } from "@/lib/formatters";
+import type { Locale } from "@/i18n/types";
 
 interface ROIChipProps {
   roiPct: number;
+  locale?: Locale;
   className?: string;
 }
 
-export function ROIChip({ roiPct, className }: ROIChipProps) {
+export function ROIChip({ roiPct, locale = "ar", className }: ROIChipProps) {
+  const isAr = locale === "ar";
+  const numStr = roiPct.toFixed(1);
+  const formatted = isAr ? toArabicNumerals(numStr) : numStr;
+  // Arabic uses Arabic-Indic percent sign ٪; English uses %
+  const label = isAr ? `عائد ${formatted}٪` : `${formatted}% yield`;
+
   return (
     <span
       className={cn(
@@ -18,7 +26,7 @@ export function ROIChip({ roiPct, className }: ROIChipProps) {
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
         <path d="M7 17 17 7M7 7h10v10" />
       </svg>
-      عائد {toArabicNumerals(roiPct.toFixed(1))}%
+      {label}
     </span>
   );
 }

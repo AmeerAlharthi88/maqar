@@ -1,26 +1,35 @@
 import { cn } from "@/lib/utils";
-import { toArabicNumerals } from "@/lib/formatters";
+import { toArabicNumerals, formatNumber } from "@/lib/formatters";
 import type { PropertySpecs as PropertySpecsType } from "@/types/listing";
+import type { Locale } from "@/i18n/types";
 
 interface PropertySpecsProps {
   specs: PropertySpecsType;
   propertyType?: string;
   size?: "sm" | "md";
   className?: string;
+  locale?: Locale;
 }
 
-export function PropertySpecs({ specs, propertyType, size = "md", className }: PropertySpecsProps) {
+export function PropertySpecs({ specs, propertyType, size = "md", className, locale = "ar" }: PropertySpecsProps) {
   const isLand = propertyType === "land";
   const textSize = size === "sm" ? "text-xs" : "text-sm";
   const iconSize = size === "sm" ? 14 : 16;
+  const isAr = locale === "ar";
+
+  function fmtNum(n: number): string {
+    return isAr ? toArabicNumerals(n) : String(n);
+  }
+
+  const areaUnit = isAr ? "م²" : "sqm";
 
   const items = isLand
-    ? [{ icon: <AreaIcon size={iconSize} />, value: `${toArabicNumerals(specs.area)} م²`, label: "المساحة" }]
+    ? [{ icon: <AreaIcon size={iconSize} />, value: `${formatNumber(specs.area, locale)} ${areaUnit}` }]
     : [
-        ...(specs.bedrooms > 0 ? [{ icon: <BedIcon size={iconSize} />, value: toArabicNumerals(specs.bedrooms), label: "غرف" }] : []),
-        { icon: <BathIcon size={iconSize} />, value: toArabicNumerals(specs.bathrooms), label: "حمامات" },
-        { icon: <AreaIcon size={iconSize} />, value: `${toArabicNumerals(specs.area)} م²`, label: "المساحة" },
-        ...(specs.parkingSpots ? [{ icon: <ParkingIcon size={iconSize} />, value: toArabicNumerals(specs.parkingSpots), label: "مواقف" }] : []),
+        ...(specs.bedrooms > 0 ? [{ icon: <BedIcon size={iconSize} />, value: fmtNum(specs.bedrooms) }] : []),
+        { icon: <BathIcon size={iconSize} />, value: fmtNum(specs.bathrooms) },
+        { icon: <AreaIcon size={iconSize} />, value: `${formatNumber(specs.area, locale)} ${areaUnit}` },
+        ...(specs.parkingSpots ? [{ icon: <ParkingIcon size={iconSize} />, value: fmtNum(specs.parkingSpots) }] : []),
       ];
 
   return (
