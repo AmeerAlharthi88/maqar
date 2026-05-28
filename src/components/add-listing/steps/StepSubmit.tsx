@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ROUTES } from "@/config/routes";
 import { QualityScoreCard } from "@/components/add-listing/QualityScoreCard";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ListingDraft } from "@/types/listing-draft";
 
 interface StepSubmitProps {
@@ -28,10 +29,25 @@ export function StepSubmit({
   onSaveDraft,
   onReset,
 }: StepSubmitProps) {
+  const { t, locale, dir } = useTranslation();
+  const isAr = locale === "ar";
+
   // ── Success state ────────────────────────────────────────────────────────────
   if (submitSuccess) {
+    const nextSteps = isAr
+      ? [
+          { title: "مراجعة الوثائق", desc: "يتحقق الفريق من صحة وثائق الملكية" },
+          { title: "التدقيق في المحتوى", desc: "مراجعة الصور والوصف والسعر" },
+          { title: "الموافقة والنشر", desc: "تلقي إشعار بنشر الإعلان" },
+        ]
+      : [
+          { title: "Document review", desc: "The team verifies ownership documents" },
+          { title: "Content check", desc: "Photos, description, and price review" },
+          { title: "Approval & publish", desc: "You'll receive a notification when live" },
+        ];
+
     return (
-      <div className="px-4 py-8 flex flex-col items-center text-center" dir="rtl">
+      <div className="px-4 py-8 flex flex-col items-center text-center" dir={dir}>
         {/* Success icon */}
         <div className="w-20 h-20 rounded-full bg-[#E6F0EF] flex items-center justify-center mb-5">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2">
@@ -40,20 +56,20 @@ export function StepSubmit({
           </svg>
         </div>
 
-        <h2 className="text-xl font-bold text-[#102A43] mb-2">تم إرسال إعلانك للمراجعة</h2>
+        <h2 className="text-xl font-bold text-[#102A43] mb-2">
+          {t("addListing.submit.successTitle")}
+        </h2>
         <p className="text-sm text-[#627D98] max-w-xs leading-relaxed mb-6">
-          سيراجع فريق مقر إعلانك خلال ١–٢ يوم عمل وسيتم إخطارك بقرار النشر.
+          {t("addListing.submit.successBody")}
         </p>
 
         {/* Next steps */}
-        <div className="w-full max-w-sm bg-[#F0F4F8] rounded-2xl p-4 mb-6 text-right">
-          <p className="text-xs font-bold text-[#627D98] mb-3">الخطوات التالية</p>
+        <div className="w-full max-w-sm bg-[#F0F4F8] rounded-2xl p-4 mb-6 text-start">
+          <p className="text-xs font-bold text-[#627D98] mb-3">
+            {isAr ? "الخطوات التالية" : "Next steps"}
+          </p>
           <div className="space-y-3">
-            {[
-              { title: "مراجعة الوثائق", desc: "يتحقق الفريق من صحة وثائق الملكية" },
-              { title: "التدقيق في المحتوى", desc: "مراجعة الصور والوصف والسعر" },
-              { title: "الموافقة والنشر", desc: "تلقي إشعار بنشر الإعلان" },
-            ].map((step, i) => (
+            {nextSteps.map((step, i) => (
               <div key={i} className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-[#0A3C36] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
                   {i + 1}
@@ -73,19 +89,19 @@ export function StepSubmit({
             href={ROUTES.myListings}
             className="w-full py-3.5 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm text-center hover:bg-[#082E29] transition-colors"
           >
-            عرض إعلاناتي
+            {t("addListing.submit.viewListings")}
           </Link>
           <button
             onClick={onReset}
             className="w-full py-3 rounded-2xl bg-[#F0F4F8] text-[#102A43] font-semibold text-sm border border-[#E2E8F0]"
           >
-            نشر إعلان جديد
+            {t("addListing.submit.addAnother")}
           </button>
           <Link
             href={ROUTES.home}
             className="w-full py-3 text-[#627D98] font-medium text-sm text-center"
           >
-            العودة للرئيسية
+            {isAr ? "العودة للرئيسية" : "Back to home"}
           </Link>
         </div>
       </div>
@@ -94,14 +110,16 @@ export function StepSubmit({
 
   // ── Pre-submit state ─────────────────────────────────────────────────────────
   return (
-    <div className="px-4 py-6 space-y-5" dir="rtl">
+    <div className="px-4 py-6 space-y-5" dir={dir}>
       {/* Quality score */}
       <QualityScoreCard score={qualityScore} draft={draft} />
 
       {/* Listing title preview */}
       {draft.titleAr && (
         <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4">
-          <p className="text-xs text-[#627D98] mb-1">سيُنشر إعلانك بهذا العنوان</p>
+          <p className="text-xs text-[#627D98] mb-1">
+            {isAr ? "سيُنشر إعلانك بهذا العنوان" : "Your listing will be published with this title"}
+          </p>
           <p className="text-base font-bold text-[#102A43]">{draft.titleAr}</p>
         </div>
       )}
@@ -115,9 +133,13 @@ export function StepSubmit({
             <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
           <div>
-            <p className="text-xs font-bold text-[#2471A3] mb-1">عملية المراجعة</p>
+            <p className="text-xs font-bold text-[#2471A3] mb-1">
+              {isAr ? "عملية المراجعة" : "Review process"}
+            </p>
             <p className="text-xs text-[#2471A3]/80 leading-relaxed">
-              يخضع كل إعلان لمراجعة خلال ١–٢ يوم عمل. لا تتردد في التواصل مع الدعم إن تجاوز وقت المراجعة ذلك.
+              {isAr
+                ? "يخضع كل إعلان لمراجعة خلال ١–٢ يوم عمل. لا تتردد في التواصل مع الدعم إن تجاوز وقت المراجعة ذلك."
+                : "Every listing is reviewed within 1–2 business days. Contact support if review takes longer."}
             </p>
           </div>
         </div>
@@ -126,7 +148,9 @@ export function StepSubmit({
       {!termsAccepted && (
         <div className="bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3">
           <p className="text-xs text-[#C0392B] font-semibold">
-            يرجى قبول شروط النشر في الخطوة السابقة للمتابعة
+            {isAr
+              ? "يرجى قبول شروط النشر في الخطوة السابقة للمتابعة"
+              : "Please accept the publishing terms in the previous step to continue"}
           </p>
         </div>
       )}
@@ -134,7 +158,9 @@ export function StepSubmit({
       {/* Submit error */}
       {submitError && (
         <div className="bg-[#FEF0EE] border border-[#C0392B]/40 rounded-xl px-4 py-3">
-          <p className="text-xs font-semibold text-[#C0392B] mb-1">فشل إرسال الإعلان</p>
+          <p className="text-xs font-semibold text-[#C0392B] mb-1">
+            {isAr ? "فشل إرسال الإعلان" : "Failed to submit listing"}
+          </p>
           <p className="text-xs text-[#627D98] font-mono break-all">{submitError}</p>
         </div>
       )}
@@ -149,7 +175,7 @@ export function StepSubmit({
           {isSubmitting ? (
             <>
               <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-              جاري الإرسال...
+              {t("addListing.common.submitting")}
             </>
           ) : (
             <>
@@ -157,7 +183,7 @@ export function StepSubmit({
                 <line x1="22" y1="2" x2="11" y2="13" />
                 <polygon points="22 2 15 22 11 13 2 9 22 2" />
               </svg>
-              إرسال الإعلان للمراجعة
+              {t("addListing.review.submit")}
             </>
           )}
         </button>
@@ -166,12 +192,14 @@ export function StepSubmit({
           disabled={isSubmitting}
           className="w-full py-3 rounded-2xl bg-[#F0F4F8] text-[#102A43] font-semibold text-sm border border-[#E2E8F0] disabled:opacity-50"
         >
-          حفظ كمسودة والمتابعة لاحقاً
+          {isAr ? "حفظ كمسودة والمتابعة لاحقاً" : "Save draft & continue later"}
         </button>
       </div>
 
       <p className="text-[10px] text-[#627D98] text-center leading-relaxed">
-        بالضغط على &quot;إرسال&quot; تؤكد أن المعلومات صحيحة وتوافق على سياسة النشر في مقر.
+        {isAr
+          ? "بالضغط على \"إرسال\" تؤكد أن المعلومات صحيحة وتوافق على سياسة النشر في مقر."
+          : "By tapping \"Submit\" you confirm the information is accurate and agree to Maqar's publishing policy."}
       </p>
     </div>
   );

@@ -3,17 +3,17 @@
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
 import { getActiveFilterLabels } from "@/lib/helpers/listing-filters";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface ActiveFiltersBarProps {
   className?: string;
 }
 
-// Keys that map to a single SearchFilters field reset
-const FILTER_KEY_RESETS: Record<string, () => void> = {};
-
 export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
   const { filters, setFilter, setFilters, resetFilters, activeFilterCount } = useSearchStore();
-  const labels = getActiveFilterLabels(filters);
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
+  const labels = getActiveFilterLabels(filters, locale as "ar" | "en");
 
   if (activeFilterCount === 0) return null;
 
@@ -52,7 +52,7 @@ export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
             "bg-[#E6F0EF] text-[#0A3C36] border border-[#0A3C36]/20",
             "hover:bg-[#D0E8E4] transition-colors"
           )}
-          aria-label={`إزالة الفلتر: ${label.label}`}
+          aria-label={`${isAr ? "إزالة الفلتر" : "Remove filter"}: ${label.label}`}
         >
           {label.label}
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -64,9 +64,9 @@ export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
       <button
         onClick={resetFilters}
         className="flex-shrink-0 flex items-center gap-1 px-3 h-8 rounded-full text-xs font-medium text-[#627D98] hover:text-[#0A3C36] transition-colors whitespace-nowrap"
-        aria-label="مسح جميع الفلاتر"
+        aria-label={t("common.clearAll")}
       >
-        مسح الكل
+        {t("common.clearAll")}
       </button>
     </div>
   );

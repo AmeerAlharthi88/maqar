@@ -5,14 +5,24 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
 import { ROUTES } from "@/config/routes";
+import { useTranslation } from "@/i18n/useTranslation";
 
-const EXAMPLE_SEARCHES = [
+const EXAMPLE_SEARCHES_AR = [
   "فيلا في بوشر",
   "شقة في الخوض",
   "أرض في السيب",
   "مكتب في مسقط",
   "تاون هاوس في الغبرة",
   "شقة مفروشة في الخوير",
+];
+
+const EXAMPLE_SEARCHES_EN = [
+  "Villa in Bawshar",
+  "Apartment in Al Khoud",
+  "Land in Seeb",
+  "Office in Muscat",
+  "Townhouse in Ghubrah",
+  "Furnished apartment in Khuwair",
 ];
 
 interface SmartSearchProps {
@@ -24,7 +34,7 @@ interface SmartSearchProps {
 }
 
 export function SmartSearch({
-  placeholder = "ابحث بالنوع أو المنطقة...",
+  placeholder,
   size = "md",
   autoFocus = false,
   onSearch,
@@ -33,10 +43,17 @@ export function SmartSearch({
   const router = useRouter();
   const { filters, setFilter, recentSearches, addRecentSearch, clearRecentSearches } =
     useSearchStore();
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
+
+  const EXAMPLE_SEARCHES = isAr ? EXAMPLE_SEARCHES_AR : EXAMPLE_SEARCHES_EN;
+
   const [localQuery, setLocalQuery] = useState(filters.query);
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const resolvedPlaceholder = placeholder ?? t("search.placeholder");
 
   useEffect(() => {
     if (autoFocus) inputRef.current?.focus();
@@ -74,7 +91,7 @@ export function SmartSearch({
 
   const showDropdown = focused && (recentSearches.length > 0 || localQuery.length === 0);
   const suggestions = localQuery.trim()
-    ? EXAMPLE_SEARCHES.filter((s) => s.includes(localQuery.trim()))
+    ? EXAMPLE_SEARCHES.filter((s) => s.toLowerCase().includes(localQuery.trim().toLowerCase()))
     : [];
 
   const heightClass = size === "sm" ? "h-10" : size === "lg" ? "h-14" : "h-12";
@@ -122,15 +139,14 @@ export function SmartSearch({
           onChange={(e) => setLocalQuery(e.target.value)}
           onFocus={() => setFocused(true)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
-          dir="rtl"
+          placeholder={resolvedPlaceholder}
           className={cn(
             "flex-1 bg-transparent outline-none border-none ring-0 shadow-none",
             "text-[#102A43] placeholder:text-[#627D98]",
             "[-webkit-appearance:none] [appearance:none]",
             textClass
           )}
-          aria-label="البحث عن عقار"
+          aria-label={t("common.search")}
           aria-autocomplete="list"
           autoComplete="off"
         />
@@ -138,7 +154,7 @@ export function SmartSearch({
         {/* Clear button */}
         {localQuery && (
           <button
-            aria-label="مسح البحث"
+            aria-label={t("search.smartSearch.clear")}
             onClick={() => {
               setLocalQuery("");
               setFilter("query", "");
@@ -154,7 +170,7 @@ export function SmartSearch({
 
         {/* Search submit */}
         <button
-          aria-label="بحث"
+          aria-label={t("search.button")}
           onClick={() => handleSubmit(localQuery)}
           className={cn(
             "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-colors",
@@ -162,7 +178,7 @@ export function SmartSearch({
           )}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-            <path d="M5 12h14M12 5l7 7-7 7" />
+            <path d={isAr ? "M19 12H5M12 5l-7 7 7 7" : "M5 12h14M12 5l7 7-7 7"} />
           </svg>
         </button>
       </div>
@@ -174,12 +190,14 @@ export function SmartSearch({
           {recentSearches.length > 0 && !localQuery && (
             <div>
               <div className="flex items-center justify-between px-4 pt-3 pb-1">
-                <p className="text-xs font-semibold text-[#627D98]">عمليات البحث الأخيرة</p>
+                <p className="text-xs font-semibold text-[#627D98]">
+                  {isAr ? "عمليات البحث الأخيرة" : "Recent searches"}
+                </p>
                 <button
                   onClick={clearRecentSearches}
                   className="text-xs text-[#0A3C36] hover:underline"
                 >
-                  مسح الكل
+                  {t("common.clearAll")}
                 </button>
               </div>
               {recentSearches.map((r) => (
@@ -224,7 +242,9 @@ export function SmartSearch({
           {/* Example searches when empty and no recents */}
           {!localQuery && recentSearches.length === 0 && (
             <div>
-              <p className="px-4 pt-3 pb-1 text-xs font-semibold text-[#627D98]">اقتراحات</p>
+              <p className="px-4 pt-3 pb-1 text-xs font-semibold text-[#627D98]">
+                {isAr ? "اقتراحات" : "Suggestions"}
+              </p>
               {EXAMPLE_SEARCHES.slice(0, 5).map((s) => (
                 <button
                   key={s}

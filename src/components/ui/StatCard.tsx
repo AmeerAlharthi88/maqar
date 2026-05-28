@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface StatCardProps {
   labelAr: string;
@@ -16,10 +16,10 @@ interface StatCardProps {
 }
 
 export function StatCard({ labelAr, labelEn, value, change, icon, className }: StatCardProps) {
-  const { locale } = useLanguageStore();
+  const { locale, t } = useTranslation();
   const isAr = locale === "ar";
   const label = isAr ? labelAr : (labelEn ?? labelAr);
-  const changeLabel = isAr ? "مقارنة بالعام السابق" : "vs last year";
+  const changeLabel = t("common.vsLastYear");
 
   return (
     <div

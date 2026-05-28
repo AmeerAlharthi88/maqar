@@ -46,30 +46,104 @@ export interface ListingDraft {
   // Step 2 — Property type (uses extended PropertyType)
   propertyType: PropertyType | null;
 
-  // Step 3 — Property details
+  // ── Step 3 — Property details ─────────────────────────────────────────────
+
+  // Core specs (shared across multiple types)
   bedrooms: number | null;
   bathrooms: number | null;
-  area: number | null;          // built-up sqm
-  landArea: number | null;      // land sqm
-  floors: number | null;
+  area: number | null;          // built-up area sqm (maps to built_up_area_sqm in DB)
+  landArea: number | null;      // land/plot area sqm (maps to land_size_sqm in DB)
   parkingSpots: number | null;
   furnishing: FurnishingStatus | null;
-  propertyAge: string | null;   // "0", "1", "2", "3-5", "5-10", "10+"
+  propertyAge: string | null;   // "0","1","2","3-5","5-10","10+"
   availabilityDate: string | null; // ISO date string
 
-  // Oman-specific boolean features
+  // Floor fields
+  floorNumber: number | null;           // which floor is this unit on (apartment, commercial)
+  totalFloorsInBuilding: number | null; // total floors in the building (apartment context)
+  floors: number | null;                // number of floors IN the property (villa, building)
+
+  // Villa / residential features
   hasMajlis: boolean;
+  majlisCount: number | null;
   hasMaidRoom: boolean;
   hasDriverRoom: boolean;
-  hasOutdoorKitchen: boolean;
-  hasIndoorKitchen: boolean;
+  hasPrivatePool: boolean;
   hasYard: boolean;
+  balconyCount: number | null;
+  hasCentralAc: boolean;
+  kitchenType: string | null;   // 'internal' | 'external' | 'both'
+  hasStoreRoom: boolean;
+
+  // Apartment-specific
+  hasElevator: boolean;
+  hasSecurity: boolean;
+  hasSharedPool: boolean;
+  hasSharedGym: boolean;
+  hasBalcony: boolean;
+
+  // Views (shared)
   hasSeaView: boolean;
   hasMountainView: boolean;
+
+  // Legacy booleans (kept for backward-compat with DB columns + existing code)
+  hasOutdoorKitchen: boolean;
+  hasIndoorKitchen: boolean;
   isFreehold: boolean;
   isExpatAllowed: boolean;
   isFamilyOnly: boolean;
   isBachelorAllowed: boolean;
+
+  // Land-specific
+  landUse: string | null;           // 'residential'|'commercial'|'agricultural'|'industrial'|'mixed'
+  roadAccess: string | null;        // 'paved' | 'unpaved'
+  isCornerPlot: boolean;
+  hasElectricity: boolean;
+  hasWater: boolean;
+  hasSewage: boolean;
+  hasBoundaryWall: boolean;
+  plotNumber: string;
+  hasNearbyMosque: boolean;
+  hasNearbySchool: boolean;
+
+  // Farm-specific
+  waterSource: string | null;       // 'well' | 'government' | 'none'
+  farmHouseExists: boolean;
+  numberOfWells: number | null;
+  palmTreesCount: number | null;
+  otherTrees: string;
+  hasPavedRoad: boolean;
+  hasAgriculturalLicense: boolean;
+
+  // Commercial shop-specific
+  shopFrontageMeters: number | null;
+  hasCommercialLicense: boolean;
+  hasDisplayWindow: boolean;
+  isMainRoadFacing: boolean;
+
+  // Office-specific
+  meetingRoomsCount: number | null;
+  hasReceptionArea: boolean;
+  isInternetReady: boolean;
+
+  // Warehouse-specific
+  ceilingHeightMeters: number | null;
+  hasLoadingDock: boolean;
+  hasTruckAccess: boolean;
+  powerCapacityKw: number | null;
+  hasFireSafety: boolean;
+  isFenced: boolean;
+  hasCrane: boolean;
+  hasOfficeSpace: boolean;
+
+  // Building-specific
+  totalUnits: number | null;
+  hasCommercialGroundFloor: boolean;
+  currentRentalIncome: number | null;
+
+  // Chalet-specific
+  hasBarbecue: boolean;
+  hasSharedBeachAccess: boolean;
 
   // Step 4 — Price
   price: number | null;

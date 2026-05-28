@@ -77,6 +77,13 @@ export interface DbListingRow {
   is_family_only: boolean;
   is_bachelor_allowed: boolean;
   amenities: string[] | null;
+  // ── Type-specific extended fields (added in migration 003) ────────────────
+  floor_number: number | null;          // which floor (apartment / commercial / office)
+  total_floors: number | null;          // total floors in building (apartment context)
+  land_use: string | null;              // residential / commercial / agricultural / industrial / mixed
+  road_access: string | null;           // paved / unpaved
+  water_source: string | null;          // well / government / none
+  type_fields: Record<string, unknown> | null;  // JSONB: remaining type-specific data
   cover_image_url: string | null;
   video_link: string | null;
   tour_link: string | null;
@@ -194,6 +201,101 @@ export function dbRowToListing(row: DbListingRow): Listing {
   };
 }
 
+// ── Build JSONB type_fields from draft ────────────────────────────────────────
+// Captures all property-type-specific fields that don't have dedicated DB columns.
+// Only includes fields relevant to the current property type (others are omitted).
+function buildTypeFields(draft: ListingDraft): Record<string, unknown> {
+  const pt = draft.propertyType;
+  switch (pt) {
+    case "villa":
+    case "duplex":
+    case "townhouse":
+    case "arabic_house":
+      return {
+        majlis_count:    draft.majlisCount,
+        balcony_count:   draft.balconyCount,
+        kitchen_type:    draft.kitchenType,
+        has_private_pool: draft.hasPrivatePool,
+        has_central_ac:  draft.hasCentralAc,
+        has_store_room:  draft.hasStoreRoom,
+      };
+    case "apartment":
+    case "hotel_apartment":
+      return {
+        has_elevator:    draft.hasElevator,
+        has_security:    draft.hasSecurity,
+        has_shared_pool: draft.hasSharedPool,
+        has_shared_gym:  draft.hasSharedGym,
+        has_balcony:     draft.hasBalcony,
+        has_central_ac:  draft.hasCentralAc,
+      };
+    case "land":
+      return {
+        is_corner_plot:       draft.isCornerPlot,
+        has_electricity:      draft.hasElectricity,
+        has_water:            draft.hasWater,
+        has_sewage:           draft.hasSewage,
+        has_boundary_wall:    draft.hasBoundaryWall,
+        plot_number:          draft.plotNumber || null,
+        has_nearby_mosque:    draft.hasNearbyMosque,
+        has_nearby_school:    draft.hasNearbySchool,
+      };
+    case "farm":
+      return {
+        farm_house_exists:       draft.farmHouseExists,
+        number_of_wells:         draft.numberOfWells,
+        palm_trees_count:        draft.palmTreesCount,
+        other_trees:             draft.otherTrees || null,
+        has_paved_road:          draft.hasPavedRoad,
+        has_electricity:         draft.hasElectricity,
+        has_boundary_wall:       draft.hasBoundaryWall,
+        has_agricultural_license: draft.hasAgriculturalLicense,
+      };
+    case "commercial":
+      return {
+        shop_frontage_meters:  draft.shopFrontageMeters,
+        has_commercial_license: draft.hasCommercialLicense,
+        has_display_window:    draft.hasDisplayWindow,
+        is_main_road_facing:   draft.isMainRoadFacing,
+        has_store_room:        draft.hasStoreRoom,
+      };
+    case "office":
+      return {
+        meeting_rooms_count: draft.meetingRoomsCount,
+        has_reception_area:  draft.hasReceptionArea,
+        is_internet_ready:   draft.isInternetReady,
+        has_security:        draft.hasSecurity,
+        has_elevator:        draft.hasElevator,
+      };
+    case "warehouse":
+      return {
+        ceiling_height_meters: draft.ceilingHeightMeters,
+        has_loading_dock:      draft.hasLoadingDock,
+        has_truck_access:      draft.hasTruckAccess,
+        power_capacity_kw:     draft.powerCapacityKw,
+        has_fire_safety:       draft.hasFireSafety,
+        is_fenced:             draft.isFenced,
+        has_crane:             draft.hasCrane,
+        has_office_space:      draft.hasOfficeSpace,
+      };
+    case "building":
+      return {
+        total_units:                draft.totalUnits,
+        has_commercial_ground_floor: draft.hasCommercialGroundFloor,
+        current_rental_income:      draft.currentRentalIncome,
+        has_elevator:               draft.hasElevator,
+      };
+    case "chalet":
+      return {
+        has_private_pool:      draft.hasPrivatePool,
+        has_barbecue:          draft.hasBarbecue,
+        has_shared_beach_access: draft.hasSharedBeachAccess,
+      };
+    default:
+      return {};
+  }
+}
+
 // ── Mapper: ListingDraft → DB insert row ──────────────────────────────────────
 export function draftToInsertRow(
   draft: ListingDraft,
@@ -238,7 +340,7 @@ export function draftToInsertRow(
     bathrooms:            draft.bathrooms,
     area_sqm:             draft.area,
     land_size_sqm:        draft.landArea,
-    built_up_area_sqm:    draft.area,  // same as area_sqm for now
+    built_up_area_sqm:    draft.area,
     floors:               draft.floors,
     parking_spaces:       draft.parkingSpots,
     furnishing_status:    draft.furnishing,
@@ -256,7 +358,15 @@ export function draftToInsertRow(
     is_expat_allowed:     draft.isExpatAllowed,
     is_family_only:       draft.isFamilyOnly,
     is_bachelor_allowed:  draft.isBachelorAllowed,
-    amenities:            draft.amenities,  // JSONB NOT NULL — always send array (never null)
+    amenities:            draft.amenities,
+    // ── Type-specific extended columns (migration 003) ─────────────────────
+    floor_number:         draft.floorNumber,
+    total_floors:         draft.totalFloorsInBuilding ?? draft.floors,
+    land_use:             draft.landUse,
+    road_access:          draft.roadAccess,
+    water_source:         draft.waterSource,
+    // All remaining type-specific data goes into JSONB type_fields
+    type_fields: buildTypeFields(draft),
     cover_image_url:      null,  // set after image upload
     video_link:           draft.videoLink  || null,
     tour_link:            draft.tourLink   || null,

@@ -1,4 +1,5 @@
 import type { PropertyType } from "@/types/listing";
+import type { Locale } from "@/i18n/types";
 
 export interface PropertyTypeConfig {
   value: PropertyType;
@@ -29,16 +30,51 @@ export const PROPERTY_TYPE_MAP: Record<PropertyType, PropertyTypeConfig> =
     PropertyTypeConfig
   >;
 
-export const FURNISHING_LABELS: Record<string, string> = {
-  furnished:      "مفروش",
-  semi_furnished: "نصف مفروش",
-  unfurnished:    "غير مفروش",
+/** Return the localised display name for a property type */
+export function getPropertyTypeName(type: PropertyType, locale: Locale): string {
+  const config = PROPERTY_TYPE_MAP[type];
+  if (!config) return type;
+  return locale === "ar" ? config.labelAr : config.labelEn;
+}
+
+// ── Bilingual furnishing labels ───────────────────────────────────────────────
+
+export interface BilingualLabel {
+  ar: string;
+  en: string;
+}
+
+export const FURNISHING_LABELS_I18N: Record<string, BilingualLabel> = {
+  furnished:      { ar: "مفروش",       en: "Furnished"      },
+  semi_furnished: { ar: "نصف مفروش",   en: "Semi-furnished" },
+  unfurnished:    { ar: "غير مفروش",   en: "Unfurnished"    },
 };
 
-export const PURPOSE_LABELS: Record<string, string> = {
-  sale: "للبيع",
-  rent: "للإيجار",
+/** @deprecated Use FURNISHING_LABELS_I18N + getFurnishingLabel() */
+export const FURNISHING_LABELS: Record<string, string> = Object.fromEntries(
+  Object.entries(FURNISHING_LABELS_I18N).map(([k, v]) => [k, v.ar])
+);
+
+export function getFurnishingLabel(value: string, locale: Locale): string {
+  return FURNISHING_LABELS_I18N[value]?.[locale] ?? value;
+}
+
+// ── Bilingual purpose labels ──────────────────────────────────────────────────
+
+export const PURPOSE_LABELS_I18N: Record<string, BilingualLabel> = {
+  sale:       { ar: "للبيع",        en: "For sale"       },
+  rent:       { ar: "للإيجار",      en: "For rent"       },
+  investment: { ar: "للاستثمار",    en: "Investment"     },
 };
+
+/** @deprecated Use PURPOSE_LABELS_I18N + getPurposeLabel() */
+export const PURPOSE_LABELS: Record<string, string> = Object.fromEntries(
+  Object.entries(PURPOSE_LABELS_I18N).map(([k, v]) => [k, v.ar])
+);
+
+export function getPurposeLabel(value: string, locale: Locale): string {
+  return PURPOSE_LABELS_I18N[value]?.[locale] ?? value;
+}
 
 export const COMMON_AMENITIES = [
   "مسبح",

@@ -1,6 +1,9 @@
+"use client";
+
+import { formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 import type { NearbyService } from "@/lib/helpers/listing-detail";
-import { toArabicNumerals } from "@/lib/formatters";
 
 interface ListingLocationProps {
   listing: Listing;
@@ -16,22 +19,30 @@ const SERVICE_ICONS: Record<string, string> = {
   fuel: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v14"/><path d="M3 22h12M17 8l2 2 2-2"/><path d="M19 4v8"/></svg>`,
 };
 
-const SERVICE_LABELS: Record<string, string> = {
-  mosque: "مسجد قريب",
-  school: "مدرسة قريبة",
-  mall: "مركز تسوق",
-  hospital: "مستشفى / صحي",
-  beach: "شاطئ قريب",
-  fuel: "محطة وقود",
+const SERVICE_LABELS: Record<string, { ar: string; en: string }> = {
+  mosque:   { ar: "مسجد قريب",         en: "Nearby Mosque" },
+  school:   { ar: "مدرسة قريبة",       en: "Nearby School" },
+  mall:     { ar: "مركز تسوق",         en: "Shopping Mall" },
+  hospital: { ar: "مستشفى / صحي",      en: "Hospital / Clinic" },
+  beach:    { ar: "شاطئ قريب",         en: "Nearby Beach" },
+  fuel:     { ar: "محطة وقود",         en: "Fuel Station" },
 };
 
-function NearbyServiceRow({ service }: { service: NearbyService }) {
+function NearbyServiceRow({ service, locale }: { service: NearbyService; locale: string }) {
+  const isAr = locale === "ar";
   const icon = SERVICE_ICONS[service.type] ?? SERVICE_ICONS.fuel;
-  const label = SERVICE_LABELS[service.type] ?? service.nameAr;
+  const labelMap = SERVICE_LABELS[service.type];
+  const label = labelMap
+    ? (isAr ? labelMap.ar : labelMap.en)
+    : service.nameAr;
   const distLabel =
     service.distanceKm < 1
-      ? `${toArabicNumerals(Math.round(service.distanceKm * 1000))} م`
-      : `${toArabicNumerals(service.distanceKm.toFixed(1))} كم`;
+      ? isAr
+        ? `${formatNumber(Math.round(service.distanceKm * 1000), "ar")} م`
+        : `${formatNumber(Math.round(service.distanceKm * 1000), "en")} m`
+      : isAr
+        ? `${formatNumber(parseFloat(service.distanceKm.toFixed(1)), "ar")} كم`
+        : `${formatNumber(parseFloat(service.distanceKm.toFixed(1)), "en")} km`;
 
   return (
     <div className="flex items-center justify-between py-2 border-b border-[#E2E8F0] last:border-0">
@@ -41,7 +52,9 @@ function NearbyServiceRow({ service }: { service: NearbyService }) {
           dangerouslySetInnerHTML={{ __html: icon }}
         />
         <span className="text-sm text-[#102A43]">{label}</span>
-        <span className="text-[10px] text-[#627D98] bg-[#F0F4F8] px-1.5 py-0.5 rounded-full">تقديري</span>
+        <span className="text-[10px] text-[#627D98] bg-[#F0F4F8] px-1.5 py-0.5 rounded-full">
+          {isAr ? "تقديري" : "est."}
+        </span>
       </div>
       <span className="text-sm font-semibold text-[#102A43]">{distLabel}</span>
     </div>
@@ -49,22 +62,28 @@ function NearbyServiceRow({ service }: { service: NearbyService }) {
 }
 
 export function ListingLocation({ listing, nearbyServices }: ListingLocationProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
   const loc = listing.location;
 
-  const breadcrumbParts = [
-    loc.governorateAr,
-    loc.wilayatAr,
-    loc.areaAr,
-    loc.addressAr,
-  ].filter(Boolean);
+  const breadcrumbParts = isAr
+    ? [loc.governorateAr, loc.wilayatAr, loc.areaAr, loc.addressAr].filter(Boolean)
+    : [
+        loc.governorateEn ?? loc.governorateAr,
+        loc.wilayatEn ?? loc.wilayatAr,
+        loc.areaEn ?? loc.areaAr,
+        loc.addressEn ?? loc.addressAr,
+      ].filter(Boolean);
 
   return (
     <div className="px-4 py-4 border-t border-[#E2E8F0]">
-      <h2 className="text-base font-bold text-[#102A43] mb-3">الموقع والخدمات القريبة</h2>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">
+        {t("listing.location.title")}
+      </h2>
 
       {/* Address hierarchy */}
       <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3 mb-3">
-        <div className="flex flex-wrap items-center gap-1 text-sm text-[#102A43]" dir="rtl">
+        <div className="flex flex-wrap items-center gap-1 text-sm text-[#102A43]">
           {breadcrumbParts.map((part, idx) => (
             <span key={idx} className="flex items-center gap-1">
               {idx > 0 && (
@@ -85,14 +104,16 @@ export function ListingLocation({ listing, nearbyServices }: ListingLocationProp
         <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
           <div className="px-4">
             {nearbyServices.map((service, idx) => (
-              <NearbyServiceRow key={idx} service={service} />
+              <NearbyServiceRow key={idx} service={service} locale={locale} />
             ))}
           </div>
         </div>
       )}
 
       <p className="mt-2 text-[10px] text-[#627D98] text-center">
-        المسافات تقديرية وقد تختلف عن الواقع
+        {isAr
+          ? "المسافات تقديرية وقد تختلف عن الواقع"
+          : "Distances are approximate and may vary"}
       </p>
     </div>
   );

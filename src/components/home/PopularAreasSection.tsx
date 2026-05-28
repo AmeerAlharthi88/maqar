@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { AreaCard } from "./AreaCard";
 import { ROUTES } from "@/config/routes";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { PopularArea } from "@/mock/popular-areas";
 
 interface PopularAreasSectionProps {
@@ -12,8 +12,7 @@ interface PopularAreasSectionProps {
 }
 
 export function PopularAreasSection({ areas }: PopularAreasSectionProps) {
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { t } = useTranslation();
 
   return (
     <section className="px-4 py-5 bg-[#F0F4F8]">
@@ -25,7 +24,7 @@ export function PopularAreasSection({ areas }: PopularAreasSectionProps) {
         size="md"
         action={
           <Link href={ROUTES.areas} className="text-xs font-semibold text-[#0A3C36] hover:underline">
-            {isAr ? "جميع المناطق" : "All Areas"}
+            {t("common.viewAll")}
           </Link>
         }
         className="mb-4"

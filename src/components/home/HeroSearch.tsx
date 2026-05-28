@@ -3,12 +3,10 @@
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { SmartSearch } from "@/components/search/SmartSearch";
 import { PropertyTypeChips } from "@/components/search/PropertyTypeChips";
-import { APP_CONFIG } from "@/config/app";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export function HeroSearch() {
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { t } = useTranslation();
 
   return (
     <section className="bg-gradient-to-b from-[#E6F0EF] to-white px-4 pt-4 pb-5 lg:pt-6 lg:pb-6 lg:max-w-3xl lg:mx-auto">
@@ -16,40 +14,25 @@ export function HeroSearch() {
       <div className="mb-4 lg:hidden">
         <MaqarLogo size="sm" />
         <p className="mt-1.5 text-xs text-[#627D98] font-medium">
-          {isAr ? APP_CONFIG.taglineAr : "Oman's Premier Real Estate Platform"}
+          {t("home.hero.tagline")}
         </p>
       </div>
 
       {/* Greeting */}
       <div className="mb-3 lg:mb-4 lg:text-center">
         <h1 className="text-2xl lg:text-3xl font-bold text-[#102A43] leading-tight">
-          {isAr ? (
-            <>
-              ابحث عن مقرك
-              <span className="text-[#0A3C36]"> في عُمان</span>
-            </>
-          ) : (
-            <>
-              Find your place
-              <span className="text-[#0A3C36]"> in Oman</span>
-            </>
-          )}
+          {t("home.hero.title")}
+          <span className="text-[#0A3C36]"> {t("home.hero.titleHighlight")}</span>
         </h1>
         <p className="text-sm text-[#627D98] mt-1">
-          {isAr
-            ? "آلاف العقارات في مسقط وصلالة وصحار وسائر المحافظات"
-            : "Thousands of properties across Muscat, Salalah, Sohar and all governorates"}
+          {t("home.hero.subtitle")}
         </p>
       </div>
 
       {/* Search */}
       <SmartSearch
         size="lg"
-        placeholder={
-          isAr
-            ? "فيلا في بوشر، شقة في الخوير..."
-            : "Villa in Bousher, apartment in Khuwair..."
-        }
+        placeholder={t("home.hero.searchPlaceholder")}
         className="mb-3"
       />
 

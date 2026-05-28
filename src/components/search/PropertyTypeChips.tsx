@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/store/search.store";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import { PROPERTY_TYPES } from "@/lib/constants/property-types";
 import { ROUTES } from "@/config/routes";
 import { usePathname, useRouter } from "next/navigation";
@@ -87,7 +87,7 @@ interface PropertyTypeChipsProps {
 
 export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProps) {
   const { filters, setFilter } = useSearchStore();
-  const { locale } = useLanguageStore();
+  const { locale, t } = useTranslation();
   const isAr = locale === "ar";
   const pathname = usePathname();
   const router = useRouter();
@@ -122,7 +122,7 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
         className
       )}
       role="group"
-      aria-label={isAr ? "نوع العقار" : "Property Type"}
+      aria-label={t("search.filters.propertyType")}
     >
       {/* All chip */}
       <button
@@ -136,7 +136,7 @@ export function PropertyTypeChips({ className, onSelect }: PropertyTypeChipsProp
         )}
         aria-pressed={!active}
       >
-        {isAr ? "الكل" : "All"}
+        {t("common.all")}
       </button>
 
       {PROPERTY_TYPES.map((pt) => (

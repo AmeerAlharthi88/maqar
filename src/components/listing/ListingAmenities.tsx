@@ -1,11 +1,14 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 
 interface ListingAmenitiesProps {
   listing: Listing;
 }
 
-// Icon map for known amenity strings
+// Icon map for known amenity strings (amenities are stored as Arabic strings in DB)
 function AmenityIcon({ name }: { name: string }) {
   if (name.includes("موقف") || name.includes("سيارات")) {
     return (
@@ -87,11 +90,16 @@ function AmenityIcon({ name }: { name: string }) {
 }
 
 export function ListingAmenities({ listing }: ListingAmenitiesProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
+
   if (listing.amenities.length === 0) return null;
 
   return (
     <div className="px-4 py-4 border-t border-[#E2E8F0]">
-      <h2 className="text-base font-bold text-[#102A43] mb-3">المرافق والخدمات</h2>
+      <h2 className="text-base font-bold text-[#102A43] mb-3">
+        {t("listing.amenities.title")}
+      </h2>
       <div className="flex flex-wrap gap-2">
         {listing.amenities.map((amenity) => (
           <span

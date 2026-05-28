@@ -1,8 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { OMAN_GOVERNORATES } from "@/lib/constants/oman-locations";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ListingDraft } from "@/types/listing-draft";
+
+// ── Map picker (client-only — Leaflet requires browser APIs) ─────────────────────
+const DynamicMapPicker = dynamic(() => import("./MapPickerInner"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-[#F0F4F8]">
+      <div className="w-6 h-6 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
+    </div>
+  ),
+});
 
 interface StepLocationProps {
   draft: ListingDraft;
@@ -22,7 +34,7 @@ function SelectField({
 }: {
   label: string;
   value: string;
-  options: Array<{ value: string; labelAr: string }>;
+  options: Array<{ value: string; label: string }>;
   placeholder: string;
   onChange: (v: string) => void;
   disabled?: boolean;
@@ -35,23 +47,30 @@ function SelectField({
         {label}
         {required && <span className="text-[#C0392B] ms-1">*</span>}
       </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        className={cn(
-          "w-full h-11 bg-white border rounded-xl px-3.5 text-[#102A43] outline-none appearance-none",
-          "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
-          disabled ? "opacity-40 cursor-not-allowed bg-[#F0F4F8]" : "",
-          error ? "border-[#C0392B]" : "border-[#E2E8F0]"
-        )}
-        dir="rtl"
-      >
-        <option value="">{placeholder}</option>
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>{opt.labelAr}</option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          className={cn(
+            "w-full h-11 bg-white border rounded-xl px-3.5 text-[#102A43] outline-none appearance-none",
+            "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
+            disabled ? "opacity-40 cursor-not-allowed bg-[#F0F4F8]" : "cursor-pointer",
+            error ? "border-[#C0392B]" : "border-[#E2E8F0]"
+          )}
+        >
+          <option value="">{placeholder}</option>
+          {options.map((opt) => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+        {/* Custom chevron */}
+        <div className="pointer-events-none absolute inset-y-0 start-3 flex items-center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </div>
+      </div>
       {error && <p className="text-xs text-[#C0392B]">{error}</p>}
     </div>
   );
@@ -83,7 +102,6 @@ function TextInput({
           "focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15",
           error ? "border-[#C0392B]" : "border-[#E2E8F0]"
         )}
-        dir="rtl"
       />
       {error && <p className="text-xs text-[#C0392B]">{error}</p>}
     </div>
@@ -91,22 +109,31 @@ function TextInput({
 }
 
 export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
-  // Derive governorate options
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
+
+  // Derive governorate options (bilingual)
   const governorateOptions = OMAN_GOVERNORATES.map((g) => ({
     value: g.id,
-    labelAr: g.nameAr,
+    label: isAr ? g.nameAr : (g.nameEn ?? g.nameAr),
   }));
 
   // Derive wilayat options from selected governorate
   const selectedGov = OMAN_GOVERNORATES.find((g) => g.id === draft.governorateId);
   const wilayatOptions = selectedGov
-    ? selectedGov.wilayats.map((w) => ({ value: w.id, labelAr: w.nameAr }))
+    ? selectedGov.wilayats.map((w) => ({
+        value: w.id,
+        label: isAr ? w.nameAr : (w.nameEn ?? w.nameAr),
+      }))
     : [];
 
   // Derive area options from selected wilayat
   const selectedWilayat = selectedGov?.wilayats.find((w) => w.id === draft.wilayatId);
   const areaOptions = selectedWilayat
-    ? selectedWilayat.areas.map((a) => ({ value: a.id, labelAr: a.nameAr }))
+    ? selectedWilayat.areas.map((a) => ({
+        value: a.id,
+        label: isAr ? a.nameAr : (a.nameEn ?? a.nameAr),
+      }))
     : [];
 
   function handleGovernorateChange(govId: string) {
@@ -139,18 +166,28 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
     });
   }
 
+  function handleMapSelect(lat: number, lng: number) {
+    onChange({ mapLat: lat, mapLng: lng });
+  }
+
+  function clearMapPin() {
+    onChange({ mapLat: null, mapLng: null });
+  }
+
+  const hasPinDropped = draft.mapLat !== null && draft.mapLng !== null;
+
   return (
-    <div className="px-4 py-6 space-y-4" dir="rtl">
+    <div className="px-4 py-6 space-y-4">
       <p className="text-sm text-[#627D98] leading-relaxed">
-        حدد موقع عقارك بدقة. كلما كانت المعلومات أكثر تفصيلاً، زاد اهتمام المشترين.
+        {t("addListing.location.hint")}
       </p>
 
       {/* Governorate */}
       <SelectField
-        label="المحافظة"
+        label={t("addListing.location.governorate")}
         value={draft.governorateId ?? ""}
         options={governorateOptions}
-        placeholder="اختر المحافظة"
+        placeholder={t("addListing.location.selectGovernorate")}
         onChange={handleGovernorateChange}
         error={errors.governorateId}
         required
@@ -158,10 +195,10 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
 
       {/* Wilayat */}
       <SelectField
-        label="الولاية"
+        label={t("addListing.location.wilayat")}
         value={draft.wilayatId ?? ""}
         options={wilayatOptions}
-        placeholder="اختر الولاية"
+        placeholder={t("addListing.location.selectWilayat")}
         onChange={handleWilayatChange}
         disabled={!draft.governorateId}
         error={errors.wilayatId}
@@ -170,10 +207,10 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
 
       {/* Area */}
       <SelectField
-        label="المنطقة / الحي"
+        label={t("addListing.location.area")}
         value={draft.areaId ?? ""}
         options={areaOptions}
-        placeholder="اختر المنطقة"
+        placeholder={t("addListing.location.selectArea")}
         onChange={handleAreaChange}
         disabled={!draft.wilayatId}
       />
@@ -181,25 +218,25 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
       {/* Block & Street */}
       <div className="grid grid-cols-2 gap-3">
         <TextInput
-          label="رقم البلوك (اختياري)"
+          label={t("addListing.location.block")}
           value={draft.block}
-          placeholder="مثال: ٣"
+          placeholder={t("addListing.location.blockPlaceholder")}
           onChange={(v) => onChange({ block: v })}
         />
         <TextInput
-          label="اسم الشارع (اختياري)"
+          label={t("addListing.location.street")}
           value={draft.street}
-          placeholder="مثال: شارع الخوير"
+          placeholder={t("addListing.location.streetPlaceholder")}
           onChange={(v) => onChange({ street: v })}
         />
       </div>
 
       {/* Location notes */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-[#102A43]">ملاحظات الموقع (اختياري)</label>
+        <label className="text-sm font-medium text-[#102A43]">{t("addListing.location.notes")}</label>
         <textarea
           value={draft.locationNotes}
-          placeholder="مثال: بجانب مسجد X، أمام مدرسة Y..."
+          placeholder={t("addListing.location.notesPlaceholder")}
           onChange={(e) => onChange({ locationNotes: e.target.value })}
           rows={2}
           className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15 resize-none"
@@ -213,9 +250,9 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
         role="switch"
         aria-checked={draft.hideExactLocation}
       >
-        <div className="text-right">
-          <p className="text-sm font-medium text-[#102A43]">إخفاء الموقع الدقيق</p>
-          <p className="text-xs text-[#627D98]">يُظهر الموقع التقريبي فقط على الخريطة</p>
+        <div className="text-start">
+          <p className="text-sm font-medium text-[#102A43]">{t("addListing.location.hideExact")}</p>
+          <p className="text-xs text-[#627D98]">{t("addListing.location.hideExactHint")}</p>
         </div>
         <div
           className={cn(
@@ -232,16 +269,60 @@ export function StepLocation({ draft, onChange, errors }: StepLocationProps) {
         </div>
       </button>
 
-      {/* Map pin placeholder */}
-      <div className="bg-[#F0F4F8] rounded-2xl border border-dashed border-[#E2E8F0] px-4 py-5 text-center">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="1.5" className="mx-auto mb-2">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
-        <p className="text-sm font-medium text-[#627D98] mb-1">تحديد الموقع على الخريطة</p>
-        <p className="text-xs text-[#627D98]">
-          سيتم توفير رابط الموقع التفاعلي في التحديث القادم
-        </p>
+      {/* ── Interactive map picker ──────────────────────────────────────────────── */}
+      <div className="rounded-2xl overflow-hidden border border-[#E2E8F0]">
+        {/* Header */}
+        <div className="flex items-center justify-between bg-white px-4 py-3 border-b border-[#E2E8F0]">
+          <div className="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span className="text-sm font-semibold text-[#102A43]">{t("addListing.location.mapTitle")}</span>
+          </div>
+          {hasPinDropped && (
+            <button
+              onClick={clearMapPin}
+              className="text-xs text-[#C0392B] font-medium"
+            >
+              {t("addListing.location.removePin")}
+            </button>
+          )}
+        </div>
+
+        {/* Map container */}
+        <div className="relative" style={{ height: 260 }}>
+          <DynamicMapPicker
+            lat={draft.mapLat}
+            lng={draft.mapLng}
+            onSelect={handleMapSelect}
+          />
+
+          {/* Instruction overlay — fades away once pin is dropped */}
+          {!hasPinDropped && (
+            <div className="absolute bottom-3 start-0 end-0 flex justify-center pointer-events-none z-[500]">
+              <div className="bg-white/90 backdrop-blur-sm text-xs text-[#102A43] font-medium px-3 py-1.5 rounded-full border border-[#E2E8F0] shadow-sm">
+                {t("addListing.location.mapHint")}
+              </div>
+            </div>
+          )}
+
+          {/* Coordinates badge — shown once pin is dropped */}
+          {hasPinDropped && (
+            <div className="absolute bottom-3 start-0 end-0 flex justify-center pointer-events-none z-[500]">
+              <div className="bg-[#0A3C36]/90 backdrop-blur-sm text-xs text-white font-medium px-3 py-1.5 rounded-full shadow-sm">
+                {t("addListing.location.mapPinDropped")}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Optional hint */}
+        <div className="bg-[#F8F9FA] px-4 py-2 border-t border-[#E2E8F0]">
+          <p className="text-[11px] text-[#627D98]">
+            {t("addListing.location.mapNote")}
+          </p>
+        </div>
       </div>
     </div>
   );

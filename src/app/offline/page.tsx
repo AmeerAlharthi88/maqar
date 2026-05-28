@@ -8,12 +8,15 @@
 import Link from "next/link";
 import { useRecentlyViewedStore } from "@/store/recently-viewed.store";
 import { ConnectionStatusIndicator } from "@/components/pwa/ConnectionStatusIndicator";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export default function OfflinePage() {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
   const recentItems = useRecentlyViewedStore((s) => s.items).slice(0, 3);
 
   return (
-    <div className="min-h-svh flex flex-col items-center justify-center px-6 text-center bg-[#F8F9FA]" dir="rtl">
+    <div className="min-h-svh flex flex-col items-center justify-center px-6 text-center bg-[#F8F9FA]">
       {/* Icon */}
       <div className="w-16 h-16 rounded-full bg-[#E2E8F0] flex items-center justify-center mb-6">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2" aria-hidden="true">
@@ -27,9 +30,9 @@ export default function OfflinePage() {
         </svg>
       </div>
 
-      <h1 className="text-xl font-bold text-[#102A43] mb-2">لا يوجد اتصال بالإنترنت</h1>
+      <h1 className="text-xl font-bold text-[#102A43] mb-2">{t("pwa.offline.title")}</h1>
       <p className="text-sm text-[#627D98] mb-2 max-w-xs">
-        تحقق من اتصالك بالإنترنت وحاول مرة أخرى.
+        {t("pwa.offline.description")}
       </p>
 
       {/* Live connection indicator */}
@@ -41,15 +44,17 @@ export default function OfflinePage() {
       <button
         onClick={() => window.location.reload()}
         className="px-6 py-3 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold min-h-[44px] mb-8"
-        aria-label="إعادة المحاولة"
+        aria-label={t("pwa.offline.retry")}
       >
-        إعادة المحاولة
+        {t("pwa.offline.retry")}
       </button>
 
       {/* Recently viewed — cached locally, available offline */}
       {recentItems.length > 0 && (
-        <div className="w-full max-w-sm text-right">
-          <p className="text-xs font-bold text-[#102A43] mb-3">آخر عقارات شاهدتها</p>
+        <div className="w-full max-w-sm text-start">
+          <p className="text-xs font-bold text-[#102A43] mb-3">
+            {isAr ? "آخر عقارات شاهدتها" : "Recently Viewed"}
+          </p>
           <div className="space-y-2">
             {recentItems.map((item) => (
               <Link
@@ -68,8 +73,10 @@ export default function OfflinePage() {
                 ) : (
                   <div className="w-10 h-10 rounded-lg bg-[#E2E8F0] flex-shrink-0" aria-hidden="true" />
                 )}
-                <div className="flex-1 min-w-0 text-right">
-                  <p className="text-xs font-semibold text-[#102A43] truncate">{item.titleAr}</p>
+                <div className="flex-1 min-w-0 text-start">
+                  <p className="text-xs font-semibold text-[#102A43] truncate">
+                    {isAr ? item.titleAr : (item.titleAr)}
+                  </p>
                   <p className="text-[10px] text-[#627D98]">{item.areaAr}</p>
                 </div>
               </Link>
@@ -84,7 +91,7 @@ export default function OfflinePage() {
           href="/account/sync"
           className="text-xs text-[#0A3C36] underline underline-offset-2"
         >
-          عرض الإجراءات المعلّقة
+          {isAr ? "عرض الإجراءات المعلّقة" : "View pending actions"}
         </Link>
       </div>
     </div>

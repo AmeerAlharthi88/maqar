@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { PROPERTY_TYPES } from "@/lib/constants/property-types";
 import { COMMON_AMENITIES } from "@/lib/constants/property-types";
+import { useTranslation } from "@/i18n/useTranslation";
+import { formatNumber } from "@/lib/formatters";
 
 export interface FilterState {
   purpose: "all" | "sale" | "rent";
@@ -33,6 +35,8 @@ interface FilterBottomSheetProps {
 }
 
 export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: FilterBottomSheetProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
   const [filters, setFilters] = useState<FilterState>({ ...defaultFilters, ...initialFilters });
 
   function toggle<K extends keyof FilterState>(key: K, value: string) {
@@ -53,11 +57,11 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
   }
 
   return (
-    <BottomSheet open={open} onClose={onClose} title="تصفية النتائج" snapToContent={false}>
+    <BottomSheet open={open} onClose={onClose} title={t("search.filters.title")} snapToContent={false}>
       <div className="flex flex-col gap-6 p-5">
         {/* Purpose */}
         <section>
-          <p className="text-sm font-semibold text-[#102A43] mb-3">الغرض</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">{t("search.filters.purpose")}</p>
           <div className="flex gap-2">
             {(["all", "sale", "rent"] as const).map((p) => (
               <button
@@ -69,7 +73,11 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
                     : "bg-white text-[#627D98] border-[#E2E8F0]"
                 }`}
               >
-                {p === "all" ? "الكل" : p === "sale" ? "للبيع" : "للإيجار"}
+                {p === "all"
+                  ? t("search.filters.any")
+                  : p === "sale"
+                  ? t("addListing.purpose.sale")
+                  : t("addListing.purpose.rent")}
               </button>
             ))}
           </div>
@@ -77,12 +85,12 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
 
         {/* Property type */}
         <section>
-          <p className="text-sm font-semibold text-[#102A43] mb-3">نوع العقار</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">{t("search.filters.propertyType")}</p>
           <div className="flex flex-col gap-2">
             {PROPERTY_TYPES.slice(0, 5).map((pt) => (
               <Checkbox
                 key={pt.value}
-                label={pt.labelAr}
+                label={isAr ? pt.labelAr : (pt.labelEn ?? pt.labelAr)}
                 checked={filters.propertyTypes.includes(pt.value)}
                 onChange={() => toggle("propertyTypes", pt.value)}
               />
@@ -92,7 +100,9 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
 
         {/* Bedrooms */}
         <section>
-          <p className="text-sm font-semibold text-[#102A43] mb-3">الحد الأدنى لغرف النوم</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">
+            {t("search.filters.minBeds")}
+          </p>
           <div className="flex gap-2">
             {[0, 1, 2, 3, 4, 5].map((n) => (
               <button
@@ -104,7 +114,11 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
                     : "bg-white text-[#627D98] border-[#E2E8F0]"
                 }`}
               >
-                {n === 0 ? "الكل" : n === 5 ? "+٥" : n}
+                {n === 0
+                  ? t("search.filters.any")
+                  : n === 5
+                  ? `${formatNumber(5, locale)}+`
+                  : formatNumber(n, locale)}
               </button>
             ))}
           </div>
@@ -112,7 +126,7 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
 
         {/* Amenities */}
         <section>
-          <p className="text-sm font-semibold text-[#102A43] mb-3">المميزات</p>
+          <p className="text-sm font-semibold text-[#102A43] mb-3">{t("search.filters.amenities")}</p>
           <div className="flex flex-wrap gap-2">
             {COMMON_AMENITIES.slice(0, 10).map((a) => (
               <button
@@ -134,10 +148,10 @@ export function FilterBottomSheet({ open, onClose, onApply, initialFilters }: Fi
       {/* Footer actions */}
       <div className="sticky bottom-0 p-5 bg-white border-t border-[#E2E8F0] flex gap-3">
         <Button variant="outline" size="md" className="flex-1" onClick={reset}>
-          إعادة تعيين
+          {t("common.clearAll")}
         </Button>
         <Button variant="primary" size="md" className="flex-1" onClick={apply}>
-          عرض النتائج
+          {t("search.filters.apply")}
         </Button>
       </div>
     </BottomSheet>

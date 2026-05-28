@@ -43,7 +43,7 @@ export const OMAN_GOVERNORATES: Governorate[] = [
           { id: "al-sidrah",         nameAr: "السدرة",             nameEn: "Al Sidrah",         wilayatId: "seeb", avgPriceSale: 58000, avgPriceRent: 230 },
           { id: "al-maabilah-south", nameAr: "المعبيلة الجنوبية", nameEn: "Al Maabilah South", wilayatId: "seeb", avgPriceSale: 52000, avgPriceRent: 210 },
           { id: "al-khoud",          nameAr: "الخوض",             nameEn: "Al Khoud",          wilayatId: "seeb", avgPriceSale: 62000, avgPriceRent: 250 },
-          { id: "mabela",            nameAr: "مبيلة",             nameEn: "Mabela",            wilayatId: "seeb", avgPriceSale: 57000, avgPriceRent: 225 },
+          // NOTE: "mabela" (مبيلة) removed — it was a duplicate of "al-maabilah" (المعبيلة) above.
           { id: "al-mawaleh-north",  nameAr: "الموالح الشمالية",  nameEn: "Al Mawaleh North",  wilayatId: "seeb", avgPriceSale: 62000, avgPriceRent: 245 },
           { id: "al-mawaleh-south",  nameAr: "الموالح الجنوبية",  nameEn: "Al Mawaleh South",  wilayatId: "seeb", avgPriceSale: 58000, avgPriceRent: 235 },
         ],
@@ -546,6 +546,14 @@ export const OMAN_GOVERNORATES: Governorate[] = [
         governorateId: "north-sharqiyah",
         areas: [
           { id: "al-qabil-center", nameAr: "وسط القابل", nameEn: "Al Qabil Centre", wilayatId: "al-qabil", avgPriceSale: 20000, avgPriceRent: 80 },
+          // Expanded areas — marked needs-verification in DB (is_verified=false).
+          // Wadi Bani Khalid and Al Suwaiq are NOT listed here:
+          //   - Wadi Bani Khalid is its own wilayat in this same governorate.
+          //   - Al Suwaiq is a wilayat in North Batinah (different governorate).
+          { id: "al-mudayrib", nameAr: "المضيرب", nameEn: "Al Mudayrib", wilayatId: "al-qabil", avgPriceSale: 18000, avgPriceRent: 72 },
+          { id: "al-iz",       nameAr: "عز",       nameEn: "Iz",          wilayatId: "al-qabil", avgPriceSale: 19000, avgPriceRent: 76 },
+          { id: "al-dreez",    nameAr: "الدريز",    nameEn: "Al Dreez",    wilayatId: "al-qabil", avgPriceSale: 17000, avgPriceRent: 68 },
+          { id: "al-hawari",   nameAr: "الهواري",   nameEn: "Al Hawari",   wilayatId: "al-qabil", avgPriceSale: 18000, avgPriceRent: 72 },
         ],
       },
       {

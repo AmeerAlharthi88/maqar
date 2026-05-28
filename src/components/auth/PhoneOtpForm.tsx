@@ -4,17 +4,16 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPhone } from "@/lib/supabase/auth-actions";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
+import { useTranslation } from "@/i18n/useTranslation";
 
 const OMAN_PREFIX = "+968";
 
 function formatPhone(raw: string): string {
-  // Strip everything except digits
   const digits = raw.replace(/\D/g, "");
   return `${OMAN_PREFIX}${digits}`;
 }
 
 function isValidOmaniNumber(digits: string): boolean {
-  // Omani mobile numbers: 7 or 9 digits starting with 7, 9, or occasionally 2
   return /^[79]\d{6,7}$/.test(digits) || /^[23]\d{6,7}$/.test(digits);
 }
 
@@ -22,6 +21,8 @@ export function PhoneOtpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? "/account";
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
 
   const [digits, setDigits] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +40,6 @@ export function PhoneOtpForm() {
 
     const phone = formatPhone(digits);
 
-    // Race signInWithPhone against a 15-second timeout
     const otpTimeout = new Promise<{ error: { message: string } }>(
       (resolve) =>
         setTimeout(
@@ -52,15 +52,17 @@ export function PhoneOtpForm() {
 
     if (authError) {
       if (authError.message === "timeout") {
-        setError("انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وأعد المحاولة.");
+        setError(
+          isAr
+            ? "انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت وأعد المحاولة."
+            : "Connection timed out. Check your internet connection and try again."
+        );
       } else {
-        // Supabase 429: "For security purposes, you can only request this after X seconds."
         const isRateLimitError =
           authError.message?.toLowerCase().includes("security purposes") ||
           authError.message?.toLowerCase().includes("rate limit") ||
           authError.message?.toLowerCase().includes("only request this after");
 
-        // Supabase 422: SMS provider / Twilio / OTP config errors
         const isSmsProviderError =
           authError.message?.toLowerCase().includes("sms") ||
           authError.message?.toLowerCase().includes("provider") ||
@@ -68,21 +70,28 @@ export function PhoneOtpForm() {
           authError.message?.toLowerCase().includes("otp") ||
           authError.message?.toLowerCase().includes("send");
 
-        // Extract wait duration from rate-limit message, e.g. "after 58 seconds"
         const waitMatch = authError.message?.match(/after\s+(\d+)\s+second/i);
         const waitSeconds = waitMatch ? parseInt(waitMatch[1], 10) : null;
 
         if (isRateLimitError) {
           setError(
             waitSeconds && waitSeconds > 5
-              ? `يرجى الانتظار ${waitSeconds} ثانية ثم أعد المحاولة.`
-              : "يرجى الانتظار لحظة ثم أعد المحاولة."
+              ? isAr
+                ? `يرجى الانتظار ${waitSeconds} ثانية ثم أعد المحاولة.`
+                : `Please wait ${waitSeconds} seconds then try again.`
+              : isAr
+                ? "يرجى الانتظار لحظة ثم أعد المحاولة."
+                : "Please wait a moment then try again."
           );
         } else {
           setError(
             isSmsProviderError
-              ? "تعذّر إرسال رمز التحقق. تأكد من إعداد مزود الرسائل أو استخدم رقم اختبار مفعّل."
-              : "تعذّر إرسال رمز التحقق. تحقق من رقم الجوال وأعد المحاولة."
+              ? isAr
+                ? "تعذّر إرسال رمز التحقق. تأكد من إعداد مزود الرسائل أو استخدم رقم اختبار مفعّل."
+                : "Failed to send verification code. Check SMS provider config or use an enabled test number."
+              : isAr
+                ? "تعذّر إرسال رمز التحقق. تحقق من رقم الجوال وأعد المحاولة."
+                : "Failed to send verification code. Check your number and try again."
           );
         }
         if (process.env.NODE_ENV !== "production") {
@@ -98,15 +107,12 @@ export function PhoneOtpForm() {
   }
 
   return (
-    /* Outer: full-height centered container with brand background */
     <div
       className="min-h-[calc(100svh-56px)] flex items-center justify-center px-4 py-10 bg-[#F8F9FA]"
-      dir="rtl"
     >
-      {/* Card: white surface on desktop, transparent on mobile */}
       <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
 
-        {/* Brand logo — mobile only (desktop header already shows logo) */}
+        {/* Brand logo — mobile only */}
         <div className="lg:hidden mb-6">
           <MaqarLogo variant="stacked" size="md" color="brand" />
         </div>
@@ -118,20 +124,19 @@ export function PhoneOtpForm() {
           </svg>
         </div>
 
-        <h1 className="text-2xl font-bold text-[#102A43] mb-1 text-center">أهلاً بك في مقر</h1>
+        <h1 className="text-2xl font-bold text-[#102A43] mb-1 text-center">{t("auth.login.title")}</h1>
         <p className="text-sm text-[#627D98] text-center mb-7 max-w-xs leading-relaxed">
-          أدخل رقم جوالك العُماني وسنرسل لك رمز التحقق فوراً
+          {t("auth.login.subtitle")}
         </p>
 
         <form onSubmit={handleSubmit} className="w-full space-y-4">
           {/* Phone input */}
           <div>
             <label className="block text-xs font-semibold text-[#627D98] mb-1.5">
-              رقم الجوال
+              {t("auth.login.phoneLabel")}
             </label>
             <div className="flex items-center border border-[#E2E8F0] rounded-2xl bg-white overflow-hidden focus-within:border-[#0A3C36] focus-within:shadow-[0_0_0_3px_rgba(10,60,54,0.10)] transition-all">
-              {/* Country prefix — clean text, no emoji flag */}
-              <span className="flex items-center gap-1 px-3 py-3.5 border-l border-[#E2E8F0] shrink-0 bg-[#F8F9FA]">
+              <span className="flex items-center gap-1 px-3 py-3.5 border-e border-[#E2E8F0] shrink-0 bg-[#F8F9FA]">
                 <span className="text-[10px] font-medium text-[#627D98] leading-none">OM</span>
                 <span className="text-sm font-bold text-[#102A43]">+968</span>
               </span>
@@ -139,7 +144,7 @@ export function PhoneOtpForm() {
                 type="tel"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                placeholder="91234567"
+                placeholder={t("auth.login.phonePlaceholder")}
                 value={digits}
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "").slice(0, 8);
@@ -149,10 +154,13 @@ export function PhoneOtpForm() {
                 className="flex-1 py-3.5 px-3 text-sm text-[#102A43] placeholder-[#627D98] bg-transparent outline-none"
                 autoComplete="tel-national"
                 autoFocus
+                dir="ltr"
               />
             </div>
             {digits.length > 0 && !isValid && (
-              <p className="mt-1 text-xs text-[#C0392B]">رقم الجوال غير صحيح</p>
+              <p className="mt-1 text-xs text-[#C0392B]">
+                {t("auth.login.invalidPhone")}
+              </p>
             )}
           </div>
 
@@ -166,7 +174,7 @@ export function PhoneOtpForm() {
             </div>
           )}
 
-          {/* Submit — disabled state uses muted slate, not transparent emerald */}
+          {/* Submit */}
           <button
             type="submit"
             disabled={!isValid || isLoading}
@@ -177,19 +185,23 @@ export function PhoneOtpForm() {
             {isLoading ? (
               <>
                 <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                جاري الإرسال...
+                {t("auth.login.sending")}
               </>
             ) : (
-              "إرسال رمز التحقق"
+              t("auth.login.submit")
             )}
           </button>
         </form>
 
         <p className="mt-6 text-[11px] text-[#627D98] text-center max-w-xs leading-relaxed">
-          بتسجيل دخولك توافق على{" "}
-          <a href="/terms" className="underline hover:text-[#0A3C36]">شروط الاستخدام</a>
-          {" "}و
-          <a href="/privacy" className="underline hover:text-[#0A3C36]">سياسة الخصوصية</a>
+          {t("auth.login.termsText")}{" "}
+          <a href="/terms" className="underline hover:text-[#0A3C36]">
+            {t("auth.login.termsLink")}
+          </a>
+          {t("auth.login.termsAnd")}
+          <a href="/privacy" className="underline hover:text-[#0A3C36]">
+            {t("auth.login.privacyLink")}
+          </a>
         </p>
       </div>
     </div>

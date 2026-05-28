@@ -6,12 +6,11 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MOCK_LISTINGS } from "@/mock/listings";
 import { ListingCardInteractive } from "@/components/real-estate/ListingCardInteractive";
 import { ROUTES } from "@/config/routes";
-import { useLanguageStore } from "@/store/language.store";
+import { useTranslation } from "@/i18n/useTranslation";
 
 export function RecentlyViewedSection() {
   const { items } = useRecentlyViewedStore();
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { t } = useTranslation();
 
   if (items.length === 0) return null;
 
@@ -30,7 +29,7 @@ export function RecentlyViewedSection() {
         size="md"
         action={
           <Link href={ROUTES.recentlyViewed} className="text-xs font-semibold text-[#0A3C36] hover:underline">
-            {isAr ? "الكل" : "All"}
+            {t("common.all")}
           </Link>
         }
         className="mb-4"

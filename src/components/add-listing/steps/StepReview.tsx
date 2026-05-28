@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { PROPERTY_TYPES } from "@/lib/constants/property-types";
 import { LISTING_PURPOSES, FURNISHING_OPTIONS, RENT_PERIODS } from "@/lib/constants/add-listing";
-import { formatOMR, toArabicNumerals } from "@/lib/formatters";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import { QualityScoreCard } from "@/components/add-listing/QualityScoreCard";
 import { AIButton } from "@/components/ai/AIButton";
 import { AILoadingState } from "@/components/ai/AILoadingState";
@@ -39,6 +40,7 @@ const PRIORITY_BADGE: Record<string, string> = {
   low:    "bg-[#F0F4F8] text-[#627D98]",
 };
 const PRIORITY_AR: Record<string, string> = { high: "مهم", medium: "محسّن", low: "اختياري" };
+const PRIORITY_EN: Record<string, string> = { high: "Important", medium: "Improved", low: "Optional" };
 
 export function StepReview({
   draft,
@@ -50,6 +52,9 @@ export function StepReview({
   onTermsChange,
   errors,
 }: StepReviewProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
+
   // AI quality suggestions
   const [qualityResult, setQualityResult] = useState<ListingQualityResponse | null>(null);
   const [qualityLoading, setQualityLoading] = useState(false);
@@ -119,24 +124,47 @@ export function StepReview({
       setDupLoading(false);
     }
   }
-  const purposeLabel = LISTING_PURPOSES.find((p) => p.value === draft.purpose)?.labelAr ?? "—";
+
+  const purposeOpt = LISTING_PURPOSES.find((p) => p.value === draft.purpose);
+  const purposeLabel = isAr ? (purposeOpt?.labelAr ?? "—") : (purposeOpt?.labelEn ?? purposeOpt?.labelAr ?? "—");
+
   const typeConfig = PROPERTY_TYPES.find((t) => t.value === draft.propertyType);
-  const typeLabel = typeConfig?.labelAr ?? "—";
-  const furnishingLabel = FURNISHING_OPTIONS.find((f) => f.value === draft.furnishing)?.labelAr ?? "—";
-  const rentPeriodLabel = RENT_PERIODS.find((r) => r.value === draft.rentPeriod)?.labelAr;
+  const typeLabel = isAr ? (typeConfig?.labelAr ?? "—") : (typeConfig?.labelEn ?? typeConfig?.labelAr ?? "—");
+
+  const furnishOpt = FURNISHING_OPTIONS.find((f) => f.value === draft.furnishing);
+  const furnishingLabel = isAr ? (furnishOpt?.labelAr ?? "—") : (furnishOpt?.labelEn ?? furnishOpt?.labelAr ?? "—");
+
+  const rentPeriodOpt = RENT_PERIODS.find((r) => r.value === draft.rentPeriod);
+  const rentPeriodLabel = isAr
+    ? rentPeriodOpt?.labelAr
+    : (rentPeriodOpt?.labelEn ?? rentPeriodOpt?.labelAr);
 
   const locationParts = [draft.areaAr, draft.wilayatAr, draft.governorateAr].filter(Boolean);
 
   const priceDisplay = draft.price
     ? draft.isPriceHidden
-      ? "مخفي — تواصل للسعر"
-      : `${formatOMR(draft.price, { arabic: true })}${rentPeriodLabel ? ` / ${rentPeriodLabel}` : ""}`
+      ? (isAr ? "مخفي — تواصل للسعر" : "Hidden — contact for price")
+      : `${formatCurrency(draft.price, locale)}${rentPeriodLabel ? ` / ${rentPeriodLabel}` : ""}`
     : "—";
 
   const isLand = draft.propertyType === "land" || draft.propertyType === "farm";
 
+  const publishingRules = isAr
+    ? [
+        "جميع الإعلانات تخضع للمراجعة قبل النشر (١–٢ يوم عمل)",
+        "الإعلانات المخالفة تُوقف فوراً",
+        "السعر الظاهر يجب أن يطابق السعر الفعلي",
+        "يُمنع نشر إعلانات وهمية أو مكررة",
+      ]
+    : [
+        "All listings are reviewed before publication (1–2 business days)",
+        "Listings that violate policies are suspended immediately",
+        "The displayed price must match the actual asking price",
+        "Fake or duplicate listings are prohibited",
+      ];
+
   return (
-    <div className="px-4 py-6 space-y-5" dir="rtl">
+    <div className="px-4 py-6 space-y-5">
 
       {/* Quality score */}
       <QualityScoreCard score={qualityScore} draft={draft} />
@@ -146,18 +174,23 @@ export function StepReview({
         {!qualityResult && !qualityLoading && (
           <AIButton
             onClick={() => void fetchQuality()}
-            label="اقتراحات تحسين الإعلان بالذكاء الاصطناعي"
-            loadingLabel="جاري التحليل..."
+            label={isAr ? "اقتراحات تحسين الإعلان بالذكاء الاصطناعي" : "AI listing improvement suggestions"}
+            loadingLabel={isAr ? "جاري التحليل..." : "Analyzing..."}
             variant="subtle"
-            aria-label="الحصول على اقتراحات الذكاء الاصطناعي لتحسين الإعلان"
+            aria-label={isAr ? "الحصول على اقتراحات الذكاء الاصطناعي لتحسين الإعلان" : "Get AI suggestions to improve listing"}
           />
         )}
-        {qualityLoading && <AILoadingState messageAr="يحلل الذكاء الاصطناعي جودة إعلانك..." compact />}
+        {qualityLoading && (
+          <AILoadingState
+            messageAr={isAr ? "يحلل الذكاء الاصطناعي جودة إعلانك..." : "AI is analyzing your listing quality..."}
+            compact
+          />
+        )}
         {qualityError && !qualityLoading && (
           <AIErrorState errorCode={qualityError} compact onRetry={() => void fetchQuality()} />
         )}
         {qualityResult && !qualityLoading && (
-          <AIResultCard isMockFallback={qualityResult.isMockFallback} title="اقتراحات التحسين">
+          <AIResultCard isMockFallback={qualityResult.isMockFallback} title={isAr ? "اقتراحات التحسين" : "Improvement suggestions"}>
             {qualityResult.overallFeedbackAr && (
               <p className="text-xs text-[#102A43] leading-relaxed mb-3">{qualityResult.overallFeedbackAr}</p>
             )}
@@ -166,14 +199,16 @@ export function StepReview({
                 {qualityResult.suggestions.map((s, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className={["text-[10px] font-semibold px-2 py-0.5 rounded-lg flex-shrink-0 mt-0.5", PRIORITY_BADGE[s.priority] ?? "bg-[#F0F4F8] text-[#627D98]"].join(" ")}>
-                      {s.categoryAr} · {PRIORITY_AR[s.priority] ?? s.priority}
+                      {s.categoryAr} · {(isAr ? PRIORITY_AR : PRIORITY_EN)[s.priority] ?? s.priority}
                     </span>
                     <p className="text-xs text-[#627D98] leading-relaxed">{s.suggestionAr}</p>
                   </div>
                 ))}
               </div>
             )}
-            <button onClick={() => setQualityResult(null)} className="mt-2 text-[10px] text-[#627D98] underline underline-offset-2">إغلاق</button>
+            <button onClick={() => setQualityResult(null)} className="mt-2 text-[10px] text-[#627D98] underline underline-offset-2">
+              {t("common.close")}
+            </button>
           </AIResultCard>
         )}
       </div>
@@ -184,18 +219,23 @@ export function StepReview({
           {!dupResult && !dupLoading && (
             <AIButton
               onClick={() => void fetchDupRisk()}
-              label="تحليل خطر التكرار بالذكاء الاصطناعي"
-              loadingLabel="جاري التحليل..."
+              label={isAr ? "تحليل خطر التكرار بالذكاء الاصطناعي" : "AI duplicate risk analysis"}
+              loadingLabel={isAr ? "جاري التحليل..." : "Analyzing..."}
               variant="subtle"
-              aria-label="تحليل خطر تكرار الإعلان"
+              aria-label={isAr ? "تحليل خطر تكرار الإعلان" : "Analyze listing duplicate risk"}
             />
           )}
-          {dupLoading && <AILoadingState messageAr="يحلل الذكاء الاصطناعي احتمال التكرار..." compact />}
+          {dupLoading && (
+            <AILoadingState
+              messageAr={isAr ? "يحلل الذكاء الاصطناعي احتمال التكرار..." : "AI is analyzing duplication probability..."}
+              compact
+            />
+          )}
           {dupError && !dupLoading && (
             <AIErrorState errorCode={dupError} compact onRetry={() => void fetchDupRisk()} />
           )}
           {dupResult && !dupLoading && (
-            <AIResultCard isMockFallback={dupResult.isMockFallback} title="تحليل التكرار">
+            <AIResultCard isMockFallback={dupResult.isMockFallback} title={isAr ? "تحليل التكرار" : "Duplicate analysis"}>
               {dupResult.summaryAr && <p className="text-xs text-[#102A43] mb-2 leading-relaxed">{dupResult.summaryAr}</p>}
               {dupResult.similarFieldsAr && dupResult.similarFieldsAr.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-2">
@@ -207,7 +247,9 @@ export function StepReview({
               {dupResult.recommendedActionAr && (
                 <p className="text-xs text-[#627D98] font-semibold">{dupResult.recommendedActionAr}</p>
               )}
-              <button onClick={() => setDupResult(null)} className="mt-2 text-[10px] text-[#627D98] underline underline-offset-2">إغلاق</button>
+              <button onClick={() => setDupResult(null)} className="mt-2 text-[10px] text-[#627D98] underline underline-offset-2">
+                {t("common.close")}
+              </button>
             </AIResultCard>
           )}
         </div>
@@ -220,9 +262,13 @@ export function StepReview({
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
           </svg>
           <div>
-            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">إعلان مشابه محتمل</p>
+            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
+              {isAr ? "إعلان مشابه محتمل" : "Possible similar listing"}
+            </p>
             <p className="text-xs text-[#627D98]">
-              قد يكون هذا الإعلان مشابهاً لإعلان موجود في نفس المنطقة. يمكنك المتابعة وسيراجعه فريق مقر.
+              {isAr
+                ? "قد يكون هذا الإعلان مشابهاً لإعلان موجود في نفس المنطقة. يمكنك المتابعة وسيراجعه فريق مقر."
+                : "This listing may be similar to an existing one in the same area. You may proceed and the Maqar team will review it."}
             </p>
           </div>
         </div>
@@ -236,7 +282,9 @@ export function StepReview({
             <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
           <div>
-            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">ملاحظة حول السعر</p>
+            <p className="text-xs font-semibold text-[#C8860A] mb-0.5">
+              {isAr ? "ملاحظة حول السعر" : "Price note"}
+            </p>
             <p className="text-xs text-[#627D98]">{suspiciousMessage}</p>
           </div>
         </div>
@@ -245,58 +293,83 @@ export function StepReview({
       {/* Summary sections */}
       <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
         <div className="px-4 py-3 bg-[#F0F4F8] border-b border-[#E2E8F0]">
-          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">ملخص الإعلان</p>
+          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">
+            {isAr ? "ملخص الإعلان" : "Listing summary"}
+          </p>
         </div>
         <div className="px-4">
-          <ReviewRow label="الغرض" value={purposeLabel} />
-          <ReviewRow label="النوع" value={typeLabel} />
-          <ReviewRow label="العنوان" value={draft.titleAr || "—"} />
-          <ReviewRow label="السعر" value={priceDisplay} />
-          <ReviewRow label="الموقع" value={locationParts.join(" › ") || "—"} />
+          <ReviewRow label={isAr ? "الغرض" : "Purpose"} value={purposeLabel} />
+          <ReviewRow label={isAr ? "النوع" : "Type"} value={typeLabel} />
+          <ReviewRow label={isAr ? "العنوان" : "Title"} value={draft.titleAr || "—"} />
+          <ReviewRow label={isAr ? "السعر" : "Price"} value={priceDisplay} />
+          <ReviewRow label={isAr ? "الموقع" : "Location"} value={locationParts.join(" › ") || "—"} />
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
         <div className="px-4 py-3 bg-[#F0F4F8] border-b border-[#E2E8F0]">
-          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">المواصفات</p>
+          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">
+            {isAr ? "المواصفات" : "Specifications"}
+          </p>
         </div>
         <div className="px-4">
           {!isLand && (
             <>
-              <ReviewRow label="غرف النوم" value={draft.bedrooms !== null ? toArabicNumerals(draft.bedrooms) : "—"} />
-              <ReviewRow label="الحمامات" value={draft.bathrooms !== null ? toArabicNumerals(draft.bathrooms) : "—"} />
+              <ReviewRow
+                label={isAr ? "غرف النوم" : "Bedrooms"}
+                value={draft.bedrooms !== null ? formatNumber(draft.bedrooms, locale) : "—"}
+              />
+              <ReviewRow
+                label={isAr ? "الحمامات" : "Bathrooms"}
+                value={draft.bathrooms !== null ? formatNumber(draft.bathrooms, locale) : "—"}
+              />
             </>
           )}
-          <ReviewRow label="المساحة" value={draft.area ? `${toArabicNumerals(draft.area)} م²` : "—"} />
-          {draft.floors ? <ReviewRow label="الطوابق" value={toArabicNumerals(draft.floors)} /> : null}
-          {!isLand && <ReviewRow label="الأثاث" value={furnishingLabel} />}
+          <ReviewRow
+            label={isAr ? "المساحة" : "Area"}
+            value={draft.area ? `${formatNumber(draft.area, locale)} م²` : "—"}
+          />
+          {draft.floors ? (
+            <ReviewRow
+              label={isAr ? "الطوابق" : "Floors"}
+              value={formatNumber(draft.floors, locale)}
+            />
+          ) : null}
+          {!isLand && (
+            <ReviewRow label={isAr ? "الأثاث" : "Furnishing"} value={furnishingLabel} />
+          )}
         </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden">
         <div className="px-4 py-3 bg-[#F0F4F8] border-b border-[#E2E8F0]">
-          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">الوسائط والوثائق</p>
+          <p className="text-xs font-bold text-[#627D98] uppercase tracking-wide">
+            {isAr ? "الوسائط والوثائق" : "Media & documents"}
+          </p>
         </div>
         <div className="px-4">
-          <ReviewRow label="الصور" value={toArabicNumerals(draft.images.length)} />
           <ReviewRow
-            label="وثائق مرفقة"
-            value={toArabicNumerals(draft.documents.filter((d) => d.file || d.referenceNumber).length)}
+            label={isAr ? "الصور" : "Photos"}
+            value={formatNumber(draft.images.length, locale)}
           />
-          <ReviewRow label="التحقق المطلوب" value={draft.requestVerification ? "نعم" : "لا"} />
+          <ReviewRow
+            label={isAr ? "وثائق مرفقة" : "Attached docs"}
+            value={formatNumber(draft.documents.filter((d) => d.file || d.referenceNumber).length, locale)}
+          />
+          <ReviewRow
+            label={isAr ? "التحقق المطلوب" : "Verification requested"}
+            value={draft.requestVerification ? (isAr ? "نعم" : "Yes") : (isAr ? "لا" : "No")}
+          />
         </div>
       </div>
 
       {/* Publishing rules */}
       <div className="bg-[#F0F4F8] rounded-2xl px-4 py-4">
-        <p className="text-xs font-semibold text-[#627D98] mb-2">قواعد النشر في مقر</p>
+        <p className="text-xs font-semibold text-[#627D98] mb-2">
+          {isAr ? "قواعد النشر في مقر" : "Maqar publishing rules"}
+        </p>
         <ul className="space-y-1.5">
-          {[
-            "جميع الإعلانات تخضع للمراجعة قبل النشر (١–٢ يوم عمل)",
-            "الإعلانات المخالفة تُوقف فوراً",
-            "السعر الظاهر يجب أن يطابق السعر الفعلي",
-            "يُمنع نشر إعلانات وهمية أو مكررة",
-          ].map((rule, i) => (
+          {publishingRules.map((rule, i) => (
             <li key={i} className="flex items-start gap-2 text-xs text-[#627D98]">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#627D98" strokeWidth="2.5" className="flex-shrink-0 mt-0.5">
                 <path d="M20 6L9 17l-5-5" />
@@ -310,7 +383,7 @@ export function StepReview({
       {/* Terms acceptance */}
       <button
         onClick={() => onTermsChange(!termsAccepted)}
-        className="w-full flex items-start gap-3 text-right"
+        className="w-full flex items-start gap-3 text-start"
         role="checkbox"
         aria-checked={termsAccepted}
       >
@@ -326,9 +399,19 @@ export function StepReview({
           )}
         </div>
         <span className="text-sm text-[#102A43] leading-relaxed">
-          أوافق على{" "}
-          <span className="text-[#0A3C36] font-semibold">شروط النشر في مقر</span>
-          {" "}وأؤكد أن المعلومات المقدمة صحيحة ودقيقة
+          {isAr ? (
+            <>
+              أوافق على{" "}
+              <span className="text-[#0A3C36] font-semibold">شروط النشر في مقر</span>
+              {" "}وأؤكد أن المعلومات المقدمة صحيحة ودقيقة
+            </>
+          ) : (
+            <>
+              I agree to{" "}
+              <span className="text-[#0A3C36] font-semibold">Maqar&apos;s publishing terms</span>
+              {" "}and confirm that the information provided is accurate
+            </>
+          )}
         </span>
       </button>
       {errors.terms && <p className="text-xs text-[#C0392B]">{errors.terms}</p>}

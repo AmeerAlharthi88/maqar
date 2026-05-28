@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface OfflineBannerProps {
   /** Where to render the banner — defaults to "top" */
@@ -14,13 +15,14 @@ interface OfflineBannerProps {
 
 export function OfflineBanner({ position = "top" }: OfflineBannerProps) {
   const isOnline = useOnlineStatus();
+  const { t } = useTranslation();
 
   if (isOnline) return null;
 
   const posClass =
     position === "top"
-      ? "top-0 left-0 right-0"
-      : "bottom-0 left-0 right-0";
+      ? "top-0 start-0 end-0"
+      : "bottom-0 start-0 end-0";
 
   return (
     <div
@@ -47,7 +49,7 @@ export function OfflineBanner({ position = "top" }: OfflineBannerProps) {
         <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
         <line x1="12" y1="20" x2="12.01" y2="20" strokeWidth="3" strokeLinecap="round" />
       </svg>
-      أنت غير متصل بالإنترنت — بعض الميزات محدودة
+      {t("pwa.offline.title")} — {t("pwa.offline.description")}
     </div>
   );
 }

@@ -1,17 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import { ROUTES } from "@/config/routes";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n/useTranslation";
 
 function CTACard({
   href,
-  titleAr,
-  descriptionAr,
+  title,
+  description,
+  cta,
   accentColor,
   icon,
 }: {
   href: string;
-  titleAr: string;
-  descriptionAr: string;
+  title: string;
+  description: string;
+  cta: string;
   accentColor: string;
   icon: React.ReactNode;
 }) {
@@ -31,24 +36,27 @@ function CTACard({
         {icon}
       </div>
       <div>
-        <p className="text-sm font-bold text-[#102A43]">{titleAr}</p>
-        <p className="text-xs text-[#627D98] mt-0.5 leading-relaxed">{descriptionAr}</p>
+        <p className="text-sm font-bold text-[#102A43]">{title}</p>
+        <p className="text-xs text-[#627D98] mt-0.5 leading-relaxed">{description}</p>
       </div>
       <span className="text-xs font-semibold" style={{ color: accentColor }}>
-        ابدأ الآن ←
+        {cta}
       </span>
     </Link>
   );
 }
 
 export function HomeCTABanner() {
+  const { t } = useTranslation();
+
   return (
     <section className="px-4 py-5">
       <div className="flex gap-3">
         <CTACard
           href={ROUTES.addListing}
-          titleAr="أضف عقارك"
-          descriptionAr="انشر إعلانك وتواصل مع المشترين مباشرة"
+          title={t("home.cta.addProperty")}
+          description={t("home.cta.addPropertyDesc")}
+          cta={t("home.cta.addPropertyCTA")}
           accentColor="#0A3C36"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -58,8 +66,9 @@ export function HomeCTABanner() {
         />
         <CTACard
           href={ROUTES.map}
-          titleAr="تصفح الخريطة"
-          descriptionAr="استكشف العقارات على خريطة تفاعلية"
+          title={t("home.cta.browseMap")}
+          description={t("home.cta.browseMapDesc")}
+          cta={t("home.cta.browseMapCTA")}
           accentColor="#1A5C54"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

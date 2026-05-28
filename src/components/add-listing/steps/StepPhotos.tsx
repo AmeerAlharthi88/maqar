@@ -3,7 +3,8 @@
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { IMAGE_CONSTRAINTS } from "@/lib/constants/add-listing";
-import { toArabicNumerals } from "@/lib/formatters";
+import { formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ListingDraft, UploadedFile } from "@/types/listing-draft";
 
 interface StepPhotosProps {
@@ -17,6 +18,8 @@ function generateFileId(): string {
 }
 
 export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleFiles(fileList: FileList | null) {
@@ -70,13 +73,15 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
   const canAddMore = draft.images.length < IMAGE_CONSTRAINTS.maxCount;
 
   return (
-    <div className="px-4 py-6 space-y-5" dir="rtl">
+    <div className="px-4 py-6 space-y-5">
       <div className="flex items-center justify-between">
         <p className="text-sm text-[#627D98]">
-          أضف حتى {toArabicNumerals(IMAGE_CONSTRAINTS.maxCount)} صورة بصيغة JPG أو PNG أو WebP (٨ ميغابايت لكل صورة).
+          {isAr
+            ? `أضف حتى ${formatNumber(IMAGE_CONSTRAINTS.maxCount, locale)} صورة بصيغة JPG أو PNG أو WebP (٨ ميغابايت لكل صورة).`
+            : `Add up to ${formatNumber(IMAGE_CONSTRAINTS.maxCount, locale)} photos in JPG, PNG or WebP format (8 MB each).`}
         </p>
         <span className="text-xs font-semibold text-[#627D98] flex-shrink-0 ms-2">
-          {toArabicNumerals(draft.images.length)} / {toArabicNumerals(IMAGE_CONSTRAINTS.maxCount)}
+          {formatNumber(draft.images.length, locale)} / {formatNumber(IMAGE_CONSTRAINTS.maxCount, locale)}
         </span>
       </div>
 
@@ -85,7 +90,7 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
         <button
           onClick={() => fileInputRef.current?.click()}
           className="w-full border-2 border-dashed border-[#E2E8F0] rounded-2xl py-8 flex flex-col items-center gap-3 bg-[#F8F9FA] active:bg-[#F0F4F8] transition-colors"
-          aria-label="رفع صور"
+          aria-label={t("addListing.photos.addMore")}
         >
           <div className="w-12 h-12 rounded-full bg-[#E6F0EF] flex items-center justify-center">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.5">
@@ -95,8 +100,12 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
             </svg>
           </div>
           <div className="text-center">
-            <p className="text-sm font-semibold text-[#102A43]">اضغط لاختيار الصور</p>
-            <p className="text-xs text-[#627D98]">أو اسحب وأفلت الصور هنا</p>
+            <p className="text-sm font-semibold text-[#102A43]">
+              {isAr ? "اضغط لاختيار الصور" : "Tap to choose photos"}
+            </p>
+            <p className="text-xs text-[#627D98]">
+              {isAr ? "أو اسحب وأفلت الصور هنا" : "or drag and drop here"}
+            </p>
           </div>
         </button>
       )}
@@ -126,7 +135,7 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
       {draft.images.length > 0 && (
         <div>
           <p className="text-xs font-semibold text-[#627D98] mb-2">
-            اضغط على أي صورة لتعيينها كصورة رئيسية
+            {isAr ? "اضغط على أي صورة لتعيينها كصورة رئيسية" : "Tap any photo to set it as the main image"}
           </p>
           <div className="grid grid-cols-3 gap-2">
             {draft.images.map((img) => (
@@ -153,7 +162,7 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
                 {/* Main badge */}
                 {img.isMain && (
                   <div className="absolute top-1 start-1 bg-[#0A3C36] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                    رئيسية
+                    {t("addListing.photos.isMain")}
                   </div>
                 )}
 
@@ -162,10 +171,10 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
                   <button
                     onClick={() => setMain(img.id)}
                     className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 active:opacity-100 flex items-center justify-center transition-opacity"
-                    aria-label="تعيين كصورة رئيسية"
+                    aria-label={t("addListing.photos.setMain")}
                   >
                     <span className="bg-white/90 text-[#102A43] text-[10px] font-semibold px-2 py-1 rounded-full">
-                      تعيين رئيسية
+                      {t("addListing.photos.setMain")}
                     </span>
                   </button>
                 )}
@@ -174,7 +183,7 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
                 <button
                   onClick={() => removeImage(img.id)}
                   className="absolute top-1 end-1 w-6 h-6 rounded-full bg-black/60 flex items-center justify-center"
-                  aria-label="حذف الصورة"
+                  aria-label={t("addListing.photos.remove")}
                 >
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
                     <path d="M18 6 6 18M6 6l12 12" />
@@ -188,9 +197,13 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
 
       {/* Video / 360 tour */}
       <section className="space-y-3">
-        <h3 className="text-sm font-bold text-[#102A43]">وسائط إضافية (اختياري)</h3>
+        <h3 className="text-sm font-bold text-[#102A43]">
+          {isAr ? "وسائط إضافية (اختياري)" : "Additional media (optional)"}
+        </h3>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-[#627D98]">رابط فيديو (YouTube / Vimeo)</label>
+          <label className="text-xs font-medium text-[#627D98]">
+            {t("addListing.photos.videoLink")}
+          </label>
           <input
             type="url"
             inputMode="url"
@@ -202,7 +215,9 @@ export function StepPhotos({ draft, onChange, errors }: StepPhotosProps) {
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-medium text-[#627D98]">رابط الجولة الافتراضية 360°</label>
+          <label className="text-xs font-medium text-[#627D98]">
+            {t("addListing.photos.tourLink")}
+          </label>
           <input
             type="url"
             inputMode="url"

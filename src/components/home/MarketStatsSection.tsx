@@ -2,8 +2,8 @@
 
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatCard } from "@/components/ui/StatCard";
-import { formatOMR, toArabicNumerals } from "@/lib/formatters";
-import { useLanguageStore } from "@/store/language.store";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { MarketOverview } from "@/mock/market-stats";
 
 interface MarketStatsSectionProps {
@@ -11,20 +11,21 @@ interface MarketStatsSectionProps {
 }
 
 export function MarketStatsSection({ overview }: MarketStatsSectionProps) {
-  const { locale } = useLanguageStore();
-  const isAr = locale === "ar";
+  const { locale } = useTranslation();
 
-  const avgSaleFormatted = formatOMR(overview.avgSalePriceMuscat, { compact: true, arabic: isAr });
-  const avgRentFormatted = formatOMR(overview.avgRentPriceMuscat, { arabic: isAr });
-  const totalListings = isAr
-    ? toArabicNumerals(overview.totalListings.toLocaleString())
-    : overview.totalListings.toLocaleString();
+  const avgSaleFormatted = formatCurrency(overview.avgSalePriceMuscat, locale, { compact: true });
+  const avgRentFormatted = formatCurrency(overview.avgRentPriceMuscat, locale);
+  const totalListings = formatNumber(overview.totalListings, locale);
+  // perMonth suffix — use locale-aware abbreviation
+  const perMonth = locale === "ar" ? "/ شهر" : "/ mo";
 
   return (
     <section className="px-4 py-5">
       <SectionHeader
-        titleAr={isAr ? "إحصاءات السوق" : "Market Statistics"}
-        subtitleAr={isAr ? "بيانات سوق العقارات العُماني — مسقط" : "Oman real estate market data — Muscat"}
+        titleAr="إحصاءات السوق"
+        titleEn="Market Statistics"
+        subtitleAr="بيانات سوق العقارات العُماني — مسقط"
+        subtitleEn="Oman real estate market data — Muscat"
         size="md"
         className="mb-4"
       />
@@ -46,7 +47,7 @@ export function MarketStatsSection({ overview }: MarketStatsSectionProps) {
         <StatCard
           labelAr="متوسط الإيجار الشهري"
           labelEn="Avg. Monthly Rent"
-          value={isAr ? `${avgRentFormatted} / شهر` : `${avgRentFormatted} / mo`}
+          value={`${avgRentFormatted} ${perMonth}`}
           change={{ pct: 3.2, direction: "up" }}
           icon={
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -73,7 +74,7 @@ export function MarketStatsSection({ overview }: MarketStatsSectionProps) {
         <StatCard
           labelAr="متوسط العائد الاستثماري"
           labelEn="Avg. Investment ROI"
-          value="٦٫٢٪"
+          value={`${formatNumber(6.2, locale)}%`}
           change={{ pct: 0.8, direction: "up" }}
           icon={
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n/useTranslation";
 
 type ToastType = "success" | "error" | "warning" | "info";
 
@@ -22,10 +23,12 @@ const typeConfig: Record<ToastType, { bg: string; border: string; icon: string; 
 };
 
 export function Toast({ open, onClose, type = "info", title, description, duration = 4000 }: ToastProps) {
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (!open) return;
-    const t = setTimeout(onClose, duration);
-    return () => clearTimeout(t);
+    const timer = setTimeout(onClose, duration);
+    return () => clearTimeout(timer);
   }, [open, duration, onClose]);
 
   if (!open) return null;
@@ -54,7 +57,7 @@ export function Toast({ open, onClose, type = "info", title, description, durati
         </div>
         <button
           onClick={onClose}
-          aria-label="إغلاق"
+          aria-label={t("common.close")}
           className="flex-shrink-0 text-[#627D98] hover:text-[#102A43] transition-colors"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

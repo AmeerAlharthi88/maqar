@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { verifyPhoneOtp, signInWithPhone } from "@/lib/supabase/auth-actions";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { useAuthStore } from "@/store/auth.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { AppRole } from "@/config/roles";
 
 const OTP_LENGTH = 6;
@@ -15,6 +16,8 @@ export function OtpVerificationForm() {
   const searchParams = useSearchParams();
   const phone = searchParams.get("phone") ?? "";
   const redirectTo = searchParams.get("redirectTo") ?? "/account";
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
 
   const { setUser, setProfile } = useAuthStore();
 
@@ -27,8 +30,8 @@ export function OtpVerificationForm() {
   // Countdown timer for resend
   useEffect(() => {
     if (cooldown <= 0) return;
-    const t = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setCooldown((c) => Math.max(0, c - 1)), 1000);
+    return () => clearInterval(timer);
   }, [cooldown]);
 
   const focusInput = useCallback((index: number) => {
@@ -46,7 +49,6 @@ export function OtpVerificationForm() {
       focusInput(index + 1);
     }
 
-    // Auto-submit when all filled
     if (char && next.every((d) => d !== "")) {
       submit(next.join(""));
     }
@@ -76,16 +78,14 @@ export function OtpVerificationForm() {
     setIsVerifying(true);
     setError(null);
 
-    // Race verifyOtp against a 15-second timeout — Supabase can hang on slow networks
+    const timeoutMsg = isAr
+      ? "انتهت مهلة التحقق (١٥ ثانية). تحقق من اتصالك بالإنترنت وأعد المحاولة."
+      : "Verification timed out (15s). Check your internet connection and try again.";
+
     const verifyTimeout = new Promise<{ user: null; session: null; error: { message: string } }>(
       (resolve) =>
         setTimeout(
-          () =>
-            resolve({
-              user: null,
-              session: null,
-              error: { message: "انتهت مهلة التحقق (١٥ ثانية). تحقق من اتصالك بالإنترنت وأعد المحاولة." },
-            }),
+          () => resolve({ user: null, session: null, error: { message: timeoutMsg } }),
           15_000
         )
     );
@@ -97,9 +97,12 @@ export function OtpVerificationForm() {
 
     if (authError || !user) {
       setError(
-        authError?.message.startsWith("انتهت مهلة")
+        authError?.message.startsWith("انتهت مهلة") ||
+        authError?.message.startsWith("Verification timed out")
           ? authError.message
-          : "رمز التحقق غير صحيح أو منتهي الصلاحية. حاول مرة أخرى."
+          : isAr
+            ? "رمز التحقق غير صحيح أو منتهي الصلاحية. حاول مرة أخرى."
+            : "Invalid or expired verification code. Please try again."
       );
       setDigits(Array(OTP_LENGTH).fill(""));
       focusInput(0);
@@ -107,7 +110,6 @@ export function OtpVerificationForm() {
       return;
     }
 
-    // Sync user to store
     const meta = user.user_metadata ?? {};
     setUser({
       id: user.id,
@@ -119,12 +121,10 @@ export function OtpVerificationForm() {
       avatarUrl: meta.avatar_url as string | undefined,
     });
 
-    // Fetch profile with timeout — non-blocking if Supabase is slow
     const profileTimeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 8_000));
     const profile = await Promise.race([getCurrentProfile(), profileTimeout]);
     setProfile(profile);
 
-    // Redirect: to onboarding if not completed, else to redirectTo
     if (!profile?.onboardingCompleted) {
       const params = new URLSearchParams({ redirectTo });
       router.replace(`/auth/onboarding?${params.toString()}`);
@@ -147,98 +147,94 @@ export function OtpVerificationForm() {
   return (
     <div
       className="min-h-[calc(100svh-56px)] flex items-center justify-center px-4 py-10 bg-[#F8F9FA]"
-      dir="rtl"
     >
       <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
-      {/* Icon */}
-      <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8">
-          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-          <line x1="12" y1="18" x2="12.01" y2="18" />
-        </svg>
-      </div>
-
-      <h1 className="text-2xl font-bold text-[#102A43] mb-1">أدخل رمز التحقق</h1>
-      <p className="text-sm text-[#627D98] text-center mb-2 max-w-xs leading-relaxed">
-        أرسلنا رمزاً مكوناً من 6 أرقام إلى
-      </p>
-      <p className="text-sm font-bold text-[#102A43] mb-8" dir="ltr">
-        {maskedPhone || phone}
-      </p>
-
-      {/* OTP inputs */}
-      <div className="flex gap-2 mb-6" dir="ltr" onPaste={handlePaste}>
-        {digits.map((d, i) => (
-          <input
-            key={i}
-            ref={(el) => { inputRefs.current[i] = el; }}
-            type="text"
-            inputMode="numeric"
-            maxLength={1}
-            value={d}
-            onChange={(e) => handleChange(i, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(i, e)}
-            className={[
-              "w-11 h-14 text-center text-xl font-bold rounded-2xl border-2 bg-white outline-none transition-colors",
-              d
-                ? "border-[#0A3C36] text-[#0A3C36]"
-                : "border-[#E2E8F0] text-[#102A43]",
-              "focus:border-[#0A3C36]",
-            ].join(" ")}
-            autoComplete="one-time-code"
-            autoFocus={i === 0}
-          />
-        ))}
-      </div>
-
-      {/* Error */}
-      {error && (
-        <div className="w-full max-w-xs bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3 mb-4">
-          <p className="text-xs text-[#C0392B] text-center">{error}</p>
+        {/* Icon */}
+        <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+            <line x1="12" y1="18" x2="12.01" y2="18" />
+          </svg>
         </div>
-      )}
 
-      {/* Verify button (for manual submit if auto-submit didn't fire) */}
-      {digits.every((d) => d !== "") && !isVerifying && (
-        <button
-          onClick={() => submit(digits.join(""))}
-          className="w-full max-w-xs py-3.5 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm mb-4 hover:bg-[#082E29]"
-        >
-          تحقق
-        </button>
-      )}
+        <h1 className="text-2xl font-bold text-[#102A43] mb-1">{t("auth.otp.title")}</h1>
+        <p className="text-sm text-[#627D98] text-center mb-2 max-w-xs leading-relaxed">
+          {t("auth.otp.subtitle", { phone: maskedPhone || phone })}
+        </p>
 
-      {isVerifying && (
-        <div className="flex items-center gap-2 text-sm text-[#627D98] mb-4">
-          <span className="w-4 h-4 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
-          جاري التحقق...
+        {/* OTP inputs */}
+        <div className="flex gap-2 mb-6" dir="ltr" onPaste={handlePaste}>
+          {digits.map((d, i) => (
+            <input
+              key={i}
+              ref={(el) => { inputRefs.current[i] = el; }}
+              type="text"
+              inputMode="numeric"
+              maxLength={1}
+              value={d}
+              onChange={(e) => handleChange(i, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(i, e)}
+              className={[
+                "w-11 h-14 text-center text-xl font-bold rounded-2xl border-2 bg-white outline-none transition-colors",
+                d
+                  ? "border-[#0A3C36] text-[#0A3C36]"
+                  : "border-[#E2E8F0] text-[#102A43]",
+                "focus:border-[#0A3C36]",
+              ].join(" ")}
+              aria-label={`${t("auth.otp.digitLabel")} ${i + 1}`}
+              autoComplete="one-time-code"
+              autoFocus={i === 0}
+            />
+          ))}
         </div>
-      )}
 
-      {/* Resend */}
-      <div className="text-center">
-        {cooldown > 0 ? (
-          <p className="text-xs text-[#627D98]">
-            إعادة الإرسال بعد{" "}
-            <span className="font-bold text-[#102A43]">{cooldown}</span> ثانية
-          </p>
-        ) : (
+        {/* Error */}
+        {error && (
+          <div className="w-full max-w-xs bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3 mb-4">
+            <p className="text-xs text-[#C0392B] text-center">{error}</p>
+          </div>
+        )}
+
+        {/* Verify button */}
+        {digits.every((d) => d !== "") && !isVerifying && (
           <button
-            onClick={handleResend}
-            className="text-xs font-semibold text-[#0A3C36] underline"
+            onClick={() => submit(digits.join(""))}
+            className="w-full max-w-xs py-3.5 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm mb-4 hover:bg-[#082E29]"
           >
-            إعادة إرسال الرمز
+            {t("auth.otp.verify")}
           </button>
         )}
-      </div>
 
-      {/* Change phone */}
-      <button
-        onClick={() => router.back()}
-        className="mt-6 text-xs text-[#627D98] underline"
-      >
-        تغيير رقم الجوال
-      </button>
+        {isVerifying && (
+          <div className="flex items-center gap-2 text-sm text-[#627D98] mb-4">
+            <span className="w-4 h-4 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
+            {t("auth.otp.verifying")}
+          </div>
+        )}
+
+        {/* Resend */}
+        <div className="text-center">
+          {cooldown > 0 ? (
+            <p className="text-xs text-[#627D98]">
+              {t("auth.otp.resendIn", { seconds: String(cooldown) })}
+            </p>
+          ) : (
+            <button
+              onClick={handleResend}
+              className="text-xs font-semibold text-[#0A3C36] underline"
+            >
+              {t("auth.otp.resend")}
+            </button>
+          )}
+        </div>
+
+        {/* Change phone */}
+        <button
+          onClick={() => router.back()}
+          className="mt-6 text-xs text-[#627D98] underline"
+        >
+          {t("auth.otp.changePhone")}
+        </button>
       </div>
     </div>
   );

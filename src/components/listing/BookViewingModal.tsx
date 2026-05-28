@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Input } from "@/components/ui/Input";
 import { createAppointment } from "@/lib/supabase/crm";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 
 interface BookViewingModalProps {
@@ -14,15 +15,25 @@ interface BookViewingModalProps {
   agentId: string;  // listing.agentId
 }
 
-const TIME_SLOTS = [
+const TIME_SLOTS_AR = [
   "٩:٠٠ ص", "١٠:٠٠ ص", "١١:٠٠ ص",
   "١٢:٠٠ م", "٢:٠٠ م", "٤:٠٠ م",
   "٥:٠٠ م", "٦:٠٠ م",
 ];
 
+const TIME_SLOTS_EN = [
+  "9:00 AM", "10:00 AM", "11:00 AM",
+  "12:00 PM", "2:00 PM",  "4:00 PM",
+  "5:00 PM",  "6:00 PM",
+];
+
 type Step = "form" | "success";
 
 export function BookViewingModal({ open, onClose, listing, userId, agentId }: BookViewingModalProps) {
+  const { t, locale, dir } = useTranslation();
+  const isAr = locale === "ar";
+  const timeSlots = isAr ? TIME_SLOTS_AR : TIME_SLOTS_EN;
+
   const [step, setStep] = useState<Step>("form");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,13 +45,17 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
 
   function validate() {
     const e: Record<string, string> = {};
-    if (!name.trim()) e.name = "الاسم مطلوب";
-    if (!phone.trim()) e.phone = "رقم الهاتف مطلوب";
+    if (!name.trim())
+      e.name = isAr ? "الاسم مطلوب" : "Name is required";
+    if (!phone.trim())
+      e.phone = isAr ? "رقم الهاتف مطلوب" : "Phone number is required";
     else if (!/^\+?9689\d{7}$/.test(phone.replace(/\s/g, ""))) {
-      e.phone = "رقم عُماني غير صحيح (مثال: +96891234567)";
+      e.phone = isAr ? "رقم عُماني غير صحيح (مثال: +96891234567)" : "Invalid Omani number (e.g. +96891234567)";
     }
-    if (!date) e.date = "التاريخ مطلوب";
-    if (!time) e.time = "يرجى اختيار وقت";
+    if (!date)
+      e.date = isAr ? "التاريخ مطلوب" : "Date is required";
+    if (!time)
+      e.time = isAr ? "يرجى اختيار وقت" : "Please select a time";
     return e;
   }
 
@@ -51,7 +66,6 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
 
     setSubmitting(true);
     if (userId) {
-      // Authenticated — insert into Supabase; navigate to success regardless of outcome
       await createAppointment({
         listingId: listing.id,
         agentId,
@@ -63,7 +77,6 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
         notes: notes.trim() || undefined,
       }).catch((err) => console.error("[BookViewing] createAppointment error:", err));
     } else {
-      // Dev bypass / guest fallback
       await new Promise((r) => setTimeout(r, 800));
     }
     setSubmitting(false);
@@ -80,9 +93,10 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
 
   // Min date: today
   const today = new Date().toISOString().split("T")[0];
+  const listingTitle = isAr ? listing.titleAr : (listing.titleEn ?? listing.titleAr);
 
   return (
-    <BottomSheet open={open} onClose={handleClose} title="حجز موعد معاينة">
+    <BottomSheet open={open} onClose={handleClose} title={t("listing.actions.bookViewing")}>
       {step === "success" ? (
         <div className="flex flex-col items-center justify-center px-6 py-10 gap-4 text-center">
           <div className="w-16 h-16 rounded-full bg-[#E6F0EF] flex items-center justify-center">
@@ -90,40 +104,48 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
               <path d="M20 6L9 17l-5-5" />
             </svg>
           </div>
-          <h3 className="text-lg font-bold text-[#102A43]">تم تأكيد طلب المعاينة</h3>
+          <h3 className="text-lg font-bold text-[#102A43]">
+            {isAr ? "تم تأكيد طلب المعاينة" : "Viewing request confirmed!"}
+          </h3>
           <p className="text-sm text-[#627D98]">
-            سيتواصل معك المعلن قريباً لتأكيد الموعد
+            {isAr
+              ? "سيتواصل معك المعلن قريباً لتأكيد الموعد"
+              : "The advertiser will contact you soon to confirm the appointment."}
           </p>
-          <div className="w-full bg-[#F0F4F8] rounded-2xl p-4 text-sm text-right" dir="rtl">
-            <p className="text-[#627D98] mb-1">العقار:</p>
-            <p className="font-semibold text-[#102A43] mb-3">{listing.titleAr}</p>
-            <p className="text-[#627D98] mb-1">التاريخ والوقت:</p>
+          <div className="w-full bg-[#F0F4F8] rounded-2xl p-4 text-sm text-start" dir={dir}>
+            <p className="text-[#627D98] mb-1">
+              {isAr ? "العقار:" : "Property:"}
+            </p>
+            <p className="font-semibold text-[#102A43] mb-3">{listingTitle}</p>
+            <p className="text-[#627D98] mb-1">
+              {isAr ? "التاريخ والوقت:" : "Date & time:"}
+            </p>
             <p className="font-semibold text-[#102A43]">{date} — {time}</p>
           </div>
           <button
             onClick={handleClose}
             className="w-full py-3 rounded-2xl bg-[#0A3C36] text-white font-semibold text-sm"
           >
-            حسناً
+            {isAr ? "حسناً" : "OK"}
           </button>
         </div>
       ) : (
-        <div className="px-5 py-4 space-y-4" dir="rtl">
+        <div className="px-5 py-4 space-y-4" dir={dir}>
           {/* Listing title reminder */}
           <div className="bg-[#F0F4F8] rounded-xl px-3 py-2 text-xs text-[#627D98]">
-            <span className="font-semibold text-[#102A43]">{listing.titleAr}</span>
+            <span className="font-semibold text-[#102A43]">{listingTitle}</span>
           </div>
 
           <Input
-            label="الاسم الكامل"
-            placeholder="محمد بن سالم..."
+            label={isAr ? "الاسم الكامل" : "Full name"}
+            placeholder={isAr ? "محمد بن سالم..." : "John Smith..."}
             value={name}
             onChange={(e) => setName(e.target.value)}
             error={errors.name}
           />
 
           <Input
-            label="رقم الهاتف"
+            label={isAr ? "رقم الهاتف" : "Phone number"}
             placeholder="+96891234567"
             type="tel"
             inputMode="tel"
@@ -134,7 +156,9 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
           />
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-[#102A43]">تاريخ المعاينة</label>
+            <label className="text-sm font-medium text-[#102A43]">
+              {isAr ? "تاريخ المعاينة" : "Viewing date"}
+            </label>
             <input
               type="date"
               min={today}
@@ -148,9 +172,11 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
 
           {/* Time slots */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-[#102A43]">الوقت المفضل</label>
+            <label className="text-sm font-medium text-[#102A43]">
+              {isAr ? "الوقت المفضل" : "Preferred time"}
+            </label>
             <div className="grid grid-cols-4 gap-2">
-              {TIME_SLOTS.map((slot) => (
+              {timeSlots.map((slot) => (
                 <button
                   key={slot}
                   onClick={() => setTime(slot)}
@@ -168,9 +194,11 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-[#102A43]">ملاحظات (اختياري)</label>
+            <label className="text-sm font-medium text-[#102A43]">
+              {isAr ? "ملاحظات (اختياري)" : "Notes (optional)"}
+            </label>
             <textarea
-              placeholder="أي تعليمات أو أسئلة..."
+              placeholder={isAr ? "أي تعليمات أو أسئلة..." : "Any instructions or questions..."}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={3}
@@ -183,7 +211,9 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
             disabled={submitting}
             className="w-full py-3.5 rounded-2xl bg-[#0A3C36] text-white font-semibold text-sm disabled:bg-[#A0AEC0] disabled:cursor-not-allowed mb-safe"
           >
-            {submitting ? "جاري الإرسال..." : "تأكيد طلب المعاينة"}
+            {submitting
+              ? t("addListing.common.submitting")
+              : isAr ? "تأكيد طلب المعاينة" : "Confirm Viewing Request"}
           </button>
         </div>
       )}
