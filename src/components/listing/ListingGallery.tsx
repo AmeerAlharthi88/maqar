@@ -116,8 +116,10 @@ export function ListingGallery({
         </button>
 
         {/* Action buttons — top end */}
+        {/* z-[99]: must exceed the mobile EN/AR toggle (z-[95]) which occupies the
+            same fixed top-end corner; otherwise pointer events on the heart are blocked. */}
         <div
-          className="absolute top-3 end-3 z-10 flex items-center gap-2"
+          className="absolute top-3 end-3 z-[99] flex items-center gap-2"
           style={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }}
         >
           {/* Share */}
