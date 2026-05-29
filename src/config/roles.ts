@@ -9,6 +9,15 @@ export const ROLE_LABELS_AR: Record<AppRole, string> = {
   super_admin:   "مشرف عام",
 };
 
+export const ROLE_LABELS_EN: Record<AppRole, string> = {
+  guest:         "Guest",
+  user:          "User",
+  agent:         "Agent",
+  agency_admin:  "Agency Admin",
+  admin:         "Admin",
+  super_admin:   "Super Admin",
+};
+
 export const ROLE_HIERARCHY: Record<AppRole, number> = {
   guest:        0,
   user:         1,

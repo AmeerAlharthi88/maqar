@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { ROUTES } from "@/config/routes";
-import { ROLE_LABELS_AR } from "@/config/roles";
+import { ROLE_LABELS_AR, ROLE_LABELS_EN } from "@/config/roles";
 import type { AppRole } from "@/config/roles";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useRecentlyViewedStore } from "@/store/recently-viewed.store";
+import { useLocaleStore } from "@/store/locale.store";
 
 interface ProfileSnapshot {
   nameAr: string;
@@ -94,9 +95,13 @@ const QUICK_LINKS = [
 export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
   const favCount = useFavoritesStore((s) => s._idsArray.length);
   const recentCount = useRecentlyViewedStore((s) => s.items.length);
+  const locale = useLocaleStore((s) => s.locale);
 
   const isAgent = profile.role === "agent" || profile.role === "agency_admin";
-  const roleLabel = ROLE_LABELS_AR[(profile.role as AppRole) ?? "user"];
+  const roleKey = (profile.role as AppRole) ?? "user";
+  const roleLabel = locale === "ar"
+    ? (ROLE_LABELS_AR[roleKey] ?? ROLE_LABELS_AR.user)
+    : (ROLE_LABELS_EN[roleKey] ?? ROLE_LABELS_EN.user);
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] pb-24" dir="rtl">
