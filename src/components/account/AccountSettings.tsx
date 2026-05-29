@@ -101,7 +101,31 @@ export function AccountSettings() {
 
   async function handleSignOut() {
     setIsSigningOut(true);
-    await signOut();
+
+    // Fire-and-forget the Supabase server-side revocation.
+    // We don't await it because supabase.auth.signOut() can hang
+    // (Web Locks deadlock in the browser). The local state and cookies
+    // are cleared below regardless.
+    signOut().catch(() => {});
+
+    // Immediately clear the auth cookies so the session cannot be
+    // re-hydrated on the next page load. The storage key format used
+    // by @supabase/ssr is: sb-{project_ref}-auth-token.{chunk}
+    try {
+      const projectRef = process.env.NEXT_PUBLIC_SUPABASE_URL
+        ?.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1];
+      if (projectRef && typeof document !== "undefined") {
+        const cookieBase = `sb-${projectRef}-auth-token`;
+        [0, 1, 2].forEach((i) => {
+          document.cookie = `${cookieBase}.${i}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+        });
+        // Also clear the non-chunked variant
+        document.cookie = `${cookieBase}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+      }
+    } catch {
+      // Cookie clearing is best-effort — never block the sign-out flow
+    }
+
     signOutLocal();
     router.replace("/");
   }

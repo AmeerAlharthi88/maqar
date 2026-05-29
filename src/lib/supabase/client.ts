@@ -12,6 +12,13 @@ export function createClient() {
         // "implicit" flow returns tokens directly from verifyOtp — correct
         // for phone OTP without a callback route.
         flowType: "implicit",
+        // Override the default Web Locks API lock with a simple passthrough.
+        // navigator.locks.request() can deadlock in some environments
+        // (preview iframes, React strict-mode double-mount) causing getSession()
+        // and signOut() to hang indefinitely. Single-tab sessions don't need
+        // cross-tab locking.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        lock: (_name: string, _acquireTimeout: number, fn: () => Promise<any>) => fn(),
       },
     }
   );
