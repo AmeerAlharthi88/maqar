@@ -80,6 +80,13 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
         setUser(userFromSupabase(session.user));
         const profile = await getCurrentProfile();
         setProfile(profile);
+        // Sync role from DB: profiles table is source of truth.
+        // user_metadata.role may be stale (e.g. manually-promoted admin users
+        // whose metadata was never updated to reflect the new role).
+        if (profile?.role) {
+          const cur = useAuthStore.getState().user;
+          if (cur) setUser({ ...cur, role: profile.role });
+        }
         // Hydrate user-specific stores from Supabase
         hydrateUserStores(session.user.id).catch((err) =>
           console.error("[Auth] hydrateUserStores error:", err)
@@ -107,7 +114,15 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
         setUser(userFromSupabase(session.user));
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           // Fire-and-forget: do not block the auth state change notification
-          void getCurrentProfile().then((profile) => setProfile(profile));
+          void getCurrentProfile().then((profile) => {
+            setProfile(profile);
+            // Sync role from DB: profiles table is source of truth.
+            // user_metadata.role may be stale for manually-promoted admin users.
+            if (profile?.role) {
+              const cur = useAuthStore.getState().user;
+              if (cur) setUser({ ...cur, role: profile.role });
+            }
+          });
           if (event === "SIGNED_IN") {
             void hydrateUserStores(session.user.id).catch((err) =>
               console.error("[Auth] hydrateUserStores error:", err)

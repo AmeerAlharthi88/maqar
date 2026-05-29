@@ -111,7 +111,7 @@ export function OtpVerificationForm() {
     }
 
     const meta = user.user_metadata ?? {};
-    setUser({
+    const userFromMeta = {
       id: user.id,
       email: user.email,
       phone: user.phone ?? undefined,
@@ -119,11 +119,17 @@ export function OtpVerificationForm() {
       role: ((meta.role as AppRole) ?? "user") as AppRole,
       isVerified: Boolean(meta.is_verified ?? false),
       avatarUrl: meta.avatar_url as string | undefined,
-    });
+    };
+    setUser(userFromMeta);
 
     const profileTimeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 8_000));
     const profile = await Promise.race([getCurrentProfile(), profileTimeout]);
     setProfile(profile);
+    // Sync role from DB: profiles table is source of truth.
+    // user_metadata.role may be stale for manually-promoted admin/agent users.
+    if (profile?.role) {
+      setUser({ ...userFromMeta, role: profile.role });
+    }
 
     if (!profile?.onboardingCompleted) {
       const params = new URLSearchParams({ redirectTo });
