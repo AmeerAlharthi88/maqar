@@ -111,7 +111,20 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
       // waits for verifyOtp to resolve — causing timeouts on slow networks.
       // All async work below is deliberately fire-and-forget (void).
       if (session?.user) {
-        setUser(userFromSupabase(session.user));
+        // On TOKEN_REFRESHED: preserve the in-memory role that was already confirmed
+        // from the DB (profile fetch) so the admin guard never sees a stale "user"
+        // role between the synchronous setUser() and the async profile re-verify.
+        // On SIGNED_IN or first load: the store is empty/different user — use metadata
+        // (profile fetch will correct the role moments later).
+        const existing = useAuthStore.getState().user;
+        const baseUser = userFromSupabase(session.user);
+        const isSameUser = existing?.id === session.user.id;
+        const hasElevatedRole = existing?.role !== undefined && existing.role !== "user";
+        setUser(
+          event === "TOKEN_REFRESHED" && isSameUser && hasElevatedRole
+            ? { ...baseUser, role: existing!.role }
+            : baseUser
+        );
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           // Fire-and-forget: do not block the auth state change notification
           void getCurrentProfile().then((profile) => {

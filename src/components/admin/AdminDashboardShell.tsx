@@ -31,11 +31,14 @@ interface AdminDashboardShellProps {
 }
 
 export function AdminDashboardShell({ children, titleAr = "لوحة الإدارة" }: AdminDashboardShellProps) {
-  const { user, isLoading } = useAuthStore();
+  const { user, profile, isLoading } = useAuthStore();
   const router = useRouter();
 
-  // Loading state
-  if (isLoading) {
+  // Show spinner while: initial auth loading OR user is authenticated but the profile
+  // hasn't been fetched from the DB yet (getCurrentProfile() is still in-flight).
+  // This prevents the restricted screen from flashing during the async gap between
+  // setUser(role:"user" from metadata) and setUser(role:"admin" from profile).
+  if (isLoading || (user !== null && profile === null)) {
     return (
       <AppShell>
         <div className="flex items-center justify-center min-h-[60vh]">
@@ -51,8 +54,13 @@ export function AdminDashboardShell({ children, titleAr = "لوحة الإدار
     return null;
   }
 
-  // UI-only role check — pending real RLS enforcement in Phase 12
-  const hasAdminAccess = user.role === "admin" || user.role === "super_admin";
+  // Use profile.role as the authoritative source: it is fetched fresh from the DB
+  // (public.profiles) by getCurrentProfile() on every auth event, whereas
+  // user.role comes from user_metadata which may be stale for manually-promoted admins.
+  // user.role is kept as a fallback only — it is always overwritten by profile.role
+  // once getCurrentProfile() resolves (see AuthSessionProvider).
+  const effectiveRole = profile?.role ?? user.role;
+  const hasAdminAccess = effectiveRole === "admin" || effectiveRole === "super_admin";
 
   if (!hasAdminAccess) {
     return (
