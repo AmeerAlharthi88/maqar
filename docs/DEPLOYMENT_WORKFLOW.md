@@ -198,9 +198,19 @@ Error: Unable to find lambda for route: /areas/al-hail
 
 **This is a local CLI validation bug, not a server-side issue.** All Vercel server-side builds (triggered by `vercel --prod` CLI or Git integration) succeed in ~1 minute. Do not use `vercel build` to validate builds locally — use `npm run build` instead.
 
-### First Git-triggered preview deployment failed (2026-05-29)
+### CRITICAL: Always commit source files before deploying (resolved 2026-05-29)
 
-The first preview deployment after connecting GitHub had `Error` status (0ms). This may be a timing issue from the integration being brand-new. Monitor subsequent pushes to confirm it resolves.
+**Root cause of all Git build failures discovered:** Three source files were imported by committed code but were themselves NOT committed to git:
+
+- `src/components/add-listing/steps/MapPickerInner.tsx` (used by StepLocation.tsx)
+- `src/lib/constants/listing-field-config.ts` (used by StepDetails.tsx)
+- `src/lib/validation/listing-schemas.ts` (used by add-listing.ts)
+
+`vercel --prod` from the CLI uploaded ALL local disk files (including untracked ones), so CLI builds worked. Git-triggered builds cloned only committed files, causing TypeScript build failures ~35 seconds in.
+
+**Rule:** Always run `git status` before deploying. Any `??` untracked file in `src/` that is imported by committed code will break Git-triggered builds. Commit all source files before merging or deploying.
+
+**Prevention:** Keep a clean git working tree. If you see untracked source files in `git status`, commit them immediately.
 
 ---
 
