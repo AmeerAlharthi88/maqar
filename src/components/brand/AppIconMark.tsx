@@ -1,6 +1,6 @@
-// AppIconMark — rounded app icon using the house+Meem+key mark
+// AppIconMark — rounded app icon using the approved house+Meem+key mark
 // Used in: home screen shortcut, splash screens, og-image fallback
-// 60×60 default (scales via size prop). Emerald bg + white mark + gold pin.
+// Emerald bg + white house/meem + gold right extension and key teeth
 
 interface AppIconMarkProps {
   size?: number;
@@ -8,10 +8,13 @@ interface AppIconMarkProps {
 }
 
 export function AppIconMark({ size = 60, className = "" }: AppIconMarkProps) {
-  // The mark was designed on a 48×48 canvas.
-  // We embed it centred inside the icon square with uniform padding.
-  const pad = size * 0.14;           // ~14% padding on each side
-  const markSize = size - pad * 2;   // mark fills the remaining area
+  // The mark uses a 44×50 viewBox (4:5 ratio).
+  // We embed it centred inside the square icon with ~15% padding on each side.
+  const pad  = Math.round(size * 0.15);
+  const markH = size - pad * 2;           // mark height
+  const markW = Math.round(markH * 44 / 50); // mark width (4:5 proportioned)
+  const markX = Math.round((size - markW) / 2); // centre horizontally
+  const markY = pad;
 
   return (
     <svg
@@ -25,58 +28,50 @@ export function AppIconMark({ size = 60, className = "" }: AppIconMarkProps) {
       role="img"
     >
       {/* Rounded square background — Deep Emerald */}
-      <rect width={size} height={size} rx={size * 0.233} fill="#0A3C36" />
+      <rect width={size} height={size} rx={Math.round(size * 0.233)} fill="#0A3C36" />
 
       {/*
         Mark group — centred inside the icon.
-        We use a nested <svg> with the same 48×48 viewBox as MaqarLogoMark
-        so the path coordinates are reused exactly.
+        Nested <svg> with 44×50 viewBox so path coordinates are identical
+        to MaqarLogoMark, just recoloured for emerald bg.
       */}
       <svg
-        x={pad}
-        y={pad}
-        width={markSize}
-        height={markSize}
-        viewBox="0 0 48 48"
+        x={markX}
+        y={markY}
+        width={markW}
+        height={markH}
+        viewBox="0 0 44 50"
         fill="none"
       >
-        {/* House arch + Meem outer form */}
+        {/* House outer left (white on emerald bg) */}
         <path
-          d="M9 45 L9 24 C9 8 17 4 24 4 C31 4 39 8 39 24 L39 45"
+          d="M 2,48 L 2,19 L 22,2 L 34,12 L 34,19"
           stroke="#FFFFFF"
-          strokeWidth="2.5"
+          strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
-          fill="#FFFFFF"
-          fillOpacity="0.08"
-        />
-        {/* Inner ring — Meem head / keyhole */}
-        <circle
-          cx="24"
-          cy="21"
-          r="6.5"
-          stroke="#FFFFFF"
-          strokeWidth="2"
           fill="none"
         />
-        {/* Key stem — Meem body */}
-        <line
-          x1="24" y1="27.5"
-          x2="24" y2="43"
-          stroke="#FFFFFF"
-          strokeWidth="2"
+        {/* House right extension (Champagne Gold) */}
+        <path
+          d="M 34,19 L 42,19 L 42,48"
+          stroke="#E5BA73"
+          strokeWidth="3"
           strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
         />
-        {/* Key tooth — Meem tail */}
-        <line
-          x1="24" y1="36"
-          x2="28.5" y2="36"
+        {/* Meem arc loop (white) */}
+        <path
+          d="M 10,48 L 10,29 A 6,6 0 0,1 22,29 L 22,41"
           stroke="#FFFFFF"
-          strokeWidth="2"
+          strokeWidth="2.6"
           strokeLinecap="round"
+          fill="none"
         />
-        {/* Champagne Gold pin — luxury accent */}
-        <circle cx="24" cy="21" r="2.5" fill="#E5BA73" />
+        {/* Key teeth (Champagne Gold) */}
+        <line x1="22" y1="36" x2="27" y2="36" stroke="#E5BA73" strokeWidth="2.2" strokeLinecap="round" />
+        <line x1="22" y1="41" x2="27" y2="41" stroke="#E5BA73" strokeWidth="2.2" strokeLinecap="round" />
       </svg>
     </svg>
   );
