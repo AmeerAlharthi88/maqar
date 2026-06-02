@@ -1,106 +1,65 @@
-// MaqarLogoMark — approved geometric brand mark
-// Concept: house outline (emerald left / gold right) + Arabic Meem arc + smart-key teeth
+// MaqarLogoMark — official Maqar brand mark (PNG asset)
 //
-// viewBox 44×50 matches the approved 4:5 proportions.
-// size prop = rendered height (px); width = size × 44/50 auto-proportioned.
+// Renders the approved mark image (house structure + gold right extension +
+// Arabic Meem/key center). Two tonal assets are available:
+//   · /brand/maqar-mark.png            — full colour, for light backgrounds
+//   · /brand/maqar-mark-white-gold.png — white + gold, for dark/emerald bgs
 //
-// Path sources scaled from the approved 400×500 SVG guide:
-//   x_new = (x_orig − 100) × 0.2 + 2
-//   y_new = (y_orig − 80)  × 0.1704 + 2
+// The source artwork is 467×512 (≈ 0.912 aspect). The `size` prop sets the
+// rendered HEIGHT in px; width is auto-proportioned so the mark never distorts.
+//
+// NOTE: this is an image asset, not inline SVG — the previous stroked SVG
+// redraw was rejected for not matching the approved brand identity. The
+// `primary` prop is now only a tone hint (light → white/gold asset); the PNG
+// itself is never recoloured.
+
+const MARK_ASPECT = 467 / 512;
 
 interface MaqarLogoMarkProps {
-  /** Rendered height in px. Width is auto-proportioned (44:50 aspect ratio). */
+  /** Rendered height in px. Width is auto-proportioned (467:512). */
   size?: number;
-  /** Primary (emerald) colour for house left and Meem. Defaults to #0A3C36. */
+  /** Tone hint. A white/light value selects the white+gold asset for dark
+   *  backgrounds. Any other value (default emerald) selects the colour asset. */
   primary?: string;
-  /** Accent (champagne gold) colour for house right and key teeth. Defaults to #E5BA73. */
+  /** Retained for API compatibility with callers; the PNG is not recoloured. */
   accent?: string;
   className?: string;
+}
+
+function isLightTone(color?: string): boolean {
+  if (!color) return false;
+  const c = color.toLowerCase().replace(/\s+/g, "");
+  return (
+    c === "#fff" ||
+    c === "#ffffff" ||
+    c === "white" ||
+    c === "rgb(255,255,255)" ||
+    c.startsWith("rgba(255,255,255")
+  );
 }
 
 export function MaqarLogoMark({
   size = 40,
   primary = "#0A3C36",
-  accent = "#E5BA73",
   className = "",
 }: MaqarLogoMarkProps) {
-  const h = size;
-  const w = Math.round(size * 44 / 50); // preserve 4:5 ratio
+  const src = isLightTone(primary)
+    ? "/brand/maqar-mark-white-gold.png"
+    : "/brand/maqar-mark.png";
+
+  const height = size;
+  const width = Math.round(size * MARK_ASPECT);
 
   return (
-    <svg
-      width={w}
-      height={h}
-      viewBox="0 0 44 50"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt="مقر"
+      width={width}
+      height={height}
       className={className}
-      aria-label="مقر"
-      role="img"
-    >
-      {/*
-        ── House outer left wall + roof (Emerald) ───────────────────────────────
-        M 2,48  → bottom of left wall
-        L 2,19  → top of left wall
-        L 22,2  → roof peak (center-top)
-        L 34,12 → roof right shoulder
-        L 34,19 → top of right junction where gold begins
-      */}
-      <path
-        d="M 2,48 L 2,19 L 22,2 L 34,12 L 34,19"
-        stroke={primary}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-
-      {/*
-        ── House right extension (Champagne Gold) ───────────────────────────────
-        M 34,19 → junction (continuing from emerald roof)
-        L 42,19 → horizontal cap (top of gold right wall)
-        L 42,48 → bottom of right wall
-      */}
-      <path
-        d="M 34,19 L 42,19 L 42,48"
-        stroke={accent}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-
-      {/*
-        ── Arabic Meem arc loop (Emerald) ───────────────────────────────────────
-        M 10,48   → base of left column (inside house, left third)
-        L 10,29   → top of left column
-        A 6,6 0 0,1 22,29 → D-arc sweeping clockwise to right column top
-                              (semi-circle: horizontal dist 12 = 2 × r=6)
-        L 22,41   → down the right column to near-base
-                    (leaves bottom open — matches Meem letterform)
-      */}
-      <path
-        d="M 10,48 L 10,29 A 6,6 0 0,1 22,29 L 22,41"
-        stroke={primary}
-        strokeWidth="2.6"
-        strokeLinecap="round"
-        fill="none"
-      />
-
-      {/*
-        ── Smart-key teeth (Champagne Gold) ────────────────────────────────────
-        Two horizontal notches on the right of the Meem stem — key bits
-        Upper tooth at y=36 (mid-stem)
-        Lower tooth at y=41 (end of stem)
-      */}
-      <line
-        x1="22" y1="36" x2="27" y2="36"
-        stroke={accent} strokeWidth="2.2" strokeLinecap="round"
-      />
-      <line
-        x1="22" y1="41" x2="27" y2="41"
-        stroke={accent} strokeWidth="2.2" strokeLinecap="round"
-      />
-    </svg>
+      style={{ width, height, objectFit: "contain", display: "block" }}
+      draggable={false}
+    />
   );
 }

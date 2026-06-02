@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <!-- Deep Emerald background -->
   <rect width="512" height="512" rx="100" fill="#0A3C36"/>
-  <!-- Maqar mark: 44×50 viewBox, height=320 width=282, centred (x=115 y=96) -->
-  <svg x="115" y="96" width="282" height="320" viewBox="0 0 44 50" fill="none">
-    <!-- House outer left (white) -->
-    <path d="M 2,48 L 2,19 L 22,2 L 34,12 L 34,19"
-      stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- House right extension (gold) -->
-    <path d="M 34,19 L 42,19 L 42,48"
-      stroke="#E5BA73" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- Meem arc (white) -->
-    <path d="M 10,48 L 10,29 A 6,6 0 0,1 22,29 L 22,41"
-      stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"/>
-    <!-- Key teeth (gold) -->
-    <line x1="22" y1="36" x2="27" y2="36" stroke="#E5BA73" stroke-width="2.2" stroke-linecap="round"/>
-    <line x1="22" y1="41" x2="27" y2="41" stroke="#E5BA73" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- House + Meem + Key mark (white), centred in 368×368 area with 72px padding -->
+  <svg x="72" y="72" width="368" height="368" viewBox="0 0 48 48" fill="none">
+    <!-- House arch + Meem outer form -->
+    <path d="M9 45 L9 24 C9 8 17 4 24 4 C31 4 39 8 39 24 L39 45"
+      stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+      fill="#FFFFFF" fill-opacity="0.08"/>
+    <!-- Inner ring — Meem head / keyhole -->
+    <circle cx="24" cy="21" r="6.5" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+    <!-- Key stem — Meem body -->
+    <line x1="24" y1="27.5" x2="24" y2="43" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    <!-- Key tooth — Meem tail -->
+    <line x1="24" y1="36" x2="28.5" y2="36" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+    <!-- Champagne Gold pin -->
+    <circle cx="24" cy="21" r="2.5" fill="#E5BA73"/>
   </svg>
 </svg>

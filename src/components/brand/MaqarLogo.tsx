@@ -87,16 +87,6 @@ export function MaqarLogo({
               MAQAR
             </span>
           )}
-          {/* Tagline — only in brand/presentation contexts (md, lg), never in header */}
-          {(size === "md" || size === "lg") && (
-            <span
-              className="text-[9px] tracking-wider font-medium mt-1.5"
-              style={{ color: c.sub, opacity: 0.75, fontFamily: "var(--font-arabic), sans-serif" }}
-              dir="rtl"
-            >
-              مكانك يبدأ من هنا
-            </span>
-          )}
         </div>
       </div>
     );
