@@ -1,10 +1,21 @@
-// MaqarLogo — brand wordmark system
-// Variants: full (mark + Arabic), horizontal (mark + Arabic + MAQAR), stacked (mark above text),
-//           mark-only, white-on-emerald (inverse card)
-// Sizes: xs | sm | md | lg
-// Colors: brand | white | dark
+// MaqarLogo — brand logo system
+// Variants:
+//   full        — header/nav logo: MARK ONLY (no wordmark) — the mark is the
+//                 unified brand lockup; pairing a tiny mark with a large "مقر"
+//                 looked disconnected, so headers show the mark alone, enlarged.
+//   horizontal  — same as full: MARK ONLY (header/nav use).
+//   stacked     — mark above "مقر" + "MAQAR" — for auth / brand presentation only.
+//   mark-only   — bare mark at the token size.
+//   white-on-emerald — inverse pill card (mark + text on emerald).
+// Sizes: xs | sm | md | lg   ·   Colors: brand | white | dark
 
 import { MaqarLogoMark } from "./MaqarLogoMark";
+
+// Header/nav mark-only variants render the mark slightly larger than the token
+// (no wordmark beside it to carry visual weight). The result still fits inside
+// the fixed-height headers (h-14 = 56px, h-16 = 64px) so header height is
+// unchanged.
+const HEADER_MARK_SCALE = 1.4;
 
 type LogoVariant = "full" | "horizontal" | "stacked" | "mark-only" | "white-on-emerald";
 type LogoSize   = "xs" | "sm" | "md" | "lg";
@@ -92,33 +103,15 @@ export function MaqarLogo({
     );
   }
 
-  // ── horizontal: mark + Arabic + MAQAR tagline ───────────────────────────────
-  if (variant === "horizontal") {
-    return (
-      <div className={`inline-flex items-center ${s.gap} ${className}`}>
-        <MaqarLogoMark size={s.mark} primary={c.primary} accent={c.accent} />
-        <div className="flex flex-col leading-none" style={{ fontFamily: "var(--font-arabic), sans-serif" }}>
-          <span className={`${s.arAr} font-bold tracking-tight`} style={{ color: c.text }}>
-            مقر
-          </span>
-          <span className={`${s.enAr} font-semibold tracking-widest mt-0.5`} style={{ color: c.sub }}>
-            MAQAR
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  // ── full (default): mark + Arabic wordmark ──────────────────────────────────
+  // ── horizontal & full (header/nav): MARK ONLY, enlarged ─────────────────────
+  // Both header variants render only the mark — no adjacent "مقر" wordmark.
+  // The mark alone is the brand lockup in compact header/nav contexts.
   return (
-    <div className={`inline-flex items-center ${s.gap} ${className}`}>
-      <MaqarLogoMark size={s.mark} primary={c.primary} accent={c.accent} />
-      <span
-        className={`${s.arAr} font-bold tracking-tight leading-none`}
-        style={{ color: c.text, fontFamily: "var(--font-arabic), sans-serif" }}
-      >
-        مقر
-      </span>
-    </div>
+    <MaqarLogoMark
+      size={Math.round(s.mark * HEADER_MARK_SCALE)}
+      primary={c.primary}
+      accent={c.accent}
+      className={className}
+    />
   );
 }
