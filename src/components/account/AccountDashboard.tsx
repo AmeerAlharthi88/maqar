@@ -7,6 +7,7 @@ import type { AppRole } from "@/config/roles";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useRecentlyViewedStore } from "@/store/recently-viewed.store";
 import { useLocaleStore } from "@/store/locale.store";
+import { safeDisplayName, safeInitial } from "@/lib/display-name";
 
 interface ProfileSnapshot {
   nameAr: string;
@@ -279,6 +280,11 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
   const locale = useLocaleStore((s) => s.locale);
   const isAr = locale === "ar";
 
+  // Guard against corrupted/encoding-broken names ("?????") — show a clean
+  // localized fallback instead of question marks. Display-only.
+  const displayName = safeDisplayName(profile.nameAr, locale);
+  const avatarInitial = safeInitial(profile.nameAr, locale);
+
   const isAdmin = profile.role === "admin" || profile.role === "super_admin";
   const isAgent = profile.role === "agent" || profile.role === "agency_admin";
 
@@ -298,12 +304,12 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={profile.avatarUrl}
-                alt={profile.nameAr}
+                alt={displayName}
                 className="w-full h-full rounded-full object-cover"
               />
             ) : (
               <span className="text-2xl font-bold text-white">
-                {profile.nameAr.slice(0, 1)}
+                {avatarInitial}
               </span>
             )}
           </div>
@@ -311,7 +317,7 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
           {/* Info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-lg font-bold text-[#102A43] truncate">{profile.nameAr}</h1>
+              <h1 className="text-lg font-bold text-[#102A43] truncate">{displayName}</h1>
               {profile.isVerified && (
                 <span className="flex items-center gap-1 bg-[#E6F0EF] text-[#0A3C36] text-[10px] font-bold px-2 py-0.5 rounded-full">
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">

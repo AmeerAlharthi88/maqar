@@ -1,6 +1,7 @@
 "use client";
 
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
+import { AdminDemoBanner } from "@/components/admin/AdminDemoBanner";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
 import { DashboardChartCard } from "@/components/dashboard/DashboardChartCard";
 import { AdminRiskBadge } from "@/components/admin/AdminRiskBadge";
@@ -37,6 +38,12 @@ export default function AdminOverviewPage() {
   return (
     <AdminDashboardShell titleAr="لوحة الإدارة">
       <div className="px-4 py-4 space-y-4" dir="rtl">
+        {/* Dashboard KPIs are demonstration data until live wiring (Phase 12+) */}
+        <AdminDemoBanner
+          noteAr="جميع مؤشرات لوحة التحكم أدناه بيانات تجريبية للعرض، وليست أرقاماً تشغيلية حقيقية."
+          noteEn="All dashboard KPIs below are demonstration data, not live operational figures."
+        />
+
         {/* Priority alerts */}
         {(criticalAml.length > 0 || pendingVerification.length > 0) && (
           <div className="bg-[#FEF0EE] rounded-2xl border border-[#C0392B]/20 px-4 py-3">

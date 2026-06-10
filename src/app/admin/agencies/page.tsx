@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
+import { AdminDemoBanner } from "@/components/admin/AdminDemoBanner";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { MOCK_AGENCIES } from "@/mock/agencies";
@@ -50,6 +51,10 @@ export default function AdminAgenciesPage() {
   return (
     <AdminDashboardShell titleAr="إدارة الشركات">
       <div className="px-4 py-4 space-y-4" dir="rtl">
+        <AdminDemoBanner
+          noteAr="إدارة الشركات قيد التطوير. البيانات والإجراءات هنا تجريبية."
+          noteEn="Agency management is a work in progress. Data and actions here are demo only."
+        />
         <p className="text-xs text-[#627D98]">{verifiedCount} شركة موثّقة · {agencies.length} إجمالي</p>
 
         {/* Filters */}

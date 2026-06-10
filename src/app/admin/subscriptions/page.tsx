@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
+import { AdminDemoBanner } from "@/components/admin/AdminDemoBanner";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { PaymentStatusBadge } from "@/components/subscriptions/PaymentStatusBadge";
@@ -64,12 +65,11 @@ export default function AdminSubscriptionsPage() {
     <AdminDashboardShell titleAr="الاشتراكات">
       <div className="px-4 py-4 space-y-4" dir="rtl">
 
-        {/* Mock notice */}
-        <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-xl px-4 py-2">
-          <p className="text-[10px] text-[#C8860A]">
-            بيانات تجريبية — الإيرادات لا تمثّل أرقاماً حقيقية
-          </p>
-        </div>
+        {/* Demo notice — subscriptions/revenue are not wired to live payments yet */}
+        <AdminDemoBanner
+          noteAr="الاشتراكات والإيرادات بيانات تجريبية ولا تمثّل أرقاماً حقيقية. الدفع يُربط في مرحلة لاحقة."
+          noteEn="Subscriptions and revenue are demo data — not real figures. Payments are wired in a later phase."
+        />
 
         {/* Summary KPIs */}
         <div className="grid grid-cols-2 gap-2">

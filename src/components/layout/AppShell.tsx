@@ -28,6 +28,11 @@ export function AppShell({ children }: AppShellProps) {
   const { locale, dir, toggleLocale, t } = useTranslation();
   const isAr = locale === "ar";
 
+  // Admin routes are an admin console, not the public buyer/agent app. They must
+  // NOT show the public bottom tab bar (incl. the centre Add button) or the
+  // public desktop nav / "Add property" CTA. Admin nav comes from DashboardNav.
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+
   // Keep <html lang> and <html dir> in sync with locale preference.
   // suppressHydrationWarning on <html> in layout.tsx prevents SSR mismatch flash.
   useEffect(() => {
@@ -50,7 +55,7 @@ export function AppShell({ children }: AppShellProps) {
             <MaqarLogo size="sm" />
           </Link>
           <nav className="flex items-center gap-1 flex-1" aria-label={t("nav.home")}>
-            {BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
+            {!isAdminRoute && BOTTOM_NAV_ITEMS.filter((i) => !i.isAdd).map((item) => {
               const isActive =
                 pathname === item.href ||
                 (item.href !== "/" && pathname.startsWith(item.href));
@@ -84,7 +89,8 @@ export function AppShell({ children }: AppShellProps) {
             {isAr ? "EN" : "عر"}
           </button>
 
-          {/* Add listing CTA */}
+          {/* Add listing CTA — hidden on admin console */}
+          {!isAdminRoute && (
           <Link
             href={ROUTES.addListing}
             className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
@@ -95,11 +101,13 @@ export function AppShell({ children }: AppShellProps) {
             </svg>
             {t("home.addProperty")}
           </Link>
+          )}
         </div>
       </header>
 
-      {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections */}
-      <main className="flex-1 pb-20 lg:pb-0 overflow-x-clip">{children}</main>
+      {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections.
+          pb-20 reserves space for the mobile bottom nav; not needed on admin (no bottom nav). */}
+      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", !isAdminRoute && "pb-20")}>{children}</main>
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">
@@ -116,7 +124,8 @@ export function AppShell({ children }: AppShellProps) {
         </button>
       </div>
 
-      {/* ── Mobile/tablet bottom tab bar (hidden on lg+) ── */}
+      {/* ── Mobile/tablet bottom tab bar (hidden on lg+ and on admin console) ── */}
+      {!isAdminRoute && (
       <nav
         className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#E2E8F0] lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
@@ -177,6 +186,7 @@ export function AppShell({ children }: AppShellProps) {
           })}
         </div>
       </nav>
+      )}
     </div>
   );
 }

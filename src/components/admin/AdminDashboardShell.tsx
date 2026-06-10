@@ -11,18 +11,21 @@ import { ROUTES } from "@/config/routes";
 // session read from the Supabase `profiles` table and RLS policies.
 // Do NOT rely on client-side role checks for real security enforcement.
 
+// `demo: true` marks modules that are still mock-only (not wired to live data
+// or real mutations) — DashboardNav shows a small "Demo / تجريبي" badge so an
+// admin never mistakes them for production tools (UAT-056/063).
 const ADMIN_NAV_ITEMS = [
-  { href: ROUTES.admin,               labelAr: "لوحة التحكم", matchExact: true },
-  { href: ROUTES.adminListings,       labelAr: "الإعلانات" },
-  { href: ROUTES.adminVerification,   labelAr: "التوثيق" },
-  { href: ROUTES.adminReports,        labelAr: "البلاغات" },
-  { href: ROUTES.adminAml,            labelAr: "AML" },
-  { href: ROUTES.adminDuplicates,     labelAr: "المكررات" },
-  { href: ROUTES.adminUsers,          labelAr: "المستخدمون" },
-  { href: ROUTES.adminAgencies,       labelAr: "الشركات" },
-  { href: ROUTES.adminMarketData,     labelAr: "بيانات السوق" },
-  { href: ROUTES.adminSubscriptions,  labelAr: "الاشتراكات" },
-  { href: ROUTES.adminAuditLogs,      labelAr: "سجل التدقيق" },
+  { href: ROUTES.admin,               labelAr: "لوحة التحكم",  labelEn: "Dashboard",     matchExact: true },
+  { href: ROUTES.adminListings,       labelAr: "الإعلانات",    labelEn: "Listings" },
+  { href: ROUTES.adminReports,        labelAr: "البلاغات",     labelEn: "Reports" },
+  { href: ROUTES.adminVerification,   labelAr: "التوثيق",      labelEn: "Verification" },
+  { href: ROUTES.adminAml,            labelAr: "AML",          labelEn: "AML" },
+  { href: ROUTES.adminDuplicates,     labelAr: "المكررات",     labelEn: "Duplicates" },
+  { href: ROUTES.adminAuditLogs,      labelAr: "سجل التدقيق",  labelEn: "Audit logs" },
+  { href: ROUTES.adminMarketData,     labelAr: "بيانات السوق", labelEn: "Market data" },
+  { href: ROUTES.adminUsers,          labelAr: "المستخدمون",   labelEn: "Users",         demo: true },
+  { href: ROUTES.adminAgencies,       labelAr: "الشركات",      labelEn: "Agencies",      demo: true },
+  { href: ROUTES.adminSubscriptions,  labelAr: "الاشتراكات",   labelEn: "Subscriptions", demo: true },
 ];
 
 interface AdminDashboardShellProps {

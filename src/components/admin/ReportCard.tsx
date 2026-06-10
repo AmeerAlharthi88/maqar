@@ -75,24 +75,24 @@ export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate 
         </div>
       )}
 
-      {/* Actions */}
+      {/* Actions — min 40px tap targets, comfortable spacing on mobile */}
       {isActionable && (
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => onResolve?.(report.id)}
-            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold"
+            className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold active:scale-[0.98] transition-transform"
           >
             حل البلاغ
           </button>
           <button
             onClick={() => onDismiss?.(report.id)}
-            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold"
+            className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold active:scale-[0.98] transition-transform"
           >
             رفض البلاغ
           </button>
           <button
             onClick={() => onEscalate?.(report.id)}
-            className="flex-1 min-w-[72px] py-2 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold"
+            className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold active:scale-[0.98] transition-transform"
           >
             تصعيد
           </button>
