@@ -328,7 +328,7 @@ export const en = {
     review: {
       title:         "Review listing",
       subtitle:      "Review your listing details before submitting",
-      submit:        "Submit for review",
+      submit:        "Submit for Review",
       terms:         "I agree to the Terms of Service and publishing policy",
       missingFields: "Missing fields:",
       qualityLabel:  "Listing quality",

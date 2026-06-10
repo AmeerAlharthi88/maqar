@@ -14,6 +14,9 @@ interface StickyStepActionsProps {
   onSaveDraft: () => void;
   nextLabel?: string;
   disableNext?: boolean;
+  /** Hide the primary Next/Submit button entirely (e.g. the final submit step,
+   *  where the in-content StepSubmit button is the single primary CTA). */
+  hideNext?: boolean;
 }
 
 export function StickyStepActions({
@@ -25,6 +28,7 @@ export function StickyStepActions({
   onSaveDraft,
   nextLabel,
   disableNext = false,
+  hideNext = false,
 }: StickyStepActionsProps) {
   const { t, locale } = useTranslation();
   const isFirst = currentStep === 1;
@@ -53,24 +57,27 @@ export function StickyStepActions({
           </button>
         )}
 
-        {/* Next / Submit button */}
-        <button
-          onClick={onNext}
-          disabled={disableNext || isSubmitting}
-          className={cn(
-            "flex-1 flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-2xl transition-all",
-            "bg-[#0A3C36] text-white hover:bg-[#082E29] disabled:bg-[#A0AEC0] disabled:cursor-not-allowed"
-          )}
-        >
-          {isSubmitting ? (
-            <>
-              <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-              {t("addListing.common.submitting")}
-            </>
-          ) : (
-            nextButtonLabel
-          )}
-        </button>
+        {/* Next / Submit button — hidden on the final submit step (step 10),
+            where StepSubmit renders the single primary "Submit for review" CTA. */}
+        {!hideNext && (
+          <button
+            onClick={onNext}
+            disabled={disableNext || isSubmitting}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-2xl transition-all",
+              "bg-[#0A3C36] text-white hover:bg-[#082E29] disabled:bg-[#A0AEC0] disabled:cursor-not-allowed"
+            )}
+          >
+            {isSubmitting ? (
+              <>
+                <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                {t("addListing.common.submitting")}
+              </>
+            ) : (
+              nextButtonLabel
+            )}
+          </button>
+        )}
       </div>
 
       {/* Save draft row */}

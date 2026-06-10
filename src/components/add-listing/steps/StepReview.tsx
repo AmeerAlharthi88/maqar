@@ -134,10 +134,13 @@ export function StepReview({
   const furnishOpt = FURNISHING_OPTIONS.find((f) => f.value === draft.furnishing);
   const furnishingLabel = isAr ? (furnishOpt?.labelAr ?? "—") : (furnishOpt?.labelEn ?? furnishOpt?.labelAr ?? "—");
 
+  // Rent period is shown ONLY for rent listings. Sale and investment never
+  // display a "/ period" suffix even if a stale rentPeriod remains in the draft.
+  const isRentListing = draft.purpose === "rent";
   const rentPeriodOpt = RENT_PERIODS.find((r) => r.value === draft.rentPeriod);
-  const rentPeriodLabel = isAr
-    ? rentPeriodOpt?.labelAr
-    : (rentPeriodOpt?.labelEn ?? rentPeriodOpt?.labelAr);
+  const rentPeriodLabel = isRentListing
+    ? (isAr ? rentPeriodOpt?.labelAr : (rentPeriodOpt?.labelEn ?? rentPeriodOpt?.labelAr))
+    : null;
 
   const locationParts = [draft.areaAr, draft.wilayatAr, draft.governorateAr].filter(Boolean);
 

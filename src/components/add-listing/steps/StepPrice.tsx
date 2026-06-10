@@ -63,7 +63,9 @@ export function StepPrice({
 }: StepPriceProps) {
   const { t, locale } = useTranslation();
   const isAr = locale === "ar";
-  const isRent = draft.purpose === "rent" || draft.purpose === "investment";
+  // Only "rent" uses a rental price + period. "investment" is a buy-to-invest
+  // (sale-type) purchase, so it is priced like a sale — no rental period.
+  const isRent = draft.purpose === "rent";
   const priceNum = draft.price ?? 0;
   const priceFormatted = priceNum > 0 ? priceNum.toLocaleString("en-US") : "";
 
