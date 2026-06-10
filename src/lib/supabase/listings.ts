@@ -220,7 +220,9 @@ export function draftToInsertRow(
     status:               "pending_review",
     review_status:        "pending",
     price_omr:            draft.price ?? 0,
-    rent_period:          draft.rentPeriod ?? null,
+    // Rent period only applies to rent listings. Sale/investment store null so
+    // a stale draft.rentPeriod never produces a "sale with monthly period".
+    rent_period:          purpose === "rent" ? (draft.rentPeriod ?? null) : null,
     is_negotiable:        draft.isNegotiable,
     is_price_hidden:      draft.isPriceHidden,
     deposit_amount:       draft.depositAmount ?? null,

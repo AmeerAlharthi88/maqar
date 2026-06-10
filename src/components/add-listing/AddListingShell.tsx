@@ -261,18 +261,15 @@ export function AddListingShell() {
           onNext={handleNext}
           onPrev={prevStep}
           onSaveDraft={saveDraft}
+          // Step 9 (review) advances to the submit step. Step 10 hides the
+          // footer's button so StepSubmit's "Submit for review" is the single
+          // primary final CTA (UAT-053 — no duplicate submit button).
           nextLabel={
             currentStep === 9
               ? (isAr ? "التالي — الإرسال" : "Next — Submit")
-              : currentStep === 10
-              ? t("addListing.common.submit")
               : undefined
           }
-          disableNext={
-            (currentStep === 10 && !termsAccepted) ||
-            // Block final submission when offline — draft save still works
-            (!isOnline && currentStep === 10)
-          }
+          hideNext={currentStep === 10}
         />
       )}
     </div>

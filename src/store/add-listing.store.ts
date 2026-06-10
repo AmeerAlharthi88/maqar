@@ -13,6 +13,7 @@ import { ADD_LISTING_TOTAL_STEPS } from "@/lib/constants/add-listing";
 import { createListingClient } from "@/lib/supabase/listings";
 import { uploadListingImages } from "@/lib/supabase/listing-images";
 import { useAuthStore } from "@/store/auth.store";
+import { useLocaleStore } from "@/store/locale.store";
 import { createListingDevAction } from "@/app/actions/listing-actions";
 
 const DEV_SKIP_AUTH = process.env.NEXT_PUBLIC_DEV_SKIP_AUTH === "true";
@@ -261,7 +262,10 @@ export const useAddListingStore = create<AddListingState>()(
       // ── Validation + advance ─────────────────────────────────────────────────
       validateAndAdvance: () => {
         const { currentStep, draft, nextStep } = get();
-        const errors = validateStep(currentStep, draft);
+        // Locale-aware validation messages (store lives outside React, so read
+        // the current locale directly from the locale store).
+        const locale = useLocaleStore.getState().locale;
+        const errors = validateStep(currentStep, draft, locale);
         if (Object.keys(errors).length > 0) {
           set({ validationErrors: errors });
           return false;
