@@ -33,7 +33,7 @@ export function ReviewActionBar({
         <button
           onClick={onApprove}
           disabled={disabled}
-          className="flex-1 min-w-[80px] py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50"
+          className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
           قبول
         </button>
@@ -42,7 +42,7 @@ export function ReviewActionBar({
         <button
           onClick={onReject}
           disabled={disabled}
-          className="flex-1 min-w-[80px] py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold disabled:opacity-50"
+          className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
           رفض
         </button>
@@ -51,7 +51,7 @@ export function ReviewActionBar({
         <button
           onClick={onRequestChanges}
           disabled={disabled}
-          className="flex-1 min-w-[80px] py-2 rounded-xl bg-[#FFF8E7] text-[#D4A017] text-xs font-bold disabled:opacity-50"
+          className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#FFF8E7] text-[#D4A017] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
           طلب تعديل
         </button>
@@ -60,7 +60,7 @@ export function ReviewActionBar({
         <button
           onClick={onEscalate}
           disabled={disabled}
-          className="flex-1 min-w-[80px] py-2 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold disabled:opacity-50"
+          className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
           تصعيد
         </button>
@@ -69,7 +69,7 @@ export function ReviewActionBar({
         <button
           onClick={onDismiss}
           disabled={disabled}
-          className="flex-1 min-w-[80px] py-2 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold disabled:opacity-50"
+          className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
           رفض البلاغ
         </button>
@@ -78,7 +78,7 @@ export function ReviewActionBar({
         <button
           onClick={onClear}
           disabled={disabled}
-          className="flex-1 min-w-[80px] py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50"
+          className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
           تخليص العلم
         </button>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
+import { AdminDemoBanner } from "@/components/admin/AdminDemoBanner";
 import { UserManagementCard } from "@/components/admin/UserManagementCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { MOCK_ADMIN_USERS } from "@/mock/admin";
@@ -37,6 +38,10 @@ export default function AdminUsersPage() {
   return (
     <AdminDashboardShell titleAr="إدارة المستخدمين">
       <div className="px-4 py-4 space-y-4" dir="rtl">
+        <AdminDemoBanner
+          noteAr="إدارة المستخدمين قيد التطوير. البيانات والإجراءات هنا تجريبية ولا تؤثر على حسابات حقيقية."
+          noteEn="User management is a work in progress. Data and actions here are demo only and do not affect real accounts."
+        />
         <p className="text-xs text-[#627D98]">{activeCount} مستخدم نشط · {users.length} إجمالي</p>
 
         {/* Search */}

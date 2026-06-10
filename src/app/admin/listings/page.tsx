@@ -114,7 +114,17 @@ export default function AdminListingsPage() {
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد إعلانات في هذه الفئة" />
+          <AdminEmptyState
+            titleAr={filter === "all" ? "لا توجد إعلانات للمراجعة" : "لا توجد إعلانات في هذه الفئة"}
+            titleEn={filter === "all" ? "No listings to review" : "No listings in this category"}
+            descriptionAr={filter === "all"
+              ? "ستظهر الإعلانات المُرسَلة للمراجعة هنا."
+              : `لا توجد إعلانات بحالة "${FILTER_LABELS_AR[filter]}". جرّب فلتراً آخر.`}
+            descriptionEn={filter === "all"
+              ? "Listings submitted for review will appear here."
+              : "No listings match this filter. Try another one."}
+            onReset={filter !== "all" ? () => setFilter("all") : undefined}
+          />
         ) : (
           <div className="space-y-3">
             {filtered.map((listing) => (

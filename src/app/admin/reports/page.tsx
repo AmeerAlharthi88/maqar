@@ -85,7 +85,17 @@ export default function AdminReportsPage() {
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
         ) : filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد بلاغات" descriptionAr="البلاغات الواردة من المستخدمين ستظهر هنا." />
+          <AdminEmptyState
+            titleAr={filter === "all" ? "لا توجد بلاغات مفتوحة" : "لا توجد بلاغات في هذه الحالة"}
+            titleEn={filter === "all" ? "No open reports" : "No reports in this status"}
+            descriptionAr={filter === "all"
+              ? "البلاغات الواردة من المستخدمين ستظهر هنا."
+              : `لا توجد بلاغات بحالة "${STATUS_AR[filter]}". جرّب فلتراً آخر.`}
+            descriptionEn={filter === "all"
+              ? "Reports submitted by users will appear here."
+              : "No reports match this filter. Try another one."}
+            onReset={filter !== "all" ? () => setFilter("all") : undefined}
+          />
         ) : (
           <div className="space-y-3">
             {filtered.map((report) => (
