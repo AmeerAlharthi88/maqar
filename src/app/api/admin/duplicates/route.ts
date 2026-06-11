@@ -18,9 +18,13 @@ export async function GET(req: NextRequest) {
   const url    = new URL(req.url);
   const status = url.searchParams.get("status") as DuplicateStatus | null;
 
-  const alerts = await fetchDuplicateAlerts(
-    status && VALID_STATUSES.includes(status) ? status : undefined
-  );
-
-  return NextResponse.json({ success: true, data: alerts });
+  try {
+    const alerts = await fetchDuplicateAlerts(
+      status && VALID_STATUSES.includes(status) ? status : undefined
+    );
+    return NextResponse.json({ success: true, data: alerts });
+  } catch (err) {
+    console.error("[api/admin/duplicates] fetch failed:", err);
+    return NextResponse.json({ success: false, error: "fetch_failed" }, { status: 500 });
+  }
 }

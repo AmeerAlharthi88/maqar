@@ -10,6 +10,11 @@ export async function GET() {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
 
-  const rows = await fetchAdminMarketData();
-  return NextResponse.json({ success: true, data: rows });
+  try {
+    const rows = await fetchAdminMarketData();
+    return NextResponse.json({ success: true, data: rows });
+  } catch (err) {
+    console.error("[api/admin/market-data] fetch failed:", err);
+    return NextResponse.json({ success: false, error: "fetch_failed" }, { status: 500 });
+  }
 }

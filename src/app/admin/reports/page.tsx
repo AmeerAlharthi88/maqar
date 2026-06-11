@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { ReportCard } from "@/components/admin/ReportCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { MOCK_ADMIN_REPORTS } from "@/mock/admin";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AdminReport, ReportStatus } from "@/types/admin";
 import { REPORT_STATUS_AR } from "@/types/admin";
 
@@ -16,20 +16,24 @@ const STATUS_AR: Record<ReportStatus | "all", string> = {
 function useReportQueue() {
   const [items, setItems] = useState<AdminReport[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const reload = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/admin/reports");
-      if (res.ok) {
-        const json = await res.json();
-        const data: AdminReport[] = json.data ?? [];
-        setItems(data.length > 0 ? data : MOCK_ADMIN_REPORTS);
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        // Real data only — empty array is a real empty state, never mock.
+        setItems((json.data ?? []) as AdminReport[]);
       } else {
-        setItems(MOCK_ADMIN_REPORTS);
+        setError(true);
+        setItems([]);
       }
     } catch {
-      setItems(MOCK_ADMIN_REPORTS);
+      setError(true);
+      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -52,12 +56,12 @@ function useReportQueue() {
     }
   }, []);
 
-  return { items, loading, update };
+  return { items, loading, error, reload, update };
 }
 
 export default function AdminReportsPage() {
   const [filter, setFilter] = useState<ReportStatus | "all">("all");
-  const { items, loading, update } = useReportQueue();
+  const { items, loading, error, reload, update } = useReportQueue();
 
   const filtered = filter === "all" ? items : items.filter((r) => r.status === filter);
   const newCount = items.filter((r) => r.status === "new").length;
@@ -84,6 +88,8 @@ export default function AdminReportsPage() {
 
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
           <AdminEmptyState
             titleAr={filter === "all" ? "لا توجد بلاغات مفتوحة" : "لا توجد بلاغات في هذه الحالة"}

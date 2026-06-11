@@ -5,7 +5,7 @@ import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AdminQueueCard } from "@/components/admin/AdminQueueCard";
 import { ReviewActionBar } from "@/components/admin/ReviewActionBar";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { MOCK_ADMIN_LISTINGS } from "@/mock/admin";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { ListingReviewStatus, AdminListingItem } from "@/types/admin";
 import { LISTING_REVIEW_STATUS_AR } from "@/types/admin";
 
@@ -32,20 +32,25 @@ const FILTER_LABELS_AR: Record<ListingReviewStatus | "all", string> = {
 function useListingQueue() {
   const [items, setItems] = useState<AdminListingItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const reload = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/admin/listings");
-      if (res.ok) {
-        const json = await res.json();
-        const data: AdminListingItem[] = json.data ?? [];
-        setItems(data.length > 0 ? data : MOCK_ADMIN_LISTINGS);
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        // Real data only — an empty array is a real empty state, NOT a reason
+        // to show mock listings (which previously masked a service-role outage).
+        setItems((json.data ?? []) as AdminListingItem[]);
       } else {
-        setItems(MOCK_ADMIN_LISTINGS);
+        setError(true);
+        setItems([]);
       }
     } catch {
-      setItems(MOCK_ADMIN_LISTINGS);
+      setError(true);
+      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -79,12 +84,12 @@ function useListingQueue() {
     []
   );
 
-  return { items, loading, updateStatus };
+  return { items, loading, error, reload, updateStatus };
 }
 
 export default function AdminListingsPage() {
   const [filter, setFilter] = useState<ListingReviewStatus | "all">("all");
-  const { items, loading, updateStatus } = useListingQueue();
+  const { items, loading, error, reload, updateStatus } = useListingQueue();
 
   const filtered = filter === "all" ? items : items.filter((l) => l.reviewStatus === filter);
 
@@ -113,6 +118,8 @@ export default function AdminListingsPage() {
         {/* Queue */}
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
           <AdminEmptyState
             titleAr={filter === "all" ? "لا توجد إعلانات للمراجعة" : "لا توجد إعلانات في هذه الفئة"}

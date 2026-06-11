@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { DuplicateComparisonCard } from "@/components/admin/DuplicateComparisonCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { MOCK_DUPLICATE_PAIRS } from "@/mock/admin";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { DuplicatePair, DuplicateStatus } from "@/types/admin";
 
 const FILTERS: (DuplicateStatus | "all")[] = ["all", "pending", "confirmed_duplicate", "not_duplicate"];
@@ -15,20 +15,23 @@ const FILTER_AR: Record<DuplicateStatus | "all", string> = {
 function useDuplicateQueue() {
   const [pairs, setPairs] = useState<DuplicatePair[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const reload = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/admin/duplicates");
-      if (res.ok) {
-        const json = await res.json();
-        const data: DuplicatePair[] = json.data ?? [];
-        setPairs(data.length > 0 ? data : MOCK_DUPLICATE_PAIRS);
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        setPairs((json.data ?? []) as DuplicatePair[]);
       } else {
-        setPairs(MOCK_DUPLICATE_PAIRS);
+        setError(true);
+        setPairs([]);
       }
     } catch {
-      setPairs(MOCK_DUPLICATE_PAIRS);
+      setError(true);
+      setPairs([]);
     } finally {
       setLoading(false);
     }
@@ -50,12 +53,12 @@ function useDuplicateQueue() {
     }
   }, []);
 
-  return { pairs, loading, update };
+  return { pairs, loading, error, reload, update };
 }
 
 export default function AdminDuplicatesPage() {
   const [filter, setFilter] = useState<DuplicateStatus | "all">("all");
-  const { pairs, loading, update } = useDuplicateQueue();
+  const { pairs, loading, error, reload, update } = useDuplicateQueue();
   const filtered = filter === "all" ? pairs : pairs.filter((p) => p.status === filter);
   const pendingCount = pairs.filter((p) => p.status === "pending").length;
 
@@ -80,8 +83,10 @@ export default function AdminDuplicatesPage() {
 
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد تكرارات" descriptionAr="الإعلانات المكررة المكتشفة تلقائياً ستظهر هنا." />
+          <AdminEmptyState titleAr="لا توجد تكرارات" titleEn="No duplicates" descriptionAr="الإعلانات المكررة المكتشفة تلقائياً ستظهر هنا." descriptionEn="Auto-detected duplicate listings will appear here." />
         ) : (
           <div className="space-y-3">
             {filtered.map((pair) => (

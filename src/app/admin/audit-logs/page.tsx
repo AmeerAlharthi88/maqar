@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AuditLogTable } from "@/components/admin/AuditLogTable";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { MOCK_AUDIT_LOGS } from "@/mock/admin";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AuditLog, AuditCategory } from "@/types/admin";
 import { AUDIT_CATEGORY_AR } from "@/types/admin";
 
@@ -33,8 +33,11 @@ function useAuditLogs(
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [error, setError] = useState(false);
+
   const reload = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const params = new URLSearchParams();
       if (categoryFilter !== "all") params.set("category", categoryFilter);
@@ -42,15 +45,16 @@ function useAuditLogs(
       if (dbSev) params.set("severity", dbSev);
 
       const res = await fetch(`/api/admin/audit-logs?${params.toString()}`);
-      if (res.ok) {
-        const json = await res.json();
-        const data: AuditLog[] = json.data ?? [];
-        setLogs(data.length > 0 ? data : MOCK_AUDIT_LOGS);
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        setLogs((json.data ?? []) as AuditLog[]);
       } else {
-        setLogs(MOCK_AUDIT_LOGS);
+        setError(true);
+        setLogs([]);
       }
     } catch {
-      setLogs(MOCK_AUDIT_LOGS);
+      setError(true);
+      setLogs([]);
     } finally {
       setLoading(false);
     }
@@ -59,14 +63,14 @@ function useAuditLogs(
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { reload(); }, [reload]);
 
-  return { logs, loading };
+  return { logs, loading, error, reload };
 }
 
 export default function AdminAuditLogsPage() {
   const [categoryFilter, setCategoryFilter] = useState<AuditCategory | "all">("all");
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
 
-  const { logs, loading } = useAuditLogs(categoryFilter, severityFilter);
+  const { logs, loading, error, reload } = useAuditLogs(categoryFilter, severityFilter);
 
   const filtered = logs.filter((log) => {
     const matchCategory = categoryFilter === "all" || log.category === categoryFilter;
@@ -127,8 +131,10 @@ export default function AdminAuditLogsPage() {
 
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد سجلات" descriptionAr="لا توجد سجلات مطابقة للفلتر المحدد." />
+          <AdminEmptyState titleAr="لا توجد سجلات" titleEn="No audit logs" descriptionAr="لا توجد سجلات مطابقة للفلتر المحدد." descriptionEn="No logs match the selected filter." />
         ) : (
           <AuditLogTable logs={filtered} />
         )}

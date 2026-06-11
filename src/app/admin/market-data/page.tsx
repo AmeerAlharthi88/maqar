@@ -3,26 +3,30 @@
 import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { MarketDataTable } from "@/components/admin/MarketDataTable";
-import { MOCK_ADMIN_MARKET_DATA } from "@/mock/admin";
+import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AdminMarketDataRow } from "@/types/admin";
 
 function useMarketData() {
   const [rows, setRows] = useState<AdminMarketDataRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const reload = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/admin/market-data");
-      if (res.ok) {
-        const json = await res.json();
-        const data: AdminMarketDataRow[] = json.data ?? [];
-        setRows(data.length > 0 ? data : MOCK_ADMIN_MARKET_DATA);
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        setRows((json.data ?? []) as AdminMarketDataRow[]);
       } else {
-        setRows(MOCK_ADMIN_MARKET_DATA);
+        setError(true);
+        setRows([]);
       }
     } catch {
-      setRows(MOCK_ADMIN_MARKET_DATA);
+      setError(true);
+      setRows([]);
     } finally {
       setLoading(false);
     }
@@ -31,11 +35,11 @@ function useMarketData() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { reload(); }, [reload]);
 
-  return { rows, loading };
+  return { rows, loading, error, reload };
 }
 
 export default function AdminMarketDataPage() {
-  const { rows, loading } = useMarketData();
+  const { rows, loading, error, reload } = useMarketData();
 
   const lastUpdated = rows[0]?.lastUpdated
     ? new Date(rows[0].lastUpdated).toLocaleDateString("ar-OM", {
@@ -72,6 +76,10 @@ export default function AdminMarketDataPage() {
 
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
+        ) : rows.length === 0 ? (
+          <AdminEmptyState titleAr="لا توجد بيانات سوق" titleEn="No market data" descriptionAr="ستظهر بيانات السوق المُدارة هنا." descriptionEn="Managed market data will appear here." />
         ) : (
           <MarketDataTable rows={rows} />
         )}

@@ -149,7 +149,7 @@ export async function fetchPendingListings(): Promise<AdminListingItem[]> {
 
     if (error) {
       console.error("[Admin] fetchPendingListings:", error.message);
-      return [];
+      throw new Error("admin_query_failed");
     }
 
     return (data ?? []).map((row: Record<string, unknown>) => ({
@@ -170,7 +170,7 @@ export async function fetchPendingListings(): Promise<AdminListingItem[]> {
     }));
   } catch (err) {
     console.error("[Admin] fetchPendingListings exception:", err);
-    return [];
+    throw err instanceof Error ? err : new Error("admin_query_failed");
   }
 }
 
@@ -303,7 +303,7 @@ export async function fetchAdminReports(
     const { data, error } = await query;
     if (error) {
       console.error("[Admin] fetchAdminReports:", error.message);
-      return [];
+      throw new Error("admin_query_failed");
     }
 
     return (data ?? []).map((row: Record<string, unknown>) => ({
@@ -321,7 +321,7 @@ export async function fetchAdminReports(
     }));
   } catch (err) {
     console.error("[Admin] fetchAdminReports exception:", err);
-    return [];
+    throw err instanceof Error ? err : new Error("admin_query_failed");
   }
 }
 
@@ -401,7 +401,7 @@ export async function fetchAMLFlags(
     const { data, error } = await query;
     if (error) {
       console.error("[Admin] fetchAMLFlags:", error.message);
-      return [];
+      throw new Error("admin_query_failed");
     }
 
     return (data ?? []).map((row: Record<string, unknown>) => {
@@ -425,7 +425,7 @@ export async function fetchAMLFlags(
     });
   } catch (err) {
     console.error("[Admin] fetchAMLFlags exception:", err);
-    return [];
+    throw err instanceof Error ? err : new Error("admin_query_failed");
   }
 }
 
@@ -502,7 +502,7 @@ export async function fetchDuplicateAlerts(
     const { data, error } = await query;
     if (error) {
       console.error("[Admin] fetchDuplicateAlerts:", error.message);
-      return [];
+      throw new Error("admin_query_failed");
     }
 
     return (data ?? []).map((row: Record<string, unknown>) => {
@@ -549,7 +549,7 @@ export async function fetchDuplicateAlerts(
     });
   } catch (err) {
     console.error("[Admin] fetchDuplicateAlerts exception:", err);
-    return [];
+    throw err instanceof Error ? err : new Error("admin_query_failed");
   }
 }
 
@@ -655,7 +655,7 @@ export async function fetchAuditLogs(opts?: {
     const { data, error } = await query;
     if (error) {
       console.error("[Admin] fetchAuditLogs:", error.message);
-      return [];
+      throw new Error("admin_query_failed");
     }
 
     return (data ?? []).map((row: Record<string, unknown>) => {
@@ -684,7 +684,7 @@ export async function fetchAuditLogs(opts?: {
     });
   } catch (err) {
     console.error("[Admin] fetchAuditLogs exception:", err);
-    return [];
+    throw err instanceof Error ? err : new Error("admin_query_failed");
   }
 }
 
@@ -715,7 +715,7 @@ export async function fetchAdminMarketData(): Promise<AdminMarketDataRow[]> {
 
     if (error) {
       console.error("[Admin] fetchAdminMarketData:", error.message);
-      return [];
+      throw new Error("admin_query_failed");
     }
 
     return (data ?? []).map((row: Record<string, unknown>) => ({
@@ -733,6 +733,6 @@ export async function fetchAdminMarketData(): Promise<AdminMarketDataRow[]> {
     }));
   } catch (err) {
     console.error("[Admin] fetchAdminMarketData exception:", err);
-    return [];
+    throw err instanceof Error ? err : new Error("admin_query_failed");
   }
 }
