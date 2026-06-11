@@ -16,9 +16,13 @@ export async function GET(req: NextRequest) {
   const url    = new URL(req.url);
   const status = url.searchParams.get("status") as AMLStatus | null;
 
-  const flags = await fetchAMLFlags(
-    status && VALID_STATUSES.includes(status) ? status : undefined
-  );
-
-  return NextResponse.json({ success: true, data: flags });
+  try {
+    const flags = await fetchAMLFlags(
+      status && VALID_STATUSES.includes(status) ? status : undefined
+    );
+    return NextResponse.json({ success: true, data: flags });
+  } catch (err) {
+    console.error("[api/admin/aml] fetch failed:", err);
+    return NextResponse.json({ success: false, error: "fetch_failed" }, { status: 500 });
+  }
 }

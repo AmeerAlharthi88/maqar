@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AMLFlagCard } from "@/components/admin/AMLFlagCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { MOCK_AML_FLAGS } from "@/mock/admin";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AMLFlag, AMLStatus } from "@/types/admin";
 import { AML_STATUS_AR } from "@/types/admin";
 
@@ -14,20 +14,23 @@ const STATUS_FILTER_AR: Record<AMLStatus | "all", string> = { all: "الكل", .
 function useAmlQueue() {
   const [items, setItems] = useState<AMLFlag[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const reload = useCallback(async () => {
     setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/admin/aml");
-      if (res.ok) {
-        const json = await res.json();
-        const data: AMLFlag[] = json.data ?? [];
-        setItems(data.length > 0 ? data : MOCK_AML_FLAGS);
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        setItems((json.data ?? []) as AMLFlag[]);
       } else {
-        setItems(MOCK_AML_FLAGS);
+        setError(true);
+        setItems([]);
       }
     } catch {
-      setItems(MOCK_AML_FLAGS);
+      setError(true);
+      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -49,12 +52,12 @@ function useAmlQueue() {
     }
   }, []);
 
-  return { items, loading, update };
+  return { items, loading, error, reload, update };
 }
 
 export default function AdminAmlPage() {
   const [filter, setFilter] = useState<AMLStatus | "all">("all");
-  const { items, loading, update } = useAmlQueue();
+  const { items, loading, error, reload, update } = useAmlQueue();
   const filtered = filter === "all" ? items : items.filter((f) => f.status === filter);
   const flaggedCount = items.filter((f) => f.status === "flagged").length;
 
@@ -87,8 +90,10 @@ export default function AdminAmlPage() {
 
         {loading ? (
           <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد أعلام AML" descriptionAr="الإعلانات المشتبه بها ستظهر هنا تلقائياً." />
+          <AdminEmptyState titleAr="لا توجد أعلام AML" titleEn="No AML flags" descriptionAr="الإعلانات المشتبه بها ستظهر هنا تلقائياً." descriptionEn="Suspicious listings will appear here automatically." />
         ) : (
           <div className="space-y-3">
             {filtered.map((flag) => (

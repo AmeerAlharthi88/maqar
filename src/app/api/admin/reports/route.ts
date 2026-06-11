@@ -16,9 +16,13 @@ export async function GET(req: NextRequest) {
   const url    = new URL(req.url);
   const status = url.searchParams.get("status") as ReportStatus | null;
 
-  const reports = await fetchAdminReports(
-    status && VALID_STATUSES.includes(status) ? status : undefined
-  );
-
-  return NextResponse.json({ success: true, data: reports });
+  try {
+    const reports = await fetchAdminReports(
+      status && VALID_STATUSES.includes(status) ? status : undefined
+    );
+    return NextResponse.json({ success: true, data: reports });
+  } catch (err) {
+    console.error("[api/admin/reports] fetch failed:", err);
+    return NextResponse.json({ success: false, error: "fetch_failed" }, { status: 500 });
+  }
 }

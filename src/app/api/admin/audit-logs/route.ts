@@ -21,10 +21,14 @@ export async function GET(req: NextRequest) {
   const category = url.searchParams.get("category") as AuditCategory | null;
   const severity = url.searchParams.get("severity");
 
-  const logs = await fetchAuditLogs({
-    category: category && VALID_CATEGORIES.includes(category) ? category : undefined,
-    severity:  severity && VALID_SEVERITIES.includes(severity) ? severity : undefined,
-  });
-
-  return NextResponse.json({ success: true, data: logs });
+  try {
+    const logs = await fetchAuditLogs({
+      category: category && VALID_CATEGORIES.includes(category) ? category : undefined,
+      severity:  severity && VALID_SEVERITIES.includes(severity) ? severity : undefined,
+    });
+    return NextResponse.json({ success: true, data: logs });
+  } catch (err) {
+    console.error("[api/admin/audit-logs] fetch failed:", err);
+    return NextResponse.json({ success: false, error: "fetch_failed" }, { status: 500 });
+  }
 }
