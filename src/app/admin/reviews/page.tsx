@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
-import { MOCK_ADMIN_REVIEWS } from "@/mock/admin";
 import type { AdminReviewItem, ReviewModerationStatus } from "@/types/admin";
 import { REVIEW_MOD_STATUS_AR } from "@/types/admin";
 import { fetchPendingReviewsAdmin, updateReviewModeration } from "@/lib/supabase/reviews";
@@ -42,18 +42,27 @@ function reviewItemToAdmin(r: ReviewItem): AdminReviewItem {
 }
 
 function useReviewQueue() {
-  const [items, setItems] = useState<AdminReviewItem[]>(MOCK_ADMIN_REVIEWS);
+  const [items, setItems] = useState<AdminReviewItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    fetchPendingReviewsAdmin()
-      .then((rows) => {
-        if (rows.length > 0) {
-          setItems(rows.map(reviewItemToAdmin));
-        }
-        // if empty, keep mock data
-      })
-      .catch(() => {/* keep mock data */});
+  const reload = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const rows = await fetchPendingReviewsAdmin();
+      // Real data only — an empty array is a real empty state, never mock.
+      setItems(rows.map(reviewItemToAdmin));
+    } catch {
+      setError(true);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { reload(); }, [reload]);
 
   async function update(id: string, status: ReviewModerationStatus, note?: string) {
     // Optimistic update
@@ -67,12 +76,12 @@ function useReviewQueue() {
     }
   }
 
-  return { items, update };
+  return { items, loading, error, reload, update };
 }
 
 export default function AdminReviewsPage() {
   const [filter, setFilter] = useState<ReviewModerationStatus | "all">("all");
-  const { items, update } = useReviewQueue();
+  const { items, loading, error, reload, update } = useReviewQueue();
 
   const filtered = filter === "all" ? items : items.filter((r) => r.status === filter);
 
@@ -95,8 +104,18 @@ export default function AdminReviewsPage() {
         </div>
 
         {/* Cards */}
-        {filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد تقييمات في هذه الفئة" />
+        {loading ? (
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
+        ) : filtered.length === 0 ? (
+          <AdminEmptyState
+            titleAr={filter === "all" ? "لا توجد تقييمات للمراجعة" : "لا توجد تقييمات في هذه الفئة"}
+            titleEn={filter === "all" ? "No reviews to moderate" : "No reviews in this category"}
+            descriptionAr={filter === "all" ? "تقييمات المستخدمين بانتظار المراجعة ستظهر هنا." : undefined}
+            descriptionEn={filter === "all" ? "User reviews awaiting moderation will appear here." : undefined}
+            onReset={filter !== "all" ? () => setFilter("all") : undefined}
+          />
         ) : (
           <div className="space-y-3">
             {filtered.map((review) => {

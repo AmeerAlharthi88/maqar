@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { VerificationRequestCard } from "@/components/admin/VerificationRequestCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
-import { MOCK_VERIFICATION_REQUESTS } from "@/mock/admin";
+import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AdminVerificationRequest, VerificationRequestStatus, VerificationRequestType } from "@/types/admin";
 import { fetchKYCApplicationsAdmin, updateKYCApplicationStatus } from "@/lib/supabase/kyc";
 import type { KycApplicationAdmin, KycStatus } from "@/lib/supabase/kyc";
@@ -57,18 +57,27 @@ function kycToVerificationRequest(app: KycApplicationAdmin): AdminVerificationRe
 }
 
 function useVerificationQueue() {
-  const [items, setItems] = useState<AdminVerificationRequest[]>(MOCK_VERIFICATION_REQUESTS);
+  const [items, setItems] = useState<AdminVerificationRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    fetchKYCApplicationsAdmin()
-      .then((rows) => {
-        if (rows.length > 0) {
-          setItems(rows.map(kycToVerificationRequest));
-        }
-        // if empty, keep mock data
-      })
-      .catch(() => {/* keep mock data */});
+  const reload = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const rows = await fetchKYCApplicationsAdmin();
+      // Real data only — an empty array is a real empty state, never mock.
+      setItems(rows.map(kycToVerificationRequest));
+    } catch {
+      setError(true);
+      setItems([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { reload(); }, [reload]);
 
   async function update(id: string, status: VerificationRequestStatus, note?: string) {
     // Optimistic update
@@ -82,12 +91,12 @@ function useVerificationQueue() {
     );
   }
 
-  return { items, update };
+  return { items, loading, error, reload, update };
 }
 
 export default function AdminVerificationPage() {
   const [typeFilter, setTypeFilter] = useState<VerificationRequestType | "all">("all");
-  const { items, update } = useVerificationQueue();
+  const { items, loading, error, reload, update } = useVerificationQueue();
 
   const filtered = typeFilter === "all" ? items : items.filter((r) => r.type === typeFilter);
   const pending  = items.filter((r) => r.status === "pending" || r.status === "under_review").length;
@@ -113,8 +122,18 @@ export default function AdminVerificationPage() {
           })}
         </div>
 
-        {filtered.length === 0 ? (
-          <AdminEmptyState titleAr="لا توجد طلبات توثيق" descriptionAr="طلبات التوثيق من الوسطاء والوكالات ستظهر هنا." />
+        {loading ? (
+          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+        ) : error ? (
+          <AdminErrorState onRetry={reload} />
+        ) : filtered.length === 0 ? (
+          <AdminEmptyState
+            titleAr={typeFilter === "all" ? "لا توجد طلبات توثيق" : "لا توجد طلبات في هذه الفئة"}
+            titleEn={typeFilter === "all" ? "No verification requests" : "No requests in this category"}
+            descriptionAr={typeFilter === "all" ? "طلبات التوثيق من الوسطاء والوكالات ستظهر هنا." : undefined}
+            descriptionEn={typeFilter === "all" ? "Verification requests from agents and agencies will appear here." : undefined}
+            onReset={typeFilter !== "all" ? () => setTypeFilter("all") : undefined}
+          />
         ) : (
           <div className="space-y-3">
             {filtered.map((req) => (

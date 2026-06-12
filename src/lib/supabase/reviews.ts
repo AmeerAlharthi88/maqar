@@ -137,7 +137,9 @@ export async function fetchPendingReviewsAdmin(): Promise<ReviewItem[]> {
 
   if (error) {
     console.error("[Reviews] fetchPendingReviewsAdmin error:", error);
-    return [];
+    // Throw so the admin page can show a real error state instead of silently
+    // falling back to mock reviews (which would hide a real read failure).
+    throw new Error("admin_reviews_fetch_failed");
   }
 
   return (data ?? []).map((r) => rowToReviewItem(r as unknown as DbReviewRow));

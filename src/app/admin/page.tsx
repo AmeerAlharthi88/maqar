@@ -4,12 +4,8 @@ import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AdminDemoBanner } from "@/components/admin/AdminDemoBanner";
 import { DashboardMetricCard } from "@/components/dashboard/DashboardMetricCard";
 import { DashboardChartCard } from "@/components/dashboard/DashboardChartCard";
-import { AdminRiskBadge } from "@/components/admin/AdminRiskBadge";
 import { MOCK_ADMIN_STATS } from "@/mock/admin";
 import { MOCK_AUDIT_LOGS } from "@/mock/admin";
-import { MOCK_AML_FLAGS } from "@/mock/admin";
-import { MOCK_VERIFICATION_REQUESTS } from "@/mock/admin";
-import { MOCK_ADMIN_LISTINGS } from "@/mock/admin";
 import { MOCK_MARKET_OVERVIEW } from "@/mock/market-stats";
 import { ROUTES } from "@/config/routes";
 import Link from "next/link";
@@ -30,46 +26,19 @@ const CHART_LINES = [
 
 export default function AdminOverviewPage() {
   const stats = MOCK_ADMIN_STATS;
-  const pendingVerification = MOCK_VERIFICATION_REQUESTS.filter((r) => r.status === "pending" || r.status === "under_review");
-  const pendingListings     = MOCK_ADMIN_LISTINGS.filter((l) => l.reviewStatus === "pending");
-  const criticalAml         = MOCK_AML_FLAGS.filter((f) => f.status === "flagged");
-  const recentLogs          = MOCK_AUDIT_LOGS.slice(0, 4);
+  const recentLogs = MOCK_AUDIT_LOGS.slice(0, 4);
 
   return (
     <AdminDashboardShell titleAr="لوحة الإدارة">
       <div className="px-4 py-4 space-y-4" dir="rtl">
-        {/* Dashboard KPIs are demonstration data until live wiring (Phase 12+) */}
+        {/* This overview shows demonstration data only. The mock-derived "priority
+            alerts" were removed so no fake operational counts appear here — real
+            moderation happens on the Listings-review and Reports pages, which load
+            live data with real loading/error/empty states. */}
         <AdminDemoBanner
-          noteAr="جميع مؤشرات لوحة التحكم أدناه بيانات تجريبية للعرض، وليست أرقاماً تشغيلية حقيقية."
-          noteEn="All dashboard KPIs below are demonstration data, not live operational figures."
+          noteAr="جميع الأرقام والنشاط في هذه اللوحة بيانات تجريبية للعرض فقط، وليست بيانات تشغيلية حقيقية. للمراجعة الفعلية استخدم صفحتَي «مراجعة الإعلانات» و«البلاغات»."
+          noteEn="All figures and activity on this dashboard are demonstration data only — not live operational data. Use the Listings-review and Reports pages for real moderation."
         />
-
-        {/* Priority alerts */}
-        {(criticalAml.length > 0 || pendingVerification.length > 0) && (
-          <div className="bg-[#FEF0EE] rounded-2xl border border-[#C0392B]/20 px-4 py-3">
-            <p className="text-xs font-bold text-[#C0392B] mb-2">تنبيهات تستوجب المراجعة الفورية</p>
-            <div className="space-y-1">
-              {criticalAml.length > 0 && (
-                <Link href={ROUTES.adminAml} className="flex items-center justify-between py-1">
-                  <p className="text-xs text-[#102A43]">{criticalAml.length} إعلان مُبلَّغ AML</p>
-                  <AdminRiskBadge level="critical" />
-                </Link>
-              )}
-              {pendingVerification.length > 0 && (
-                <Link href={ROUTES.adminVerification} className="flex items-center justify-between py-1">
-                  <p className="text-xs text-[#102A43]">{pendingVerification.length} طلب توثيق في الانتظار</p>
-                  <AdminRiskBadge level="medium" />
-                </Link>
-              )}
-              {pendingListings.length > 0 && (
-                <Link href={ROUTES.adminListings} className="flex items-center justify-between py-1">
-                  <p className="text-xs text-[#102A43]">{pendingListings.length} إعلان ينتظر المراجعة</p>
-                  <AdminRiskBadge level="low" />
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Key metrics — row 1 */}
         <div className="grid grid-cols-2 gap-3">
