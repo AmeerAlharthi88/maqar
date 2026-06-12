@@ -6,55 +6,11 @@ import { VerificationRequestCard } from "@/components/admin/VerificationRequestC
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AdminVerificationRequest, VerificationRequestStatus, VerificationRequestType } from "@/types/admin";
-import { fetchKYCApplicationsAdmin, updateKYCApplicationStatus } from "@/lib/supabase/kyc";
-import type { KycApplicationAdmin, KycStatus } from "@/lib/supabase/kyc";
-import type { KYCDocumentType } from "@/types/profile";
 
 const TYPE_FILTERS: (VerificationRequestType | "all")[] = ["all", "agent", "agency"];
 const TYPE_AR: Record<VerificationRequestType | "all", string> = {
   all: "الكل", agent: "وسيط", agency: "وكالة", property: "عقار",
 };
-
-// ── Mapper: KycApplicationAdmin → AdminVerificationRequest ─────────────────────
-const KYC_STATUS_MAP: Record<KycStatus, VerificationRequestStatus> = {
-  not_started:    "pending",
-  draft:          "pending",
-  submitted:      "pending",
-  under_review:   "under_review",
-  approved:       "approved",
-  rejected:       "rejected",
-  needs_more_info:"needs_more_info",
-};
-
-const KYC_DOC_TYPE_MAP: Record<KYCDocumentType, "civil_id" | "agent_license" | "cr" | "property_deed" | "other"> = {
-  civil_id_front: "civil_id",
-  civil_id_back:  "civil_id",
-  cr_number:      "cr",
-  agency_license: "other",
-  agent_card:     "agent_license",
-  selfie:         "other",
-};
-
-function kycToVerificationRequest(app: KycApplicationAdmin): AdminVerificationRequest {
-  return {
-    id: app.id,
-    applicantNameAr: app.authorName,
-    applicantId: app.userId,
-    type: app.entityType === "individual" ? "agent" : "agency",
-    status: KYC_STATUS_MAP[app.status] ?? "pending",
-    phone: "—",
-    isPhoneVerified: false,
-    documents: app.documents.map((d) => ({
-      type: KYC_DOC_TYPE_MAP[d.documentType] ?? "other",
-      labelAr: d.fileName,
-      submitted: true,
-      verified: false,
-    })),
-    submittedAt: app.submittedAt ?? app.createdAt,
-    riskLevel: "low",
-    adminNote: app.adminNotes ?? undefined,
-  };
-}
 
 function useVerificationQueue() {
   const [items, setItems] = useState<AdminVerificationRequest[]>([]);
@@ -65,9 +21,16 @@ function useVerificationQueue() {
     setLoading(true);
     setError(false);
     try {
-      const rows = await fetchKYCApplicationsAdmin();
-      // Real data only — an empty array is a real empty state, never mock.
-      setItems(rows.map(kycToVerificationRequest));
+      const res = await fetch("/api/admin/verification");
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        // Real data only — the service-role API returns AdminVerificationRequest[]
+        // directly; an empty array is a real empty state, never mock.
+        setItems((json.data ?? []) as AdminVerificationRequest[]);
+      } else {
+        setError(true);
+        setItems([]);
+      }
     } catch {
       setError(true);
       setItems([]);
@@ -84,11 +47,11 @@ function useVerificationQueue() {
     setItems((prev) =>
       prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r)
     );
-    // Map VerificationRequestStatus back to KycStatus for DB update
-    const kycStatus = status as KycStatus;
-    await updateKYCApplicationStatus(id, kycStatus, note).catch((err) =>
-      console.error("[Admin/Verification] updateKYCApplicationStatus error:", err)
-    );
+    await fetch(`/api/admin/verification/${id}`, {
+      method:  "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ status, note }),
+    }).catch((err) => console.error("[Admin/Verification] update error:", err));
   }
 
   return { items, loading, error, reload, update };
