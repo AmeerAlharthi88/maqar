@@ -319,7 +319,7 @@ export const AML_PRICE_THRESHOLD = 100_000; // OMR — flag if >= this
 export const SUSPICIOUS_DISCOUNT_PCT = 30;   // % below market avg to flag
 
 // ── Minimum field lengths ─────────────────────────────────────────────────────
-export const MIN_TITLE_LENGTH = 10;
+export const MIN_TITLE_LENGTH = 8;
 export const MAX_TITLE_LENGTH = 120;
 export const MIN_DESCRIPTION_LENGTH = 50;
 export const MAX_DESCRIPTION_LENGTH = 2000;
