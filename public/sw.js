@@ -13,9 +13,9 @@
 // that changes JS bundles, so the activate event evicts all stale caches.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CACHE_NAME = "maqar-v2";
-const STATIC_CACHE = "maqar-static-v2";
-const DYNAMIC_CACHE = "maqar-dynamic-v2";
+const CACHE_NAME = "maqar-v3";
+const STATIC_CACHE = "maqar-static-v3";
+const DYNAMIC_CACHE = "maqar-dynamic-v3";
 
 // App shell — always cache these on install
 const APP_SHELL_URLS = [
@@ -100,7 +100,15 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Stale-while-revalidate for HTML pages
+  // Network-first for page navigations so a fresh deployment is shown
+  // immediately (prevents a stale cached app shell from hiding new fixes).
+  // Falls back to cache, then the offline page, when the network is down.
+  if (request.mode === "navigate") {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
+  // Stale-while-revalidate for other (non-navigation) documents
   event.respondWith(staleWhileRevalidate(request));
 });
 

@@ -97,7 +97,7 @@ function NumberInput({
         {label}
         {required && <span className="text-[#C0392B] ms-0.5">*</span>}
       </label>
-      <div className="relative flex items-center">
+      <div className="relative flex items-center" dir="ltr">
         <input
           type="number"
           inputMode="numeric"
@@ -464,7 +464,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
           <div className="grid grid-cols-2 gap-3">
             {showFloorNum && (
               <NumberInput
-                label={`${getFieldLabel("floorNumber", locale)}${req("floorNumber") ? " *" : ""}`}
+                label={getFieldLabel("floorNumber", locale)}
                 value={draft.floorNumber}
                 placeholder={isAr ? "مثال: 3" : "e.g. 3"}
                 onChange={(v) => onChange({ floorNumber: v })}
@@ -474,7 +474,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
             )}
             {showTotalFloors && (
               <NumberInput
-                label={`${getFieldLabel("totalFloorsInBuilding", locale)}${req("totalFloorsInBuilding") ? " *" : ""}`}
+                label={getFieldLabel("totalFloorsInBuilding", locale)}
                 value={draft.totalFloorsInBuilding}
                 placeholder={isAr ? "مثال: 10" : "e.g. 10"}
                 onChange={(v) => onChange({ totalFloorsInBuilding: v })}
@@ -1197,7 +1197,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
         <section>
           <SectionHeader title={isAr ? "الوحدات" : "Units"} />
           <NumberInput
-            label={`${getFieldLabel("totalUnits", locale)} *`}
+            label={getFieldLabel("totalUnits", locale)}
             value={draft.totalUnits}
             placeholder={isAr ? "مثال: 24" : "e.g. 24"}
             onChange={(v) => onChange({ totalUnits: v })}
