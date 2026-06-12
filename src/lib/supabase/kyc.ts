@@ -219,7 +219,7 @@ export async function insertKYCDocument(
 // fetchKYCApplicationsAdmin
 // Returns all KYC applications with author profile and documents.
 // Admin-only — RLS is_admin() guards the query.
-// Falls back to [] on error (page will use mock data).
+// Throws on error so the admin page can show a real error state (no mock fallback).
 // ─────────────────────────────────────────────────────────────────────────────
 export async function fetchKYCApplicationsAdmin(): Promise<KycApplicationAdmin[]> {
   if (DEV_SKIP_AUTH) return [];
@@ -240,7 +240,9 @@ export async function fetchKYCApplicationsAdmin(): Promise<KycApplicationAdmin[]
 
   if (error) {
     console.error("[KYC] fetchKYCApplicationsAdmin error:", error);
-    return [];
+    // Throw so the admin page can show a real error state instead of silently
+    // falling back to mock verification requests (which would hide a read failure).
+    throw new Error("kyc_admin_fetch_failed");
   }
 
   return (data ?? []).map((r) => rowToAdminItem(r as unknown as DbKycApplicationRow));
