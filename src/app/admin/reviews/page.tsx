@@ -7,8 +7,6 @@ import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import type { AdminReviewItem, ReviewModerationStatus } from "@/types/admin";
 import { REVIEW_MOD_STATUS_AR } from "@/types/admin";
-import { fetchPendingReviewsAdmin, updateReviewModeration } from "@/lib/supabase/reviews";
-import type { ReviewItem } from "@/lib/supabase/reviews";
 
 const STATUS_VARIANT: Record<ReviewModerationStatus, "success" | "warning" | "danger" | "info" | "neutral" | "purple"> = {
   pending:  "warning",
@@ -22,25 +20,6 @@ const FILTER_AR: Record<ReviewModerationStatus | "all", string> = {
   all: "الكل", pending: "في الانتظار", approved: "مقبول", rejected: "مرفوض", hidden: "مخفي",
 };
 
-// ── Mapper: ReviewItem (Supabase) → AdminReviewItem (UI) ─────────────────────
-const TARGET_TYPE_AR: Record<"agent" | "agency", string> = { agent: "وسيط", agency: "وكالة" };
-
-function reviewItemToAdmin(r: ReviewItem): AdminReviewItem {
-  return {
-    id: r.id,
-    authorNameAr: r.authorName,
-    rating: r.rating,
-    bodyAr: r.body ?? "",
-    targetType: r.targetType,
-    // We don't have the target display name without an extra join; show type label
-    targetNameAr: TARGET_TYPE_AR[r.targetType],
-    targetId: r.targetId,
-    status: r.moderationStatus,
-    isReported: false,
-    createdAt: r.createdAt,
-  };
-}
-
 function useReviewQueue() {
   const [items, setItems] = useState<AdminReviewItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,9 +29,16 @@ function useReviewQueue() {
     setLoading(true);
     setError(false);
     try {
-      const rows = await fetchPendingReviewsAdmin();
-      // Real data only — an empty array is a real empty state, never mock.
-      setItems(rows.map(reviewItemToAdmin));
+      const res = await fetch("/api/admin/reviews");
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        // Real data only — the service-role API returns AdminReviewItem[] directly;
+        // an empty array is a real empty state, never mock.
+        setItems((json.data ?? []) as AdminReviewItem[]);
+      } else {
+        setError(true);
+        setItems([]);
+      }
     } catch {
       setError(true);
       setItems([]);
@@ -70,9 +56,11 @@ function useReviewQueue() {
       prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r)
     );
     if (status === "approved" || status === "rejected" || status === "hidden") {
-      await updateReviewModeration(id, status).catch((err) =>
-        console.error("[Admin/Reviews] updateReviewModeration error:", err)
-      );
+      await fetch(`/api/admin/reviews/${id}`, {
+        method:  "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ status }),
+      }).catch((err) => console.error("[Admin/Reviews] moderate error:", err));
     }
   }
 

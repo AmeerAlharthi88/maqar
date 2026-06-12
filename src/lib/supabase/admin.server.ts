@@ -30,6 +30,11 @@ import type {
   AuditLog,
   AuditCategory,
   AdminMarketDataRow,
+  AdminReviewItem,
+  ReviewModerationStatus,
+  AdminVerificationRequest,
+  VerificationRequestStatus,
+  VerificationDocument,
 } from "@/types/admin";
 
 // ── Environment guard ──────────────────────────────────────────────────────────
@@ -355,6 +360,216 @@ export async function updateReportStatus(
       details:    { status, adminNote },
     });
 
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
+// ── Reviews moderation (service-role) ────────────────────────────────────────────
+// Replaces the browser-client/RLS admin read, which failed in Production.
+
+const REVIEW_TARGET_TYPE_AR: Record<"agent" | "agency", string> = {
+  agent:  "وسيط",
+  agency: "وكالة",
+};
+
+// Resolve display names for a set of user ids. reviews.author_id and
+// kyc_applications.user_id have no PostgREST relationship to `profiles` in the
+// schema cache, so we look the names up with a separate query instead of a join.
+async function fetchProfileNames(
+  sb: ReturnType<typeof createServiceClient>,
+  ids: string[]
+): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+  const unique = [...new Set(ids.filter(Boolean))];
+  if (unique.length === 0) return map;
+  const { data } = await sb.from("profiles").select("id, name_ar").in("id", unique);
+  for (const p of (data ?? []) as Array<{ id: string; name_ar: string | null }>) {
+    if (p.name_ar) map.set(p.id, p.name_ar);
+  }
+  return map;
+}
+
+export async function fetchAdminReviews(): Promise<AdminReviewItem[]> {
+  if (!isConfigured()) return [];
+  try {
+    const sb = createServiceClient();
+    const { data, error } = await sb
+      .from("reviews")
+      .select("id, author_id, target_id, target_type, rating, body, moderation_status, created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+
+    if (error) {
+      console.error("[Admin] fetchAdminReviews:", error.message);
+      throw new Error("admin_query_failed");
+    }
+    const rows = (data ?? []) as Array<Record<string, unknown>>;
+    const nameById = await fetchProfileNames(sb, rows.map((r) => r.author_id as string));
+
+    return rows.map((row) => {
+      const targetType = ((row.target_type as string) === "agency" ? "agency" : "agent") as "agent" | "agency";
+      return {
+        id:           row.id as string,
+        authorNameAr: nameById.get(row.author_id as string) ?? "مستخدم",
+        rating:       Number(row.rating ?? 0),
+        bodyAr:       (row.body as string | null) ?? "",
+        targetType,
+        targetNameAr: REVIEW_TARGET_TYPE_AR[targetType],
+        targetId:     (row.target_id as string) ?? "",
+        status:       (row.moderation_status as ReviewModerationStatus) ?? "pending",
+        isReported:   false,
+        createdAt:    (row.created_at as string) ?? "",
+      };
+    });
+  } catch (err) {
+    console.error("[Admin] fetchAdminReviews exception:", err);
+    throw err instanceof Error ? err : new Error("admin_query_failed");
+  }
+}
+
+export async function moderateReviewAdmin(
+  reviewId: string,
+  status: ReviewModerationStatus,
+  actorId: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (!isConfigured()) return { ok: false, error: "not_configured" };
+  try {
+    const sb = createServiceClient();
+    const { error } = await sb
+      .from("reviews")
+      .update({ moderation_status: status })
+      .eq("id", reviewId);
+
+    if (error) return { ok: false, error: error.message };
+
+    await insertAuditLog({
+      actorId,
+      category:   "admin_action",
+      action:     `moderate_review_${status}`,
+      targetType: "review",
+      targetId:   reviewId,
+      severity:   "low",
+      details:    { status },
+    });
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
+// ── Verification / KYC (service-role) ─────────────────────────────────────────────
+
+const KYC_STATUS_TO_VERIF: Record<string, VerificationRequestStatus> = {
+  not_started:     "pending",
+  draft:           "pending",
+  submitted:       "pending",
+  under_review:    "under_review",
+  approved:        "approved",
+  rejected:        "rejected",
+  needs_more_info: "needs_more_info",
+};
+
+const KYC_DOC_TYPE_MAP: Record<string, VerificationDocument["type"]> = {
+  civil_id_front: "civil_id",
+  civil_id_back:  "civil_id",
+  cr_number:      "cr",
+  agency_license: "other",
+  agent_card:     "agent_license",
+  selfie:         "other",
+};
+
+export async function fetchAdminVerifications(): Promise<AdminVerificationRequest[]> {
+  if (!isConfigured()) return [];
+  try {
+    const sb = createServiceClient();
+    const { data, error } = await sb
+      .from("kyc_applications")
+      .select("id, user_id, entity_type, status, admin_notes, submitted_at, created_at")
+      .order("submitted_at", { ascending: false })
+      .limit(100);
+
+    if (error) {
+      console.error("[Admin] fetchAdminVerifications:", error.message);
+      throw new Error("admin_query_failed");
+    }
+    const rows = (data ?? []) as Array<Record<string, unknown>>;
+    const nameById = await fetchProfileNames(sb, rows.map((r) => r.user_id as string));
+
+    // Documents via a separate query (no reliance on a PostgREST join).
+    const appIds = rows.map((r) => r.id as string);
+    const docsByApp = new Map<string, Array<{ document_type: string; file_name: string }>>();
+    if (appIds.length) {
+      const { data: docs } = await sb
+        .from("kyc_documents")
+        .select("application_id, document_type, file_name")
+        .in("application_id", appIds);
+      for (const d of (docs ?? []) as Array<{ application_id: string; document_type: string; file_name: string }>) {
+        const arr = docsByApp.get(d.application_id) ?? [];
+        arr.push({ document_type: d.document_type, file_name: d.file_name });
+        docsByApp.set(d.application_id, arr);
+      }
+    }
+
+    return rows.map((row) => {
+      const docs = docsByApp.get(row.id as string) ?? [];
+      return {
+        id:              row.id as string,
+        applicantNameAr: nameById.get(row.user_id as string) ?? "—",
+        applicantId:     (row.user_id as string) ?? "",
+        type:            (row.entity_type as string) === "individual" ? "agent" : "agency",
+        status:          KYC_STATUS_TO_VERIF[row.status as string] ?? "pending",
+        phone:           "—",
+        isPhoneVerified: false,
+        documents:       docs.map((d) => ({
+          type:      KYC_DOC_TYPE_MAP[d.document_type] ?? "other",
+          labelAr:   d.file_name,
+          submitted: true,
+          verified:  false,
+        })),
+        submittedAt:     (row.submitted_at as string) ?? (row.created_at as string) ?? "",
+        riskLevel:       "low",
+        adminNote:       (row.admin_notes as string | undefined) ?? undefined,
+      };
+    });
+  } catch (err) {
+    console.error("[Admin] fetchAdminVerifications exception:", err);
+    throw err instanceof Error ? err : new Error("admin_query_failed");
+  }
+}
+
+export async function updateVerificationAdmin(
+  applicationId: string,
+  status: VerificationRequestStatus,
+  actorId: string,
+  note?: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (!isConfigured()) return { ok: false, error: "not_configured" };
+  try {
+    const sb = createServiceClient();
+    // The admin actions only send approved | rejected | needs_more_info, which are
+    // valid kyc_applications.status values.
+    const { error } = await sb
+      .from("kyc_applications")
+      .update({
+        status,
+        admin_notes: note ?? null,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", applicationId);
+
+    if (error) return { ok: false, error: error.message };
+
+    await insertAuditLog({
+      actorId,
+      category:   "verification_action",
+      action:     `update_verification_${status}`,
+      targetType: "kyc_application",
+      targetId:   applicationId,
+      severity:   "low",
+      details:    { status, note },
+    });
     return { ok: true };
   } catch (err) {
     return { ok: false, error: String(err) };
