@@ -8,9 +8,11 @@ import { useTranslation } from "@/i18n/useTranslation";
 interface StepperProgressProps {
   currentStep: number;
   completedSteps: number[];
+  /** When provided, renders a "Cancel Listing" button that exits the flow. */
+  onCancel?: () => void;
 }
 
-export function StepperProgress({ currentStep, completedSteps }: StepperProgressProps) {
+export function StepperProgress({ currentStep, completedSteps, onCancel }: StepperProgressProps) {
   const { t, locale } = useTranslation();
   const isAr = locale === "ar";
   const step = ADD_LISTING_STEPS.find((s) => s.number === currentStep);
@@ -20,6 +22,22 @@ export function StepperProgress({ currentStep, completedSteps }: StepperProgress
 
   return (
     <div className="bg-white border-b border-[#E2E8F0] px-4 pt-3 pb-4">
+      {/* Cancel / exit row — visible on every step so the user can always leave */}
+      {onCancel && (
+        <div className="flex justify-end mb-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="flex items-center gap-1 text-xs font-semibold text-[#C0392B] hover:underline"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+            {isAr ? "إلغاء الإعلان" : "Cancel Listing"}
+          </button>
+        </div>
+      )}
+
       {/* Step label row */}
       <div className="flex items-center justify-between mb-3">
         <div>

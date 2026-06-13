@@ -131,7 +131,11 @@ export function OtpVerificationForm() {
       setUser({ ...userFromMeta, role: profile.role });
     }
 
-    if (!profile?.onboardingCompleted) {
+    // Deterministic redirect: only divert to onboarding when we actually have a
+    // profile that is not yet onboarded. If the profile fetch failed or timed
+    // out (profile === null), proceed to the requested destination instead of
+    // misrouting an already-onboarded returning user into onboarding.
+    if (profile && !profile.onboardingCompleted) {
       const params = new URLSearchParams({ redirectTo });
       router.replace(`/auth/onboarding?${params.toString()}`);
     } else {
@@ -180,12 +184,13 @@ export function OtpVerificationForm() {
               value={d}
               onChange={(e) => handleChange(i, e.target.value)}
               onKeyDown={(e) => handleKeyDown(i, e)}
+              disabled={isVerifying}
               className={[
                 "w-11 h-14 text-center text-xl font-bold rounded-2xl border-2 bg-white outline-none transition-colors",
                 d
                   ? "border-[#0A3C36] text-[#0A3C36]"
                   : "border-[#E2E8F0] text-[#102A43]",
-                "focus:border-[#0A3C36]",
+                "focus:border-[#0A3C36] disabled:opacity-60 disabled:cursor-not-allowed",
               ].join(" ")}
               aria-label={`${t("auth.otp.digitLabel")} ${i + 1}`}
               autoComplete="one-time-code"

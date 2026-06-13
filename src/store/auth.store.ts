@@ -36,8 +36,17 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
   isAuthenticated: false,
   redirectTo: null,
 
-  setUser: (user) =>
-    set({ user, isAuthenticated: user !== null, isLoading: false }),
+  setUser: (user) => {
+    // When the authenticated user changes (account switch), immediately drop any
+    // profile still held from the previous account. Otherwise client components
+    // would render the old account's name/role during the gap before the new
+    // profile is fetched. The current user's profile is set right after via
+    // setProfile(). Same-user updates (role sync, token refresh) keep the profile.
+    const prevProfile = get().profile;
+    const profile =
+      user && prevProfile && prevProfile.id !== user.id ? null : prevProfile;
+    set({ user, profile, isAuthenticated: user !== null, isLoading: false });
+  },
 
   setProfile: (profile) => set({ profile }),
 
