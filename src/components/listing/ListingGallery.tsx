@@ -23,7 +23,12 @@ export function ListingGallery({
   const router = useRouter();
   const { t, locale } = useTranslation();
   const isAr = locale === "ar";
-  const allImages = images.length > 0 ? images : [coverImage];
+  // Only keep real, non-empty image URLs. When there are none we render a clear
+  // "no image" placeholder instead of a broken <img>.
+  const allImages = (images.length > 0 ? images : coverImage ? [coverImage] : []).filter(
+    (s): s is string => typeof s === "string" && s.trim() !== ""
+  );
+  const hasImages = allImages.length > 0;
   const [current, setCurrent] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
@@ -62,30 +67,43 @@ export function ListingGallery({
     <>
       {/* ── Gallery strip ─────────────────────────────────────────────── */}
       <div className="relative w-full bg-[#102A43] overflow-hidden">
-        {/* Main image */}
-        <div
-          className="relative w-full"
-          style={{ paddingBottom: "62%" }}
-          onClick={() => setModalOpen(true)}
-          role="button"
-          aria-label={isAr ? "فتح معرض الصور" : "Open photo gallery"}
-          tabIndex={0}
-          onKeyDown={(e) => e.key === "Enter" && setModalOpen(true)}
-        >
-          <img
-            src={allImages[current]}
-            alt={`${title} — ${isAr ? "صورة" : "photo"} ${current + 1}`}
-            className="absolute inset-0 w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src =
-                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250' viewBox='0 0 400 250'%3E%3Crect fill='%23E2E8F0' width='400' height='250'/%3E%3Ctext fill='%23627D98' font-family='system-ui' font-size='18' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3ENo image%3C/text%3E%3C/svg%3E";
-            }}
-            loading={current === 0 ? "eager" : "lazy"}
-          />
+        {/* Main image — or a clear no-image placeholder when the listing has none */}
+        {hasImages ? (
+          <div
+            className="relative w-full"
+            style={{ paddingBottom: "62%" }}
+            onClick={() => setModalOpen(true)}
+            role="button"
+            aria-label={isAr ? "فتح معرض الصور" : "Open photo gallery"}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && setModalOpen(true)}
+          >
+            <img
+              src={allImages[current]}
+              alt={`${title} — ${isAr ? "صورة" : "photo"} ${current + 1}`}
+              className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250' viewBox='0 0 400 250'%3E%3Crect fill='%23E2E8F0' width='400' height='250'/%3E%3Ctext fill='%23627D98' font-family='system-ui' font-size='18' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle'%3ENo image%3C/text%3E%3C/svg%3E";
+              }}
+              loading={current === 0 ? "eager" : "lazy"}
+            />
 
-          {/* Dark gradient at bottom */}
-          <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-        </div>
+            {/* Dark gradient at bottom */}
+            <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+          </div>
+        ) : (
+          <div className="relative w-full" style={{ paddingBottom: "62%" }}>
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/60">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              <span className="text-sm font-medium">{isAr ? "لا توجد صورة" : "No image available"}</span>
+            </div>
+          </div>
+        )}
 
         {/* ── Floating controls ──────────────────────────────────────────── */}
 

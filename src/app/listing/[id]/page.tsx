@@ -5,12 +5,11 @@ import { listingJsonLd, breadcrumbJsonLd, serializeJsonLd } from "@/lib/seo/json
 
 import {
   getListingById,
-  getSimilarListings,
   getListingMarketData,
   getMockPriceHistory,
   getMockNearbyServices,
 } from "@/lib/helpers/listing-detail";
-import { getListingByIdServer } from "@/lib/supabase/listings.server";
+import { getListingByIdServer, getSimilarListingsServer } from "@/lib/supabase/listings.server";
 
 import { ListingGallery } from "@/components/listing/ListingGallery";
 import { ListingHeader } from "@/components/listing/ListingHeader";
@@ -70,7 +69,8 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const marketData = getListingMarketData(listing);
   const priceHistory = getMockPriceHistory(listing);
-  const similarListings = getSimilarListings(listing);
+  // Real similar listings only (active+approved); empty array hides the section.
+  const similarListings = await getSimilarListingsServer(listing);
   const nearbyServices = getMockNearbyServices(listing);
 
   const listingSchema = listingJsonLd({
