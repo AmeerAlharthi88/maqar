@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
+import { useAddListingStore } from "@/store/add-listing.store";
 import { updateProfile } from "@/lib/supabase/profile";
 import { signOut } from "@/lib/supabase/auth-actions";
 import type { NotificationPreferences } from "@/types/profile";
@@ -127,6 +128,9 @@ export function AccountSettings() {
     }
 
     signOutLocal();
+    // Wipe the in-progress listing draft from this device so it can never
+    // resurface for the next account that signs in here.
+    useAddListingStore.getState().reconcileOwner(null);
     router.replace("/");
   }
 

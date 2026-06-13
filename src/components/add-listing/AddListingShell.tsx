@@ -1,10 +1,13 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { useAddListingStore } from "@/store/add-listing.store";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useTranslation } from "@/i18n/useTranslation";
+import { ROUTES } from "@/config/routes";
+import { Dialog } from "@/components/ui/Dialog";
 
 import { LoginRequired } from "./LoginRequired";
 import { StepperProgress } from "./StepperProgress";
@@ -28,12 +31,16 @@ import type { DraftPurpose } from "@/types/listing-draft";
 import type { PropertyType } from "@/types/listing";
 
 export function AddListingShell() {
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated, isLoading, user } = useAuthStore();
   const isOnline = useOnlineStatus();
+  const router = useRouter();
   const { t, dir } = useTranslation();
   const isAr = dir === "rtl";
 
+  const [showCancel, setShowCancel] = useState(false);
+
   const {
+    ownerId,
     currentStep,
     completedSteps,
     draft,
@@ -48,6 +55,7 @@ export function AddListingShell() {
     suspiciousMessage,
     amlFlagged: _aml, // tracked internally, not shown to user
     termsAccepted,
+    reconcileOwner,
     updateDraft,
     validateAndAdvance,
     prevStep,
@@ -57,11 +65,35 @@ export function AddListingShell() {
     setTermsAccepted,
   } = useAddListingStore();
 
+  // ── Draft ownership guard ────────────────────────────────────────────────────
+  // Scope the persisted draft to the current user. Backs up AuthSessionProvider
+  // and also covers client-side navigations into the flow. A draft left by a
+  // different account is discarded here so it can never appear for this user.
+  // Wait until auth has resolved (isLoading=false) — reconciling while the
+  // session is still loading (user=null) would wrongly wipe the owner's draft.
+  useEffect(() => {
+    if (isLoading) return;
+    reconcileOwner(user?.id ?? null);
+  }, [isLoading, user?.id, reconcileOwner]);
+
   // ── Handlers — must be declared before any early returns (rules-of-hooks) ────
   // Step 10 submit action comes from StepSubmit directly
   const handleStepSubmit = useCallback(async () => {
     await submitListing();
   }, [submitListing]);
+
+  // Cancel the in-progress listing: clears ONLY this device's local draft/state
+  // (never touches submitted DB rows or other accounts), then exits to /account.
+  const handleCancelConfirmed = useCallback(() => {
+    resetFlow();
+    try {
+      useAddListingStore.persist?.clearStorage?.();
+    } catch {
+      /* clearing persisted storage is best-effort */
+    }
+    setShowCancel(false);
+    router.replace(ROUTES.account);
+  }, [resetFlow, router]);
 
   // ── Auth gate ────────────────────────────────────────────────────────────────
   if (isLoading) {
@@ -74,6 +106,17 @@ export function AddListingShell() {
 
   if (!isAuthenticated) {
     return <LoginRequired />;
+  }
+
+  // Draft still owned by a different account — the reconcile effect runs on the
+  // next tick. Show a spinner for that single frame instead of briefly flashing
+  // the previous user's step/data.
+  if (user && ownerId !== null && ownerId !== user.id) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
+      </div>
+    );
   }
 
   // ── Listing limit gate (Phase 14) ─────────────────────────────────────────────
@@ -209,7 +252,11 @@ export function AddListingShell() {
       style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom, 0px))" }}
     >
       {/* Step progress header */}
-      <StepperProgress currentStep={currentStep} completedSteps={completedSteps} />
+      <StepperProgress
+        currentStep={currentStep}
+        completedSteps={completedSteps}
+        onCancel={() => setShowCancel(true)}
+      />
 
       {/* Validation error summary (if any) */}
       {Object.keys(validationErrors).length > 0 && currentStep !== 10 && (
@@ -272,6 +319,22 @@ export function AddListingShell() {
           hideNext={currentStep === 10}
         />
       )}
+
+      {/* Cancel-listing confirmation */}
+      <Dialog
+        open={showCancel}
+        onClose={() => setShowCancel(false)}
+        title={isAr ? "هل تريد إلغاء هذا الإعلان؟" : "Cancel this listing?"}
+        description={
+          isAr
+            ? "سيتم حذف المسودة من هذا الجهاز."
+            : "This draft will be removed from this device."
+        }
+        confirmLabel={isAr ? "إلغاء الإعلان" : "Cancel Listing"}
+        cancelLabel={isAr ? "متابعة التعديل" : "Keep editing"}
+        confirmVariant="danger"
+        onConfirm={handleCancelConfirmed}
+      />
     </div>
   );
 }

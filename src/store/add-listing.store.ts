@@ -168,6 +168,10 @@ function makeInitialDraft(): ListingDraft {
 
 // ── State interface ───────────────────────────────────────────────────────────
 interface AddListingState {
+  // ID of the authenticated user who owns the persisted draft. Scopes the
+  // draft to a single account so Account A's in-progress listing can never
+  // surface for Account B on the same device. null = unclaimed / logged out.
+  ownerId: string | null;
   currentStep: number;
   completedSteps: number[];
   draft: ListingDraft;
@@ -182,6 +186,9 @@ interface AddListingState {
   suspiciousMessage: string | null;
   termsAccepted: boolean;
   submitError: string | null;
+
+  // Session / ownership
+  reconcileOwner: (userId: string | null) => void;
 
   // Navigation
   goToStep: (step: number) => void;
@@ -208,6 +215,7 @@ interface AddListingState {
 export const useAddListingStore = create<AddListingState>()(
   persist(
     (set, get) => ({
+      ownerId: null,
       currentStep: 1,
       completedSteps: [],
       draft: makeInitialDraft(),
@@ -222,6 +230,30 @@ export const useAddListingStore = create<AddListingState>()(
       suspiciousMessage: null,
       termsAccepted: true,  // default true — step 9 shows terms, user already reviewed them
       submitError: null,
+
+      // ── Session / ownership ───────────────────────────────────────────────────
+      // Keeps the persisted draft scoped to the authenticated user. Called on
+      // every auth resolution (login, logout, user switch) and on add-listing
+      // mount. Guarantees Account A's draft/step never appears for Account B.
+      reconcileOwner: (userId) => {
+        const { ownerId } = get();
+        if (!userId) {
+          // Logged out → wipe any device-local draft so the next account that
+          // signs in on this device starts from a clean slate.
+          if (ownerId !== null) {
+            get().resetFlow();
+            set({ ownerId: null });
+          }
+          return;
+        }
+        if (ownerId !== userId) {
+          // Draft belongs to a different user (or is unclaimed) → discard it and
+          // claim a fresh draft for the current user. Resets currentStep to 1.
+          get().resetFlow();
+          set({ ownerId: userId });
+        }
+        // else: same owner → preserve their in-progress draft.
+      },
 
       // ── Navigation ──────────────────────────────────────────────────────────
       goToStep: (step) => {
@@ -394,11 +426,13 @@ export const useAddListingStore = create<AddListingState>()(
       },
     }),
     {
-      // v2: extended draft schema with per-type fields (2026-05-26)
-      // Bump version to clear cached v1 drafts — incompatible shape.
-      name: "maqar-add-listing-v2",
+      // v3: drafts are now scoped to an authenticated user via ownerId.
+      // Bumping the key clears every pre-v3 draft — those were stored under a
+      // single un-scoped key and could leak across accounts on a shared device.
+      name: "maqar-add-listing-v3",
       // Persist only serializable fields — strip blob URLs and File objects
       partialize: (s) => ({
+        ownerId: s.ownerId,
         currentStep: s.currentStep,
         completedSteps: s.completedSteps,
         // termsAccepted is intentionally NOT persisted so it always resets to true (default)

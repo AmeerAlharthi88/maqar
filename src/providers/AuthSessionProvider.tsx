@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
+import { useAddListingStore } from "@/store/add-listing.store";
 import { useFavoritesStore } from "@/store/favorites.store";
 import { useSavedSearchesStore, rowToSavedSearch } from "@/store/saved-searches.store";
 import { createClient } from "@/lib/supabase/client";
@@ -53,6 +54,7 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
     // Allows Phase B/C testing without a working Supabase auth connection.
     // Favorites and saved searches stay local-only in bypass mode.
     if (DEV_SKIP_AUTH) {
+      useAddListingStore.getState().reconcileOwner(DEV_USER_ID);
       setUser({
         id: DEV_USER_ID,
         phone: "+96892961266",
@@ -76,6 +78,10 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
 
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       clearTimeout(authTimeoutId);
+      // Reconcile the persisted add-listing draft to the current user BEFORE
+      // unblocking the UI (setUser flips isLoading=false). This wipes/replaces a
+      // draft left by a different account so it never flashes for this user.
+      useAddListingStore.getState().reconcileOwner(session?.user?.id ?? null);
       if (session?.user) {
         setUser(userFromSupabase(session.user));
         const profile = await getCurrentProfile();
@@ -110,6 +116,12 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
       // here directly adds to the time the caller (e.g. OtpVerificationForm)
       // waits for verifyOtp to resolve — causing timeouts on slow networks.
       // All async work below is deliberately fire-and-forget (void).
+      //
+      // Scope the persisted add-listing draft to whoever is now signed in. On a
+      // SIGNED_IN as a different account this discards the previous user's draft
+      // and step; on SIGNED_OUT it wipes the device-local draft entirely. This
+      // call is synchronous (plain store updates) so it does not delay verifyOtp.
+      useAddListingStore.getState().reconcileOwner(session?.user?.id ?? null);
       if (session?.user) {
         // On TOKEN_REFRESHED: preserve the in-memory role that was already confirmed
         // from the DB (profile fetch) so the admin guard never sees a stale "user"
