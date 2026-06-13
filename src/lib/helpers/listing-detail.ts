@@ -8,30 +8,8 @@ export function getListingById(id: string): Listing | null {
   return MOCK_LISTINGS.find((l) => l.id === id) ?? null;
 }
 
-// ── Similar listings ───────────────────────────────────────────────────────────
-
-export function getSimilarListings(listing: Listing, limit = 6): Listing[] {
-  const priceTolerance = 0.45;
-
-  return MOCK_LISTINGS.filter((l) => {
-    if (l.id === listing.id) return false;
-    if (l.status !== "active") return false;
-    if (l.purpose !== listing.purpose) return false;
-    const diff = Math.abs(l.price - listing.price) / listing.price;
-    if (diff > priceTolerance) return false;
-    return (
-      l.propertyType === listing.propertyType ||
-      l.location.wilayatId === listing.location.wilayatId
-    );
-  })
-    .sort((a, b) => {
-      const score = (l: Listing) =>
-        (l.propertyType === listing.propertyType ? 2 : 0) +
-        (l.location.wilayatId === listing.location.wilayatId ? 1 : 0);
-      return score(b) - score(a);
-    })
-    .slice(0, limit);
-}
+// Note: similar listings now come from real data via getSimilarListingsServer()
+// in lib/supabase/listings.server.ts — the mock helper was removed.
 
 // ── Market data for a listing ──────────────────────────────────────────────────
 

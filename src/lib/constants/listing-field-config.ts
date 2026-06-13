@@ -361,19 +361,21 @@ export function getAreaLabels(
   propertyType: PropertyType | null,
   locale: Locale = "ar"
 ): AreaLabels {
+  // The unit (م² / sqm) is rendered as the input suffix, so it is intentionally
+  // omitted from these labels to avoid showing the unit twice.
   if (locale === "en") {
     switch (propertyType) {
-      case "farm":      return { builtUp: "Farmhouse area (sqm)", land: "Farm area (sqm)"              };
-      case "land":      return { builtUp: "",                      land: "Land area (sqm)"              };
-      case "warehouse": return { builtUp: "Warehouse area (sqm)", land: "Land area (optional) (sqm)"   };
-      default:          return { builtUp: "Built-up area (sqm)",  land: "Land area (sqm)"              };
+      case "farm":      return { builtUp: "Farmhouse area", land: "Farm area"            };
+      case "land":      return { builtUp: "",               land: "Land area"            };
+      case "warehouse": return { builtUp: "Warehouse area", land: "Land area (optional)" };
+      default:          return { builtUp: "Built-up area",  land: "Land area"            };
     }
   }
   switch (propertyType) {
-    case "farm":      return { builtUp: "مساحة المنزل الزراعي (م²)", land: "مساحة المزرعة (م²)"              };
-    case "land":      return { builtUp: "",                            land: "مساحة الأرض (م²)"               };
-    case "warehouse": return { builtUp: "مساحة المستودع (م²)",        land: "مساحة الأرض (اختياري) (م²)"     };
-    default:          return { builtUp: "مساحة البناء (م²)",          land: "مساحة الأرض (م²)"               };
+    case "farm":      return { builtUp: "مساحة المنزل الزراعي", land: "مساحة المزرعة"          };
+    case "land":      return { builtUp: "",                      land: "مساحة الأرض"            };
+    case "warehouse": return { builtUp: "مساحة المستودع",        land: "مساحة الأرض (اختياري)"  };
+    default:          return { builtUp: "مساحة البناء",          land: "مساحة الأرض"            };
   }
 }
 
