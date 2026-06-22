@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { ReportCard } from "@/components/admin/ReportCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
@@ -17,6 +17,11 @@ function useReportQueue() {
   const [items, setItems] = useState<AdminReport[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  // Per-row action state (in-flight + last-failed) so a failed report action
+  // shows a retryable error instead of a silent optimistic success.
+  const [pending, setPending] = useState<Set<string>>(new Set());
+  const [failed, setFailed] = useState<Record<string, ReportStatus>>({});
+  const inFlight = useRef<Set<string>>(new Set());
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -42,26 +47,41 @@ function useReportQueue() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { reload(); }, [reload]);
 
-  const update = useCallback(async (id: string, status: ReportStatus, note?: string) => {
-    // Optimistic update
-    setItems((prev) => prev.map((r) => r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r));
+  // Pessimistic action: only update the row after the backend confirms success.
+  // Any failure (HTTP 400/403/500, network, malformed JSON) leaves the row as-is
+  // and surfaces a retryable error — never a fake success.
+  const runAction = useCallback(async (id: string, status: ReportStatus, note?: string) => {
+    if (inFlight.current.has(id)) return; // ignore duplicate clicks while pending
+    inFlight.current.add(id);
+    setPending((p) => new Set(p).add(id));
+    setFailed((f) => { const next = { ...f }; delete next[id]; return next; });
+
     try {
-      await fetch(`/api/admin/reports/${id}`, {
+      const res = await fetch(`/api/admin/reports/${id}`, {
         method:  "PATCH",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({ status, adminNote: note }),
       });
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        setItems((prev) => prev.map((r) => (r.id === id ? { ...r, status, adminNote: note ?? r.adminNote } : r)));
+      } else {
+        setFailed((f) => ({ ...f, [id]: status }));
+      }
     } catch {
-      // Optimistic update stands
+      setFailed((f) => ({ ...f, [id]: status }));
+    } finally {
+      inFlight.current.delete(id);
+      setPending((p) => { const next = new Set(p); next.delete(id); return next; });
     }
   }, []);
 
-  return { items, loading, error, reload, update };
+  return { items, loading, error, reload, pending, failed, runAction };
 }
 
 export default function AdminReportsPage() {
   const [filter, setFilter] = useState<ReportStatus | "all">("all");
-  const { items, loading, error, reload, update } = useReportQueue();
+  const { items, loading, error, reload, pending, failed, runAction } = useReportQueue();
 
   const filtered = filter === "all" ? items : items.filter((r) => r.status === filter);
   const newCount = items.filter((r) => r.status === "new").length;
@@ -108,9 +128,12 @@ export default function AdminReportsPage() {
               <ReportCard
                 key={report.id}
                 report={report}
-                onResolve={(id) => update(id, "resolved")}
-                onDismiss={(id) => update(id, "dismissed")}
-                onEscalate={(id) => update(id, "escalated")}
+                pending={pending.has(report.id)}
+                actionError={Boolean(failed[report.id])}
+                onRetry={() => { const s = failed[report.id]; if (s) runAction(report.id, s); }}
+                onResolve={(id) => runAction(id, "resolved")}
+                onDismiss={(id) => runAction(id, "dismissed")}
+                onEscalate={(id) => runAction(id, "escalated")}
               />
             ))}
           </div>
