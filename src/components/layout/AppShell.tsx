@@ -6,6 +6,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { BOTTOM_NAV_ITEMS } from "@/config/navigation";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
+import { LanguageToggle } from "@/components/shell/LanguageToggle";
 import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { TranslationKey } from "@/i18n/types";
@@ -25,7 +26,7 @@ interface AppShellProps {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
-  const { locale, dir, toggleLocale, t } = useTranslation();
+  const { locale, dir, t } = useTranslation();
   const isAr = locale === "ar";
 
   // Admin routes are an admin console, not the public buyer/agent app. They must
@@ -77,17 +78,7 @@ export function AppShell({ children }: AppShellProps) {
           </nav>
 
           {/* Language toggle */}
-          <button
-            onClick={toggleLocale}
-            aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
-            className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-lg border border-[#E2E8F0] text-xs font-semibold text-[#627D98] hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-            {isAr ? "English" : "العربية"}
-          </button>
+          <LanguageToggle className="flex-shrink-0 text-xs" />
 
           {/* Add listing CTA — hidden on admin console */}
           {!isAdminRoute && (
@@ -111,17 +102,7 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">
-        <button
-          onClick={toggleLocale}
-          aria-label={isAr ? "Switch to English" : "التبديل إلى العربية"}
-          className="flex items-center gap-1 px-2.5 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-[#E2E8F0] text-xs font-semibold text-[#627D98] shadow-sm hover:border-[#0A3C36] hover:text-[#0A3C36] transition-colors"
-        >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-          </svg>
-          {isAr ? "English" : "العربية"}
-        </button>
+        <LanguageToggle className="shadow-sm backdrop-blur-sm" />
       </div>
 
       {/* ── Mobile/tablet bottom tab bar (hidden on lg+ and on admin console) ── */}
