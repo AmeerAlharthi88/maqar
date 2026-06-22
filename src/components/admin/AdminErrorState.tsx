@@ -26,12 +26,12 @@ export function AdminErrorState({ onRetry }: AdminErrorStateProps) {
         </svg>
       </div>
       <p className="text-sm font-bold text-[#102A43] mb-1">
-        {isAr ? "تعذّر تحميل البيانات" : "Could not load data"}
+        {isAr ? "تعذر تحميل البيانات الحقيقية" : "Unable to load live data"}
       </p>
       <p className="text-xs text-[#627D98] max-w-xs leading-relaxed">
         {isAr
-          ? "تعذر تحميل البيانات الحقيقية. يرجى المحاولة مرة أخرى."
-          : "Could not load real data. Please try again."}
+          ? "يرجى المحاولة مرة أخرى أو التحقق من اتصال النظام."
+          : "Please try again or check the system connection."}
       </p>
       {onRetry && (
         <button
@@ -42,7 +42,7 @@ export function AdminErrorState({ onRetry }: AdminErrorStateProps) {
             <path d="M23 4v6h-6M1 20v-6h6" />
             <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
           </svg>
-          {isAr ? "إعادة المحاولة" : "Try again"}
+          {isAr ? "إعادة المحاولة" : "Retry"}
         </button>
       )}
     </div>

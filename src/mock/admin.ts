@@ -33,6 +33,10 @@ export const MOCK_ADMIN_STATS: AdminOverviewStats = {
 
 // ── Listing review queue ───────────────────────────────────────────────────────
 
+// DEMO/DEV/TEST FIXTURE ONLY. Never use as a fallback for the live admin review
+// queue. /admin/listings reads real rows via /api/admin/listings and shows an
+// error state (AdminErrorState) on failure — it must never substitute this mock
+// data for failed/empty production data (that previously masked a real outage).
 export const MOCK_ADMIN_LISTINGS: AdminListingItem[] = [
   {
     id: "lst-001",
@@ -238,6 +242,9 @@ export const MOCK_VERIFICATION_REQUESTS: AdminVerificationRequest[] = [
 
 // ── Reports ────────────────────────────────────────────────────────────────────
 
+// DEMO/DEV/TEST FIXTURE ONLY. Never use as a fallback for the live reports queue.
+// /admin/reports reads real rows via /api/admin/reports and shows an error state
+// on failure — it must never substitute this mock data for failed/empty data.
 export const MOCK_ADMIN_REPORTS: AdminReport[] = [
   {
     id: "rpt-1",
