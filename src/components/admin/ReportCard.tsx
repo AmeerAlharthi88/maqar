@@ -1,5 +1,6 @@
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { AdminRiskBadge } from "./AdminRiskBadge";
+import { AdminActionFeedback } from "./AdminActionFeedback";
 import type { AdminReport, ReportStatus } from "@/types/admin";
 import { REPORT_REASON_AR, REPORT_STATUS_AR } from "@/types/admin";
 
@@ -24,9 +25,15 @@ interface ReportCardProps {
   onDismiss?: (id: string) => void;
   onResolve?: (id: string) => void;
   onEscalate?: (id: string) => void;
+  /** An action is in flight for this report — disables buttons + shows loading. */
+  pending?: boolean;
+  /** The last action for this report failed — shows a retryable error. */
+  actionError?: boolean;
+  /** Re-runs the failed action. */
+  onRetry?: () => void;
 }
 
-export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate }: ReportCardProps) {
+export function ReportCard({ report, onDismiss, onResolve, onEscalate, pending = false, actionError = false, onRetry }: ReportCardProps) {
   const isActionable = report.status === "new" || report.status === "reviewing";
 
   return (
@@ -77,26 +84,32 @@ export function ReportCard({ report, onReview, onDismiss, onResolve, onEscalate 
 
       {/* Actions — min 40px tap targets, comfortable spacing on mobile */}
       {isActionable && (
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => onResolve?.(report.id)}
-            className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold active:scale-[0.98] transition-transform"
-          >
-            حل البلاغ
-          </button>
-          <button
-            onClick={() => onDismiss?.(report.id)}
-            className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold active:scale-[0.98] transition-transform"
-          >
-            رفض البلاغ
-          </button>
-          <button
-            onClick={() => onEscalate?.(report.id)}
-            className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold active:scale-[0.98] transition-transform"
-          >
-            تصعيد
-          </button>
-        </div>
+        <>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => onResolve?.(report.id)}
+              disabled={pending}
+              className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
+            >
+              حل البلاغ
+            </button>
+            <button
+              onClick={() => onDismiss?.(report.id)}
+              disabled={pending}
+              className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
+            >
+              رفض البلاغ
+            </button>
+            <button
+              onClick={() => onEscalate?.(report.id)}
+              disabled={pending}
+              className="flex-1 min-w-[88px] min-h-[40px] py-2.5 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
+            >
+              تصعيد
+            </button>
+          </div>
+          <AdminActionFeedback pending={pending} error={actionError} onRetry={onRetry} />
+        </>
       )}
     </div>
   );

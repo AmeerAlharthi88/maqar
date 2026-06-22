@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
 import { AdminQueueCard } from "@/components/admin/AdminQueueCard";
 import { ReviewActionBar } from "@/components/admin/ReviewActionBar";
+import { AdminActionFeedback } from "@/components/admin/AdminActionFeedback";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { ListingReviewStatus, AdminListingItem } from "@/types/admin";
@@ -29,10 +30,17 @@ const FILTER_LABELS_AR: Record<ListingReviewStatus | "all", string> = {
   suspicious:    "مشبوه",
 };
 
+type ListingAction = "approve" | "reject" | "request_changes";
+
 function useListingQueue() {
   const [items, setItems] = useState<AdminListingItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  // Per-row action state: which rows have an action in flight, and which rows'
+  // last action failed (so we can show an error + retry instead of faking success).
+  const [pending, setPending] = useState<Set<string>>(new Set());
+  const [failed, setFailed] = useState<Record<string, ListingAction>>({});
+  const inFlight = useRef<Set<string>>(new Set());
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -59,37 +67,43 @@ function useListingQueue() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { reload(); }, [reload]);
 
-  const updateStatus = useCallback(
-    async (id: string, action: "approve" | "reject" | "request_changes", note?: string) => {
-      // Optimistic update
-      const reviewStatus: ListingReviewStatus =
-        action === "approve"          ? "approved"
-        : action === "reject"         ? "rejected"
-        : "needs_changes";
+  // Pessimistic action: only update the row AFTER the backend confirms success.
+  // On any failure (HTTP 400/403/500, network error, malformed JSON) the row is
+  // left untouched and a retryable error is surfaced — never a fake success.
+  const runAction = useCallback(async (id: string, action: ListingAction, note?: string) => {
+    if (inFlight.current.has(id)) return; // ignore duplicate clicks while pending
+    inFlight.current.add(id);
+    setPending((p) => new Set(p).add(id));
+    setFailed((f) => { const next = { ...f }; delete next[id]; return next; });
 
-      setItems((prev) =>
-        prev.map((item) => item.id === id ? { ...item, reviewStatus } : item)
-      );
-
-      try {
-        await fetch(`/api/admin/listings/${id}`, {
-          method:  "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body:    JSON.stringify({ action, note }),
-        });
-      } catch {
-        // Server might not be configured — optimistic update still stands
+    try {
+      const res = await fetch(`/api/admin/listings/${id}`, {
+        method:  "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ action, note }),
+      });
+      const json = await res.json().catch(() => null);
+      if (res.ok && json?.success) {
+        const reviewStatus: ListingReviewStatus =
+          action === "approve" ? "approved" : action === "reject" ? "rejected" : "needs_changes";
+        setItems((prev) => prev.map((item) => (item.id === id ? { ...item, reviewStatus } : item)));
+      } else {
+        setFailed((f) => ({ ...f, [id]: action }));
       }
-    },
-    []
-  );
+    } catch {
+      setFailed((f) => ({ ...f, [id]: action }));
+    } finally {
+      inFlight.current.delete(id);
+      setPending((p) => { const next = new Set(p); next.delete(id); return next; });
+    }
+  }, []);
 
-  return { items, loading, error, reload, updateStatus };
+  return { items, loading, error, reload, pending, failed, runAction };
 }
 
 export default function AdminListingsPage() {
   const [filter, setFilter] = useState<ListingReviewStatus | "all">("all");
-  const { items, loading, error, reload, updateStatus } = useListingQueue();
+  const { items, loading, error, reload, pending, failed, runAction } = useListingQueue();
 
   const filtered = filter === "all" ? items : items.filter((l) => l.reviewStatus === filter);
 
@@ -154,11 +168,19 @@ export default function AdminListingsPage() {
                   {new Date(listing.submittedAt).toLocaleDateString("ar-OM", { year: "numeric", month: "long", day: "numeric" })}
                 </p>
                 {(listing.reviewStatus === "pending" || listing.reviewStatus === "suspicious") && (
-                  <ReviewActionBar
-                    onApprove={() => updateStatus(listing.id, "approve")}
-                    onReject={() => updateStatus(listing.id, "reject")}
-                    onRequestChanges={() => updateStatus(listing.id, "request_changes")}
-                  />
+                  <>
+                    <ReviewActionBar
+                      disabled={pending.has(listing.id)}
+                      onApprove={() => runAction(listing.id, "approve")}
+                      onReject={() => runAction(listing.id, "reject")}
+                      onRequestChanges={() => runAction(listing.id, "request_changes")}
+                    />
+                    <AdminActionFeedback
+                      pending={pending.has(listing.id)}
+                      error={Boolean(failed[listing.id])}
+                      onRetry={() => { const a = failed[listing.id]; if (a) runAction(listing.id, a); }}
+                    />
+                  </>
                 )}
               </AdminQueueCard>
             ))}
