@@ -101,7 +101,6 @@ function NumberInput({
         <input
           type="number"
           inputMode="numeric"
-          placeholder={placeholder ?? "0"}
           value={value ?? ""}
           onChange={(e) => {
             const v = e.target.value;
@@ -121,6 +120,11 @@ function NumberInput({
           </span>
         )}
       </div>
+      {/* Example/helper is shown BELOW the field — never inside the input — so it
+          can't overlap the typed value or the unit suffix in RTL. */}
+      {placeholder && !error && (
+        <p className="text-[11px] text-[#627D98]">{placeholder}</p>
+      )}
       {error && <p className="text-xs text-[#C0392B]">{error}</p>}
     </div>
   );
