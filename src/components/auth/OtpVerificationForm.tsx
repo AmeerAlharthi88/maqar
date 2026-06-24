@@ -144,7 +144,11 @@ export function OtpVerificationForm() {
       const params = new URLSearchParams({ redirectTo });
       router.replace(`/auth/onboarding?${params.toString()}`);
     } else {
-      router.replace(redirectTo);
+      // Full navigation (not a client router push): guarantees the freshly-set
+      // session cookie is sent with the request to the (middleware-protected)
+      // destination, so the server doesn't bounce the just-authenticated user
+      // back to /auth/login — the redirect race behind "returns to login" (FP7).
+      window.location.assign(redirectTo);
     }
   }
 

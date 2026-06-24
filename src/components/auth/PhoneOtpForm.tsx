@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signInWithPhone } from "@/lib/supabase/auth-actions";
+import { signInWithPhone, getSession } from "@/lib/supabase/auth-actions";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -28,6 +28,24 @@ export function PhoneOtpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [techDetail, setTechDetail] = useState<string | null>(null);
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  // Session-aware login: if a session already exists, never show a conflicting
+  // login form — send the user to their destination. A full navigation guarantees
+  // the (possibly just-set) session cookie reaches the middleware, which also
+  // self-corrects the post-OTP redirect race where the server briefly bounces a
+  // freshly-authenticated user back to /auth/login (FP7).
+  useEffect(() => {
+    let active = true;
+    getSession()
+      .then(({ session }) => {
+        if (!active) return;
+        if (session) window.location.replace(redirectTo);
+        else setCheckingSession(false);
+      })
+      .catch(() => { if (active) setCheckingSession(false); });
+    return () => { active = false; };
+  }, [redirectTo]);
 
   const isValid = isValidOmaniNumber(digits);
 
@@ -104,6 +122,16 @@ export function PhoneOtpForm() {
 
     const params = new URLSearchParams({ phone, redirectTo });
     router.push(`/auth/verify?${params.toString()}`);
+  }
+
+  // While checking for an existing session, show a brief spinner instead of the
+  // login form so an already-authenticated user never sees a conflicting form.
+  if (checkingSession) {
+    return (
+      <div className="min-h-[calc(100svh-56px)] flex items-center justify-center bg-[#F8F9FA]" role="status" aria-live="polite">
+        <span className="w-8 h-8 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
+      </div>
+    );
   }
 
   return (
