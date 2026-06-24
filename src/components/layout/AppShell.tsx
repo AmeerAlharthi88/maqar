@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { BOTTOM_NAV_ITEMS } from "@/config/navigation";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { LanguageToggle } from "@/components/shell/LanguageToggle";
+import { useAuthStore } from "@/store/auth.store";
 import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { TranslationKey } from "@/i18n/types";
@@ -27,12 +28,21 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const { locale, dir, t } = useTranslation();
+  const { user, profile } = useAuthStore();
   const isAr = locale === "ar";
 
   // Admin routes are an admin console, not the public buyer/agent app. They must
   // NOT show the public bottom tab bar (incl. the centre Add button) or the
   // public desktop nav / "Add property" CTA. Admin nav comes from DashboardNav.
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+
+  // Admin-role users (internal observers) also must not see the public bottom nav
+  // or the "Add property" CTA on non-admin pages like /account — they should not
+  // be nudged to add a property from an internal account (FP6 #2). profile.role
+  // is authoritative; user.role is the metadata fallback before profile loads.
+  const role = profile?.role ?? user?.role;
+  const isAdminUser = role === "admin" || role === "super_admin";
+  const hidePublicNav = isAdminRoute || isAdminUser;
 
   // Keep <html lang> and <html dir> in sync with locale preference.
   // suppressHydrationWarning on <html> in layout.tsx prevents SSR mismatch flash.
@@ -80,8 +90,8 @@ export function AppShell({ children }: AppShellProps) {
           {/* Language toggle */}
           <LanguageToggle className="flex-shrink-0 text-xs" />
 
-          {/* Add listing CTA — hidden on admin console */}
-          {!isAdminRoute && (
+          {/* Add listing CTA — hidden on admin console + for admin-role users */}
+          {!hidePublicNav && (
           <Link
             href={ROUTES.addListing}
             className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
@@ -98,15 +108,15 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections.
           pb-20 reserves space for the mobile bottom nav; not needed on admin (no bottom nav). */}
-      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", !isAdminRoute && "pb-20")}>{children}</main>
+      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", !hidePublicNav && "pb-20")}>{children}</main>
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">
         <LanguageToggle className="shadow-sm backdrop-blur-sm" />
       </div>
 
-      {/* ── Mobile/tablet bottom tab bar (hidden on lg+ and on admin console) ── */}
-      {!isAdminRoute && (
+      {/* ── Mobile/tablet bottom tab bar (hidden on lg+, on admin console, and for admin-role users) ── */}
+      {!hidePublicNav && (
       <nav
         className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#E2E8F0] lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}

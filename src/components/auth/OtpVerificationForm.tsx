@@ -23,6 +23,7 @@ export function OtpVerificationForm() {
 
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(""));
   const [isVerifying, setIsVerifying] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cooldown, setCooldown] = useState(RESEND_COOLDOWN_S);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -76,6 +77,7 @@ export function OtpVerificationForm() {
   async function submit(token: string) {
     if (isVerifying || !phone) return;
     setIsVerifying(true);
+    setRedirecting(false);
     setError(null);
 
     const timeoutMsg = isAr
@@ -121,6 +123,9 @@ export function OtpVerificationForm() {
       avatarUrl: meta.avatar_url as string | undefined,
     };
     setUser(userFromMeta);
+    // Verification succeeded — switch the indicator to "signing in" so the user
+    // knows it worked while the profile loads + the redirect runs (FP6 #5).
+    setRedirecting(true);
 
     const profileTimeout = new Promise<null>((resolve) => setTimeout(() => resolve(null), 8_000));
     const profile = await Promise.race([getCurrentProfile(), profileTimeout]);
@@ -217,9 +222,11 @@ export function OtpVerificationForm() {
         )}
 
         {isVerifying && (
-          <div className="flex items-center gap-2 text-sm text-[#627D98] mb-4">
+          <div className="flex items-center gap-2 text-sm text-[#627D98] mb-4" role="status" aria-live="polite">
             <span className="w-4 h-4 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
-            {t("auth.otp.verifying")}
+            {redirecting
+              ? (isAr ? "تم التحقق، جاري تسجيل الدخول..." : "Verified — signing you in...")
+              : t("auth.otp.verifying")}
           </div>
         )}
 

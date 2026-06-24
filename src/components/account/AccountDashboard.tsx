@@ -420,8 +420,10 @@ export function AccountDashboard({ profile }: { profile: ProfileSnapshot }) {
         </div>
       )}
 
-      {/* ── Buyer / general services (all roles — admin sees below admin tools) */}
-      {!isAgent && (
+      {/* ── Buyer / general services — buyers/users only. Hidden for admin so the
+             internal observer account shows a clean Admin-Tools-only surface (FP6 #3),
+             and for agents who get their own tools section above. */}
+      {!isAgent && !isAdmin && (
         <div className="px-4 mt-5">
           <SectionHeader label={isAr ? "الخدمات السريعة" : "Quick Services"} />
           <div className="grid grid-cols-3 gap-2">
