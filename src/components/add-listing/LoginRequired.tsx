@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { ROUTES } from "@/config/routes";
 import { useAuthStore } from "@/store/auth.store";
+import { useTranslation } from "@/i18n/useTranslation";
 
 // ── Dev bypass — clearly marked ───────────────────────────────────────────────
 const IS_DEV = process.env.NODE_ENV === "development";
 
 export function LoginRequired() {
   const { setUser } = useAuthStore();
+  const { locale, dir } = useTranslation();
+  const isAr = locale === "ar";
 
   function handleDevBypass() {
     setUser({
@@ -21,7 +24,7 @@ export function LoginRequired() {
   }
 
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center" dir="rtl">
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center" dir={dir}>
       {/* Icon */}
       <div className="w-20 h-20 rounded-full bg-[#E6F0EF] flex items-center justify-center mb-6">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.5">
@@ -31,9 +34,13 @@ export function LoginRequired() {
       </div>
 
       {/* Title */}
-      <h1 className="text-xl font-bold text-[#102A43] mb-2">تسجيل الدخول مطلوب</h1>
+      <h1 className="text-xl font-bold text-[#102A43] mb-2">
+        {isAr ? "تسجيل الدخول مطلوب" : "Sign in required"}
+      </h1>
       <p className="text-sm text-[#627D98] max-w-xs mb-8 leading-relaxed">
-        لنشر إعلان عقاري في مقر، يجب تسجيل الدخول أولاً. سجّل دخولك للمتابعة أو تصفّح العقارات بحرية.
+        {isAr
+          ? "لنشر إعلان عقاري في مقر، يجب تسجيل الدخول أولاً. سجّل دخولك للمتابعة أو تصفّح العقارات بحرية."
+          : "To post a property listing on Maqar, please sign in first. Sign in to continue, or browse listings freely."}
       </p>
 
       {/* Actions */}
@@ -42,28 +49,30 @@ export function LoginRequired() {
           href={ROUTES.login}
           className="w-full py-3.5 rounded-2xl bg-[#0A3C36] text-white font-bold text-sm text-center hover:bg-[#082E29] transition-colors"
         >
-          تسجيل الدخول
+          {isAr ? "تسجيل الدخول" : "Sign in"}
         </Link>
         <Link
           href={ROUTES.home}
           className="w-full py-3 rounded-2xl bg-[#F0F4F8] text-[#102A43] font-semibold text-sm text-center border border-[#E2E8F0]"
         >
-          تصفح العقارات
+          {isAr ? "تصفح العقارات" : "Browse listings"}
         </Link>
       </div>
 
       {/* Dev bypass — only in development */}
       {IS_DEV && (
         <div className="mt-10 p-4 border border-dashed border-[#0A3C36]/40 rounded-2xl bg-[#E6F0EF]/50 max-w-xs w-full">
-          <p className="text-xs text-[#0A3C36] font-semibold mb-2">وضع التطوير فقط</p>
+          <p className="text-xs text-[#0A3C36] font-semibold mb-2">
+            {isAr ? "وضع التطوير فقط" : "Development only"}
+          </p>
           <p className="text-xs text-[#627D98] mb-3">
-            هذا الزر للاختبار فقط ولن يظهر في الإنتاج.
+            {isAr ? "هذا الزر للاختبار فقط ولن يظهر في الإنتاج." : "This button is for testing only and never ships to production."}
           </p>
           <button
             onClick={handleDevBypass}
             className="w-full py-2 rounded-xl bg-[#0A3C36]/10 text-[#0A3C36] text-xs font-semibold border border-[#0A3C36]/30"
           >
-            متابعة كمستخدم تجريبي
+            {isAr ? "متابعة كمستخدم تجريبي" : "Continue as demo user"}
           </button>
         </div>
       )}

@@ -1,10 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { AppHeader } from "@/components/shell/AppHeader";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
 import { useAuthStore } from "@/store/auth.store";
+import { useTranslation } from "@/i18n/useTranslation";
 import { ROUTES } from "@/config/routes";
 
 // TODO: In Phase 12, replace this UI role check with a verified server-side
@@ -36,16 +39,75 @@ interface AdminDashboardShellProps {
 export function AdminDashboardShell({ children, titleAr = "لوحة الإدارة" }: AdminDashboardShellProps) {
   const { user, profile, isLoading } = useAuthStore();
   const router = useRouter();
+  const { locale } = useTranslation();
+  const isAr = locale === "ar";
+  const [timedOut, setTimedOut] = useState(false);
 
-  // Show spinner while: initial auth loading OR user is authenticated but the profile
-  // hasn't been fetched from the DB yet (getCurrentProfile() is still in-flight).
-  // This prevents the restricted screen from flashing during the async gap between
-  // setUser(role:"user" from metadata) and setUser(role:"admin" from profile).
-  if (isLoading || (user !== null && profile === null)) {
+  // Loading while: initial auth loading OR user is authenticated but the profile
+  // (which carries the authoritative role) hasn't been fetched yet. Showing the
+  // shell until the role is known prevents the restricted screen flashing during
+  // the gap between setUser(metadata role) and setUser(profile role).
+  const loadingProfile = isLoading || (user !== null && profile === null);
+
+  // Never hang on a blank spinner: if the profile fetch stalls/fails on mobile,
+  // surface a clear error + retry + back instead of spinning forever (FP6 #1/#6).
+  useEffect(() => {
+    if (!loadingProfile) return;
+    const id = setTimeout(() => setTimedOut(true), 8000);
+    return () => clearTimeout(id);
+  }, [loadingProfile]);
+
+  if (loadingProfile) {
     return (
       <AppShell>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <span className="w-8 h-8 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
+        <AppHeader variant="back" titleAr={titleAr} />
+        <div
+          className="flex flex-col items-center justify-center min-h-[55vh] px-6 text-center gap-3"
+          dir={isAr ? "rtl" : "ltr"}
+          role="status"
+          aria-live="polite"
+        >
+          {!timedOut ? (
+            <>
+              <span className="w-9 h-9 rounded-full border-2 border-[#E2E8F0] border-t-[#0A3C36] animate-spin" />
+              <p className="text-sm font-semibold text-[#102A43]">
+                {isAr ? "جاري تحميل لوحة الإدارة..." : "Loading admin dashboard..."}
+              </p>
+              <p className="text-xs text-[#627D98] max-w-xs leading-relaxed">
+                {isAr ? "إذا استغرق التحميل وقتاً طويلاً، حاول مرة أخرى." : "If this takes too long, please try again."}
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="w-14 h-14 rounded-2xl bg-[#FEF0EE] flex items-center justify-center">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C0392B" strokeWidth="1.8" aria-hidden="true">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+              </div>
+              <p className="text-sm font-bold text-[#102A43]">
+                {isAr ? "تعذّر تحميل لوحة الإدارة" : "Couldn't load the admin dashboard"}
+              </p>
+              <p className="text-xs text-[#627D98] max-w-xs leading-relaxed">
+                {isAr ? "تحقق من اتصالك بالإنترنت وحاول مرة أخرى." : "Check your connection and try again."}
+              </p>
+              <div className="flex items-center gap-2 mt-1">
+                <button
+                  onClick={() => { setTimedOut(false); window.location.reload(); }}
+                  className="px-4 py-2.5 rounded-xl bg-[#0A3C36] text-white text-xs font-bold hover:bg-[#082E29] transition-colors"
+                >
+                  {isAr ? "إعادة المحاولة" : "Retry"}
+                </button>
+                <Link
+                  href={ROUTES.account}
+                  className="px-4 py-2.5 rounded-xl bg-[#F0F4F8] text-[#102A43] text-xs font-bold border border-[#E2E8F0]"
+                >
+                  {isAr ? "العودة للحساب" : "Back to account"}
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </AppShell>
     );
