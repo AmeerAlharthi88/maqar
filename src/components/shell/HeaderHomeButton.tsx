@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -14,10 +15,12 @@ interface HeaderHomeButtonProps {
 /**
  * Always-available "go to the main page" affordance for headers that show a
  * title/back arrow instead of the clickable Maqar logo (admin, account
- * sub-pages, add-listing, listing detail, auth…). Navigates to "/" via Next
- * Link, with a localized accessible label (الرئيسية / Home) and a comfortable
- * 40px mobile tap target. It complements — never replaces — the back arrow
- * (FP9): back = previous safe page, Home = always the main page.
+ * sub-pages, add-listing, listing detail, auth…). It renders the approved Maqar
+ * mark (not a generic home icon) so the brand doubles as the Home control
+ * (FP10 #2), navigates to "/" via Next Link, carries a localized accessible
+ * label (الرئيسية / Home), and keeps a comfortable 40px mobile tap target. It
+ * complements — never replaces — the back arrow: back = previous safe page,
+ * Home = always the main page.
  */
 export function HeaderHomeButton({ className, variant = "ghost" }: HeaderHomeButtonProps) {
   const { t } = useTranslation();
@@ -29,15 +32,14 @@ export function HeaderHomeButton({ className, variant = "ghost" }: HeaderHomeBut
       className={cn(
         "inline-flex items-center justify-center w-10 h-10 rounded-xl flex-shrink-0 transition-all active:scale-95",
         variant === "overlay"
-          ? "bg-black/45 backdrop-blur-sm text-white hover:bg-black/60"
-          : "text-[#627D98] hover:bg-[#F0F4F8] hover:text-[#0A3C36]",
+          ? "bg-black/45 backdrop-blur-sm hover:bg-black/60"
+          : "hover:bg-[#F0F4F8]",
         className
       )}
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
-        <path d="M9 21V12h6v9" />
-      </svg>
+      {/* mark-only keeps the logo compact and undistorted inside the tap target;
+          white on image overlays, brand emerald on light headers. */}
+      <MaqarLogo variant="mark-only" size="xs" color={variant === "overlay" ? "white" : "brand"} />
     </Link>
   );
 }

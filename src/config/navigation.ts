@@ -3,6 +3,8 @@ import { ROUTES } from "./routes";
 export interface BottomNavItem {
   href: string;
   labelAr: string;
+  /** English label — only needed for items whose key has no i18n dictionary entry. */
+  labelEn?: string;
   key: string;
   isAdd?: boolean;
 }

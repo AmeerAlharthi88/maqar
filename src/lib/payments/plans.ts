@@ -67,6 +67,13 @@ export const ADDON_LABELS_AR: Record<AddOnType, string> = {
   area_placement: "ظهور في صفحة المنطقة",
 };
 
+export const ADDON_LABELS_EN: Record<AddOnType, string> = {
+  featured_listing: "Featured listing",
+  lead_boost: "Lead boost",
+  homepage_placement: "Homepage placement",
+  area_placement: "Area-page placement",
+};
+
 // ── Plan prices ────────────────────────────────────────────────────────────────
 export const PLAN_PRICES: Record<PlanId, number> = {
   free: 0,
@@ -78,6 +85,12 @@ export const PLAN_NAMES_AR: Record<PlanId, string> = {
   free: "المجاني",
   agent_pro: "وسيط احترافي",
   agency: "وكالة عقارية",
+};
+
+export const PLAN_NAMES_EN: Record<PlanId, string> = {
+  free: "Free",
+  agent_pro: "Agent Pro",
+  agency: "Agency",
 };
 
 // ── Utilities ──────────────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { BOTTOM_NAV_ITEMS } from "@/config/navigation";
+import { BOTTOM_NAV_ITEMS, type BottomNavItem } from "@/config/navigation";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { LanguageToggle } from "@/components/shell/LanguageToggle";
 import { useAuthStore } from "@/store/auth.store";
@@ -21,6 +21,16 @@ const NAV_KEY_MAP: Record<string, TranslationKey> = {
   account:   "nav.account",
 };
 
+// Minimal bottom nav shown to admin-role users on PUBLIC pages. Admins must not
+// see the buyer-style nav (Add / Map / Favorites), but they also must not be
+// stranded on the public home page with no way back to their account or admin
+// tools after tapping the Maqar/Home mark (FP10 #3). Home + Account + Admin.
+const ADMIN_PUBLIC_NAV: BottomNavItem[] = [
+  { key: "home",    href: "/",        labelAr: "الرئيسية", labelEn: "Home" },
+  { key: "account", href: "/account", labelAr: "حسابي",    labelEn: "Account" },
+  { key: "admin",   href: "/admin",   labelAr: "الإدارة",  labelEn: "Admin" },
+];
+
 interface AppShellProps {
   children: React.ReactNode;
 }
@@ -36,13 +46,21 @@ export function AppShell({ children }: AppShellProps) {
   // public desktop nav / "Add property" CTA. Admin nav comes from DashboardNav.
   const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
-  // Admin-role users (internal observers) also must not see the public bottom nav
-  // or the "Add property" CTA on non-admin pages like /account — they should not
-  // be nudged to add a property from an internal account (FP6 #2). profile.role
-  // is authoritative; user.role is the metadata fallback before profile loads.
+  // Admin-role users (internal observers) must not see the buyer-style nav or the
+  // "Add property" CTA — they should not be nudged to add a property from an
+  // internal account (FP6 #2). profile.role is authoritative; user.role is the
+  // metadata fallback before profile loads.
   const role = profile?.role ?? user?.role;
   const isAdminUser = role === "admin" || role === "super_admin";
-  const hidePublicNav = isAdminRoute || isAdminUser;
+
+  // Bottom tab bar (mobile): hidden entirely on the admin console (DashboardNav +
+  // header take over). On public pages, admins get a minimal Home/Account/Admin
+  // bar instead of the buyer nav, so they can always return to their account or
+  // admin tools (FP10 #3); everyone else gets the full public nav.
+  const showBottomNav = !isAdminRoute;
+  const bottomNavItems = isAdminUser ? ADMIN_PUBLIC_NAV : BOTTOM_NAV_ITEMS;
+  // The "Add property" CTA / buyer affordances stay hidden for admins everywhere.
+  const hideAddCta = isAdminRoute || isAdminUser;
 
   // Keep <html lang> and <html dir> in sync with locale preference.
   // suppressHydrationWarning on <html> in layout.tsx prevents SSR mismatch flash.
@@ -51,9 +69,10 @@ export function AppShell({ children }: AppShellProps) {
     document.documentElement.dir = dir;
   }, [locale, dir]);
 
-  function navLabel(item: { key: string; labelAr: string }): string {
+  function navLabel(item: { key: string; labelAr: string; labelEn?: string }): string {
     const key = NAV_KEY_MAP[item.key];
-    return key ? t(key) : item.labelAr;
+    if (key) return t(key);
+    return isAr ? item.labelAr : (item.labelEn ?? item.labelAr);
   }
 
   return (
@@ -91,7 +110,7 @@ export function AppShell({ children }: AppShellProps) {
           <LanguageToggle className="flex-shrink-0 text-xs" />
 
           {/* Add listing CTA — hidden on admin console + for admin-role users */}
-          {!hidePublicNav && (
+          {!hideAddCta && (
           <Link
             href={ROUTES.addListing}
             className="flex-shrink-0 flex items-center gap-2 px-4 h-9 rounded-xl bg-[#0A3C36] text-white text-sm font-semibold hover:bg-[#082E29] transition-colors"
@@ -108,15 +127,16 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections.
           pb-20 reserves space for the mobile bottom nav; not needed on admin (no bottom nav). */}
-      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", !hidePublicNav && "pb-20")}>{children}</main>
+      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", showBottomNav && "pb-20")}>{children}</main>
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
       <div className="fixed top-3 end-3 z-[95] lg:hidden">
         <LanguageToggle className="shadow-sm backdrop-blur-sm" />
       </div>
 
-      {/* ── Mobile/tablet bottom tab bar (hidden on lg+, on admin console, and for admin-role users) ── */}
-      {!hidePublicNav && (
+      {/* ── Mobile/tablet bottom tab bar (hidden on lg+ and on the admin console;
+            admins get a minimal Home/Account/Admin set on public pages) ── */}
+      {showBottomNav && (
       <nav
         className="fixed bottom-0 start-0 end-0 z-[100] bg-white border-t border-[#E2E8F0] lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
@@ -124,7 +144,7 @@ export function AppShell({ children }: AppShellProps) {
       >
         {/* overflow-visible so the raised Add button can extend above the bar */}
         <div className="flex items-stretch h-16 overflow-visible">
-          {BOTTOM_NAV_ITEMS.map((item) => {
+          {bottomNavItems.map((item) => {
             const isActive =
               pathname === item.href ||
               (item.href !== "/" && pathname.startsWith(item.href));
@@ -214,6 +234,13 @@ function NavIcon({ itemKey, filled }: { itemKey: string; filled: boolean }) {
       <svg width="22" height="22" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth={w}>
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
+      </svg>
+    );
+  }
+  if (itemKey === "admin") {
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth={w}>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     );
   }

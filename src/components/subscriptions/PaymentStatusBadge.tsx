@@ -1,7 +1,10 @@
 // ── PaymentStatusBadge — badge for payment/subscription status ────────────────
 
+"use client";
+
 import { cn } from "@/lib/utils";
 import type { SubscriptionStatus, PaymentStatus } from "@/lib/payments/types";
+import { useLocaleStore } from "@/store/locale.store";
 
 type StatusVariant = SubscriptionStatus | PaymentStatus;
 
@@ -25,6 +28,19 @@ const LABEL_AR: Record<StatusVariant, string> = {
   refunded:   "مسترجع",
 };
 
+const LABEL_EN: Record<StatusVariant, string> = {
+  free:       "Free",
+  trial:      "Trial",
+  active:     "Active",
+  past_due:   "Past due",
+  cancelled:  "Cancelled",
+  expired:    "Expired",
+  pending:    "Pending",
+  paid:       "Paid",
+  failed:     "Failed",
+  refunded:   "Refunded",
+};
+
 const STYLE_MAP: Record<StatusVariant, string> = {
   free:      "bg-[#F0F4F8] text-[#627D98] border-[#E2E8F0]",
   trial:     "bg-[#EAF4FB] text-[#2471A3] border-[#2471A3]/20",
@@ -42,6 +58,7 @@ export function PaymentStatusBadge({
   status,
   className,
 }: PaymentStatusBadgeProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
     <span
       className={cn(
@@ -50,7 +67,7 @@ export function PaymentStatusBadge({
         className
       )}
     >
-      {LABEL_AR[status]}
+      {isAr ? LABEL_AR[status] : LABEL_EN[status]}
     </span>
   );
 }
