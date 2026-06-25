@@ -6,10 +6,15 @@ import { DuplicateComparisonCard } from "@/components/admin/DuplicateComparisonC
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { DuplicatePair, DuplicateStatus } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
 
 const FILTERS: (DuplicateStatus | "all")[] = ["all", "pending", "confirmed_duplicate", "not_duplicate"];
 const FILTER_AR: Record<DuplicateStatus | "all", string> = {
   all: "الكل", pending: "في الانتظار", confirmed_duplicate: "مكرر مؤكد", not_duplicate: "ليس مكرراً", merged: "مدموج",
+};
+const FILTER_EN: Record<DuplicateStatus | "all", string> = {
+  all: "All", pending: "Pending", confirmed_duplicate: "Confirmed", not_duplicate: "Not duplicate", merged: "Merged",
 };
 
 function useDuplicateQueue() {
@@ -58,14 +63,16 @@ function useDuplicateQueue() {
 
 export default function AdminDuplicatesPage() {
   const [filter, setFilter] = useState<DuplicateStatus | "all">("all");
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
+  const filterLabels = isAr ? FILTER_AR : FILTER_EN;
   const { pairs, loading, error, reload, update } = useDuplicateQueue();
   const filtered = filter === "all" ? pairs : pairs.filter((p) => p.status === filter);
   const pendingCount = pairs.filter((p) => p.status === "pending").length;
 
   return (
-    <AdminDashboardShell titleAr="الإعلانات المكررة">
-      <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#627D98]">{pendingCount} في الانتظار · {pairs.length} إجمالي</p>
+    <AdminDashboardShell titleAr="الإعلانات المكررة" titleEn="Duplicate listings">
+      <div className="px-4 py-4 space-y-4" dir={isAr ? "rtl" : "ltr"}>
+        <p className="text-xs text-[#627D98]">{bi(isAr, `${pendingCount} في الانتظار · ${pairs.length} إجمالي`, `${pendingCount} pending · ${pairs.length} total`)}</p>
 
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
           {FILTERS.map((f) => {
@@ -75,14 +82,14 @@ export default function AdminDuplicatesPage() {
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
                   filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
-                {FILTER_AR[f]} ({count})
+                {filterLabels[f]} ({count})
               </button>
             );
           })}
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">{bi(isAr, "جارٍ التحميل…", "Loading…")}</div>
         ) : error ? (
           <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (

@@ -6,6 +6,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { AdminDashboardShell } from "@/components/admin/AdminDashboardShell";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
 
 type CheckStatus = "done" | "partial" | "todo" | "blocked";
 
@@ -16,11 +18,27 @@ interface ReadinessItem {
   noteAr?: string;
 }
 
-const STATUS_CONFIG: Record<CheckStatus, { labelAr: string; color: string; bg: string; icon: string }> = {
-  done: { labelAr: "مكتمل", color: "text-[#0A3C36]", bg: "bg-[#E6F0EF]", icon: "✓" },
-  partial: { labelAr: "جزئي", color: "text-[#C8860A]", bg: "bg-[#FEF9EC]", icon: "◑" },
-  todo: { labelAr: "مطلوب", color: "text-[#627D98]", bg: "bg-[#F0F4F8]", icon: "○" },
-  blocked: { labelAr: "محظور", color: "text-[#C0392B]", bg: "bg-[#FEF0EE]", icon: "✕" },
+const STATUS_CONFIG: Record<CheckStatus, { labelAr: string; labelEn: string; color: string; bg: string; icon: string }> = {
+  done: { labelAr: "مكتمل", labelEn: "Done", color: "text-[#0A3C36]", bg: "bg-[#E6F0EF]", icon: "✓" },
+  partial: { labelAr: "جزئي", labelEn: "Partial", color: "text-[#C8860A]", bg: "bg-[#FEF9EC]", icon: "◑" },
+  todo: { labelAr: "مطلوب", labelEn: "To do", color: "text-[#627D98]", bg: "bg-[#F0F4F8]", icon: "○" },
+  blocked: { labelAr: "محظور", labelEn: "Blocked", color: "text-[#C0392B]", bg: "bg-[#FEF0EE]", icon: "✕" },
+};
+
+// English headers for the (internal, non-nav) readiness categories. The detailed
+// checklist item text is technical documentation kept in Arabic.
+const CATEGORY_EN: Record<string, string> = {
+  "المصادقة": "Authentication",
+  "المدفوعات": "Payments",
+  "PWA": "PWA",
+  "SEO": "SEO",
+  "الوضع الغير متصل": "Offline",
+  "جودة الكود": "Code quality",
+  "الأداء": "Performance",
+  "إمكانية الوصول": "Accessibility",
+  "المتغيرات البيئية": "Environment",
+  "الأمان": "Security",
+  "الاختبار": "Testing",
 };
 
 const CHECKLIST: ReadinessItem[] = [
@@ -107,6 +125,7 @@ function groupByCategory(items: ReadinessItem[]) {
 
 export default function AdminSystemReadinessPage() {
   const grouped = groupByCategory(CHECKLIST);
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
 
   const doneCount = CHECKLIST.filter((i) => i.status === "done").length;
   const partialCount = CHECKLIST.filter((i) => i.status === "partial").length;
@@ -116,21 +135,21 @@ export default function AdminSystemReadinessPage() {
   const readinessPct = Math.round(((doneCount + partialCount * 0.5) / total) * 100);
 
   return (
-    <AdminDashboardShell titleAr="جاهزية الإنتاج">
-      <div className="px-4 py-4 space-y-4" dir="rtl">
+    <AdminDashboardShell titleAr="جاهزية الإنتاج" titleEn="Production readiness">
+      <div className="px-4 py-4 space-y-4" dir={isAr ? "rtl" : "ltr"}>
 
         {/* Mock/preview notice */}
         <div className="bg-[#FEF9EC] border border-[#C8860A]/20 rounded-xl px-4 py-2">
           <p className="text-[10px] text-[#C8860A]">
-            قائمة تحقق يدوية — تُحدَّث مع كل مرحلة تطوير
+            {bi(isAr, "قائمة تحقق يدوية — تُحدَّث مع كل مرحلة تطوير", "Manual checklist — updated each development phase")}
           </p>
         </div>
 
         {/* Readiness score */}
         <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-bold text-[#102A43]">مؤشر الجاهزية</p>
-            <p className="text-2xl font-bold text-[#0A3C36]">{readinessPct}٪</p>
+            <p className="text-sm font-bold text-[#102A43]">{bi(isAr, "مؤشر الجاهزية", "Readiness score")}</p>
+            <p className="text-2xl font-bold text-[#0A3C36]">{readinessPct}{isAr ? "٪" : "%"}</p>
           </div>
           {/* Progress bar */}
           <div className="h-2 bg-[#E2E8F0] rounded-full overflow-hidden">
@@ -141,26 +160,26 @@ export default function AdminSystemReadinessPage() {
               aria-valuenow={readinessPct}
               aria-valuemin={0}
               aria-valuemax={100}
-              aria-label={`جاهزية الإنتاج ${readinessPct}٪`}
+              aria-label={bi(isAr, `جاهزية الإنتاج ${readinessPct}٪`, `Production readiness ${readinessPct}%`)}
             />
           </div>
           {/* Counts */}
           <div className="grid grid-cols-4 gap-2 mt-3 text-center">
             <div>
               <p className="text-sm font-bold text-[#0A3C36]">{doneCount}</p>
-              <p className="text-[9px] text-[#627D98]">مكتمل</p>
+              <p className="text-[9px] text-[#627D98]">{bi(isAr, "مكتمل", "Done")}</p>
             </div>
             <div>
               <p className="text-sm font-bold text-[#C8860A]">{partialCount}</p>
-              <p className="text-[9px] text-[#627D98]">جزئي</p>
+              <p className="text-[9px] text-[#627D98]">{bi(isAr, "جزئي", "Partial")}</p>
             </div>
             <div>
               <p className="text-sm font-bold text-[#627D98]">{todoCount}</p>
-              <p className="text-[9px] text-[#627D98]">مطلوب</p>
+              <p className="text-[9px] text-[#627D98]">{bi(isAr, "مطلوب", "To do")}</p>
             </div>
             <div>
               <p className="text-sm font-bold text-[#C0392B]">{blockedCount}</p>
-              <p className="text-[9px] text-[#627D98]">محظور</p>
+              <p className="text-[9px] text-[#627D98]">{bi(isAr, "محظور", "Blocked")}</p>
             </div>
           </div>
         </div>
@@ -168,7 +187,7 @@ export default function AdminSystemReadinessPage() {
         {/* Checklist by category */}
         {Array.from(grouped.entries()).map(([category, items]) => (
           <div key={category}>
-            <p className="text-xs font-bold text-[#102A43] mb-2">{category}</p>
+            <p className="text-xs font-bold text-[#102A43] mb-2">{isAr ? category : (CATEGORY_EN[category] ?? category)}</p>
             <div className="space-y-2">
               {items.map((item, idx) => {
                 const cfg = STATUS_CONFIG[item.status];
@@ -185,7 +204,7 @@ export default function AdminSystemReadinessPage() {
                         <p className="text-xs text-[#102A43] leading-relaxed">{item.item}</p>
                       </div>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${cfg.bg} ${cfg.color}`}>
-                        {cfg.labelAr}
+                        {isAr ? cfg.labelAr : cfg.labelEn}
                       </span>
                     </div>
                     {item.noteAr && (
@@ -200,7 +219,7 @@ export default function AdminSystemReadinessPage() {
 
         {/* Footer */}
         <p className="text-[11px] text-[#627D98] text-center py-2">
-          آخر تحديث: Phase 17 — Final Hardening & Launch Readiness · {new Date().toLocaleDateString("ar-OM", { year: "numeric", month: "long" })}
+          {bi(isAr, "آخر تحديث", "Last updated")}: Phase 17 — Final Hardening & Launch Readiness · {new Date().toLocaleDateString(isAr ? "ar-OM" : "en-OM", { year: "numeric", month: "long" })}
         </p>
       </div>
     </AdminDashboardShell>

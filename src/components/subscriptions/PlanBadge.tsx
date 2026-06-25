@@ -1,8 +1,11 @@
 // ── PlanBadge — compact badge showing current plan ────────────────────────────
 
+"use client";
+
 import { cn } from "@/lib/utils";
 import type { PlanId } from "@/lib/payments/types";
-import { PLAN_NAMES_AR } from "@/lib/payments/plans";
+import { PLAN_NAMES_AR, PLAN_NAMES_EN } from "@/lib/payments/plans";
+import { useLocaleStore } from "@/store/locale.store";
 
 interface PlanBadgeProps {
   planId: PlanId;
@@ -17,6 +20,7 @@ const styleMap: Record<PlanId, string> = {
 };
 
 export function PlanBadge({ planId, className, size = "xs" }: PlanBadgeProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
     <span
       className={cn(
@@ -26,7 +30,7 @@ export function PlanBadge({ planId, className, size = "xs" }: PlanBadgeProps) {
         className
       )}
     >
-      {PLAN_NAMES_AR[planId]}
+      {isAr ? PLAN_NAMES_AR[planId] : PLAN_NAMES_EN[planId]}
     </span>
   );
 }
