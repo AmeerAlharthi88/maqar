@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPhone, getSession } from "@/lib/supabase/auth-actions";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
+import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 
 const OMAN_PREFIX = "+968";
@@ -140,10 +142,12 @@ export function PhoneOtpForm() {
     >
       <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
 
-        {/* Brand logo — mobile only */}
-        <div className="lg:hidden mb-6">
+        {/* Brand logo — mobile only. Tappable so users can leave auth for the
+            main page without the browser back button (FP9). On desktop the
+            AppShell header logo already provides this. */}
+        <Link href={ROUTES.home} aria-label={t("nav.home")} className="lg:hidden mb-6 rounded-2xl active:scale-95 transition-transform">
           <MaqarLogo variant="stacked" size="md" color="brand" />
-        </div>
+        </Link>
 
         {/* Phone icon */}
         <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/useTranslation";
+import { HeaderHomeButton } from "@/components/shell/HeaderHomeButton";
 
 interface AddListingHeaderProps {
   /** When set, renders the "continue draft" variant with the draft id. */
@@ -39,6 +40,11 @@ export function AddListingHeader({ draftId }: AddListingHeaderProps) {
         <h1 className="text-sm font-bold text-[#102A43] truncate">{title}</h1>
         <p className="text-[11px] text-[#627D98] truncate">{subtitle}</p>
       </div>
+
+      {/* Home shortcut — the add-listing flow has no clickable logo; this gives a
+          one-tap path to the main page. The persisted draft stays scoped to its
+          owner, so leaving does not lose or leak it (FP9). */}
+      <HeaderHomeButton className="ms-auto" />
     </div>
   );
 }

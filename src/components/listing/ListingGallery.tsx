@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { FavoriteButton } from "@/components/real-estate/FavoriteButton";
 import { formatNumber } from "@/lib/formatters";
+import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 
 interface ListingGalleryProps {
@@ -132,6 +134,25 @@ export function ListingGallery({
             <path d="M19 12H5M12 5l-7 7 7 7" />
           </svg>
         </button>
+
+        {/* Home button — next to back, so the listing detail (no app-bar logo)
+            still has a one-tap path to the main page (FP9). */}
+        <Link
+          href={ROUTES.home}
+          aria-label={t("nav.home")}
+          className={cn(
+            "absolute top-3 start-16 z-10",
+            "w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white",
+            "flex items-center justify-center transition-colors hover:bg-black/60",
+            "focus-visible:ring-2 focus-visible:ring-white"
+          )}
+          style={{ top: "calc(env(safe-area-inset-top, 0px) + 12px)" }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+            <path d="M9 21V12h6v9" />
+          </svg>
+        </Link>
 
         {/* Action buttons — top end */}
         {/* z-[99]: must exceed the mobile EN/AR toggle (z-[95]) which occupies the

@@ -1,10 +1,13 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { verifyPhoneOtp, signInWithPhone } from "@/lib/supabase/auth-actions";
 import { getCurrentProfile } from "@/lib/supabase/profile";
 import { useAuthStore } from "@/store/auth.store";
+import { MaqarLogo } from "@/components/brand/MaqarLogo";
+import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { AppRole } from "@/config/roles";
 
@@ -168,6 +171,12 @@ export function OtpVerificationForm() {
       className="min-h-[calc(100svh-56px)] flex items-center justify-center px-4 py-10 bg-[#F8F9FA]"
     >
       <div className="w-full max-w-sm lg:bg-white lg:rounded-3xl lg:shadow-[0_4px_32px_0_rgb(10_60_54/0.10)] lg:border lg:border-[#E2E8F0] lg:p-8 flex flex-col items-center">
+        {/* Brand logo — mobile only, tappable to leave auth for the main page
+            without the browser back button (FP9). */}
+        <Link href={ROUTES.home} aria-label={t("nav.home")} className="lg:hidden mb-6 rounded-2xl active:scale-95 transition-transform">
+          <MaqarLogo variant="stacked" size="md" color="brand" />
+        </Link>
+
         {/* Icon */}
         <div className="w-16 h-16 rounded-2xl bg-[#0A3C36] flex items-center justify-center mb-5">
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8">
