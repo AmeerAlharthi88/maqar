@@ -1,6 +1,9 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import type { RiskLevel } from "@/types/admin";
-import { RISK_LEVEL_AR } from "@/types/admin";
+import { RISK_LEVEL_AR, RISK_LEVEL_EN } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
 
 const RISK_CLASSES: Record<RiskLevel, string> = {
   low:      "bg-[#E6F0EF] text-[#0A3C36]",
@@ -16,6 +19,7 @@ interface AdminRiskBadgeProps {
 }
 
 export function AdminRiskBadge({ level, className, size = "xs" }: AdminRiskBadgeProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
     <span
       className={cn(
@@ -25,7 +29,7 @@ export function AdminRiskBadge({ level, className, size = "xs" }: AdminRiskBadge
         className
       )}
     >
-      {RISK_LEVEL_AR[level]}
+      {isAr ? RISK_LEVEL_AR[level] : RISK_LEVEL_EN[level]}
     </span>
   );
 }

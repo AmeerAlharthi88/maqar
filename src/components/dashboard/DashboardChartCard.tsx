@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { AnalyticsTimePoint } from "@/mock/agent-analytics";
+import { useLocaleStore } from "@/store/locale.store";
 
 const AnalyticsChartInner = dynamic(
   () => import("./AnalyticsChartInner"),
@@ -11,26 +12,30 @@ const AnalyticsChartInner = dynamic(
 interface ChartLine {
   key: keyof AnalyticsTimePoint;
   labelAr: string;
+  /** English legend label. Falls back to labelAr when omitted. */
+  labelEn?: string;
   color: string;
 }
 
 interface DashboardChartCardProps {
   titleAr: string;
+  titleEn?: string;
   data: AnalyticsTimePoint[];
   lines: ChartLine[];
 }
 
-export function DashboardChartCard({ titleAr, data, lines }: DashboardChartCardProps) {
+export function DashboardChartCard({ titleAr, titleEn, data, lines }: DashboardChartCardProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir="rtl">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir={isAr ? "rtl" : "ltr"}>
       <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-bold text-[#102A43]">{titleAr}</p>
+        <p className="text-sm font-bold text-[#102A43]">{isAr ? titleAr : (titleEn ?? titleAr)}</p>
         {/* Legend */}
         <div className="flex items-center gap-3">
           {lines.map((l) => (
             <div key={l.key as string} className="flex items-center gap-1">
               <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: l.color }} />
-              <span className="text-[10px] text-[#627D98]">{l.labelAr}</span>
+              <span className="text-[10px] text-[#627D98]">{isAr ? l.labelAr : (l.labelEn ?? l.labelAr)}</span>
             </div>
           ))}
         </div>

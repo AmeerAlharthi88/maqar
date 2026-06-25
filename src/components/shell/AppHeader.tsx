@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { IconButton } from "@/components/ui/IconButton";
@@ -12,10 +13,23 @@ interface AppHeaderProps {
   variant?: "home" | "search" | "minimal" | "back";
   /** Locale-aware title — pass the already-translated string from the parent */
   title?: string;
-  /** @deprecated Use `title` with a pre-translated value instead */
+  /**
+   * Bilingual title. When `title` is not given, the header localizes the title
+   * itself from these via its own locale-store subscription — the same selector
+   * pattern as DashboardNav, so the title reliably tracks the persisted locale
+   * after hydration instead of sticking on the SSR-default language (FP8 #1).
+   */
   titleAr?: string;
+  titleEn?: string;
   showSearch?: boolean;
+  /** Explicit back handler. Takes precedence over `backHref`. */
   onBack?: () => void;
+  /**
+   * Deterministic back destination. When set, the back arrow navigates here
+   * instead of `router.back()` — used by the admin shell so the arrow reliably
+   * returns to a safe page (/account) rather than looping through admin tabs.
+   */
+  backHref?: string;
   actions?: React.ReactNode;
   className?: string;
 }
@@ -24,14 +38,30 @@ export function AppHeader({
   variant = "home",
   title,
   titleAr,
+  titleEn,
   showSearch = false,
   onBack,
+  backHref,
   actions,
   className,
 }: AppHeaderProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const router = useRouter();
+  const isAr = locale === "ar";
 
-  const displayTitle = title ?? titleAr;
+  // Prefer an explicit pre-translated `title`; otherwise localize here from the
+  // bilingual props. Read locale via useTranslation (the same store access used
+  // for `t` above) — mixing it with a second direct useLocaleStore subscription
+  // can resolve to a different bundled store instance and leave the title stuck
+  // on one language while the rest of the header localizes (FP8 #1/#4).
+  const displayTitle = title ?? (isAr ? titleAr : (titleEn ?? titleAr));
+
+  // Back behavior, in priority order:
+  //   1. explicit onBack handler from the caller
+  //   2. explicit backHref destination (deterministic, never stuck)
+  //   3. router.back() — was previously a no-op when onBack was omitted, which
+  //      left the admin back arrow unresponsive (FP8 #2).
+  const handleBack = onBack ?? (backHref ? () => router.push(backHref) : () => router.back());
 
   return (
     <header
@@ -46,10 +76,10 @@ export function AppHeader({
         {(variant === "back" || onBack) && (
           <IconButton
             label={t("common.back")}
-            size="sm"
+            size="md"
             variant="ghost"
-            onClick={onBack}
-            className="flex-shrink-0 flip-x"
+            onClick={handleBack}
+            className="flex-shrink-0 flip-x -ms-1"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M19 12H5M12 5l-7 7 7 7" />

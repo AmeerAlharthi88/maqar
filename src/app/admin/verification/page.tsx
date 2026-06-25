@@ -6,10 +6,15 @@ import { VerificationRequestCard } from "@/components/admin/VerificationRequestC
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AdminVerificationRequest, VerificationRequestStatus, VerificationRequestType } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
 
 const TYPE_FILTERS: (VerificationRequestType | "all")[] = ["all", "agent", "agency"];
 const TYPE_AR: Record<VerificationRequestType | "all", string> = {
   all: "الكل", agent: "وسيط", agency: "وكالة", property: "عقار",
+};
+const TYPE_EN: Record<VerificationRequestType | "all", string> = {
+  all: "All", agent: "Agent", agency: "Agency", property: "Property",
 };
 
 function useVerificationQueue() {
@@ -59,16 +64,20 @@ function useVerificationQueue() {
 
 export default function AdminVerificationPage() {
   const [typeFilter, setTypeFilter] = useState<VerificationRequestType | "all">("all");
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
+  const typeLabels = isAr ? TYPE_AR : TYPE_EN;
   const { items, loading, error, reload, update } = useVerificationQueue();
 
   const filtered = typeFilter === "all" ? items : items.filter((r) => r.type === typeFilter);
   const pending  = items.filter((r) => r.status === "pending" || r.status === "under_review").length;
 
   return (
-    <AdminDashboardShell titleAr="طلبات التوثيق">
-      <div className="px-4 py-4 space-y-4" dir="rtl">
+    <AdminDashboardShell titleAr="طلبات التوثيق" titleEn="Verification requests">
+      <div className="px-4 py-4 space-y-4" dir={isAr ? "rtl" : "ltr"}>
         <div className="flex items-center justify-between">
-          <p className="text-xs text-[#627D98]">{pending} طلب في الانتظار · {items.length} إجمالي</p>
+          <p className="text-xs text-[#627D98]">
+            {bi(isAr, `${pending} طلب في الانتظار · ${items.length} إجمالي`, `${pending} pending · ${items.length} total`)}
+          </p>
         </div>
 
         <div className="flex gap-2">
@@ -79,14 +88,14 @@ export default function AdminVerificationPage() {
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl flex-shrink-0 transition-colors",
                   typeFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
-                {TYPE_AR[f]} ({count})
+                {typeLabels[f]} ({count})
               </button>
             );
           })}
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">{bi(isAr, "جارٍ التحميل…", "Loading…")}</div>
         ) : error ? (
           <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
@@ -105,7 +114,7 @@ export default function AdminVerificationPage() {
                 request={req}
                 onApprove={(id) => void update(id, "approved")}
                 onReject={(id) => void update(id, "rejected")}
-                onRequestInfo={(id) => void update(id, "needs_more_info", "يرجى إرسال المستندات المطلوبة.")}
+                onRequestInfo={(id) => void update(id, "needs_more_info", bi(isAr, "يرجى إرسال المستندات المطلوبة.", "Please submit the required documents."))}
               />
             ))}
           </div>

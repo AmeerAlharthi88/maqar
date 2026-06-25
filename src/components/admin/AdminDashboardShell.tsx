@@ -6,6 +6,7 @@ import Link from "next/link";
 import { AppShell } from "@/components/layout/AppShell";
 import { AppHeader } from "@/components/shell/AppHeader";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
+import { LanguageToggle } from "@/components/shell/LanguageToggle";
 import { useAuthStore } from "@/store/auth.store";
 import { useTranslation } from "@/i18n/useTranslation";
 import { ROUTES } from "@/config/routes";
@@ -34,9 +35,10 @@ const ADMIN_NAV_ITEMS = [
 interface AdminDashboardShellProps {
   children: React.ReactNode;
   titleAr?: string;
+  titleEn?: string;
 }
 
-export function AdminDashboardShell({ children, titleAr = "لوحة الإدارة" }: AdminDashboardShellProps) {
+export function AdminDashboardShell({ children, titleAr = "لوحة الإدارة", titleEn = "Admin" }: AdminDashboardShellProps) {
   const { user, profile, isLoading } = useAuthStore();
   const router = useRouter();
   const { locale } = useTranslation();
@@ -60,7 +62,7 @@ export function AdminDashboardShell({ children, titleAr = "لوحة الإدار
   if (loadingProfile) {
     return (
       <AppShell>
-        <AppHeader variant="back" titleAr={titleAr} />
+        <AppHeader variant="back" titleAr={titleAr} titleEn={titleEn} backHref={ROUTES.account} actions={<LanguageToggle className="text-[11px]" />} />
         <div
           className="flex flex-col items-center justify-center min-h-[55vh] px-6 text-center gap-3"
           dir={isAr ? "rtl" : "ltr"}
@@ -130,7 +132,7 @@ export function AdminDashboardShell({ children, titleAr = "لوحة الإدار
   if (!hasAdminAccess) {
     return (
       <AppShell>
-        <AppHeader variant="back" titleAr="لوحة الإدارة" />
+        <AppHeader variant="back" titleAr="لوحة الإدارة" titleEn="Admin" backHref={ROUTES.account} />
         <div className="px-4 py-12 text-center" dir="rtl">
           <div className="w-16 h-16 rounded-full bg-[#0A3C36]/10 flex items-center justify-center mx-auto mb-4">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="1.8">
@@ -152,7 +154,16 @@ export function AdminDashboardShell({ children, titleAr = "لوحة الإدار
 
   return (
     <AppShell>
-      <AppHeader variant="back" titleAr={titleAr} />
+      {/* The global mobile language toggle is fixed under the sticky header (z-95
+          vs z-100) and is unreachable on admin pages — surface a reachable one in
+          the header so an admin can switch language from any admin screen (FP8 #1). */}
+      <AppHeader
+        variant="back"
+        titleAr={titleAr}
+        titleEn={titleEn}
+        backHref={ROUTES.account}
+        actions={<LanguageToggle className="text-[11px]" />}
+      />
       <DashboardNav items={ADMIN_NAV_ITEMS} />
       {children}
     </AppShell>
