@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { IconButton } from "@/components/ui/IconButton";
 import { SearchInput } from "@/components/ui/SearchInput";
+import { HeaderHomeButton } from "@/components/shell/HeaderHomeButton";
 import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -105,6 +106,12 @@ export function AppHeader({
 
         {/* Spacer when no search */}
         {!showSearch && variant !== "back" && <div className="flex-1" />}
+
+        {/* Home shortcut — title/back headers hide the clickable logo, so this
+            guarantees a one-tap path to the main page on every such screen
+            (admin, account sub-pages, dashboards, policies…) without replacing
+            the back arrow (FP9). */}
+        {variant === "back" && <HeaderHomeButton />}
 
         {/* Actions slot */}
         {actions && (
