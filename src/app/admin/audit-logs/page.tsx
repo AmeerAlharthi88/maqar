@@ -6,7 +6,9 @@ import { AuditLogTable } from "@/components/admin/AuditLogTable";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AuditLog, AuditCategory } from "@/types/admin";
-import { AUDIT_CATEGORY_AR } from "@/types/admin";
+import { AUDIT_CATEGORY_AR, AUDIT_CATEGORY_EN } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
 
 type SeverityFilter = "info" | "warning" | "critical" | "all";
 
@@ -15,10 +17,14 @@ const CATEGORY_FILTERS: (AuditCategory | "all")[] = [
   "user_action", "payment_action", "ai_action", "security_action", "system_action",
 ];
 const CATEGORY_AR: Record<AuditCategory | "all", string> = { all: "الكل", ...AUDIT_CATEGORY_AR };
+const CATEGORY_EN: Record<AuditCategory | "all", string> = { all: "All", ...AUDIT_CATEGORY_EN };
 
 const SEVERITY_FILTERS: SeverityFilter[] = ["all", "info", "warning", "critical"];
 const SEVERITY_AR: Record<SeverityFilter, string> = {
   all: "الكل", info: "معلومات", warning: "تحذير", critical: "حرج",
+};
+const SEVERITY_EN: Record<SeverityFilter, string> = {
+  all: "All", info: "Info", warning: "Warning", critical: "Critical",
 };
 
 // Map UI severity to DB severity values for the filter query param
@@ -79,15 +85,18 @@ export default function AdminAuditLogsPage() {
   });
 
   const criticalCount = logs.filter((l) => l.severity === "critical").length;
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
+  const categoryLabels = isAr ? CATEGORY_AR : CATEGORY_EN;
+  const severityLabels = isAr ? SEVERITY_AR : SEVERITY_EN;
 
   return (
-    <AdminDashboardShell titleAr="سجل التدقيق">
-      <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#627D98]">{criticalCount} حرج · {logs.length} إجمالي</p>
+    <AdminDashboardShell titleAr="سجل التدقيق" titleEn="Audit logs">
+      <div className="px-4 py-4 space-y-4" dir={isAr ? "rtl" : "ltr"}>
+        <p className="text-xs text-[#627D98]">{bi(isAr, `${criticalCount} حرج · ${logs.length} إجمالي`, `${criticalCount} critical · ${logs.length} total`)}</p>
 
         {/* Category filters */}
         <div>
-          <p className="text-[10px] font-bold text-[#627D98] mb-1.5">الفئة</p>
+          <p className="text-[10px] font-bold text-[#627D98] mb-1.5">{bi(isAr, "الفئة", "Category")}</p>
           <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
             {CATEGORY_FILTERS.map((f) => {
               const count = f === "all" ? logs.length : logs.filter((l) => l.category === f).length;
@@ -96,7 +105,7 @@ export default function AdminAuditLogsPage() {
                   className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
                     categoryFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
                 >
-                  {CATEGORY_AR[f]} ({count})
+                  {categoryLabels[f]} ({count})
                 </button>
               );
             })}
@@ -105,7 +114,7 @@ export default function AdminAuditLogsPage() {
 
         {/* Severity filters */}
         <div>
-          <p className="text-[10px] font-bold text-[#627D98] mb-1.5">الخطورة</p>
+          <p className="text-[10px] font-bold text-[#627D98] mb-1.5">{bi(isAr, "الخطورة", "Severity")}</p>
           <div className="flex gap-2">
             {SEVERITY_FILTERS.map((f) => {
               const count = f === "all" ? logs.length : logs.filter((l) => l.severity === f).length;
@@ -114,7 +123,7 @@ export default function AdminAuditLogsPage() {
                   className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
                     severityFilter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
                 >
-                  {SEVERITY_AR[f]} ({count})
+                  {severityLabels[f]} ({count})
                 </button>
               );
             })}
@@ -123,14 +132,18 @@ export default function AdminAuditLogsPage() {
 
         {/* Privacy notice */}
         <div className="bg-[#EAF4FB] rounded-2xl border border-[#2471A3]/15 px-4 py-3">
-          <p className="text-xs font-bold text-[#2471A3] mb-0.5">سجل التدقيق — للاستخدام الداخلي فقط</p>
+          <p className="text-xs font-bold text-[#2471A3] mb-0.5">{bi(isAr, "سجل التدقيق — للاستخدام الداخلي فقط", "Audit log — internal use only")}</p>
           <p className="text-[10px] text-[#627D98] leading-relaxed">
-            جميع الإجراءات الإدارية مسجّلة وخاضعة للمراجعة. عناوين IP مُخفاة جزئياً لأغراض الخصوصية.
+            {bi(
+              isAr,
+              "جميع الإجراءات الإدارية مسجّلة وخاضعة للمراجعة. عناوين IP مُخفاة جزئياً لأغراض الخصوصية.",
+              "All admin actions are logged and auditable. IP addresses are partially masked for privacy."
+            )}
           </p>
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">{bi(isAr, "جارٍ التحميل…", "Loading…")}</div>
         ) : error ? (
           <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (

@@ -6,11 +6,16 @@ import { ReportCard } from "@/components/admin/ReportCard";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { AdminReport, ReportStatus } from "@/types/admin";
-import { REPORT_STATUS_AR } from "@/types/admin";
+import { REPORT_STATUS_AR, REPORT_STATUS_EN } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
 
 const STATUS_FILTERS: (ReportStatus | "all")[] = ["all", "new", "reviewing", "resolved", "dismissed", "escalated"];
 const STATUS_AR: Record<ReportStatus | "all", string> = {
   all: "الكل", ...REPORT_STATUS_AR,
+};
+const STATUS_EN: Record<ReportStatus | "all", string> = {
+  all: "All", ...REPORT_STATUS_EN,
 };
 
 function useReportQueue() {
@@ -81,15 +86,17 @@ function useReportQueue() {
 
 export default function AdminReportsPage() {
   const [filter, setFilter] = useState<ReportStatus | "all">("all");
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
+  const statusLabels = isAr ? STATUS_AR : STATUS_EN;
   const { items, loading, error, reload, pending, failed, runAction } = useReportQueue();
 
   const filtered = filter === "all" ? items : items.filter((r) => r.status === filter);
   const newCount = items.filter((r) => r.status === "new").length;
 
   return (
-    <AdminDashboardShell titleAr="البلاغات">
-      <div className="px-4 py-4 space-y-4" dir="rtl">
-        <p className="text-xs text-[#627D98]">{newCount} بلاغ جديد · {items.length} إجمالي</p>
+    <AdminDashboardShell titleAr="البلاغات" titleEn="Reports">
+      <div className="px-4 py-4 space-y-4" dir={isAr ? "rtl" : "ltr"}>
+        <p className="text-xs text-[#627D98]">{bi(isAr, `${newCount} بلاغ جديد · ${items.length} إجمالي`, `${newCount} new · ${items.length} total`)}</p>
 
         {/* Filters */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
@@ -100,14 +107,14 @@ export default function AdminReportsPage() {
                 className={["px-3 py-1.5 text-xs font-semibold rounded-xl whitespace-nowrap flex-shrink-0 transition-colors",
                   filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]"].join(" ")}
               >
-                {STATUS_AR[f]} ({count})
+                {statusLabels[f]} ({count})
               </button>
             );
           })}
         </div>
 
         {loading ? (
-          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">{bi(isAr, "جارٍ التحميل…", "Loading…")}</div>
         ) : error ? (
           <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (

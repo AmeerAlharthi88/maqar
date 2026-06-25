@@ -1,6 +1,10 @@
+"use client";
+
 import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { AdminRiskBadge } from "./AdminRiskBadge";
 import type { RiskLevel } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
 
 interface AdminQueueCardProps {
   titleAr: string;
@@ -25,8 +29,9 @@ export function AdminQueueCard({
   adminNote,
   children,
 }: AdminQueueCardProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
-    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir="rtl">
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir={isAr ? "rtl" : "ltr"}>
       {/* Header row */}
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex-1 min-w-0">
@@ -61,7 +66,7 @@ export function AdminQueueCard({
       {/* Admin note */}
       {adminNote && (
         <div className="bg-[#FFF8E7] rounded-xl px-3 py-2 mb-2">
-          <p className="text-[10px] text-[#D4A017] font-semibold mb-0.5">ملاحظة الإدارة</p>
+          <p className="text-[10px] text-[#D4A017] font-semibold mb-0.5">{bi(isAr, "ملاحظة الإدارة", "Admin note")}</p>
           <p className="text-xs text-[#627D98] leading-relaxed">{adminNote}</p>
         </div>
       )}

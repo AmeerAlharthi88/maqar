@@ -1,5 +1,8 @@
 "use client";
 
+import { useLocaleStore } from "@/store/locale.store";
+import { bi } from "@/lib/admin/labels";
+
 interface ReviewActionBarProps {
   onApprove?: () => void;
   onReject?: () => void;
@@ -27,15 +30,16 @@ export function ReviewActionBar({
   showRequestChanges = true,
   disabled = false,
 }: ReviewActionBarProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
-    <div className="flex flex-wrap gap-2 mt-3" dir="rtl">
+    <div className="flex flex-wrap gap-2 mt-3" dir={isAr ? "rtl" : "ltr"}>
       {onApprove && (
         <button
           onClick={onApprove}
           disabled={disabled}
           className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
-          قبول
+          {bi(isAr, "قبول", "Approve")}
         </button>
       )}
       {onReject && (
@@ -44,7 +48,7 @@ export function ReviewActionBar({
           disabled={disabled}
           className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
-          رفض
+          {bi(isAr, "رفض", "Reject")}
         </button>
       )}
       {showRequestChanges && onRequestChanges && (
@@ -53,7 +57,7 @@ export function ReviewActionBar({
           disabled={disabled}
           className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#FFF8E7] text-[#D4A017] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
-          طلب تعديل
+          {bi(isAr, "طلب تعديل", "Request changes")}
         </button>
       )}
       {showEscalate && onEscalate && (
@@ -62,7 +66,7 @@ export function ReviewActionBar({
           disabled={disabled}
           className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#F3EEFA] text-[#7B5EA7] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
-          تصعيد
+          {bi(isAr, "تصعيد", "Escalate")}
         </button>
       )}
       {showDismiss && onDismiss && (
@@ -71,7 +75,7 @@ export function ReviewActionBar({
           disabled={disabled}
           className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#F0F4F8] text-[#627D98] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
-          رفض البلاغ
+          {bi(isAr, "رفض البلاغ", "Dismiss report")}
         </button>
       )}
       {showClear && onClear && (
@@ -80,7 +84,7 @@ export function ReviewActionBar({
           disabled={disabled}
           className="flex-1 min-w-[80px] min-h-[40px] py-2.5 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50 active:scale-[0.98] transition-transform"
         >
-          تخليص العلم
+          {bi(isAr, "تخليص العلم", "Clear flag")}
         </button>
       )}
     </div>

@@ -1,7 +1,9 @@
 "use client";
 
-import type { AuditLog, AuditCategory } from "@/types/admin";
-import { AUDIT_CATEGORY_AR } from "@/types/admin";
+import type { AuditLog } from "@/types/admin";
+import { AUDIT_CATEGORY_AR, AUDIT_CATEGORY_EN } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { displayMeta } from "@/lib/admin/labels";
 
 const SEVERITY_CLASSES = {
   info:     "bg-[#EAF4FB] text-[#2471A3]",
@@ -15,27 +17,34 @@ const SEVERITY_AR = {
   critical: "حرج",
 } as const;
 
+const SEVERITY_EN = {
+  info:     "Info",
+  warning:  "Warning",
+  critical: "Critical",
+} as const;
+
 interface AuditLogTableProps {
   logs: AuditLog[];
 }
 
 export function AuditLogTable({ logs }: AuditLogTableProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
-    <div className="space-y-2" dir="rtl">
+    <div className="space-y-2" dir={isAr ? "rtl" : "ltr"}>
       {logs.map((log) => (
         <div key={log.id} className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-3">
           <div className="flex items-start justify-between gap-2 mb-1.5">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[10px] px-2 py-0.5 bg-[#F0F4F8] text-[#627D98] rounded-lg font-semibold whitespace-nowrap">
-                  {AUDIT_CATEGORY_AR[log.category]}
+                  {isAr ? AUDIT_CATEGORY_AR[log.category] : AUDIT_CATEGORY_EN[log.category]}
                 </span>
-                <p className="text-sm font-bold text-[#102A43]">{log.actionAr}</p>
+                <p className="text-sm font-bold text-[#102A43]">{displayMeta(log.actionAr, isAr)}</p>
               </div>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <p className="text-xs text-[#627D98]">
-                  <span className="font-semibold">{log.actorNameAr}</span>
-                  {log.targetAr && <span className="text-[#627D98]"> ← {log.targetAr}</span>}
+                  <span className="font-semibold">{displayMeta(log.actorNameAr, isAr)}</span>
+                  {log.targetAr && <span className="text-[#627D98]"> ← {displayMeta(log.targetAr, isAr)}</span>}
                 </p>
               </div>
             </div>
@@ -43,7 +52,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
               "text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0",
               SEVERITY_CLASSES[log.severity],
             ].join(" ")}>
-              {SEVERITY_AR[log.severity]}
+              {isAr ? SEVERITY_AR[log.severity] : SEVERITY_EN[log.severity]}
             </span>
           </div>
 
@@ -55,7 +64,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
 
           <div className="flex items-center justify-between">
             <p className="text-[10px] text-[#627D98]">
-              {new Date(log.createdAt).toLocaleString("ar-OM", {
+              {new Date(log.createdAt).toLocaleString(isAr ? "ar-OM" : "en-OM", {
                 year: "numeric", month: "short", day: "numeric",
                 hour: "2-digit", minute: "2-digit",
               })}

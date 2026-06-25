@@ -8,7 +8,9 @@ import { AdminActionFeedback } from "@/components/admin/AdminActionFeedback";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { ListingReviewStatus, AdminListingItem } from "@/types/admin";
-import { LISTING_REVIEW_STATUS_AR } from "@/types/admin";
+import { LISTING_REVIEW_STATUS_AR, LISTING_REVIEW_STATUS_EN } from "@/types/admin";
+import { useLocaleStore } from "@/store/locale.store";
+import { bi, displayMeta } from "@/lib/admin/labels";
 
 const STATUS_VARIANT: Record<ListingReviewStatus, "success" | "warning" | "danger" | "info" | "neutral" | "purple"> = {
   pending:       "warning",
@@ -28,6 +30,14 @@ const FILTER_LABELS_AR: Record<ListingReviewStatus | "all", string> = {
   rejected:      "مرفوض",
   needs_changes: "يحتاج تعديل",
   suspicious:    "مشبوه",
+};
+const FILTER_LABELS_EN: Record<ListingReviewStatus | "all", string> = {
+  all:           "All",
+  pending:       "Pending",
+  approved:      "Approved",
+  rejected:      "Rejected",
+  needs_changes: "Needs changes",
+  suspicious:    "Suspicious",
 };
 
 type ListingAction = "approve" | "reject" | "request_changes";
@@ -103,13 +113,17 @@ function useListingQueue() {
 
 export default function AdminListingsPage() {
   const [filter, setFilter] = useState<ListingReviewStatus | "all">("all");
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
+  const filterLabels = isAr ? FILTER_LABELS_AR : FILTER_LABELS_EN;
+  const statusLabels = isAr ? LISTING_REVIEW_STATUS_AR : LISTING_REVIEW_STATUS_EN;
+  const numLocale = isAr ? "ar-OM" : "en-OM";
   const { items, loading, error, reload, pending, failed, runAction } = useListingQueue();
 
   const filtered = filter === "all" ? items : items.filter((l) => l.reviewStatus === filter);
 
   return (
-    <AdminDashboardShell titleAr="مراجعة الإعلانات">
-      <div className="px-4 py-4 space-y-4" dir="rtl">
+    <AdminDashboardShell titleAr="مراجعة الإعلانات" titleEn="Review listings">
+      <div className="px-4 py-4 space-y-4" dir={isAr ? "rtl" : "ltr"}>
         {/* Filter chips */}
         <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1">
           {ALL_FILTERS.map((f) => {
@@ -123,7 +137,7 @@ export default function AdminListingsPage() {
                   filter === f ? "bg-[#0A3C36] text-white" : "bg-[#F0F4F8] text-[#627D98]",
                 ].join(" ")}
               >
-                {FILTER_LABELS_AR[f]} ({count})
+                {filterLabels[f]} ({count})
               </button>
             );
           })}
@@ -131,7 +145,7 @@ export default function AdminListingsPage() {
 
         {/* Queue */}
         {loading ? (
-          <div className="text-center text-xs text-[#627D98] py-8">جارٍ التحميل…</div>
+          <div className="text-center text-xs text-[#627D98] py-8">{bi(isAr, "جارٍ التحميل…", "Loading…")}</div>
         ) : error ? (
           <AdminErrorState onRetry={reload} />
         ) : filtered.length === 0 ? (
@@ -151,21 +165,21 @@ export default function AdminListingsPage() {
             {filtered.map((listing) => (
               <AdminQueueCard
                 key={listing.id}
-                titleAr={listing.titleAr}
-                subtitleAr={`${listing.agentNameAr} · ${listing.areaAr}، ${listing.wilayatAr}`}
-                metaAr={`${listing.price.toLocaleString("ar-OM")} ر.ع. · ${listing.purpose === "sale" ? "بيع" : "إيجار"} · جودة ${listing.qualityScore}/100`}
-                statusLabel={LISTING_REVIEW_STATUS_AR[listing.reviewStatus]}
+                titleAr={displayMeta(listing.titleAr, isAr)}
+                subtitleAr={`${displayMeta(listing.agentNameAr, isAr)} · ${displayMeta(listing.areaAr, isAr)}${isAr ? "، " : ", "}${displayMeta(listing.wilayatAr, isAr)}`}
+                metaAr={`${listing.price.toLocaleString(numLocale)} ${bi(isAr, "ر.ع.", "OMR")} · ${listing.purpose === "sale" ? bi(isAr, "بيع", "Sale") : bi(isAr, "إيجار", "Rent")} · ${bi(isAr, "جودة", "Quality")} ${listing.qualityScore}/100`}
+                statusLabel={statusLabels[listing.reviewStatus]}
                 statusVariant={STATUS_VARIANT[listing.reviewStatus]}
                 flagLabel={
-                  listing.isSuspiciousPrice ? "سعر مشبوه" :
-                  listing.duplicateRisk === "high"   ? "خطر تكرار: مرتفع" :
-                  listing.duplicateRisk === "medium" ? "خطر تكرار: متوسط" :
+                  listing.isSuspiciousPrice ? bi(isAr, "سعر مشبوه", "Suspicious price") :
+                  listing.duplicateRisk === "high"   ? bi(isAr, "خطر تكرار: مرتفع", "Duplicate risk: high") :
+                  listing.duplicateRisk === "medium" ? bi(isAr, "خطر تكرار: متوسط", "Duplicate risk: medium") :
                   undefined
                 }
                 adminNote={listing.adminNote}
               >
                 <p className="text-[10px] text-[#627D98] mb-2">
-                  {new Date(listing.submittedAt).toLocaleDateString("ar-OM", { year: "numeric", month: "long", day: "numeric" })}
+                  {new Date(listing.submittedAt).toLocaleDateString(numLocale, { year: "numeric", month: "long", day: "numeric" })}
                 </p>
                 {(listing.reviewStatus === "pending" || listing.reviewStatus === "suspicious") && (
                   <>

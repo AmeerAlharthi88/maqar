@@ -18,6 +18,14 @@ export const LISTING_REVIEW_STATUS_AR: Record<ListingReviewStatus, string> = {
   suspicious:    "مشبوه",
 };
 
+export const LISTING_REVIEW_STATUS_EN: Record<ListingReviewStatus, string> = {
+  pending:       "Pending",
+  approved:      "Approved",
+  rejected:      "Rejected",
+  needs_changes: "Needs changes",
+  suspicious:    "Suspicious",
+};
+
 export interface AdminListingItem {
   id: string;
   titleAr: string;
@@ -53,6 +61,14 @@ export const VERIFICATION_STATUS_AR: Record<VerificationRequestStatus, string> =
   needs_more_info:"يحتاج معلومات",
 };
 
+export const VERIFICATION_STATUS_EN: Record<VerificationRequestStatus, string> = {
+  pending:        "Pending",
+  under_review:   "Under review",
+  approved:       "Approved",
+  rejected:       "Rejected",
+  needs_more_info:"Needs info",
+};
+
 export type RiskLevel = "low" | "medium" | "high" | "critical";
 
 export const RISK_LEVEL_AR: Record<RiskLevel, string> = {
@@ -60,6 +76,13 @@ export const RISK_LEVEL_AR: Record<RiskLevel, string> = {
   medium:   "متوسط",
   high:     "مرتفع",
   critical: "حرج",
+};
+
+export const RISK_LEVEL_EN: Record<RiskLevel, string> = {
+  low:      "Low",
+  medium:   "Medium",
+  high:     "High",
+  critical: "Critical",
 };
 
 export interface VerificationDocument {
@@ -106,6 +129,16 @@ export const REPORT_REASON_AR: Record<ReportReason, string> = {
   other:             "سبب آخر",
 };
 
+export const REPORT_REASON_EN: Record<ReportReason, string> = {
+  wrong_info:        "Incorrect information",
+  unrealistic_price: "Unrealistic price",
+  fake_photos:       "Fake photos",
+  duplicate:         "Duplicate property",
+  already_sold:      "Already sold or rented",
+  suspicious:        "Suspicious listing",
+  other:             "Other reason",
+};
+
 export type ReportStatus = "new" | "reviewing" | "resolved" | "dismissed" | "escalated";
 
 export const REPORT_STATUS_AR: Record<ReportStatus, string> = {
@@ -114,6 +147,14 @@ export const REPORT_STATUS_AR: Record<ReportStatus, string> = {
   resolved:  "تم الحل",
   dismissed: "تم الرفض",
   escalated: "مُصعَّد",
+};
+
+export const REPORT_STATUS_EN: Record<ReportStatus, string> = {
+  new:       "New",
+  reviewing: "Reviewing",
+  resolved:  "Resolved",
+  dismissed: "Dismissed",
+  escalated: "Escalated",
 };
 
 export type ReportTargetType = "listing" | "agent" | "agency" | "review";
@@ -141,6 +182,13 @@ export const AML_STATUS_AR: Record<AMLStatus, string> = {
   cleared:          "تم التخليص",
   escalated:        "مُصعَّد",
   rejected_listing: "تم رفض الإعلان",
+};
+
+export const AML_STATUS_EN: Record<AMLStatus, string> = {
+  flagged:          "Flagged",
+  cleared:          "Cleared",
+  escalated:        "Escalated",
+  rejected_listing: "Listing rejected",
 };
 
 export interface AMLFlag {
@@ -201,6 +249,13 @@ export const USER_STATUS_AR: Record<UserStatus, string> = {
   pending_verification:  "في انتظار التحقق",
 };
 
+export const USER_STATUS_EN: Record<UserStatus, string> = {
+  active:                "Active",
+  suspended:             "Suspended",
+  banned:                "Banned",
+  pending_verification:  "Pending verification",
+};
+
 export interface AdminUser {
   id: string;
   nameAr: string;
@@ -241,6 +296,13 @@ export const PAYMENT_STATUS_AR: Record<PaymentStatus, string> = {
   cancelled: "ملغي",
 };
 
+export const PAYMENT_STATUS_EN: Record<PaymentStatus, string> = {
+  paid:      "Paid",
+  failed:    "Failed",
+  trial:     "Trial",
+  cancelled: "Cancelled",
+};
+
 export interface AdminSubscriptionRecord {
   id: string;
   userNameAr: string;
@@ -276,6 +338,17 @@ export const AUDIT_CATEGORY_AR: Record<AuditCategory, string> = {
   system_action:       "إجراء نظام",
 };
 
+export const AUDIT_CATEGORY_EN: Record<AuditCategory, string> = {
+  admin_action:        "Admin action",
+  listing_action:      "Listing action",
+  verification_action: "Verification action",
+  user_action:         "User action",
+  payment_action:      "Payment action",
+  ai_action:           "AI action",
+  security_action:     "Security action",
+  system_action:       "System action",
+};
+
 export interface AuditLog {
   id: string;
   actorNameAr: string;
@@ -299,6 +372,13 @@ export const REVIEW_MOD_STATUS_AR: Record<ReviewModerationStatus, string> = {
   approved: "مقبول",
   rejected: "مرفوض",
   hidden:   "مخفي",
+};
+
+export const REVIEW_MOD_STATUS_EN: Record<ReviewModerationStatus, string> = {
+  pending:  "Pending",
+  approved: "Approved",
+  rejected: "Rejected",
+  hidden:   "Hidden",
 };
 
 export interface AdminReviewItem {

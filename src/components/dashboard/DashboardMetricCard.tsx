@@ -1,7 +1,14 @@
+"use client";
+
+import { useLocaleStore } from "@/store/locale.store";
+
 interface DashboardMetricCardProps {
   labelAr: string;
+  /** English label. Falls back to labelAr when omitted (keeps old call sites working). */
+  labelEn?: string;
   value: string | number;
   subLabelAr?: string;
+  subLabelEn?: string;
   icon?: React.ReactNode;
   trend?: { value: string; up: boolean } | null;
   accent?: boolean;
@@ -9,12 +16,17 @@ interface DashboardMetricCardProps {
 
 export function DashboardMetricCard({
   labelAr,
+  labelEn,
   value,
   subLabelAr,
+  subLabelEn,
   icon,
   trend,
   accent = false,
 }: DashboardMetricCardProps) {
+  const isAr = useLocaleStore((s) => s.locale) === "ar";
+  const label = isAr ? labelAr : (labelEn ?? labelAr);
+  const subLabel = isAr ? subLabelAr : (subLabelEn ?? subLabelAr);
   return (
     <div
       className={[
@@ -43,11 +55,11 @@ export function DashboardMetricCard({
           accent ? "text-white/80" : "text-[#627D98]",
         ].join(" ")}
       >
-        {labelAr}
+        {label}
       </p>
-      {subLabelAr && (
+      {subLabel && (
         <p className={["text-[10px]", accent ? "text-white/60" : "text-[#627D98]"].join(" ")}>
-          {subLabelAr}
+          {subLabel}
         </p>
       )}
       {trend && (
