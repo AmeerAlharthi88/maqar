@@ -37,6 +37,7 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const numAmount = parseFloat(offerAmount.replace(/,/g, "")) || 0;
   const diffPct =
@@ -63,26 +64,40 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
   }
 
   async function handleSubmit() {
+    if (submitting) return; // guard against duplicate submissions while in flight
     const e = validate();
     setErrors(e);
     if (Object.keys(e).length > 0) return;
+    setSubmitError(null);
     setSubmitting(true);
-    if (userId) {
-      await createOffer({
-        listingId: listing.id,
-        agentId,
-        userId,
-        offerAmountOmr: numAmount,
-        askingPriceOmr: listing.price,
-        financingType: financing,
-        customerName: name.trim(),
-        customerPhone: phone.trim(),
-        notes: notes.trim() || undefined,
-      }).catch((err) => console.error("[MakeOffer] createOffer error:", err));
-    } else {
-      await new Promise((r) => setTimeout(r, 800));
-    }
+    // Honest success: createOffer returns the new row id on success, or null on
+    // ANY failure (not signed in, non-real listing id, RLS, DB error). Only show
+    // success when a row was actually created — never fake it (FP12 #2).
+    const offerId = userId
+      ? await createOffer({
+          listingId: listing.id,
+          agentId,
+          userId,
+          offerAmountOmr: numAmount,
+          askingPriceOmr: listing.price,
+          financingType: financing,
+          customerName: name.trim(),
+          customerPhone: phone.trim(),
+          notes: notes.trim() || undefined,
+        }).catch((err) => {
+          console.error("[MakeOffer] createOffer error:", err);
+          return null;
+        })
+      : null;
     setSubmitting(false);
+    if (!offerId) {
+      setSubmitError(
+        isAr
+          ? "تعذّر إرسال العرض. تأكد من تسجيل الدخول وحاول مرة أخرى."
+          : "Couldn't submit your offer. Please make sure you're signed in and try again."
+      );
+      return;
+    }
     setStep("success");
   }
 
@@ -91,6 +106,7 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
     setTimeout(() => {
       setStep("form");
       setErrors({});
+      setSubmitError(null);
     }, 300);
   }
 
@@ -225,6 +241,12 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
               className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15 resize-none"
             />
           </div>
+
+          {submitError && (
+            <div className="bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3" role="alert">
+              <p className="text-xs text-[#C0392B]">{submitError}</p>
+            </div>
+          )}
 
           <button
             onClick={handleSubmit}

@@ -30,10 +30,18 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+// Mock fallback is dev/demo only. In production this flag is off, so an unknown
+// or mock id (e.g. lst-001) resolves to null → notFound() instead of rendering
+// fake inventory. Real DB listings are unaffected (FP12 #1).
+const ALLOW_MOCK_FALLBACK: boolean =
+  process.env.NEXT_PUBLIC_ALLOW_MOCK_FALLBACK === "true";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  // Try DB first; fall back to mock data if Supabase is not configured or listing not found
-  const listing = (await getListingByIdServer(id)) ?? getListingById(id);
+  // Try DB first; fall back to mock data only when the mock flag is on (dev/demo)
+  const listing =
+    (await getListingByIdServer(id)) ??
+    (ALLOW_MOCK_FALLBACK ? getListingById(id) : null);
 
   if (!listing) {
     return {
@@ -60,8 +68,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ListingDetailPage({ params }: Props) {
   const { id } = await params;
-  // Try DB first; fall back to mock data if Supabase is not configured or listing not found
-  const listing = (await getListingByIdServer(id)) ?? getListingById(id);
+  // Try DB first; fall back to mock data only when the mock flag is on (dev/demo)
+  const listing =
+    (await getListingByIdServer(id)) ??
+    (ALLOW_MOCK_FALLBACK ? getListingById(id) : null);
 
   if (!listing) {
     notFound();

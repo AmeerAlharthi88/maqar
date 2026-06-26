@@ -11,11 +11,11 @@ import { MarketStatsSection } from "@/components/home/MarketStatsSection";
 import { AgentsPreviewSection } from "@/components/home/AgentsPreviewSection";
 import { HomeCTABanner } from "@/components/home/HomeCTABanner";
 import { RecentlyViewedSection } from "@/components/home/RecentlyViewedSection";
-import { MOCK_LISTINGS } from "@/mock/listings";
 import { MOCK_AGENTS } from "@/mock/agents";
 import { POPULAR_AREAS } from "@/mock/popular-areas";
 import { MOCK_MARKET_OVERVIEW } from "@/mock/market-stats";
 import { createClient } from "@/lib/supabase/server";
+import { getPublicListingsServer } from "@/lib/supabase/listings.server";
 
 export const metadata: Metadata = buildMetadata({
   titleAr: "مقر — منصة العقارات العُمانية",
@@ -24,15 +24,6 @@ export const metadata: Metadata = buildMetadata({
   path: "/",
   keywords: ["عقارات عمان", "شقق للبيع مسقط", "فيلات للإيجار عمان", "وسطاء عقاريون عمان"],
 });
-
-// Derive featured and recommended from mock data
-const featuredListings = MOCK_LISTINGS.filter((l) => l.isFeatured);
-const recommendedListings = MOCK_LISTINGS.filter((l) => !l.isFeatured && l.isVerified)
-  .sort((a, b) => b.viewCount - a.viewCount)
-  .slice(0, 6);
-const nearYouListings = MOCK_LISTINGS.filter(
-  (l) => l.location.governorateId === "muscat" && !l.isFeatured
-).slice(0, 4);
 
 /** Fetch real counts from Supabase for the market stats section. */
 async function fetchRealCounts(): Promise<{ totalListings: number }> {
@@ -56,9 +47,25 @@ export default async function HomePage() {
   const orgSchema = organizationJsonLd();
   const siteSchema = websiteJsonLd();
 
-  // Fetch real listing count; keep all other mock market data
-  const { totalListings } = await fetchRealCounts();
+  // Fetch the real listing count + the real public listings in parallel.
+  // Real, public (active + approved) listings only — never mock (FP12 #1).
+  // The sections hide themselves when empty, so low inventory degrades cleanly.
+  const [{ totalListings }, publicListings] = await Promise.all([
+    fetchRealCounts(),
+    getPublicListingsServer(30),
+  ]);
   const marketOverview = { ...MOCK_MARKET_OVERVIEW, totalListings };
+  const byViews = [...publicListings].sort((a, b) => b.viewCount - a.viewCount);
+  // "Featured" = explicitly flagged listings; if none are flagged yet, fall back
+  // to the most-viewed real listings so the hero isn't empty (still 100% real,
+  // nothing invented).
+  const flagged = publicListings.filter((l) => l.isFeatured);
+  const featuredListings = (flagged.length > 0 ? flagged : byViews).slice(0, 6);
+  const featuredIds = new Set(featuredListings.map((l) => l.id));
+  const recommendedListings = byViews.filter((l) => !featuredIds.has(l.id)).slice(0, 6);
+  const nearYouListings = publicListings
+    .filter((l) => l.location.governorateId === "muscat")
+    .slice(0, 4);
 
   return (
     <AppShell>

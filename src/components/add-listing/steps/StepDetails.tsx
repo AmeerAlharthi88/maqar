@@ -289,7 +289,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
   const isAr = locale === "ar";
   const pt = draft.propertyType;
   const { show, req } = useFieldVis(pt);
-  const areaLabels = getAreaLabels(pt);
+  const areaLabels = getAreaLabels(pt, locale);
 
   // Helper: get bilingual option label
   function optLabel(opt: { labelAr: string; labelEn?: string }): string {

@@ -42,6 +42,7 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
   const [notes, setNotes] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function validate() {
     const e: Record<string, string> = {};
@@ -60,26 +61,39 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
   }
 
   async function handleSubmit() {
+    if (submitting) return; // guard against duplicate submissions while in flight
     const e = validate();
     setErrors(e);
     if (Object.keys(e).length > 0) return;
 
+    setSubmitError(null);
     setSubmitting(true);
-    if (userId) {
-      await createAppointment({
-        listingId: listing.id,
-        agentId,
-        userId,
-        preferredDate: date,
-        preferredTime: time,
-        customerName: name.trim(),
-        customerPhone: phone.trim(),
-        notes: notes.trim() || undefined,
-      }).catch((err) => console.error("[BookViewing] createAppointment error:", err));
-    } else {
-      await new Promise((r) => setTimeout(r, 800));
-    }
+    // Honest success: createAppointment returns the new row id on success, or
+    // null on ANY failure. Only show success when a real row was created (FP12 #2).
+    const apptId = userId
+      ? await createAppointment({
+          listingId: listing.id,
+          agentId,
+          userId,
+          preferredDate: date,
+          preferredTime: time,
+          customerName: name.trim(),
+          customerPhone: phone.trim(),
+          notes: notes.trim() || undefined,
+        }).catch((err) => {
+          console.error("[BookViewing] createAppointment error:", err);
+          return null;
+        })
+      : null;
     setSubmitting(false);
+    if (!apptId) {
+      setSubmitError(
+        isAr
+          ? "تعذّر حجز الموعد. تأكد من تسجيل الدخول وحاول مرة أخرى."
+          : "Couldn't book the viewing. Please make sure you're signed in and try again."
+      );
+      return;
+    }
     setStep("success");
   }
 
@@ -88,6 +102,7 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
     setTimeout(() => {
       setStep("form");
       setErrors({});
+      setSubmitError(null);
     }, 300);
   }
 
@@ -205,6 +220,12 @@ export function BookViewingModal({ open, onClose, listing, userId, agentId }: Bo
               className="w-full bg-white border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 text-sm text-[#102A43] placeholder:text-[#627D98] outline-none focus:border-[#0A3C36] focus:ring-2 focus:ring-[#0A3C36]/15 resize-none"
             />
           </div>
+
+          {submitError && (
+            <div className="bg-[#FEF0EE] border border-[#C0392B]/30 rounded-xl px-4 py-3 mb-3" role="alert">
+              <p className="text-xs text-[#C0392B]">{submitError}</p>
+            </div>
+          )}
 
           <button
             onClick={handleSubmit}
