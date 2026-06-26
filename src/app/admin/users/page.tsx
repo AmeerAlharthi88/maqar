@@ -83,6 +83,7 @@ export default function AdminUsersPage() {
                 user={user}
                 onSuspend={suspend}
                 onReactivate={reactivate}
+                demo
               />
             ))}
           </div>

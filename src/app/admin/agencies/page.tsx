@@ -46,17 +46,14 @@ const FILTER_EN: Record<AgencyVerificationStatus | "all", string> = { all: "All"
 
 export default function AdminAgenciesPage() {
   const [filter, setFilter] = useState<AgencyVerificationStatus | "all">("all");
-  const [agencies, setAgencies] = useState(ADMIN_AGENCY_DATA);
+  // Read-only demo data: agency moderation is not wired to a real backend yet,
+  // so the suspend/reactivate actions are disabled in the card (FP11 #7).
+  const [agencies] = useState(ADMIN_AGENCY_DATA);
   const isAr = useLocaleStore((s) => s.locale) === "ar";
   const statusLabels = isAr ? STATUS_AR : STATUS_EN;
   const filterLabels = isAr ? FILTER_AR : FILTER_EN;
 
   const filtered = filter === "all" ? agencies : agencies.filter((a) => a.verificationStatus === filter);
-
-  const suspend = (id: string) =>
-    setAgencies((prev) => prev.map((a) => a.id === id ? { ...a, verificationStatus: "suspended" as AgencyVerificationStatus } : a));
-  const reinstate = (id: string) =>
-    setAgencies((prev) => prev.map((a) => a.id === id ? { ...a, verificationStatus: "verified" as AgencyVerificationStatus } : a));
 
   const verifiedCount = agencies.filter((a) => a.verificationStatus === "verified").length;
 
@@ -149,17 +146,20 @@ export default function AdminAgenciesPage() {
                     )}
                   </div>
 
-                  {/* Actions */}
+                  {/* Actions — demo/read-only: disabled so the mock no-op never
+                      misleads an admin into thinking it changed a real agency (FP11 #7). */}
                   <div className="flex gap-2">
                     {!isSuspended ? (
-                      <button onClick={() => suspend(agency.id)}
-                        className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold">
-                        {bi(isAr, "تعليق مؤقت", "Suspend")}
+                      <button disabled
+                        title={bi(isAr, "إجراء تجريبي — غير مفعّل", "Demo action — not wired")}
+                        className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold opacity-50 cursor-not-allowed">
+                        {bi(isAr, "تعليق مؤقت (تجريبي)", "Suspend (demo)")}
                       </button>
                     ) : (
-                      <button onClick={() => reinstate(agency.id)}
-                        className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold">
-                        {bi(isAr, "إعادة تفعيل", "Reactivate")}
+                      <button disabled
+                        title={bi(isAr, "إجراء تجريبي — غير مفعّل", "Demo action — not wired")}
+                        className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold opacity-50 cursor-not-allowed">
+                        {bi(isAr, "إعادة تفعيل (تجريبي)", "Reactivate (demo)")}
                       </button>
                     )}
                     {/* Role/plan changes are server-only — TODO: Phase 12 */}

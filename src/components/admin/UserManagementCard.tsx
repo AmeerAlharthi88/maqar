@@ -18,9 +18,12 @@ interface UserManagementCardProps {
   user: AdminUser;
   onSuspend?: (id: string) => void;
   onReactivate?: (id: string) => void;
+  /** Demo/read-only mode: destructive actions are disabled so an admin is not
+   *  misled into thinking a mock action affected a real account (FP11 #7). */
+  demo?: boolean;
 }
 
-export function UserManagementCard({ user, onSuspend, onReactivate }: UserManagementCardProps) {
+export function UserManagementCard({ user, onSuspend, onReactivate, demo = false }: UserManagementCardProps) {
   const isAr = useLocaleStore((s) => s.locale) === "ar";
   const displayName = displayMeta(user.nameAr, isAr);
   const initials = displayName.split(" ").slice(0, 2).map((w) => w[0]).join("");
@@ -82,18 +85,22 @@ export function UserManagementCard({ user, onSuspend, onReactivate }: UserManage
       <div className="flex gap-2">
         {!isSuspended && (
           <button
-            onClick={() => onSuspend?.(user.id)}
-            className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold"
+            onClick={() => { if (!demo) onSuspend?.(user.id); }}
+            disabled={demo}
+            title={demo ? bi(isAr, "إجراء تجريبي — غير مفعّل", "Demo action — not wired") : undefined}
+            className="flex-1 py-2 rounded-xl bg-[#FEF0EE] text-[#C0392B] text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {bi(isAr, "تعليق مؤقت", "Suspend")}
+            {bi(isAr, "تعليق مؤقت", "Suspend")}{demo ? bi(isAr, " (تجريبي)", " (demo)") : ""}
           </button>
         )}
         {isSuspended && (
           <button
-            onClick={() => onReactivate?.(user.id)}
-            className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold"
+            onClick={() => { if (!demo) onReactivate?.(user.id); }}
+            disabled={demo}
+            title={demo ? bi(isAr, "إجراء تجريبي — غير مفعّل", "Demo action — not wired") : undefined}
+            className="flex-1 py-2 rounded-xl bg-[#E6F0EF] text-[#0A3C36] text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {bi(isAr, "إعادة تفعيل", "Reactivate")}
+            {bi(isAr, "إعادة تفعيل", "Reactivate")}{demo ? bi(isAr, " (تجريبي)", " (demo)") : ""}
           </button>
         )}
         {/* Role change is intentionally disabled — server-side action only */}
