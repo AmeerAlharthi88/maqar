@@ -64,6 +64,40 @@ export async function getListingByIdServer(
 }
 
 /**
+ * Fetch REAL public listings (active + approved) for the home page sections.
+ * RLS only exposes active+approved rows to anon, so this never returns mock or
+ * non-public listings. Returns [] when none exist or Supabase is unconfigured —
+ * the home sections then hide themselves (clean empty state). Never falls back
+ * to mock (FP12 #1).
+ */
+export async function getPublicListingsServer(limit = 30): Promise<Listing[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  try {
+    const supabase = await createServerClient();
+    const { data, error } = await supabase
+      .from("listings")
+      .select(`
+        *,
+        listing_images ( url, is_main, sort_order )
+      `)
+      .eq("status", "active")
+      .eq("review_status", "approved")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error || !data) {
+      if (error) console.error("[Listings] getPublicListingsServer error:", error.message);
+      return [];
+    }
+    return data.map((row) => dbRowToListing(row as DbListingRow));
+  } catch (err) {
+    console.error("[Listings] getPublicListingsServer exception:", err);
+    return [];
+  }
+}
+
+/**
  * Fetch REAL similar listings for the listing detail page (replaces the old mock
  * helper). Same purpose; same property type OR same wilayat; price within a
  * tolerance; excludes the current listing. RLS only exposes active+approved

@@ -365,17 +365,26 @@ export function getAreaLabels(
   // omitted from these labels to avoid showing the unit twice.
   if (locale === "en") {
     switch (propertyType) {
-      case "farm":      return { builtUp: "Farmhouse area", land: "Farm area"            };
-      case "land":      return { builtUp: "",               land: "Land area"            };
-      case "warehouse": return { builtUp: "Warehouse area", land: "Land area (optional)" };
-      default:          return { builtUp: "Built-up area",  land: "Land area"            };
+      // A unit inside a building measures the unit, not the whole building (FP12 #3).
+      case "apartment":
+      case "hotel_apartment": return { builtUp: "Apartment area",  land: "Land area"            };
+      case "commercial":
+      case "office":          return { builtUp: "Unit area",       land: "Land area"            };
+      case "farm":            return { builtUp: "Farmhouse area",  land: "Farm area"            };
+      case "land":            return { builtUp: "",                land: "Land area"            };
+      case "warehouse":       return { builtUp: "Warehouse area",  land: "Land area (optional)" };
+      default:                return { builtUp: "Built-up area",   land: "Land area"            };
     }
   }
   switch (propertyType) {
-    case "farm":      return { builtUp: "مساحة المنزل الزراعي", land: "مساحة المزرعة"          };
-    case "land":      return { builtUp: "",                      land: "مساحة الأرض"            };
-    case "warehouse": return { builtUp: "مساحة المستودع",        land: "مساحة الأرض (اختياري)"  };
-    default:          return { builtUp: "مساحة البناء",          land: "مساحة الأرض"            };
+    case "apartment":
+    case "hotel_apartment": return { builtUp: "مساحة الشقة",          land: "مساحة الأرض"            };
+    case "commercial":
+    case "office":          return { builtUp: "مساحة الوحدة",         land: "مساحة الأرض"            };
+    case "farm":            return { builtUp: "مساحة المنزل الزراعي", land: "مساحة المزرعة"          };
+    case "land":            return { builtUp: "",                     land: "مساحة الأرض"            };
+    case "warehouse":       return { builtUp: "مساحة المستودع",       land: "مساحة الأرض (اختياري)"  };
+    default:                return { builtUp: "مساحة البناء",         land: "مساحة الأرض"            };
   }
 }
 
