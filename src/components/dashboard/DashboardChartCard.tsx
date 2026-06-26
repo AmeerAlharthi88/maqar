@@ -22,14 +22,23 @@ interface DashboardChartCardProps {
   titleEn?: string;
   data: AnalyticsTimePoint[];
   lines: ChartLine[];
+  /** Marks the chart as demonstration data (FP14 #4). */
+  demo?: boolean;
 }
 
-export function DashboardChartCard({ titleAr, titleEn, data, lines }: DashboardChartCardProps) {
+export function DashboardChartCard({ titleAr, titleEn, data, lines, demo = false }: DashboardChartCardProps) {
   const isAr = useLocaleStore((s) => s.locale) === "ar";
   return (
     <div className="bg-white rounded-2xl border border-[#E2E8F0] px-4 py-4" dir={isAr ? "rtl" : "ltr"}>
       <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-bold text-[#102A43]">{isAr ? titleAr : (titleEn ?? titleAr)}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-bold text-[#102A43]">{isAr ? titleAr : (titleEn ?? titleAr)}</p>
+          {demo && (
+            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#FFF8E7] text-[#9A7400] border border-[#D4A017]/30">
+              {isAr ? "تجريبي" : "Demo"}
+            </span>
+          )}
+        </div>
         {/* Legend */}
         <div className="flex items-center gap-3">
           {lines.map((l) => (

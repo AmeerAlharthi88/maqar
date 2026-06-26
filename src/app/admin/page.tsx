@@ -51,11 +51,13 @@ export default function AdminOverviewPage() {
             labelEn="Total listings"
             value={stats.totalListings.toLocaleString(numLocale)}
             accent
+            demo
           />
           <DashboardMetricCard
             labelAr="إعلانات نشطة"
             labelEn="Active listings"
             value={stats.activeListings.toLocaleString(numLocale)}
+            demo
           />
         </div>
 
@@ -67,6 +69,7 @@ export default function AdminOverviewPage() {
             value={stats.pendingReview}
             subLabelAr="إعلان معلّق"
             subLabelEn="listings pending"
+            demo
           />
           <DashboardMetricCard
             labelAr="بلاغات"
@@ -74,11 +77,13 @@ export default function AdminOverviewPage() {
             value={stats.reportedListings}
             subLabelAr="إعلان مُبلَّغ"
             subLabelEn="reported listings"
+            demo
           />
           <DashboardMetricCard
             labelAr="طلبات توثيق"
             labelEn="Verification requests"
             value={stats.verificationRequests}
+            demo
           />
           <DashboardMetricCard
             labelAr="أعلام AML"
@@ -86,10 +91,17 @@ export default function AdminOverviewPage() {
             value={stats.amlFlags}
             subLabelAr="يستوجب مراجعة"
             subLabelEn="need review"
+            demo
           />
         </div>
 
         {/* Platform stats */}
+        <div className="flex items-center gap-2 -mb-1">
+          <p className="text-xs font-bold text-[#102A43]">{bi(isAr, "إحصاءات المنصة", "Platform stats")}</p>
+          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#FFF8E7] text-[#9A7400] border border-[#D4A017]/30">
+            {bi(isAr, "بيانات تجريبية", "Demo data")}
+          </span>
+        </div>
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-white rounded-2xl border border-[#E2E8F0] px-3 py-3 text-center">
             <p className="text-lg font-bold text-[#102A43]">{stats.totalUsers.toLocaleString(numLocale)}</p>
@@ -111,12 +123,18 @@ export default function AdminOverviewPage() {
           titleEn="Market activity — last 6 months"
           data={chartData}
           lines={CHART_LINES}
+          demo
         />
 
         {/* Recent admin activity */}
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-[#102A43]">{bi(isAr, "آخر الإجراءات الإدارية", "Recent admin actions")}</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-bold text-[#102A43]">{bi(isAr, "آخر الإجراءات الإدارية", "Recent admin actions")}</h2>
+              <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#FFF8E7] text-[#9A7400] border border-[#D4A017]/30">
+                {bi(isAr, "بيانات تجريبية", "Demo data")}
+              </span>
+            </div>
             <Link href={ROUTES.adminAuditLogs} className="text-xs text-[#0A3C36] font-semibold">
               {bi(isAr, "سجل كامل", "Full log")}
             </Link>
