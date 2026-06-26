@@ -162,6 +162,8 @@ export function dbRowToListing(row: DbListingRow): Listing {
       bedrooms:     row.bedrooms    ?? 0,
       bathrooms:    row.bathrooms   ?? 0,
       area:         Number(row.area_sqm   ?? 0),
+      // Plot size, so land listings stay filterable by their land area (FP13 #1).
+      landArea:     row.land_size_sqm != null ? Number(row.land_size_sqm) : undefined,
       floors:       row.floors      ?? undefined,
       parkingSpots: row.parking_spaces ?? undefined,
     },
@@ -189,6 +191,7 @@ export function dbRowToListing(row: DbListingRow): Listing {
     isFreehold:     row.is_freehold,
     isExpatAllowed: row.is_expat_allowed,
     isFamilyOnly:   row.is_family_only,
+    isBelowMarket:  row.is_below_market === true,
     qualityScore:  row.quality_score ?? 0,
     roiEstimate:   row.roi_estimate != null ? Number(row.roi_estimate) : undefined,
     viewCount:     row.view_count     ?? 0,
@@ -328,11 +331,21 @@ function applyFilters(query: any, filters: SearchFilters): any {
   if (filters.minBaths > 0) {
     query = query.gte("bathrooms", filters.minBaths);
   }
-  if (filters.minArea !== null) {
-    query = query.gte("area_sqm", filters.minArea);
-  }
-  if (filters.maxArea !== null) {
-    query = query.lte("area_sqm", filters.maxArea);
+  // Area filter is context-aware: when filtering land/farm only, match the plot
+  // size (land_size_sqm); otherwise match the built-up / unit area (area_sqm).
+  // This stops a "100–200 m²" search from mixing apartment unit areas with land
+  // plot sizes under one ambiguous meaning (FP13 #1).
+  {
+    const landAreaScope =
+      filters.propertyTypes.length > 0 &&
+      filters.propertyTypes.every((t) => t === "land" || t === "farm");
+    const areaCol = landAreaScope ? "land_size_sqm" : "area_sqm";
+    if (filters.minArea !== null) {
+      query = query.gte(areaCol, filters.minArea);
+    }
+    if (filters.maxArea !== null) {
+      query = query.lte(areaCol, filters.maxArea);
+    }
   }
   if (filters.furnishing.length > 0) {
     query = query.in("furnishing_status", filters.furnishing);
@@ -387,10 +400,6 @@ function applySort(query: any, sortBy: SortOption): any {
       return query.order("view_count", { ascending: false });
     case "highest_roi":
       return query.order("roi_estimate", { ascending: false, nullsFirst: false });
-    case "below_market":
-      return query
-        .eq("is_below_market", true)
-        .order("price_omr", { ascending: true });
     default:
       return query.order("created_at", { ascending: false });
   }

@@ -22,6 +22,8 @@ export function ActiveFiltersBar({ className }: ActiveFiltersBarProps) {
       case "purpose":          setFilter("purpose", "all"); break;
       case "propertyTypes":    setFilter("propertyTypes", []); break;
       case "governorateId":    setFilters({ governorateId: "", wilayatId: "", areaId: "" }); break;
+      case "wilayatId":        setFilters({ wilayatId: "", areaId: "" }); break;
+      case "areaId":           setFilter("areaId", ""); break;
       case "price":            setFilters({ minPrice: null, maxPrice: null }); break;
       case "minBeds":          setFilter("minBeds", 0); break;
       case "minBaths":         setFilter("minBaths", 0); break;

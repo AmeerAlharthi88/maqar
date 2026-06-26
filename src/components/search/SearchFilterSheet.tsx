@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { Button } from "@/components/ui/Button";
 import { useSearchStore } from "@/store/search.store";
 import { PROPERTY_TYPES } from "@/lib/constants/property-types";
 import { OMAN_GOVERNORATES } from "@/lib/constants/oman-locations";
 import { FURNISHING_LABELS_I18N } from "@/lib/constants/property-types";
+import { getAreaFilterLabel } from "@/lib/helpers/listing-filters";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -84,6 +85,15 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
   const isAr = locale === "ar";
 
   const [draft, setDraft] = useState(() => ({ ...filters }));
+
+  // Re-sync the draft from the active filters whenever the sheet opens, so it
+  // reflects filters set elsewhere — URL deep-links, active chips — instead of a
+  // stale snapshot. This keeps the context-aware area label correct (FP13 #1).
+  /* eslint-disable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (open) setDraft({ ...filters });
+  }, [open]);
+  /* eslint-enable react-hooks/set-state-in-effect, react-hooks/exhaustive-deps */
 
   function update<K extends keyof typeof draft>(key: K, value: (typeof draft)[K]) {
     setDraft((d) => ({ ...d, [key]: value }));
@@ -273,8 +283,16 @@ export function SearchFilterSheet({ open, onClose, resultCount }: SearchFilterSh
           </div>
         </FilterSection>
 
-        {/* Area size */}
-        <FilterSection title={`${t("search.filters.areaSize")} (${t("common.sqm")})`}>
+        {/* Area size — label adapts to the selected property type so the meaning
+            (land / apartment / unit / built-up area) is never ambiguous (FP13 #1). */}
+        <FilterSection title={`${getAreaFilterLabel(draft.propertyTypes, locale as "ar" | "en")} (${t("common.sqm")})`}>
+          {draft.propertyTypes.length === 0 && (
+            <p className="text-xs text-[#627D98] -mt-2 mb-3">
+              {isAr
+                ? "اختر نوع العقار لتحديد معنى المساحة (شقة / أرض / وحدة / بناء)"
+                : "Pick a property type to define the area meaning (apartment / land / unit / built-up)"}
+            </p>
+          )}
           <div className="flex items-center gap-3">
             <input
               type="number"

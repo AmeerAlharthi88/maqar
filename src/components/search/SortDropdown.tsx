@@ -32,7 +32,6 @@ export function SortDropdown({ className }: SortDropdownProps) {
     { value: "price_desc",  labelAr: "السعر: من الأعلى",      labelEn: "Price: High to Low" },
     { value: "most_viewed", labelAr: "الأكثر مشاهدة",         labelEn: "Most Viewed" },
     { value: "highest_roi", labelAr: "الأعلى عائداً",          labelEn: "Highest ROI" },
-    { value: "below_market",labelAr: "أقل من سعر السوق",      labelEn: "Below Market" },
   ];
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === filters.sortBy);

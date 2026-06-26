@@ -207,15 +207,27 @@ export function SearchPageClient() {
         {isLoading ? (
           <SearchResultsSkeletonGrid />
         ) : displayListings.length === 0 ? (
-          <SearchEmptyState query={filters.query} />
+          <SearchEmptyState query={filters.query} locale={locale as "ar" | "en"} />
         ) : (
           <>
-            {/* Result count */}
-            <p className="text-sm text-[#627D98] mb-4">
-              <span className="font-bold text-[#102A43]">
-                {formatNumber(displayListings.length, locale)}
-              </span>{" "}
-              {isAr ? "عقار متاح" : "properties found"}
+            {/* Result count (FP13 #5) */}
+            <p className="text-sm text-[#627D98] mb-4" role="status" aria-live="polite">
+              {isAr ? (
+                <>
+                  تم العثور على{" "}
+                  <span className="font-bold text-[#102A43]">
+                    {formatNumber(displayListings.length, locale)}
+                  </span>{" "}
+                  عقار
+                </>
+              ) : (
+                <>
+                  <span className="font-bold text-[#102A43]">
+                    {formatNumber(displayListings.length, locale)}
+                  </span>{" "}
+                  properties found
+                </>
+              )}
             </p>
 
             {/* Listings */}
