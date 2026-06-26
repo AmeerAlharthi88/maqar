@@ -818,11 +818,11 @@ interface InsertAuditLogParams {
   ipAddress?: string;
 }
 
-export async function insertAuditLog(params: InsertAuditLogParams): Promise<void> {
-  if (!isConfigured()) return;
+export async function insertAuditLog(params: InsertAuditLogParams): Promise<boolean> {
+  if (!isConfigured()) return false;
   try {
     const sb = createServiceClient();
-    await sb.from("audit_logs").insert({
+    const { error } = await sb.from("audit_logs").insert({
       actor_id:    params.actorId,
       category:    params.category,
       action:      params.action,
@@ -832,9 +832,22 @@ export async function insertAuditLog(params: InsertAuditLogParams): Promise<void
       details:     params.details,
       ip_address:  params.ipAddress ?? null,
     });
-    // Fire-and-forget — failures are acceptable for audit infra
-  } catch {
-    // Intentionally swallowed — audit log failures must never block user actions
+    // Audit insert must never BLOCK the user action, but a missing
+    // security/compliance entry must not vanish silently either — log it loudly
+    // and report success so callers of sensitive actions can react (FP11 #6).
+    if (error) {
+      console.error(
+        `[audit] FAILED to record action="${params.action}" severity="${params.severity}" actor=${params.actorId}: ${error.message}`
+      );
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error(
+      `[audit] EXCEPTION recording action="${params.action}" severity="${params.severity}" actor=${params.actorId}:`,
+      err
+    );
+    return false;
   }
 }
 
