@@ -20,7 +20,8 @@ export type FurnishingStatus = "furnished" | "semi_furnished" | "unfurnished";
 export interface PropertySpecs {
   bedrooms: number;
   bathrooms: number;
-  area: number;        // sqm
+  area: number;        // sqm — built-up / unit area for buildings; plot size for land
+  landArea?: number;   // sqm — plot/land area (land_size_sqm), when applicable
   floors?: number;
   parkingSpots?: number;
 }
@@ -68,6 +69,9 @@ export interface Listing {
   isFreehold?: boolean;
   isExpatAllowed?: boolean;
   isFamilyOnly?: boolean;
+  // Real below-market flag from the DB (is_below_market). Never derived from mock
+  // market stats — the badge shows only when this is a real, stored signal (FP13 #3).
+  isBelowMarket?: boolean;
   qualityScore: number;    // 1-100
   roiEstimate?: number;    // % annual for investment
   viewCount: number;

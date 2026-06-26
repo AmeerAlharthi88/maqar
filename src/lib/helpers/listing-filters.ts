@@ -1,8 +1,10 @@
 import type { Listing } from "@/types/listing";
 import type { SearchFilters, SortOption } from "@/store/search.store";
 import type { Locale } from "@/types";
-import { MOCK_AREA_STATS } from "@/mock/market-stats";
 import { formatNumber } from "@/lib/formatters";
+import { PROPERTY_TYPES } from "@/lib/constants/property-types";
+import { OMAN_GOVERNORATES } from "@/lib/constants/oman-locations";
+import { listingAmenityKeys, type AmenityKey } from "@/lib/constants/amenities";
 
 // ── Text matching ──────────────────────────────────────────────────────────────
 
@@ -23,22 +25,48 @@ export function matchesQuery(listing: Listing, query: string): boolean {
   return haystack.includes(q);
 }
 
-// ── Below-market detection ─────────────────────────────────────────────────────
+// ── Property-type categories (area meaning) ─────────────────────────────────────
 
-const AREA_STAT_MAP = Object.fromEntries(
-  MOCK_AREA_STATS.map((s) => [s.areaId, s])
-);
+const LAND_TYPES = new Set(["land", "farm"]);
+const APARTMENT_TYPES = new Set(["apartment", "hotel_apartment"]);
+const UNIT_TYPES = new Set(["commercial", "office"]);
+const BUILT_UP_TYPES = new Set([
+  "villa", "duplex", "townhouse", "arabic_house", "chalet", "building", "warehouse",
+]);
 
-export function isBelowMarket(listing: Listing, thresholdPct = 15): boolean {
-  const stat = AREA_STAT_MAP[listing.location.areaId];
-  if (!stat) return false;
-  const avg =
-    listing.purpose === "sale" ? stat.avgSalePrice : stat.avgRentPrice;
-  if (!avg) return false;
-  return listing.price < avg * (1 - thresholdPct / 100);
+/**
+ * The area meaning depends on the selected property type(s). When the selection
+ * is unambiguous we use the type-specific label; mixed/empty selections use a
+ * neutral "Area" so the user is never misled (FP13 #1).
+ */
+export function getAreaFilterLabel(propertyTypes: string[], locale: Locale = "ar"): string {
+  const isAr = locale === "ar";
+  if (propertyTypes.length === 0) return isAr ? "المساحة" : "Area";
+  const all = (s: Set<string>) => propertyTypes.every((t) => s.has(t));
+  if (all(LAND_TYPES))      return isAr ? "مساحة الأرض"  : "Land area";
+  if (all(APARTMENT_TYPES)) return isAr ? "مساحة الشقة"  : "Apartment area";
+  if (all(UNIT_TYPES))      return isAr ? "مساحة الوحدة" : "Unit area";
+  if (all(BUILT_UP_TYPES))  return isAr ? "مساحة البناء" : "Built-up area";
+  return isAr ? "المساحة" : "Area";
 }
 
-// ── Filter application ─────────────────────────────────────────────────────────
+/** The area value to compare against, by the listing's own type (land → plot size). */
+function relevantArea(l: Listing): number {
+  if (LAND_TYPES.has(l.propertyType)) {
+    return l.specs.landArea ?? l.specs.area;
+  }
+  return l.specs.area;
+}
+
+// ── Below-market detection (real DB flag only — never mock) ─────────────────────
+
+export function isBelowMarket(listing: Listing): boolean {
+  // FP13 #3: the badge reflects the real is_below_market DB signal only. No mock
+  // market average is ever used, so a trust badge never appears on fake data.
+  return listing.isBelowMarket === true;
+}
+
+// ── Filter application (client / mock-fallback path) ────────────────────────────
 
 export function filterListings(
   listings: Listing[],
@@ -67,23 +95,33 @@ export function filterListings(
     if (filters.maxPrice !== null && l.price > filters.maxPrice) return false;
     if (filters.minBeds > 0 && l.specs.bedrooms < filters.minBeds) return false;
     if (filters.minBaths > 0 && l.specs.bathrooms < filters.minBaths) return false;
-    if (filters.minArea !== null && l.specs.area < filters.minArea) return false;
-    if (filters.maxArea !== null && l.specs.area > filters.maxArea) return false;
+    // Area filter is scoped to the listing's own area meaning (land → plot size,
+    // everything else → built-up / unit area), so meanings never mix (FP13 #1).
+    const area = relevantArea(l);
+    if (filters.minArea !== null && area < filters.minArea) return false;
+    if (filters.maxArea !== null && area > filters.maxArea) return false;
     if (filters.isVerified !== null && l.isVerified !== filters.isVerified)
       return false;
     if (filters.furnishing.length > 0 && !filters.furnishing.includes(l.furnishing))
       return false;
+    // Amenity matching uses stable keys, never display text, so Arabic and English
+    // selections return identical results and spelling drift can't break it (FP13 #2).
+    const keys = listingAmenityKeys(l.amenities);
     if (
       filters.amenities.length > 0 &&
-      !filters.amenities.every((a) => l.amenities.includes(a))
+      !filters.amenities.every((a) => keys.has(a as AmenityKey))
     )
       return false;
-    if (filters.hasSeaView && !l.amenities.includes("إطلالة بحرية")) return false;
-    if (filters.hasMountainView && !l.amenities.includes("إطلالة جبلية")) return false;
-    if (filters.hasMajlis && !l.amenities.includes("مجلس")) return false;
-    if (filters.hasMaidRoom && !l.amenities.includes("غرفة خادمة")) return false;
-    if (filters.hasDriverRoom && !l.amenities.includes("غرفة سائق")) return false;
-    if (filters.hasParking && !(l.specs.parkingSpots && l.specs.parkingSpots > 0))
+    if (filters.hasSeaView && !keys.has("sea_view")) return false;
+    if (filters.hasMountainView && !keys.has("mountain_view")) return false;
+    if (filters.hasMajlis && !keys.has("majlis")) return false;
+    if (filters.hasMaidRoom && !keys.has("maid_room")) return false;
+    if (filters.hasDriverRoom && !keys.has("driver_room")) return false;
+    if (
+      filters.hasParking &&
+      !(l.specs.parkingSpots && l.specs.parkingSpots > 0) &&
+      !keys.has("parking")
+    )
       return false;
     // Oman-specific boolean filters — only applied when the listing declares the field
     if (filters.isFreehold === true && l.isFreehold !== true) return false;
@@ -113,29 +151,38 @@ export function sortListings(listings: Listing[], sortBy: SortOption): Listing[]
       return copy.sort(
         (a, b) => (b.roiEstimate ?? 0) - (a.roiEstimate ?? 0)
       );
-    case "below_market":
-      return copy.sort((a, b) => {
-        const aStat = AREA_STAT_MAP[a.location.areaId];
-        const bStat = AREA_STAT_MAP[b.location.areaId];
-        const aAvg =
-          aStat
-            ? a.purpose === "sale"
-              ? aStat.avgSalePrice
-              : aStat.avgRentPrice
-            : a.price;
-        const bAvg =
-          bStat
-            ? b.purpose === "sale"
-              ? bStat.avgSalePrice
-              : bStat.avgRentPrice
-            : b.price;
-        const aDiff = (a.price - aAvg) / aAvg;
-        const bDiff = (b.price - bAvg) / bAvg;
-        return aDiff - bDiff;
-      });
     default:
       return copy;
   }
+}
+
+// ── Name resolvers (id → display name) ──────────────────────────────────────────
+
+const PT_BY_VALUE = new Map(PROPERTY_TYPES.map((p) => [p.value, p]));
+function propertyTypeName(value: string, isAr: boolean): string {
+  const p = PT_BY_VALUE.get(value as (typeof PROPERTY_TYPES)[number]["value"]);
+  return p ? (isAr ? p.labelAr : p.labelEn) : value;
+}
+
+const GOV_NAME = new Map<string, { ar: string; en: string }>();
+const WIL_NAME = new Map<string, { ar: string; en: string }>();
+const AREA_NAME = new Map<string, { ar: string; en: string }>();
+for (const g of OMAN_GOVERNORATES) {
+  GOV_NAME.set(g.id, { ar: g.nameAr, en: g.nameEn ?? g.nameAr });
+  for (const w of g.wilayats ?? []) {
+    WIL_NAME.set(w.id, { ar: w.nameAr, en: w.nameEn ?? w.nameAr });
+    for (const a of w.areas ?? []) {
+      AREA_NAME.set(a.id, { ar: a.nameAr, en: a.nameEn ?? a.nameAr });
+    }
+  }
+}
+function locName(
+  map: Map<string, { ar: string; en: string }>,
+  id: string,
+  isAr: boolean
+): string {
+  const n = map.get(id);
+  return n ? (isAr ? n.ar : n.en) : id;
 }
 
 // ── Active filter labels ───────────────────────────────────────────────────────
@@ -169,18 +216,29 @@ export function getActiveFilterLabels(
   }
 
   if (filters.propertyTypes.length > 0) {
-    const count = n(filters.propertyTypes.length);
-    labels.push({
-      key: "propertyTypes",
-      label: isAr ? `${count} أنواع` : `${count} types`,
-    });
+    // Show the actual type names for 1–2 selections; summarise beyond that (FP13 #6).
+    let label: string;
+    if (filters.propertyTypes.length <= 2) {
+      label = filters.propertyTypes
+        .map((t) => propertyTypeName(t, isAr))
+        .join(isAr ? "، " : ", ");
+    } else {
+      label = isAr
+        ? `${n(filters.propertyTypes.length)} أنواع محددة`
+        : `${n(filters.propertyTypes.length)} property types selected`;
+    }
+    labels.push({ key: "propertyTypes", label });
   }
 
+  // Location chips — show the real governorate / wilayat / area names (FP13 #4).
   if (filters.governorateId) {
-    labels.push({
-      key: "governorateId",
-      label: isAr ? "المحافظة" : "Governorate",
-    });
+    labels.push({ key: "governorateId", label: locName(GOV_NAME, filters.governorateId, isAr) });
+  }
+  if (filters.wilayatId) {
+    labels.push({ key: "wilayatId", label: locName(WIL_NAME, filters.wilayatId, isAr) });
+  }
+  if (filters.areaId) {
+    labels.push({ key: "areaId", label: locName(AREA_NAME, filters.areaId, isAr) });
   }
 
   if (filters.minPrice !== null && filters.maxPrice !== null) {
@@ -220,20 +278,26 @@ export function getActiveFilterLabels(
     });
   }
 
+  // Area chip carries its context-aware meaning so the value is never ambiguous (FP13 #1).
+  const areaName = getAreaFilterLabel(filters.propertyTypes, locale);
   if (filters.minArea !== null && filters.maxArea !== null) {
     labels.push({
       key: "area",
-      label: `${n(filters.minArea)}–${n(filters.maxArea)} ${sqm}`,
+      label: `${areaName}: ${n(filters.minArea)}–${n(filters.maxArea)} ${sqm}`,
     });
   } else if (filters.minArea !== null) {
     labels.push({
       key: "area",
-      label: isAr ? `من ${n(filters.minArea)} ${sqm}` : `From ${n(filters.minArea)} ${sqm}`,
+      label: isAr
+        ? `${areaName}: من ${n(filters.minArea)} ${sqm}`
+        : `${areaName}: from ${n(filters.minArea)} ${sqm}`,
     });
   } else if (filters.maxArea !== null) {
     labels.push({
       key: "area",
-      label: isAr ? `حتى ${n(filters.maxArea)} ${sqm}` : `Up to ${n(filters.maxArea)} ${sqm}`,
+      label: isAr
+        ? `${areaName}: حتى ${n(filters.maxArea)} ${sqm}`
+        : `${areaName}: up to ${n(filters.maxArea)} ${sqm}`,
     });
   }
 

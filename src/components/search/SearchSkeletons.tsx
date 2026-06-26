@@ -52,7 +52,8 @@ export function SearchResultsSkeletonGrid({ count = 6 }: { count?: number }) {
   );
 }
 
-export function SearchEmptyState({ query }: { query?: string }) {
+export function SearchEmptyState({ query, locale = "ar" }: { query?: string; locale?: "ar" | "en" }) {
+  const isAr = locale === "ar";
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
       <div className="w-16 h-16 rounded-2xl bg-[#E6F0EF] flex items-center justify-center mb-5">
@@ -62,11 +63,17 @@ export function SearchEmptyState({ query }: { query?: string }) {
           <path d="M8 11h6M11 8v6" stroke="#0A3C36" strokeWidth="2.5"/>
         </svg>
       </div>
-      <h2 className="text-lg font-bold text-[#102A43] mb-2">لا توجد نتائج</h2>
+      <h2 className="text-lg font-bold text-[#102A43] mb-2">
+        {isAr ? "لم يتم العثور على عقارات مطابقة" : "No matching properties found"}
+      </h2>
       <p className="text-sm text-[#627D98] max-w-xs">
         {query
-          ? `لم نجد عقارات تطابق "${query}". جرّب تغيير كلمة البحث أو تعديل الفلاتر.`
-          : "لم نجد عقارات تطابق الفلاتر المحددة. جرّب تعديل البحث أو إعادة التعيين."}
+          ? isAr
+            ? `لم نجد عقارات تطابق "${query}". جرّب تغيير كلمة البحث أو تعديل الفلاتر.`
+            : `No properties match "${query}". Try a different search term or adjust the filters.`
+          : isAr
+          ? "جرّب تعديل الفلاتر أو إعادة التعيين."
+          : "Try adjusting or resetting the filters."}
       </p>
     </div>
   );

@@ -6,8 +6,7 @@ export type SortOption =
   | "price_asc"
   | "price_desc"
   | "most_viewed"
-  | "highest_roi"
-  | "below_market";
+  | "highest_roi";
 
 export const SORT_LABELS: Record<SortOption, string> = {
   newest:       "الأحدث",
@@ -15,7 +14,6 @@ export const SORT_LABELS: Record<SortOption, string> = {
   price_desc:   "السعر: من الأعلى",
   most_viewed:  "الأكثر مشاهدة",
   highest_roi:  "الأعلى عائداً",
-  below_market: "أقل من سعر السوق",
 };
 
 export interface SearchFilters {
