@@ -91,3 +91,53 @@ export async function requireAdmin(): Promise<AdminAuthResult> {
     };
   }
 }
+
+// ── Server-Component admin gate ───────────────────────────────────────────────
+// Layout/page-friendly variant of the admin check (no NextResponse coupling) so
+// Server Components can redirect or render a restricted screen. The API guard
+// requireAdmin() above is intentionally left unchanged. (FP15)
+
+export interface AdminAccessState {
+  /** A Supabase session exists. */
+  authenticated: boolean;
+  /** Authenticated AND profiles.role ∈ {admin, super_admin} AND account active. */
+  isAdmin: boolean;
+  userId?: string;
+}
+
+/**
+ * Resolve admin access for use in Server Components (the admin layout). Requires
+ * an authenticated user whose profiles.role is admin/super_admin and whose
+ * account_status is active when present. Fails closed on any error.
+ */
+export async function checkAdminAccess(): Promise<AdminAccessState> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return { authenticated: false, isAdmin: false };
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, account_status")
+      .eq("id", user.id)
+      .single();
+
+    const roleOk =
+      profile?.role === "admin" || profile?.role === "super_admin";
+    // account_status is enforced only when present, so a missing/null value never
+    // locks out an otherwise-valid admin.
+    const statusOk =
+      !profile?.account_status || profile.account_status === "active";
+
+    return { authenticated: true, isAdmin: !!roleOk && statusOk, userId: user.id };
+  } catch (err) {
+    console.error("[checkAdminAccess] exception:", err);
+    return { authenticated: false, isAdmin: false };
+  }
+}
