@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { APP_CONFIG } from "@/config/app";
 import { AppShell } from "@/components/layout/AppShell";
 import { listingJsonLd, breadcrumbJsonLd, serializeJsonLd } from "@/lib/seo/jsonld";
 
@@ -44,23 +45,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     (ALLOW_MOCK_FALLBACK ? getListingById(id) : null);
 
   if (!listing) {
-    return {
-      title: "العقار غير موجود | مقر",
-    };
+    // absolute → bypass the layout's "%s | مقر" template (no double brand).
+    return { title: { absolute: "العقار غير موجود | مقر" } };
   }
 
   const purposeLabel = listing.purpose === "sale" ? "للبيع" : "للإيجار";
-  const title = `${listing.titleAr} | مقر`;
+  const brandedTitle = `${listing.titleAr} | ${APP_CONFIG.nameAr}`;
   const description = `${listing.titleAr} ${purposeLabel} في ${listing.location.areaAr}، ${listing.location.wilayatAr}. ${listing.descriptionAr.slice(0, 120)}...`;
+  const canonical = `${APP_CONFIG.url}/listing/${id}`;
+  const hasEn = Boolean(listing.titleEn);
 
   return {
-    title,
+    // Single brand suffix — `absolute` bypasses the parent title template (FP16).
+    title: { absolute: brandedTitle },
     description,
+    alternates: {
+      canonical,
+      // Arabic-first; signal English availability only when it exists. There are
+      // no locale-routed URLs, so both map to the same canonical (FP16 #4).
+      languages: { ar: canonical, ...(hasEn ? { en: canonical } : {}) },
+    },
     openGraph: {
-      title,
+      title: brandedTitle,
       description,
+      url: canonical,
       images: listing.coverImage ? [{ url: listing.coverImage }] : [],
       locale: "ar_OM",
+      ...(hasEn ? { alternateLocale: ["en_OM"] } : {}),
       type: "website",
     },
   };

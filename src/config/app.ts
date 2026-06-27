@@ -3,7 +3,13 @@ export const APP_CONFIG = {
   nameAr: "مقر",
   taglineAr: "مقرك يبدأ هنا",
   version: "0.4.0",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  // Sanitised: strip a stray BOM/zero-width prefix and trailing slash that an
+  // env value can carry, so robots.txt Host/Sitemap and OG/canonical URLs are
+  // clean UTF-8 (FP16).
+  url: (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000")
+    .replace(/[\uFEFF\u200B\u200E\u200F]/g, "")
+    .trim()
+    .replace(/\/+$/, ""),
   supportPhone: "+96824000000",
   supportEmail: "support@maqar.om",
   defaultLocale: "ar" as const,
