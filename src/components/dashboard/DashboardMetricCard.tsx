@@ -12,6 +12,9 @@ interface DashboardMetricCardProps {
   icon?: React.ReactNode;
   trend?: { value: string; up: boolean } | null;
   accent?: boolean;
+  /** Marks this metric as demonstration data — shows a small "Demo" pill so the
+   *  number is self-evidently mock even when seen out of context (FP14 #4). */
+  demo?: boolean;
 }
 
 export function DashboardMetricCard({
@@ -23,6 +26,7 @@ export function DashboardMetricCard({
   icon,
   trend,
   accent = false,
+  demo = false,
 }: DashboardMetricCardProps) {
   const isAr = useLocaleStore((s) => s.locale) === "ar";
   const label = isAr ? labelAr : (labelEn ?? labelAr);
@@ -30,12 +34,24 @@ export function DashboardMetricCard({
   return (
     <div
       className={[
-        "rounded-2xl px-4 py-4 flex flex-col gap-1 border",
+        "relative rounded-2xl px-4 py-4 flex flex-col gap-1 border",
         accent
           ? "bg-[#0A3C36] border-transparent"
           : "bg-white border-[#E2E8F0]",
       ].join(" ")}
     >
+      {demo && (
+        <span
+          className={[
+            "absolute top-2 end-2 text-[9px] font-bold px-1.5 py-0.5 rounded-full",
+            accent
+              ? "bg-white/20 text-white"
+              : "bg-[#FFF8E7] text-[#9A7400] border border-[#D4A017]/30",
+          ].join(" ")}
+        >
+          {isAr ? "تجريبي" : "Demo"}
+        </span>
+      )}
       {icon && (
         <span className={accent ? "text-white/80" : "text-[#627D98]"}>
           {icon}
