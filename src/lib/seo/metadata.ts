@@ -49,7 +49,9 @@ export function buildMetadata(opts: BuildMetadataOptions): Metadata {
   const ogImage = ogImagePath.startsWith("http") ? ogImagePath : `${BASE_URL}${ogImagePath}`;
 
   return {
-    title: pageTitle,
+    // `absolute` bypasses the root layout's `%s | مقر` title template so the
+    // brand suffix is applied exactly once on child-segment pages (FP16).
+    title: { absolute: pageTitle },
     description: descriptionAr,
     keywords: keywords.length > 0 ? keywords : undefined,
     alternates: {
