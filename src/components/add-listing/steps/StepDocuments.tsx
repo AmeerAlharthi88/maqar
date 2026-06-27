@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { cn } from "@/lib/utils";
 import { DOCUMENT_TYPES } from "@/lib/constants/add-listing";
 import type { ListingDraft, UploadedFile, DocumentType } from "@/types/listing-draft";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface StepDocumentsProps {
   draft: ListingDraft;
@@ -15,6 +16,8 @@ function generateFileId(): string {
 }
 
 export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
+  const { locale, dir } = useTranslation();
+  const isAr = locale === "ar";
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   function handleFile(docType: DocumentType, file: File | null) {
@@ -41,7 +44,7 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
   }
 
   return (
-    <div className="px-4 py-6 space-y-5" dir="rtl">
+    <div className="px-4 py-6 space-y-5" dir={dir}>
       {/* Privacy notice */}
       <div className="bg-[#EAF4FB] border border-[#2471A3]/20 rounded-2xl px-4 py-4">
         <div className="flex items-start gap-3">
@@ -49,9 +52,13 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
           <div>
-            <p className="text-xs font-bold text-[#2471A3] mb-1">الوثائق لأغراض التحقق الإداري فقط</p>
+            <p className="text-xs font-bold text-[#2471A3] mb-1">
+              {isAr ? "الوثائق لأغراض التحقق الإداري فقط" : "Documents are for administrative verification only"}
+            </p>
             <p className="text-xs text-[#2471A3]/80 leading-relaxed">
-              جميع الوثائق المرفقة خاصة ومشفرة ولا تُعرض للعموم أو للمشترين. يراجعها فريق مقر فقط للتحقق من صحة الإعلان.
+              {isAr
+                ? "جميع الوثائق المرفقة خاصة ومشفرة ولا تُعرض للعموم أو للمشترين. يراجعها فريق مقر فقط للتحقق من صحة الإعلان."
+                : "All uploaded documents are private and encrypted, and are never shown to the public or to buyers. Only the Maqar team reviews them to verify your listing."}
             </p>
           </div>
         </div>
@@ -74,14 +81,14 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
               <div className="flex items-start justify-between gap-3 mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-[#102A43]">{docConfig.labelAr}</p>
+                    <p className="text-sm font-semibold text-[#102A43]">{isAr ? docConfig.labelAr : docConfig.labelEn}</p>
                     {docConfig.required && (
                       <span className="text-[9px] font-bold text-[#C0392B] bg-[#FEF0EE] border border-[#C0392B]/30 px-1.5 py-0.5 rounded-full">
-                        مطلوب للتحقق
+                        {isAr ? "مطلوب للتحقق" : "Required for verification"}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#627D98] mt-0.5">{docConfig.descAr}</p>
+                  <p className="text-xs text-[#627D98] mt-0.5">{isAr ? docConfig.descAr : docConfig.descEn}</p>
                 </div>
                 {hasFile && (
                   <div className="w-8 h-8 rounded-full bg-[#E6F0EF] flex items-center justify-center flex-shrink-0">
@@ -104,9 +111,9 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
                   <button
                     onClick={() => removeDocument(docConfig.value)}
                     className="text-xs text-[#C0392B] font-semibold flex-shrink-0 ms-2"
-                    aria-label="حذف الوثيقة"
+                    aria-label={isAr ? "حذف الوثيقة" : "Remove document"}
                   >
-                    حذف
+                    {isAr ? "حذف" : "Remove"}
                   </button>
                 </div>
               ) : (
@@ -119,7 +126,7 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
                     <polyline points="17 8 12 3 7 8" />
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
-                  رفع الوثيقة
+                  {isAr ? "رفع الوثيقة" : "Upload document"}
                 </button>
               )}
 
@@ -143,9 +150,11 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
         role="switch"
         aria-checked={draft.requestVerification}
       >
-        <div className="text-right">
-          <p className="text-sm font-medium text-[#102A43]">طلب شارة التحقق</p>
-          <p className="text-xs text-[#627D98]">يُظهر علامة التحقق على إعلانك بعد المراجعة</p>
+        <div className="text-start">
+          <p className="text-sm font-medium text-[#102A43]">{isAr ? "طلب شارة التحقق" : "Request a verified badge"}</p>
+          <p className="text-xs text-[#627D98]">
+            {isAr ? "يُظهر علامة التحقق على إعلانك بعد المراجعة" : "Shows a verified mark on your listing after review"}
+          </p>
         </div>
         <div
           className={cn(
@@ -163,7 +172,9 @@ export function StepDocuments({ draft, onChange }: StepDocumentsProps) {
       </button>
 
       <p className="text-[10px] text-[#627D98] text-center leading-relaxed">
-        رفع الوثائق اختياري للمسودة ومطلوب للنشر النهائي. جميع الوثائق مشفرة وآمنة.
+        {isAr
+          ? "رفع الوثائق اختياري للمسودة ومطلوب للنشر النهائي. جميع الوثائق مشفرة وآمنة."
+          : "Uploading documents is optional for a draft and required for final publishing. All documents are encrypted and secure."}
       </p>
     </div>
   );

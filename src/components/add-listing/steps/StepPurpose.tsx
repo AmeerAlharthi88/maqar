@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { LISTING_PURPOSES } from "@/lib/constants/add-listing";
 import type { DraftPurpose } from "@/types/listing-draft";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface StepPurposeProps {
   value: DraftPurpose | null;
@@ -35,10 +36,14 @@ const PURPOSE_ICONS: Record<DraftPurpose, React.ReactNode> = {
 };
 
 export function StepPurpose({ value, onChange, error }: StepPurposeProps) {
+  const { locale, dir } = useTranslation();
+  const isAr = locale === "ar";
   return (
-    <div className="px-4 py-6" dir="rtl">
+    <div className="px-4 py-6" dir={dir}>
       <p className="text-sm text-[#627D98] mb-6 leading-relaxed">
-        حدد الغرض من إعلانك العقاري. يمكنك تغيير هذا الاختيار لاحقاً.
+        {isAr
+          ? "حدد الغرض من إعلانك العقاري. يمكنك تغيير هذا الاختيار لاحقاً."
+          : "Choose the purpose of your listing. You can change this later."}
       </p>
 
       <div className="flex flex-col gap-3">
@@ -49,7 +54,7 @@ export function StepPurpose({ value, onChange, error }: StepPurposeProps) {
               key={purpose.value}
               onClick={() => onChange(purpose.value)}
               className={cn(
-                "w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-right transition-all",
+                "w-full flex items-center gap-4 p-4 rounded-2xl border-2 text-start transition-all",
                 selected
                   ? "border-[#0A3C36] bg-[#E6F0EF]"
                   : "border-[#E2E8F0] bg-white active:bg-[#F0F4F8]"
@@ -66,9 +71,9 @@ export function StepPurpose({ value, onChange, error }: StepPurposeProps) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className={cn("text-base font-bold mb-0.5", selected ? "text-[#0A3C36]" : "text-[#102A43]")}>
-                  {purpose.labelAr}
+                  {isAr ? purpose.labelAr : purpose.labelEn}
                 </p>
-                <p className="text-xs text-[#627D98] leading-relaxed">{purpose.descAr}</p>
+                <p className="text-xs text-[#627D98] leading-relaxed">{isAr ? purpose.descAr : purpose.descEn}</p>
               </div>
               {selected && (
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A3C36" strokeWidth="2.5" className="flex-shrink-0">
