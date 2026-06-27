@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { PROPERTY_TYPES } from "@/lib/constants/property-types";
 import { DRAFT_PROPERTY_TYPE_GROUPS } from "@/lib/constants/add-listing";
 import type { PropertyType } from "@/types/listing";
+import { useTranslation } from "@/i18n/useTranslation";
 
 interface StepPropertyTypeProps {
   value: PropertyType | null;
@@ -100,16 +101,20 @@ function PropertyTypeIcon({ type }: { type: string }) {
 }
 
 export function StepPropertyType({ value, onChange, error }: StepPropertyTypeProps) {
+  const { locale, dir } = useTranslation();
+  const isAr = locale === "ar";
   const typeMap = Object.fromEntries(PROPERTY_TYPES.map((t) => [t.value, t]));
 
   return (
-    <div className="px-4 py-6" dir="rtl">
-      <p className="text-sm text-[#627D98] mb-6">اختر النوع الذي يصف عقارك بشكل أدق.</p>
+    <div className="px-4 py-6" dir={dir}>
+      <p className="text-sm text-[#627D98] mb-6">
+        {isAr ? "اختر النوع الذي يصف عقارك بشكل أدق." : "Pick the type that best describes your property."}
+      </p>
 
       <div className="space-y-5">
         {DRAFT_PROPERTY_TYPE_GROUPS.map((group) => (
           <div key={group.groupAr}>
-            <p className="text-xs font-semibold text-[#627D98] uppercase tracking-wide mb-2">{group.groupAr}</p>
+            <p className="text-xs font-semibold text-[#627D98] uppercase tracking-wide mb-2">{isAr ? group.groupAr : group.groupEn}</p>
             <div className="grid grid-cols-3 gap-2">
               {group.types.map((typeValue) => {
                 const config = typeMap[typeValue];
@@ -128,7 +133,7 @@ export function StepPropertyType({ value, onChange, error }: StepPropertyTypePro
                     aria-pressed={selected}
                   >
                     <PropertyTypeIcon type={typeValue} />
-                    <span className="text-xs font-medium leading-tight">{config.labelAr}</span>
+                    <span className="text-xs font-medium leading-tight">{isAr ? config.labelAr : config.labelEn}</span>
                   </button>
                 );
               })}

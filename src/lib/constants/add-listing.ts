@@ -77,14 +77,17 @@ export const LISTING_PURPOSES: PurposeConfig[] = [
 export const DRAFT_PROPERTY_TYPE_GROUPS = [
   {
     groupAr: "سكني",
+    groupEn: "Residential",
     types: ["apartment", "villa", "duplex", "townhouse", "arabic_house", "chalet"],
   },
   {
     groupAr: "أراضي ومزارع",
+    groupEn: "Land & Farms",
     types: ["land", "farm"],
   },
   {
     groupAr: "تجاري",
+    groupEn: "Commercial",
     types: ["commercial", "office", "warehouse", "building", "hotel_apartment"],
   },
 ];
@@ -247,7 +250,9 @@ export const OMAN_FEATURES: OmanFeature[] = AMENITY_GROUPS.flatMap((g) =>
 export interface DocumentTypeConfig {
   value: DocumentType;
   labelAr: string;
+  labelEn: string;
   descAr: string;
+  descEn: string;
   required: boolean;
   accept: string;
 }
@@ -256,35 +261,45 @@ export const DOCUMENT_TYPES: DocumentTypeConfig[] = [
   {
     value: "mulkiya",
     labelAr: "سند الملكية (ملكية)",
+    labelEn: "Title deed (Mulkiya)",
     descAr: "مستند رسمي يثبت ملكية العقار",
+    descEn: "Official document proving property ownership",
     required: true,
     accept: ".pdf,.jpg,.jpeg,.png",
   },
   {
     value: "agency_auth",
     labelAr: "تفويض الوكالة",
+    labelEn: "Agency authorization",
     descAr: "مطلوب إذا كنت وسيطاً معتمداً",
+    descEn: "Required if you are a licensed agent",
     required: false,
     accept: ".pdf,.jpg,.jpeg,.png",
   },
   {
     value: "civil_id",
     labelAr: "الهوية المدنية",
+    labelEn: "Civil ID",
     descAr: "نسخة من بطاقة الهوية للتحقق",
+    descEn: "A copy of your ID card for verification",
     required: false,
     accept: ".pdf,.jpg,.jpeg,.png",
   },
   {
     value: "cr_number",
     labelAr: "رقم السجل التجاري",
+    labelEn: "Commercial registration (CR)",
     descAr: "للوكالات والشركات العقارية",
+    descEn: "For real-estate agencies and companies",
     required: false,
     accept: ".pdf",
   },
   {
     value: "contract_draft",
     labelAr: "مسودة العقد (اختياري)",
+    labelEn: "Contract draft (optional)",
     descAr: "مسودة مبدئية للعقد إن وجدت",
+    descEn: "An initial draft of the contract, if any",
     required: false,
     accept: ".pdf,.doc,.docx",
   },
@@ -294,15 +309,16 @@ export const DOCUMENT_TYPES: DocumentTypeConfig[] = [
 export interface QualityLabel {
   minScore: number;
   labelAr: string;
+  labelEn: string;
   color: string;
   bgColor: string;
 }
 
 export const QUALITY_LABELS: QualityLabel[] = [
-  { minScore: 0,  labelAr: "ضعيف",   color: "#C0392B", bgColor: "#FEF0EE" },
-  { minScore: 40, labelAr: "متوسط",  color: "#C8860A", bgColor: "#FDF6E3" },
-  { minScore: 70, labelAr: "جيد",    color: "#0A3C36", bgColor: "#E6F0EF" },
-  { minScore: 90, labelAr: "ممتاز",  color: "#2471A3", bgColor: "#EAF4FB" },
+  { minScore: 0,  labelAr: "ضعيف",   labelEn: "Weak",      color: "#C0392B", bgColor: "#FEF0EE" },
+  { minScore: 40, labelAr: "متوسط",  labelEn: "Fair",      color: "#C8860A", bgColor: "#FDF6E3" },
+  { minScore: 70, labelAr: "جيد",    labelEn: "Good",      color: "#0A3C36", bgColor: "#E6F0EF" },
+  { minScore: 90, labelAr: "ممتاز",  labelEn: "Excellent", color: "#2471A3", bgColor: "#EAF4FB" },
 ];
 
 // ── Image constraints ─────────────────────────────────────────────────────────

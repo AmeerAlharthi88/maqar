@@ -437,7 +437,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 label={areaLabels.builtUp}
                 value={draft.area}
                 placeholder={isAr ? "مثال: 200" : "e.g. 200"}
-                suffix="م²"
+                suffix={isAr ? "م²" : "m²"}
                 onChange={(v) => onChange({ area: v })}
                 error={errors.area}
                 required={req("builtUpArea")}
@@ -448,7 +448,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 label={areaLabels.land}
                 value={draft.landArea}
                 placeholder={isAr ? "مثال: 400" : "e.g. 400"}
-                suffix="م²"
+                suffix={isAr ? "م²" : "m²"}
                 onChange={(v) => onChange({ landArea: v })}
                 error={errors.landArea}
                 required={req("landArea")}
@@ -915,7 +915,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 label={isAr ? "مساحة المنزل الزراعي (م²)" : "Farmhouse area (sqm)"}
                 value={draft.area}
                 placeholder={isAr ? "مثال: 150" : "e.g. 150"}
-                suffix="م²"
+                suffix={isAr ? "م²" : "m²"}
                 onChange={(v) => onChange({ area: v })}
                 error={errors.area}
               />
@@ -1019,7 +1019,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 label={getFieldLabel("shopFrontage", locale)}
                 value={draft.shopFrontageMeters}
                 placeholder={isAr ? "مثال: 8" : "e.g. 8"}
-                suffix="م"
+                suffix={isAr ? "م" : "m"}
                 onChange={(v) => onChange({ shopFrontageMeters: v })}
               />
             )}
@@ -1123,7 +1123,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 label={getFieldLabel("ceilingHeight", locale)}
                 value={draft.ceilingHeightMeters}
                 placeholder={isAr ? "مثال: 8" : "e.g. 8"}
-                suffix="م"
+                suffix={isAr ? "م" : "m"}
                 onChange={(v) => onChange({ ceilingHeightMeters: v })}
               />
             )}
@@ -1225,7 +1225,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
                 label={getFieldLabel("currentRentalIncome", locale)}
                 value={draft.currentRentalIncome}
                 placeholder={isAr ? "مثال: 2500" : "e.g. 2500"}
-                suffix="ر.ع"
+                suffix={isAr ? "ر.ع" : "OMR"}
                 onChange={(v) => onChange({ currentRentalIncome: v })}
               />
             )}
