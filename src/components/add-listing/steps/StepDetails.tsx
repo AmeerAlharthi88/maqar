@@ -317,17 +317,24 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
   // ── Section: Parking ──────────────────────────────────────────────────────
   const showParking = show("parkingSpots");
 
-  // ── Section: Villa features ───────────────────────────────────────────────
-  const showVillaFeatures =
+  // Property-type categories — every feature section below is gated by the
+  // actual property type (not by shared field presence), so a villa never shows
+  // apartment/chalet/commercial sections and no chip is duplicated (FP17A).
+  const ptKey = pt ?? "";
+  const isVillaType = ["villa", "duplex", "townhouse", "arabic_house"].includes(ptKey);
+  const isApartmentType = ["apartment", "hotel_apartment"].includes(ptKey);
+
+  // ── Section: Villa features (villa-class only) ────────────────────────────
+  const showVillaFeatures = isVillaType && (
     show("majlisCount") || show("maidRoom") || show("driverRoom") ||
     show("privatePool") || show("yard") || show("balconyCount") ||
-    show("centralAc") || show("kitchenType") || show("storeRoom");
+    show("centralAc") || show("kitchenType") || show("storeRoom"));
 
-  // ── Section: Apartment amenities ─────────────────────────────────────────
-  const showAptAmenities =
+  // ── Section: Apartment / building amenities (apartment-class only) ────────
+  const showAptAmenities = isApartmentType && (
     show("elevator") || show("security") || show("sharedPool") ||
     show("sharedGym") || show("balcony") || show("centralAc") ||
-    show("maidRoom");
+    show("maidRoom"));
 
   // ── Section: Views ────────────────────────────────────────────────────────
   const showViews = show("seaView") || show("mountainView");
@@ -338,48 +345,46 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
   // ── Section: Property age ─────────────────────────────────────────────────
   const showAge = show("propertyAge");
 
-  // ── Section: Land ─────────────────────────────────────────────────────────
-  const showLandUse = show("landUse");
-  const showLandAccess =
+  // ── Section: Land (land only) ─────────────────────────────────────────────
+  const showLandUse = ptKey === "land" && show("landUse");
+  const showLandAccess = ptKey === "land" && (
     show("roadAccess") || show("electricityAvailable") ||
-    show("waterAvailable") || show("sewageAvailable");
-  const showLandProps =
-    show("cornerPlot") || show("boundaryWall") || show("plotNumber");
-  const showLandNearby = show("nearbyMosque") || show("nearbySchool");
+    show("waterAvailable") || show("sewageAvailable"));
+  const showLandProps = ptKey === "land" && (
+    show("cornerPlot") || show("boundaryWall") || show("plotNumber"));
+  const showLandNearby = ptKey === "land" && (show("nearbyMosque") || show("nearbySchool"));
 
-  // ── Section: Farm ─────────────────────────────────────────────────────────
-  const showFarmWater      = show("waterSource");
-  const showFarmHouse      = show("farmHouseExists");
-  const showFarmDetails    = show("numberOfWells") || show("palmTreesCount") || show("otherTrees");
-  const showFarmAmenities  = show("electricityAvailable") || show("pavedRoad") || show("boundaryWall");
-  const showFarmLicense    = show("agriculturalLicense");
+  // ── Section: Farm (farm only) ─────────────────────────────────────────────
+  const showFarmWater      = ptKey === "farm" && show("waterSource");
+  const showFarmHouse      = ptKey === "farm" && show("farmHouseExists");
+  const showFarmDetails    = ptKey === "farm" && (show("numberOfWells") || show("palmTreesCount") || show("otherTrees"));
+  const showFarmAmenities  = ptKey === "farm" && (show("electricityAvailable") || show("pavedRoad") || show("boundaryWall"));
+  const showFarmLicense    = ptKey === "farm" && show("agriculturalLicense");
 
-  // ── Section: Commercial ───────────────────────────────────────────────────
-  const showCommercialFeatures =
+  // ── Section: Commercial (commercial only) ─────────────────────────────────
+  const showCommercialFeatures = ptKey === "commercial" && (
     show("shopFrontage") || show("commercialLicense") ||
-    show("displayWindow") || show("mainRoadFacing") || show("storeRoom");
+    show("displayWindow") || show("mainRoadFacing") || show("storeRoom"));
 
-  // ── Section: Office ───────────────────────────────────────────────────────
-  const showOfficeFeatures =
+  // ── Section: Office (office only) ─────────────────────────────────────────
+  const showOfficeFeatures = ptKey === "office" && (
     show("meetingRooms") || show("receptionArea") ||
-    show("internetReady") || show("security") || show("elevator");
+    show("internetReady") || show("security") || show("elevator"));
 
-  // ── Section: Warehouse ────────────────────────────────────────────────────
-  const showWarehouseTech =
-    show("ceilingHeight") || show("powerCapacity");
-  const showWarehouseAccess =
-    show("loadingDock") || show("truckAccess");
-  const showWarehouseSafety =
-    show("fireSafety") || show("fenced") || show("crane") || show("officeSpace");
+  // ── Section: Warehouse (warehouse only) ───────────────────────────────────
+  const showWarehouseTech = ptKey === "warehouse" && (show("ceilingHeight") || show("powerCapacity"));
+  const showWarehouseAccess = ptKey === "warehouse" && (show("loadingDock") || show("truckAccess"));
+  const showWarehouseSafety = ptKey === "warehouse" && (
+    show("fireSafety") || show("fenced") || show("crane") || show("officeSpace"));
 
-  // ── Section: Building ─────────────────────────────────────────────────────
-  const showBuildingFeatures =
-    show("commercialGroundFloor") || show("elevator") || show("currentRentalIncome");
+  // ── Section: Building (building only) ─────────────────────────────────────
+  const showBuildingFeatures = ptKey === "building" && (
+    show("commercialGroundFloor") || show("elevator") || show("currentRentalIncome"));
 
-  // ── Section: Chalet ───────────────────────────────────────────────────────
-  const showChaletFeatures =
+  // ── Section: Chalet (chalet only) ─────────────────────────────────────────
+  const showChaletFeatures = ptKey === "chalet" && (
     show("privatePool") || show("yard") || show("barbecue") ||
-    show("sharedBeachAccess") || show("maidRoom");
+    show("sharedBeachAccess") || show("maidRoom"));
 
   return (
     <div className="px-4 py-6 space-y-6">
@@ -520,7 +525,7 @@ export function StepDetails({ draft, onChange, errors }: StepDetailsProps) {
       {showVillaFeatures && (
         <section>
           <SectionHeader
-            title={isAr ? "خصائص الوحدة" : "Unit features"}
+            title={isAr ? "مرافق الفيلا" : "Villa features"}
             subtitle={isAr ? "اختر ما ينطبق" : "Select all that apply"}
           />
           <div className="space-y-4">
