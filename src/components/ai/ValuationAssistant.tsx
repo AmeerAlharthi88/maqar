@@ -6,6 +6,7 @@ import { AILoadingState } from "./AILoadingState";
 import { AIResultCard } from "./AIResultCard";
 import { AIErrorState } from "./AIErrorState";
 import { AIDisclaimer } from "./AIDisclaimer";
+import { useTranslation } from "@/i18n/useTranslation";
 import type { ValuationResponse } from "@/lib/ai/types";
 import type { AIErrorCode } from "@/lib/ai/types";
 
@@ -36,6 +37,8 @@ const CONFIDENCE_COLOR: Record<string, string> = {
 };
 
 export function ValuationAssistant(props: ValuationAssistantProps) {
+  const { locale } = useTranslation();
+  const isAr = locale === "ar";
   const [result, setResult] = useState<ValuationResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [errorCode, setErrorCode] = useState<AIErrorCode | undefined>();
@@ -83,15 +86,18 @@ export function ValuationAssistant(props: ValuationAssistantProps) {
 
   return (
     <div className="space-y-3" dir="rtl">
+      <h2 className="text-base font-bold text-[#102A43]" dir={isAr ? "rtl" : "ltr"}>
+        {isAr ? "تحليل السعر بالذكاء الاصطناعي" : "AI Price Analysis"}
+      </h2>
       {/* Trigger button */}
       {!result && !loading && (
         <AIButton
           onClick={handleAnalyze}
-          label="تحليل السعر بالذكاء الاصطناعي"
-          loadingLabel="جاري التحليل..."
+          label={isAr ? "تحليل السعر بالذكاء الاصطناعي" : "Analyze price with AI"}
+          loadingLabel={isAr ? "جاري التحليل..." : "Analyzing..."}
           loading={loading}
           variant="subtle"
-          aria-label="تحليل سعر العقار بالذكاء الاصطناعي"
+          aria-label={isAr ? "تحليل سعر العقار بالذكاء الاصطناعي" : "Analyze property price with AI"}
         />
       )}
 
@@ -107,7 +113,7 @@ export function ValuationAssistant(props: ValuationAssistantProps) {
 
       {/* Result */}
       {result && !loading && (
-        <AIResultCard isMockFallback={result.isMockFallback} title="تحليل السعر">
+        <AIResultCard isMockFallback={result.isMockFallback} title={isAr ? "تحليل السعر" : "Price analysis"}>
           {/* Position badge */}
           {result.positionType && (
             <div

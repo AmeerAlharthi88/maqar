@@ -154,13 +154,15 @@ export function MakeOfferModal({ open, onClose, listing, userId, agentId }: Make
         </div>
       ) : (
         <div className="px-5 py-4 space-y-4" dir={dir}>
-          {/* Price reference */}
+          {/* Price reference — hidden when the owner chose "Contact for price" (FP17C-1) */}
           <div className="bg-[#F0F4F8] rounded-xl px-4 py-3">
             <p className="text-xs text-[#627D98] mb-1">
               {isAr ? "السعر المطلوب" : "Asking price"}
             </p>
             <p className="text-base font-bold text-[#102A43]">
-              {formatCurrency(listing.price, locale)}
+              {listing.isPriceHidden
+                ? (isAr ? "تواصل للسعر" : "Contact for price")
+                : formatCurrency(listing.price, locale)}
             </p>
           </div>
 

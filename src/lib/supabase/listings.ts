@@ -158,12 +158,16 @@ export function dbRowToListing(row: DbListingRow): Listing {
       row.area_sqm && Number(row.area_sqm) > 0
         ? Math.round(Number(row.price_omr) / Number(row.area_sqm))
         : undefined,
+    isPriceHidden: row.is_price_hidden === true,
     specs: {
       bedrooms:     row.bedrooms    ?? 0,
       bathrooms:    row.bathrooms   ?? 0,
       area:         Number(row.area_sqm   ?? 0),
       // Plot size, so land listings stay filterable by their land area (FP13 #1).
       landArea:     row.land_size_sqm != null ? Number(row.land_size_sqm) : undefined,
+      // Built-up / unit area — the reliable building footprint (distinct from
+      // area_sqm, which for land/farm rows can hold the plot size).
+      builtUpArea:  row.built_up_area_sqm != null ? Number(row.built_up_area_sqm) : undefined,
       floors:       row.floors      ?? undefined,
       parkingSpots: row.parking_spaces ?? undefined,
     },

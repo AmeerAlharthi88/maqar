@@ -6,8 +6,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import { dbRowToListing, type DbListingRow } from "@/lib/supabase/listings";
-import type { Listing } from "@/types/listing";
+import type { Listing, ListingOwnerContact } from "@/types/listing";
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // ── Environment guard ──────────────────────────────────────────────────────────
 function isSupabaseConfigured(): boolean {
@@ -24,6 +28,51 @@ function isSupabaseConfigured(): boolean {
  *   · Active + approved listings are visible to everyone (anon key).
  *   · Owner can see their own listings (any status).
  */
+/**
+ * Public-safe seller contact for a listing's owner, for the listing-detail page.
+ *
+ * Why service role: the `profiles` table RLS (correctly) blocks anonymous reads
+ * of individual (non-agent) sellers. But a published listing's owner is meant to
+ * be reachable by buyers — that is the whole point of a marketplace listing. So
+ * this reads ONLY the public contact/display fields (name, phone, whatsapp,
+ * avatar, verified flag, license) — never email, role, status or any private
+ * profile data — and is called only from the server listing-detail page.
+ *
+ * Replaces the old MOCK_AGENTS fallback that showed a fabricated agent + fake
+ * phone on every real listing (FP17C-1). Returns null when the owner cannot be
+ * resolved, so the UI shows a safe "unavailable" state instead of fake data.
+ */
+export async function getListingOwnerContact(
+  ownerId: string | null | undefined
+): Promise<ListingOwnerContact | null> {
+  if (!ownerId || !UUID_RE.test(ownerId) || !isSupabaseConfigured()) return null;
+
+  try {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, name_ar, phone, whatsapp, avatar_url, is_verified, license_number")
+      .eq("id", ownerId)
+      .maybeSingle();
+
+    if (error || !data) return null;
+
+    return {
+      id: data.id as string,
+      nameAr: (data.name_ar as string) ?? "",
+      phone: (data.phone as string | null) ?? null,
+      // Owners often have no separate WhatsApp number — fall back to phone.
+      whatsapp: (data.whatsapp as string | null) ?? (data.phone as string | null) ?? null,
+      avatarUrl: (data.avatar_url as string | null) ?? null,
+      isVerified: Boolean(data.is_verified),
+      licenseNumber: (data.license_number as string | null) ?? null,
+    };
+  } catch (err) {
+    console.error("[Listings] getListingOwnerContact exception:", err);
+    return null;
+  }
+}
+
 export async function getListingByIdServer(
   id: string
 ): Promise<Listing | null> {

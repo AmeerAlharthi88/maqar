@@ -178,7 +178,7 @@ export function listingJsonLd(listing: {
   id: string;
   titleAr: string;
   descriptionAr: string;
-  price: number;
+  price?: number; // omitted for "Contact for price" listings (FP17C-1)
   purpose: "sale" | "rent";
   coverImage?: string;
   areaAr: string;
@@ -210,12 +210,16 @@ export function listingJsonLd(listing: {
       addressLocality: listing.wilayatAr,
       streetAddress: listing.areaAr,
     },
-    offers: {
-      "@type": "Offer",
-      price: listing.price,
-      priceCurrency: "OMR",
-      availability: "https://schema.org/InStock",
-    },
+    // Hidden-price listings emit no offer price (never expose the number) (FP17C-1).
+    offers:
+      listing.price != null
+        ? {
+            "@type": "Offer",
+            price: listing.price,
+            priceCurrency: "OMR",
+            availability: "https://schema.org/InStock",
+          }
+        : undefined,
   };
 }
 

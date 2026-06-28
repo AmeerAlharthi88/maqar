@@ -34,9 +34,13 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
   const area        = isAr ? listing.location.areaAr        : (listing.location.areaEn        ?? listing.location.areaAr);
   const address     = isAr ? listing.location.addressAr     : (listing.location.addressEn     ?? listing.location.addressAr);
 
-  const priceFormatted = formatCurrency(listing.price, locale);
+  // Owner chose "Contact for price" — never expose the number (FP17C-1).
+  const priceHidden = listing.isPriceHidden === true;
+  const priceFormatted = priceHidden
+    ? (isAr ? "تواصل للسعر" : "Contact for price")
+    : formatCurrency(listing.price, locale);
   const pricePerSqm = listing.pricePerSqm;
-  const pricePerSqmStr = pricePerSqm
+  const pricePerSqmStr = !priceHidden && pricePerSqm
     ? isAr
       ? `(${formatNumber(pricePerSqm, locale)} ر.ع/م²)`
       : `(${formatNumber(pricePerSqm, locale)} OMR/sqm)`
@@ -110,7 +114,7 @@ export function ListingHeader({ listing }: ListingHeaderProps) {
       {/* Price */}
       <div className="flex items-baseline gap-2 mb-3">
         <span className="text-2xl font-bold text-[#0A3C36]">{priceFormatted}</span>
-        {rentSuffix && (
+        {!priceHidden && rentSuffix && (
           <span className="text-sm text-[#627D98]">{rentSuffix}</span>
         )}
         {pricePerSqmStr && (
