@@ -20,10 +20,23 @@ export type FurnishingStatus = "furnished" | "semi_furnished" | "unfurnished";
 export interface PropertySpecs {
   bedrooms: number;
   bathrooms: number;
-  area: number;        // sqm — built-up / unit area for buildings; plot size for land
+  area: number;        // sqm — legacy/generic area (area_sqm). Prefer builtUpArea/landArea below.
   landArea?: number;   // sqm — plot/land area (land_size_sqm), when applicable
+  builtUpArea?: number; // sqm — built-up / unit area (built_up_area_sqm), when applicable
   floors?: number;
   parkingSpots?: number;
+}
+
+// Public-safe seller contact, fetched server-side for the listing-detail page.
+// Contains ONLY display/contact fields — never email, role, account status, etc.
+export interface ListingOwnerContact {
+  id: string;
+  nameAr: string;
+  phone: string | null;
+  whatsapp: string | null;   // falls back to phone when no separate WhatsApp number
+  avatarUrl: string | null;
+  isVerified: boolean;
+  licenseNumber: string | null;
 }
 
 export interface Coordinates {
@@ -42,6 +55,7 @@ export interface Listing {
   status: ListingStatus;
   price: number;           // OMR
   pricePerSqm?: number;    // OMR/sqm
+  isPriceHidden?: boolean; // owner chose "Contact for price" — never expose the number
   specs: PropertySpecs;
   furnishing: FurnishingStatus;
   amenities: string[];

@@ -10,7 +10,7 @@ import {
   getMockPriceHistory,
   getMockNearbyServices,
 } from "@/lib/helpers/listing-detail";
-import { getListingByIdServer, getSimilarListingsServer } from "@/lib/supabase/listings.server";
+import { getListingByIdServer, getSimilarListingsServer, getListingOwnerContact } from "@/lib/supabase/listings.server";
 
 import { ListingGallery } from "@/components/listing/ListingGallery";
 import { ListingHeader } from "@/components/listing/ListingHeader";
@@ -93,12 +93,15 @@ export default async function ListingDetailPage({ params }: Props) {
   // Real similar listings only (active+approved); empty array hides the section.
   const similarListings = await getSimilarListingsServer(listing);
   const nearbyServices = getMockNearbyServices(listing);
+  // Real seller contact (replaces the old MOCK_AGENTS fallback) — null → safe
+  // unavailable state, never fabricated agent data (FP17C-1).
+  const ownerContact = await getListingOwnerContact(listing.agentId);
 
   const listingSchema = listingJsonLd({
     id: listing.id,
     titleAr: listing.titleAr,
     descriptionAr: listing.descriptionAr,
-    price: listing.price,
+    price: listing.isPriceHidden ? undefined : listing.price,
     purpose: listing.purpose,
     coverImage: listing.coverImage,
     areaAr: listing.location.areaAr,
@@ -126,7 +129,8 @@ export default async function ListingDetailPage({ params }: Props) {
       />
       <div
         className="min-h-screen bg-[#F8F9FA]"
-        dir="rtl"
+        // Direction follows the locale (set on <html> by AppShell) — no hardcoded
+        // dir="rtl", so English mode lays out LTR (FP17C-1).
         // Extra bottom padding for the sticky action bar (which itself has 64px nav padding + 3rem content)
         style={{ paddingBottom: "calc(128px + env(safe-area-inset-bottom, 0px))" }}
       >
@@ -145,10 +149,7 @@ export default async function ListingDetailPage({ params }: Props) {
         <ListingSpecs listing={listing} />
 
         {/* Description */}
-        <ListingDescription
-          description={listing.descriptionAr}
-          aiGenerated={listing.qualityScore > 75}
-        />
+        <ListingDescription description={listing.descriptionAr} />
 
         {/* Amenities */}
         <ListingAmenities listing={listing} />
@@ -156,9 +157,8 @@ export default async function ListingDetailPage({ params }: Props) {
         {/* Market insight */}
         <ListingMarketInsight listing={listing} marketData={marketData} />
 
-        {/* AI Valuation Assistant */}
+        {/* AI Valuation Assistant — renders its own localized heading */}
         <div className="px-4 py-4 border-t border-[#E2E8F0]">
-          <h2 className="text-base font-bold text-[#102A43] mb-3">تحليل السعر بالذكاء الاصطناعي</h2>
           <ValuationAssistant
             propertyType={listing.propertyType}
             purpose={listing.purpose}
@@ -185,22 +185,15 @@ export default async function ListingDetailPage({ params }: Props) {
         {/* Location + nearby services */}
         <ListingLocation listing={listing} nearbyServices={nearbyServices} />
 
-        {/* Agent card */}
-        <AgentCard listing={listing} />
+        {/* Agent card — real owner contact only */}
+        <AgentCard listing={listing} owner={ownerContact} />
 
         {/* Similar listings */}
         <SimilarListings listings={similarListings} />
-
-        {/* Report link */}
-        <div className="px-4 py-6 text-center">
-          <p className="text-xs text-[#627D98]">
-            هل هناك مشكلة في هذا الإعلان؟ يمكنك الإبلاغ عنه من خلال الزر أدناه.
-          </p>
-        </div>
       </div>
 
       {/* Client component: recently-viewed tracking, modals, sticky action bar */}
-      <ListingDetailClient listing={listing} />
+      <ListingDetailClient listing={listing} owner={ownerContact} />
     </AppShell>
   );
 }
