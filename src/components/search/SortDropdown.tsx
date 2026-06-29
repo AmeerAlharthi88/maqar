@@ -35,7 +35,9 @@ export function SortDropdown({ className }: SortDropdownProps) {
   ];
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === filters.sortBy);
-  const displayLabel = isAr ? (currentLabel?.labelAr ?? "الأحدث") : (currentLabel?.labelEn ?? "Newest");
+  const optionLabel = isAr ? (currentLabel?.labelAr ?? "الأحدث") : (currentLabel?.labelEn ?? "Newest");
+  // Prefix so the toolbar button reads as a sort control, not a filter (FP17D).
+  const displayLabel = `${isAr ? "الترتيب: " : "Sort: "}${optionLabel}`;
 
   return (
     <div ref={ref} className={cn("relative", className)}>

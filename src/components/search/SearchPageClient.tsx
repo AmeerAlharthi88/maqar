@@ -130,8 +130,10 @@ export function SearchPageClient() {
 
   return (
     <div className="flex flex-col min-h-full">
-      {/* Sticky search + filter bar */}
-      <div className="sticky top-14 z-[90] bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-4 py-3 flex flex-col gap-3">
+      {/* Sticky search + filter bar — pins to the very top on mobile (no mobile
+          header exists), and below the lg header on desktop. Solid background (no
+          translucent blur) so cards never bleed through while scrolling (FP17D). */}
+      <div className="sticky top-0 lg:top-14 z-[90] bg-white border-b border-[#E2E8F0] shadow-sm px-4 py-2.5 flex flex-col gap-2.5">
         <SmartSearch size="md" onSearch={() => {}} />
 
         {/* Toolbar */}
@@ -165,8 +167,9 @@ export function SearchPageClient() {
 
           <SaveSearchButton />
 
-          {/* Grid / list toggle */}
-          <div className="flex border border-[#E2E8F0] rounded-xl overflow-hidden">
+          {/* Grid / list toggle — desktop only; mobile is a single column so the
+              toggle has no real effect and only crowds the toolbar (FP17D). */}
+          <div className="hidden lg:flex border border-[#E2E8F0] rounded-xl overflow-hidden">
             <button
               onClick={() => setDisplayMode("grid")}
               aria-label={isAr ? "عرض شبكي" : "Grid view"}

@@ -168,17 +168,20 @@ export function SmartSearch({
           </button>
         )}
 
-        {/* Search submit */}
+        {/* Search submit — desktop only; on mobile the keyboard "go" key submits.
+            The old arrow read as a back button (it points left in RTL), so the
+            icon is now a clear magnifier (FP17D). */}
         <button
           aria-label={t("search.button")}
           onClick={() => handleSubmit(localQuery)}
           className={cn(
-            "flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-colors",
+            "hidden lg:flex flex-shrink-0 w-8 h-8 rounded-xl items-center justify-center transition-colors",
             "bg-[#0A3C36] text-white hover:bg-[#082E29] active:scale-95"
           )}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-            <path d={isAr ? "M19 12H5M12 5l-7 7 7 7" : "M5 12h14M12 5l7 7-7 7"} />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
           </svg>
         </button>
       </div>

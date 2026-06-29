@@ -129,10 +129,15 @@ export function AppShell({ children }: AppShellProps) {
           pb-20 reserves space for the mobile bottom nav; not needed on admin (no bottom nav). */}
       <main className={cn("flex-1 lg:pb-0 overflow-x-clip", showBottomNav && "pb-20")}>{children}</main>
 
-      {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ── */}
-      <div className="fixed top-3 end-3 z-[95] lg:hidden">
-        <LanguageToggle className="shadow-sm backdrop-blur-sm" />
-      </div>
+      {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ──
+            Hidden on /search where the sticky search bar now pins to top-0 — the
+            floating pill would overlap it. Language can still be switched from the
+            home, account and listing pages (FP17D). */}
+      {pathname !== "/search" && (
+        <div className="fixed top-3 end-3 z-[95] lg:hidden">
+          <LanguageToggle className="shadow-sm backdrop-blur-sm" />
+        </div>
+      )}
 
       {/* ── Mobile/tablet bottom tab bar (hidden on lg+ and on the admin console;
             admins get a minimal Home/Account/Admin set on public pages) ── */}
