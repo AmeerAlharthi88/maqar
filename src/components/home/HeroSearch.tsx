@@ -2,11 +2,12 @@
 
 import { MaqarLogo } from "@/components/brand/MaqarLogo";
 import { SmartSearch } from "@/components/search/SmartSearch";
-import { PropertyTypeChips } from "@/components/search/PropertyTypeChips";
+import { HomeSearchBuilder } from "@/components/home/HomeSearchBuilder";
 import { useTranslation } from "@/i18n/useTranslation";
 
 export function HeroSearch() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
 
   return (
     <section className="bg-gradient-to-b from-[#E6F0EF] to-white px-4 pt-4 pb-5 lg:pt-6 lg:pb-6 lg:max-w-3xl lg:mx-auto">
@@ -29,15 +30,16 @@ export function HeroSearch() {
         </p>
       </div>
 
-      {/* Search */}
-      <SmartSearch
-        size="lg"
-        placeholder={t("home.hero.searchPlaceholder")}
-        className="mb-3"
-      />
+      {/* Primary path: guided search (purpose → type → location → Show results) */}
+      <HomeSearchBuilder />
 
-      {/* Property type chips */}
-      <PropertyTypeChips />
+      {/* Secondary path: optional keyword search */}
+      <div className="mt-3">
+        <p className="text-[11px] text-[#627D98] mb-1.5 text-center">
+          {isAr ? "أو ابحث بكلمة" : "Or search by keyword"}
+        </p>
+        <SmartSearch size="md" placeholder={t("home.hero.searchPlaceholder")} />
+      </div>
     </section>
   );
 }

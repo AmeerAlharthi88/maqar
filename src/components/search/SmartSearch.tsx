@@ -7,22 +7,25 @@ import { useSearchStore } from "@/store/search.store";
 import { ROUTES } from "@/config/routes";
 import { useTranslation } from "@/i18n/useTranslation";
 
+// Single-token examples — the keyword search matches title/area/wilayat/
+// governorate substrings, so these resolve to real results (a full phrase like
+// "فيلا في بوشر" would not). FP17E-1.
 const EXAMPLE_SEARCHES_AR = [
-  "فيلا في بوشر",
-  "شقة في الخوض",
-  "أرض في السيب",
-  "مكتب في مسقط",
-  "تاون هاوس في الغبرة",
-  "شقة مفروشة في الخوير",
+  "فيلا",
+  "شقة",
+  "أرض",
+  "بوشر",
+  "السيب",
+  "الخوير",
 ];
 
 const EXAMPLE_SEARCHES_EN = [
-  "Villa in Bawshar",
-  "Apartment in Al Khoud",
-  "Land in Seeb",
-  "Office in Muscat",
-  "Townhouse in Ghubrah",
-  "Furnished apartment in Khuwair",
+  "Villa",
+  "Apartment",
+  "Land",
+  "Bawshar",
+  "Seeb",
+  "Al Khuwair",
 ];
 
 interface SmartSearchProps {

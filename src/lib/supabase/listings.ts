@@ -385,8 +385,21 @@ function applyFilters(query: any, filters: SearchFilters): any {
     query = query.eq("is_family_only", filters.familyOnly);
   }
   if (filters.query.trim()) {
-    // Trigram similarity search on title_ar (requires pg_trgm extension)
-    query = query.ilike("title_ar", `%${filters.query.trim()}%`);
+    // Real-only keyword search across the title AND the location/description, so a
+    // buyer can find listings by area/wilayat/governorate name — not just the
+    // Arabic title (FP17E-1). Commas and parentheses are stripped because they are
+    // PostgREST or() delimiters and would otherwise break the filter string.
+    const q = filters.query.trim().replace(/[,()]/g, " ");
+    query = query.or(
+      [
+        `title_ar.ilike.%${q}%`,
+        `title_en.ilike.%${q}%`,
+        `area_ar.ilike.%${q}%`,
+        `wilayat_ar.ilike.%${q}%`,
+        `governorate_ar.ilike.%${q}%`,
+        `description_ar.ilike.%${q}%`,
+      ].join(",")
+    );
   }
   return query;
 }
