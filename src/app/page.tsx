@@ -8,10 +8,8 @@ import { FeaturedListingsSection } from "@/components/home/FeaturedListingsSecti
 import { RecommendedListingsSection } from "@/components/home/RecommendedListingsSection";
 import { PopularAreasSection } from "@/components/home/PopularAreasSection";
 import { MarketStatsSection } from "@/components/home/MarketStatsSection";
-import { AgentsPreviewSection } from "@/components/home/AgentsPreviewSection";
 import { HomeCTABanner } from "@/components/home/HomeCTABanner";
 import { RecentlyViewedSection } from "@/components/home/RecentlyViewedSection";
-import { MOCK_AGENTS } from "@/mock/agents";
 import { POPULAR_AREAS } from "@/mock/popular-areas";
 import { MOCK_MARKET_OVERVIEW } from "@/mock/market-stats";
 import { createClient } from "@/lib/supabase/server";
@@ -108,9 +106,6 @@ export default async function HomePage() {
           subtitleAr="عقارات في محافظة مسقط"
           subtitleEn="Properties in Muscat Governorate"
         />
-
-        {/* Agents preview */}
-        <AgentsPreviewSection agents={MOCK_AGENTS} />
 
         {/* Recently viewed — client component */}
         <RecentlyViewedSection />
