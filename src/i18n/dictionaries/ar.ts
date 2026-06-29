@@ -29,7 +29,7 @@ export const ar = {
     next:        "التالي",
     back:        "رجوع",
     search:      "بحث",
-    filter:      "تصفية",
+    filter:      "الفلاتر",
     sort:        "ترتيب",
     share:       "مشاركة",
     copy:        "نسخ",
@@ -118,11 +118,11 @@ export const ar = {
 
   // ── Search & filters ────────────────────────────────────────────────────────
   search: {
-    placeholder:  "ابحث بالمنطقة أو نوع العقار...",
+    placeholder:  "ابحث باسم المنطقة أو العقار",
     button:       "بحث",
     filters: {
-      title:        "تصفية البحث",
-      clearAll:     "مسح الفلاتر",
+      title:        "تصفية النتائج",
+      clearAll:     "مسح الكل",
       apply:        "تطبيق الفلاتر",
       priceRange:   "نطاق السعر",
       minPrice:     "السعر الأدنى",
@@ -700,7 +700,7 @@ export const ar = {
       title:            "ابحث عن مقرك",
       titleHighlight:   "في عُمان",
       subtitle:         "آلاف العقارات في مسقط وصلالة وصحار وسائر المحافظات",
-      searchPlaceholder: "فيلا في بوشر، شقة في الخوير...",
+      searchPlaceholder: "ابحث باسم المنطقة أو العقار",
     },
     cta: {
       addProperty:     "أضف عقارك",

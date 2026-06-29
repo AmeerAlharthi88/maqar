@@ -28,7 +28,7 @@ export const en = {
     next:        "Next",
     back:        "Back",
     search:      "Search",
-    filter:      "Filter",
+    filter:      "Filters",
     sort:        "Sort",
     share:       "Share",
     copy:        "Copy",
@@ -117,11 +117,11 @@ export const en = {
 
   // ── Search & filters ────────────────────────────────────────────────────────
   search: {
-    placeholder:  "Search by area or property type...",
+    placeholder:  "Search by area or property",
     button:       "Search",
     filters: {
-      title:        "Filter search",
-      clearAll:     "Clear filters",
+      title:        "Filter results",
+      clearAll:     "Clear all",
       apply:        "Apply filters",
       priceRange:   "Price range",
       minPrice:     "Min price",
@@ -699,7 +699,7 @@ export const en = {
       title:            "Find your place",
       titleHighlight:   "in Oman",
       subtitle:         "Thousands of properties across Muscat, Salalah, Sohar and all governorates",
-      searchPlaceholder: "Villa in Bousher, apartment in Khuwair...",
+      searchPlaceholder: "Search by area or property",
     },
     cta: {
       addProperty:     "List Your Property",
