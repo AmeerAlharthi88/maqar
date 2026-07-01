@@ -127,7 +127,9 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Page content — overflow-x-clip stops horizontal scroll from -mx carousel sections.
           pb-20 reserves space for the mobile bottom nav; not needed on admin (no bottom nav). */}
-      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", showBottomNav && "pb-20")}>{children}</main>
+      {/* pb-24 (not pb-20) so the raised centre Add button never covers the last
+          card's price/CTA on 390px (FP17F-1). */}
+      <main className={cn("flex-1 lg:pb-0 overflow-x-clip", showBottomNav && "pb-24")}>{children}</main>
 
       {/* ── Mobile language toggle (shown only on small screens, fixed top-right) ──
             Hidden on /search where the sticky search bar now pins to top-0 — the

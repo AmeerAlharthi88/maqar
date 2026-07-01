@@ -46,7 +46,7 @@ export const en = {
     verified:    "Verified",
     featured:    "Featured",
     new:         "New",
-    noImage:     "No image",
+    noImage:     "Image not available",
     belowMarket: "Below market",
     saveFavorite: "Save to favourites",
   },

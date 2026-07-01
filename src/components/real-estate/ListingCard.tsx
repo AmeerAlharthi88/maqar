@@ -71,16 +71,26 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-4 flex flex-col gap-2.5">
-        {/* Property type + date */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-[#627D98]">
-            {getPropertyTypeName(listing.propertyType, locale)}
-          </span>
-          <span className="text-xs text-[#627D98]">
-            {formatRelativeDateLocale(listing.createdAt, locale)}
-          </span>
+      {/* Content — hierarchy: price → title → location → key facts → meta (FP17F-1) */}
+      <div className="p-3.5 flex flex-col gap-2">
+        {/* Price — the primary scan element after the image */}
+        <div className="flex items-end justify-between gap-2">
+          {listing.isPriceHidden ? (
+            <span className="text-lg font-bold text-[#0A3C36]">
+              {locale === "ar" ? "تواصل للسعر" : "Contact for price"}
+            </span>
+          ) : (
+            <PropertyPrice
+              amount={listing.price}
+              purpose={listing.purpose}
+              pricePerSqm={listing.pricePerSqm}
+              size="md"
+              compact
+            />
+          )}
+          {listing.roiEstimate && (
+            <ROIChip roiPct={listing.roiEstimate} locale={locale} />
+          )}
         </div>
 
         {/* Title */}
@@ -99,7 +109,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           locale={locale}
         />
 
-        {/* Specs */}
+        {/* Key facts */}
         <PropertySpecs
           specs={listing.specs}
           propertyType={listing.propertyType}
@@ -107,18 +117,10 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           locale={locale}
         />
 
-        {/* Price row */}
-        <div className="flex items-end justify-between pt-1 border-t border-[#F0F4F8]">
-          <PropertyPrice
-            amount={listing.price}
-            purpose={listing.purpose}
-            pricePerSqm={listing.pricePerSqm}
-            size="sm"
-            compact
-          />
-          {listing.roiEstimate && (
-            <ROIChip roiPct={listing.roiEstimate} locale={locale} />
-          )}
+        {/* Meta — property type + posted date (subtle) */}
+        <div className="flex items-center justify-between pt-1.5 border-t border-[#F0F4F8] text-xs text-[#627D98]">
+          <span>{getPropertyTypeName(listing.propertyType, locale)}</span>
+          <span>{formatRelativeDateLocale(listing.createdAt, locale)}</span>
         </div>
       </div>
     </article>
@@ -151,6 +153,14 @@ function ListingRow({ listing, className, favoriteButton, locale, t }: {
           </div>
           {favoriteButton && <div className="flex-shrink-0">{favoriteButton}</div>}
         </div>
+        {/* Price — dominant, above the title (FP17F-1) */}
+        {listing.isPriceHidden ? (
+          <span className="text-base font-bold text-[#0A3C36]">
+            {locale === "ar" ? "تواصل للسعر" : "Contact for price"}
+          </span>
+        ) : (
+          <PropertyPrice amount={listing.price} purpose={listing.purpose} size="md" compact />
+        )}
         <h3 className="text-sm font-semibold text-[#102A43] line-clamp-1">{locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)}</h3>
         <LocationBreadcrumb
           governorateAr={listing.location.governorateAr}
@@ -167,7 +177,6 @@ function ListingRow({ listing, className, favoriteButton, locale, t }: {
           size="sm"
           locale={locale}
         />
-        <PropertyPrice amount={listing.price} purpose={listing.purpose} size="sm" compact />
       </div>
     </article>
   );

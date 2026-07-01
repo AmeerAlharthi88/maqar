@@ -53,11 +53,17 @@ export default async function HomePage() {
     getPublicListingsServer(30),
   ]);
   const marketOverview = { ...MOCK_MARKET_OVERVIEW, totalListings };
-  const byViews = [...publicListings].sort((a, b) => b.viewCount - a.viewCount);
-  // "Featured" = explicitly flagged listings; if none are flagged yet, fall back
-  // to the most-viewed real listings so the hero isn't empty (still 100% real,
-  // nothing invented).
-  const flagged = publicListings.filter((l) => l.isFeatured);
+  // Prefer listings that actually have a cover image so Featured/rows never lead
+  // with a placeholder (FP17F-1). Image-having first, then by views.
+  const hasImg = (l: (typeof publicListings)[number]) => Boolean(l.coverImage && l.coverImage.trim());
+  const byViews = [...publicListings].sort((a, b) => {
+    if (hasImg(a) !== hasImg(b)) return hasImg(a) ? -1 : 1;
+    return b.viewCount - a.viewCount;
+  });
+  // "Featured" = explicitly flagged listings (with an image); if none are flagged
+  // yet, fall back to the most-viewed real listings so the hero isn't empty
+  // (still 100% real, nothing invented).
+  const flagged = publicListings.filter((l) => l.isFeatured && hasImg(l));
   const featuredListings = (flagged.length > 0 ? flagged : byViews).slice(0, 6);
   const featuredIds = new Set(featuredListings.map((l) => l.id));
   const recommendedListings = byViews.filter((l) => !featuredIds.has(l.id)).slice(0, 6);
@@ -89,20 +95,20 @@ export default async function HomePage() {
         {/* Market stats — totalListings is real; price/ROI data is illustrative */}
         <MarketStatsSection overview={marketOverview} />
 
-        {/* Recommended listings */}
+        {/* Most viewed — honest name matching the actual logic (FP17F-1) */}
         <RecommendedListingsSection
           listings={recommendedListings}
-          titleAr="عقارات قد تعجبك"
-          titleEn="Recommended for You"
-          subtitleAr="بناءً على أكثر العقارات مشاهدةً في مسقط"
-          subtitleEn="Based on the most viewed listings in Muscat"
+          titleAr="الأكثر مشاهدة"
+          titleEn="Most viewed"
+          subtitleAr="أكثر العقارات مشاهدةً في مسقط"
+          subtitleEn="The most viewed listings in Muscat"
         />
 
-        {/* Near you */}
+        {/* Properties in Muscat — not geolocated, so no "near you" claim (FP17F-1) */}
         <RecommendedListingsSection
           listings={nearYouListings}
-          titleAr="قريب منك"
-          titleEn="Near You"
+          titleAr="عقارات في مسقط"
+          titleEn="Properties in Muscat"
           subtitleAr="عقارات في محافظة مسقط"
           subtitleEn="Properties in Muscat Governorate"
         />

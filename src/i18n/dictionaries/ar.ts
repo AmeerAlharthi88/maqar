@@ -47,7 +47,7 @@ export const ar = {
     verified:    "موثق",
     featured:    "مميز",
     new:         "جديد",
-    noImage:     "لا توجد صورة",
+    noImage:     "صورة غير متوفرة",
     belowMarket: "أقل من السوق",
     saveFavorite: "حفظ في المفضلة",
   },

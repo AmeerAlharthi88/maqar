@@ -159,6 +159,7 @@ export function dbRowToListing(row: DbListingRow): Listing {
         ? Math.round(Number(row.price_omr) / Number(row.area_sqm))
         : undefined,
     isPriceHidden: row.is_price_hidden === true,
+    isNegotiable:  row.is_negotiable === true,
     specs: {
       bedrooms:     row.bedrooms    ?? 0,
       bathrooms:    row.bathrooms   ?? 0,
