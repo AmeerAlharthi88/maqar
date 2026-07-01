@@ -129,8 +129,19 @@ export function formatDateLocale(iso: string, locale: Locale): string {
 }
 
 /**
+ * Arabic "since N units" with correct dual/plural grammar (FP17F-1):
+ *   1 → منذ يوم · 2 → منذ يومين · 3–10 → منذ N أيام · 11+ → منذ N يوماً
+ */
+function arAgo(n: number, one: string, two: string, few: string, many: string): string {
+  if (n === 1) return `منذ ${one}`;
+  if (n === 2) return `منذ ${two}`;
+  if (n >= 3 && n <= 10) return `منذ ${toArabicNumerals(n)} ${few}`;
+  return `منذ ${toArabicNumerals(n)} ${many}`;
+}
+
+/**
  * Relative date string (e.g. "٣ أيام" / "3 days ago") for the given locale.
- * Uses Intl.RelativeTimeFormat for English; Arabic keeps custom strings.
+ * Uses Intl.RelativeTimeFormat for English; Arabic uses correct dual/plural.
  */
 export function formatRelativeDateLocale(iso: string, locale: Locale): string {
   const now = new Date();
@@ -147,11 +158,11 @@ export function formatRelativeDateLocale(iso: string, locale: Locale): string {
     return rtf.format(-Math.floor(diffDays / 365), "year");
   }
 
-  // Arabic
+  // Arabic — correct dual/plural grammar (no more "منذ ١ أشهر") (FP17F-1)
   if (diffDays === 0) return "اليوم";
   if (diffDays === 1) return "أمس";
-  if (diffDays < 7) return `منذ ${toArabicNumerals(diffDays)} أيام`;
-  if (diffDays < 30) return `منذ ${toArabicNumerals(Math.floor(diffDays / 7))} أسابيع`;
-  if (diffDays < 365) return `منذ ${toArabicNumerals(Math.floor(diffDays / 30))} أشهر`;
-  return `منذ ${toArabicNumerals(Math.floor(diffDays / 365))} سنوات`;
+  if (diffDays < 7)   return arAgo(diffDays, "يوم", "يومين", "أيام", "يوماً");
+  if (diffDays < 30)  return arAgo(Math.floor(diffDays / 7), "أسبوع", "أسبوعين", "أسابيع", "أسبوعاً");
+  if (diffDays < 365) return arAgo(Math.floor(diffDays / 30), "شهر", "شهرين", "أشهر", "شهراً");
+  return arAgo(Math.floor(diffDays / 365), "سنة", "سنتين", "سنوات", "سنة");
 }

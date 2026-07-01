@@ -56,6 +56,7 @@ export interface Listing {
   price: number;           // OMR
   pricePerSqm?: number;    // OMR/sqm
   isPriceHidden?: boolean; // owner chose "Contact for price" — never expose the number
+  isNegotiable?: boolean;  // price is negotiable (is_negotiable)
   specs: PropertySpecs;
   furnishing: FurnishingStatus;
   amenities: string[];

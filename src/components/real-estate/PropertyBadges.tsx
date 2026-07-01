@@ -5,12 +5,13 @@ import { useTranslation } from "@/i18n/useTranslation";
 import type { Listing } from "@/types/listing";
 
 interface PropertyBadgesProps {
-  listing: Pick<Listing, "isNew" | "isFeatured" | "isVerified" | "purpose">;
+  listing: Pick<Listing, "isNew" | "isFeatured" | "isVerified" | "purpose" | "isNegotiable">;
   className?: string;
 }
 
 export function PropertyBadges({ listing, className }: PropertyBadgesProps) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
+  const isAr = locale === "ar";
 
   return (
     <div className={cn("flex flex-wrap gap-1.5", className)}>
@@ -39,6 +40,11 @@ export function PropertyBadges({ listing, className }: PropertyBadgesProps) {
             <path d="M20 6 9 17l-5-5" />
           </svg>
           {t("common.verified")}
+        </span>
+      )}
+      {listing.isNegotiable && (
+        <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#FFF7E6] text-[#C8860A]">
+          {isAr ? "قابل للتفاوض" : "Negotiable"}
         </span>
       )}
     </div>
