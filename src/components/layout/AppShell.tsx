@@ -165,13 +165,14 @@ export function AppShell({ children }: AppShellProps) {
                   aria-label={navLabel(item)}
                   style={{ overflow: "visible" }}
                 >
-                  {/* Raised circle */}
+                  {/* Raised circle — slightly smaller + softer shadow so it does
+                      not visually dominate the cards while browsing (FP17F-2). */}
                   <span
-                    className="flex items-center justify-center w-14 h-14 rounded-full bg-[#0A3C36] shadow-[0_4px_20px_rgba(10,60,54,0.35)]"
-                    style={{ marginTop: "-28px" }}
+                    className="flex items-center justify-center w-12 h-12 rounded-full bg-[#0A3C36] shadow-[0_3px_12px_rgba(10,60,54,0.22)]"
+                    style={{ marginTop: "-22px" }}
                     aria-hidden="true"
                   >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
                       <line x1="12" y1="5" x2="12" y2="19" />
                       <line x1="5" y1="12" x2="19" y2="12" />
                     </svg>
