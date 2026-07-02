@@ -8,7 +8,7 @@ import { PropertyPrice } from "./PropertyPrice";
 import { LocationBreadcrumb } from "./LocationBreadcrumb";
 import { ROIChip } from "./ROIChip";
 import { formatRelativeDateLocale } from "@/lib/formatters";
-import { getPropertyTypeName } from "@/lib/constants/property-types";
+import { isKnownBadCoverListing } from "@/lib/helpers/card-image";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { TranslationKey } from "@/i18n/types";
 import type { Listing } from "@/types/listing";
@@ -25,8 +25,12 @@ interface ListingCardProps {
 export function ListingCard({ listing, variant = "card", className, favoriteButton, belowMarket }: ListingCardProps) {
   const { locale, t } = useTranslation();
 
+  // Suppress known non-property covers (screenshot/watermark/irrelevant) → the
+  // branded placeholder shows instead (FP17F-2).
+  const coverSrc = isKnownBadCoverListing(listing.id) ? "" : listing.coverImage;
+
   if (variant === "row") {
-    return <ListingRow listing={listing} className={className} favoriteButton={favoriteButton} locale={locale} t={t} />;
+    return <ListingRow listing={listing} coverSrc={coverSrc} className={className} favoriteButton={favoriteButton} locale={locale} t={t} />;
   }
 
   return (
@@ -41,7 +45,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
       {/* Image */}
       <div className="relative">
         <PropertyImage
-          src={listing.coverImage}
+          src={coverSrc}
           alt={locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)}
           imageCount={listing.images.length}
           aspectRatio="listing"
@@ -71,22 +75,17 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         </div>
       </div>
 
-      {/* Content — hierarchy: price → title → location → key facts → meta (FP17F-1) */}
-      <div className="p-3.5 flex flex-col gap-2">
-        {/* Price — the primary scan element after the image */}
-        <div className="flex items-end justify-between gap-2">
+      {/* Content — compact hierarchy: price → title → location → key facts →
+          meta. No price-per-m² on cards (confusing second price) (FP17F-2). */}
+      <div className="p-3 flex flex-col gap-1.5">
+        {/* Price — the primary scan element after the image (no per-m²) */}
+        <div className="flex items-center justify-between gap-2">
           {listing.isPriceHidden ? (
-            <span className="text-lg font-bold text-[#0A3C36]">
+            <span className="text-base font-bold text-[#0A3C36]">
               {locale === "ar" ? "تواصل للسعر" : "Contact for price"}
             </span>
           ) : (
-            <PropertyPrice
-              amount={listing.price}
-              purpose={listing.purpose}
-              pricePerSqm={listing.pricePerSqm}
-              size="md"
-              compact
-            />
+            <PropertyPrice amount={listing.price} purpose={listing.purpose} size="md" compact />
           )}
           {listing.roiEstimate && (
             <ROIChip roiPct={listing.roiEstimate} locale={locale} />
@@ -94,7 +93,7 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
         </div>
 
         {/* Title */}
-        <h3 className="text-sm font-semibold text-[#102A43] leading-snug line-clamp-2 min-h-[2.5rem]">
+        <h3 className="text-sm font-semibold text-[#102A43] leading-snug line-clamp-2">
           {locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)}
         </h3>
 
@@ -109,26 +108,24 @@ export function ListingCard({ listing, variant = "card", className, favoriteButt
           locale={locale}
         />
 
-        {/* Key facts */}
-        <PropertySpecs
-          specs={listing.specs}
-          propertyType={listing.propertyType}
-          size="sm"
-          locale={locale}
-        />
-
-        {/* Meta — property type + posted date (subtle) */}
-        <div className="flex items-center justify-between pt-1.5 border-t border-[#F0F4F8] text-xs text-[#627D98]">
-          <span>{getPropertyTypeName(listing.propertyType, locale)}</span>
-          <span>{formatRelativeDateLocale(listing.createdAt, locale)}</span>
+        {/* Key facts + posted date on one compact row */}
+        <div className="flex items-center justify-between gap-2 text-xs text-[#627D98]">
+          <PropertySpecs
+            specs={listing.specs}
+            propertyType={listing.propertyType}
+            size="sm"
+            locale={locale}
+          />
+          <span className="flex-shrink-0">{formatRelativeDateLocale(listing.createdAt, locale)}</span>
         </div>
       </div>
     </article>
   );
 }
 
-function ListingRow({ listing, className, favoriteButton, locale, t }: {
+function ListingRow({ listing, coverSrc, className, favoriteButton, locale, t }: {
   listing: Listing;
+  coverSrc: string;
   className?: string;
   favoriteButton?: React.ReactNode;
   locale: "ar" | "en";
@@ -144,7 +141,7 @@ function ListingRow({ listing, className, favoriteButton, locale, t }: {
       )}
     >
       <div className="w-28 flex-shrink-0">
-        <PropertyImage src={listing.coverImage} alt={locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)} aspectRatio="square" className="h-full rounded-none" />
+        <PropertyImage src={coverSrc} alt={locale === "ar" ? listing.titleAr : (listing.titleEn ?? listing.titleAr)} aspectRatio="square" className="h-full rounded-none" />
       </div>
       <div className="flex-1 p-3 flex flex-col gap-1.5 min-w-0">
         <div className="flex items-center justify-between gap-1.5">

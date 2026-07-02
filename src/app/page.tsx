@@ -14,6 +14,7 @@ import { POPULAR_AREAS } from "@/mock/popular-areas";
 import { MOCK_MARKET_OVERVIEW } from "@/mock/market-stats";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicListingsServer } from "@/lib/supabase/listings.server";
+import { isKnownBadCoverListing } from "@/lib/helpers/card-image";
 
 export const metadata: Metadata = buildMetadata({
   titleAr: "مقر — منصة العقارات العُمانية",
@@ -53,21 +54,25 @@ export default async function HomePage() {
     getPublicListingsServer(30),
   ]);
   const marketOverview = { ...MOCK_MARKET_OVERVIEW, totalListings };
+  // Keep known non-property covers (screenshot/watermark/irrelevant) out of the
+  // Home rows entirely so Featured leads with real photos (FP17F-2). Those
+  // listings still appear in Search (with the branded placeholder on the card).
+  const homeListings = publicListings.filter((l) => !isKnownBadCoverListing(l.id));
   // Prefer listings that actually have a cover image so Featured/rows never lead
   // with a placeholder (FP17F-1). Image-having first, then by views.
-  const hasImg = (l: (typeof publicListings)[number]) => Boolean(l.coverImage && l.coverImage.trim());
-  const byViews = [...publicListings].sort((a, b) => {
+  const hasImg = (l: (typeof homeListings)[number]) => Boolean(l.coverImage && l.coverImage.trim());
+  const byViews = [...homeListings].sort((a, b) => {
     if (hasImg(a) !== hasImg(b)) return hasImg(a) ? -1 : 1;
     return b.viewCount - a.viewCount;
   });
   // "Featured" = explicitly flagged listings (with an image); if none are flagged
   // yet, fall back to the most-viewed real listings so the hero isn't empty
   // (still 100% real, nothing invented).
-  const flagged = publicListings.filter((l) => l.isFeatured && hasImg(l));
+  const flagged = homeListings.filter((l) => l.isFeatured && hasImg(l));
   const featuredListings = (flagged.length > 0 ? flagged : byViews).slice(0, 6);
   const featuredIds = new Set(featuredListings.map((l) => l.id));
   const recommendedListings = byViews.filter((l) => !featuredIds.has(l.id)).slice(0, 6);
-  const nearYouListings = publicListings
+  const nearYouListings = homeListings
     .filter((l) => l.location.governorateId === "muscat")
     .slice(0, 4);
 

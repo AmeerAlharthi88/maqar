@@ -49,6 +49,13 @@ export function PropertyImage({
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           loading="lazy"
           onError={() => setFailed(true)}
+          // Broken/blank uploads (e.g. tiny 284-byte JPEGs) can decode without
+          // firing onError — treat a degenerate image as failed so the branded
+          // placeholder shows instead of an empty/black block (FP17F-2).
+          onLoad={(e) => {
+            const img = e.currentTarget;
+            if (img.naturalWidth < 100 || img.naturalHeight < 100) setFailed(true);
+          }}
         />
       ) : (
         /* Maqar brand placeholder */
